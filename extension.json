@@ -1,0 +1,47 @@
+{
+	"name": "RobloxAPI",
+	"version": "0.0.1",
+	"author": [
+		"abaddriverlol"
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:RobloxAPI",
+	"descriptionmsg": "robloxapi-desc",
+	"license-name": "GPL-2.0-or-later",
+	"type": "other",
+	"requires": {
+		"MediaWiki": ">= 1.41.0"
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\RobloxAPI\\": "src/"
+	},
+	"config": {},
+	"ExtensionMessagesFiles": {
+		"RobloxAPIMagic": "RobloxAPI.i18n.magic.php"
+	},
+	"HookHandlers": {
+		"RobloxAPIHooks": {
+			"class": "MediaWiki\\Extension\\RobloxAPI\\Hooks"
+		}
+	},
+	"Hooks": {
+		"ParserFirstCallInit": "RobloxAPIHooks"
+	},
+	"MessagesDirs": {
+		"BoilerPlate": [
+			"i18n"
+		]
+	},
+	"ResourceModules": {
+		"ext.robloxApi": {
+			"localBasePath": "resources/ext.robloxApi",
+			"remoteExtPath": "RobloxAPI/resources/ext.robloxApi",
+			"dependencies": [],
+			"styles": [],
+			"packageFiles": [
+				"init.js"
+			],
+			"messages": []
+		}
+	},
+	"manifest_version": 2
+}
