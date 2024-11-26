@@ -19,39 +19,40 @@
 
 namespace MediaWiki\Extension\RobloxAPI;
 
+use MediaWiki\Config\Config;
+use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\parserFunction\ActivePlayersParserFunction;
+use MediaWiki\Extension\RobloxAPI\parserFunction\GroupRankParserFunction;
 use MediaWiki\Hook\ParserFirstCallInitHook;
+use MediaWiki\MediaWikiServices;
 
 class Hooks implements ParserFirstCallInitHook {
 
-	public function onParserFirstCallInit( $parser ) {
-		$parser->setFunctionHook( 'grouprank', [ $this, 'grouprank' ] );
+	private Config $config;
+	private DataSourceProvider $dataSourceProvider;
+	private array $parserFunctions;
+
+	public function __construct() {
+		$this->config =
+			MediaWikiServices::getInstance()->getConfigFactory()->makeConfig( 'RobloxAPI' );
+
+		$this->dataSourceProvider = new DataSourceProvider( $this->config );
+
+		$this->parserFunctions = [
+			'roblox_grouprank' => new GroupRankParserFunction( $this->dataSourceProvider ),
+			'roblox_activeplayers' => new ActivePlayersParserFunction( $this->dataSourceProvider ),
+		];
 	}
 
-	public function grouprank( $parser, $groupId = '', $userId = '' ) {
-		if ( !$this->isValidId( $groupId ) || !$this->isValidId( $userId ) ) {
-			return 'Invalid parameters!';
-		}
-
-		$json = file_get_contents( "https://groups.roblox.com/v1/users/$userId/groups/roles" );
-		$data = json_decode( $json );
-
-		$groups = $data->data;
-
-		if ( !$groups ) {
-			return 'Failed to parse groups!';
-		}
-
-		foreach ( $groups as $group ) {
-			if ($group->group->id === (int)$groupId) {
-				return $group->role->name;
+	/**
+	 * @inheritDoc
+	 */
+	public function onParserFirstCallInit( $parser ) {
+		foreach ( $this->parserFunctions as $id => $function ) {
+			if ( in_array( $id, $this->config->get( 'RobloxAPIEnabledParserFunctions' ) ) ) {
+				$parser->setFunctionHook( $id, [ $function, 'exec' ] );
 			}
 		}
-
-		return 'Failed to find group!';
-	}
-
-	private function isValidId( string $string ): bool {
-		return preg_match( '/^\d{1,16}$/', $string );
 	}
 
 }

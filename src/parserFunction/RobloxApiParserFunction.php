@@ -18,10 +18,22 @@
  * @file
  */
 
-$magicWords = [];
-$magicWords['en'] = [
-	'roblox_grouprank' => [ 0, 'grouprank' ],
-	'roblox_activeplayers' => [ 0, 'activeplayers' ],
-	'roblox_visits' => [ 0, 'visits' ],
-	'roblox_favorites' => [ 0, 'favorites' ],
-];
+namespace MediaWiki\Extension\RobloxAPI\parserFunction;
+
+use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+
+/**
+ * Defines a parser function that can be used to access the Roblox API.
+ */
+abstract class RobloxApiParserFunction {
+
+	/**
+	 * @var DataSourceProvider An instance of the data source provider.
+	 */
+	protected DataSourceProvider $dataSourceProvider;
+
+	public function __construct( DataSourceProvider $dataSourceProvider ) {
+		$this->dataSourceProvider = $dataSourceProvider;
+	}
+
+}

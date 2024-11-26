@@ -18,10 +18,31 @@
  * @file
  */
 
-$magicWords = [];
-$magicWords['en'] = [
-	'roblox_grouprank' => [ 0, 'grouprank' ],
-	'roblox_activeplayers' => [ 0, 'activeplayers' ],
-	'roblox_visits' => [ 0, 'visits' ],
-	'roblox_favorites' => [ 0, 'favorites' ],
-];
+namespace MediaWiki\Extension\RobloxAPI\data\source;
+
+use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
+
+class GroupRolesDataSource extends DataSource {
+
+	public function __construct() {
+		// TODO expiry config option
+		parent::__construct( 'groupRoles', new SimpleExpiringCache( 60 ) );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function fetch( ...$args ) {
+		[ $userId ] = $args;
+
+		if ( !$this->areValidIds( [ $userId ] ) ) {
+			// TODO
+			return 'Invalid ID!';
+		}
+
+		$endpoint = "https://groups.roblox.com/v1/users/$userId/groups/roles";
+		$data = $this->cache->fetchJson( $endpoint );
+
+		return $data->data;
+	}
+}

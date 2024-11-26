@@ -14,7 +14,25 @@
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\RobloxAPI\\": "src/"
 	},
-	"config": {},
+	"config": {
+		"RobloxAPIEnabledDatasources": {
+			"value": [
+				"gameData",
+				"groupRoles"
+			],
+			"description": "The datasources that should be enabled and available."
+		},
+		"RobloxAPIEnabledParserFunctions": {
+			"value": [
+				"roblox_grouprank",
+				"roblox_activeplayers"
+			],
+			"description": "The parser functions that should be enabled."
+		}
+	},
+	"ConfigRegistry": {
+		"RobloxAPI": "GlobalVarConfig::newInstance"
+	},
 	"ExtensionMessagesFiles": {
 		"RobloxAPIMagic": "RobloxAPI.i18n.magic.php"
 	},
