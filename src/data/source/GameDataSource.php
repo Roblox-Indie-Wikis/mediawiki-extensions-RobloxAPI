@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 /**
  * A data source for the roblox games API.
@@ -37,7 +38,7 @@ class GameDataSource extends DataSource {
 	public function fetch( ...$args ) {
 		[ $universeId, $gameId ] = $args;
 
-		if ( !$this->areValidIds( [ $universeId, $gameId ] ) ) {
+		if ( !RobloxAPIUtil::areValidIds( [ $universeId, $gameId ] ) ) {
 			// TODO use an exception or sth
 			return 'Invalid ID!';
 		}

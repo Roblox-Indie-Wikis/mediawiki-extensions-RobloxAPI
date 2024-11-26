@@ -18,38 +18,40 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source;
-
-use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
+namespace MediaWiki\Extension\RobloxAPI\util;
 
 /**
- * A data source represents an endpoint of the roblox api.
+ * Provides utilities for working with the Roblox API.
  */
-abstract class DataSource {
+class RobloxAPIUtil {
 
 	/**
-	 * @var string The ID of this data source.
+	 * Checks whether a numeric ID is valid.
+	 * @param string|null $string
+	 * @return bool
 	 */
-	public string $id;
-	/**
-	 * @var DataSourceCache The cache of this data source.
-	 */
-	protected DataSourceCache $cache;
+	public static function isValidId( ?string $string ): bool {
+		if ( $string === null ) {
+			// TODO handle this somewhere else
+			return false;
+		}
 
-	public function __construct( string $id, DataSourceCache $cache ) {
-		$this->id = $id;
-		$this->cache = $cache;
-	}
-
-	public function setCacheExpiry( int $seconds ): void {
-		$this->cache->setExpiry( $seconds );
+		return preg_match( '/^\d{1,16}$/', $string );
 	}
 
 	/**
-	 * Fetches data
-	 * @param mixed ...$args
-	 * @return mixed
+	 * Checks whether multiple numeric IDs are valid.
+	 * @param array $strings
+	 * @return bool
 	 */
-	abstract public function fetch( ...$args );
+	public static function areValidIds( array $strings ): bool {
+		foreach ( $strings as $string ) {
+			if ( !self::isValidId( $string ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 
 }

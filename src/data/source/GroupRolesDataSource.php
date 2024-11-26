@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 class GroupRolesDataSource extends DataSource {
 
@@ -35,7 +36,7 @@ class GroupRolesDataSource extends DataSource {
 	public function fetch( ...$args ) {
 		[ $userId ] = $args;
 
-		if ( !$this->areValidIds( [ $userId ] ) ) {
+		if ( !RobloxAPIUtil::areValidIds( [ $userId ] ) ) {
 			// TODO
 			return 'Invalid ID!';
 		}

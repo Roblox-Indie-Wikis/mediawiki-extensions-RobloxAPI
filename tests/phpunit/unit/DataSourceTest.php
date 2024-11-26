@@ -18,38 +18,23 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source;
+namespace phpunit\unit;
 
-use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
+use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
+use MediaWiki\Extension\RobloxAPI\data\source\DataSource;
 
 /**
- * A data source represents an endpoint of the roblox api.
+ * @covers \MediaWiki\Extension\RobloxAPI\data\source\DataSource
  */
-abstract class DataSource {
+class DataSourceTest extends \MediaWikiUnitTestCase {
 
-	/**
-	 * @var string The ID of this data source.
-	 */
-	public string $id;
-	/**
-	 * @var DataSourceCache The cache of this data source.
-	 */
-	protected DataSourceCache $cache;
+	private DataSource $dataSource;
 
-	public function __construct( string $id, DataSourceCache $cache ) {
-		$this->id = $id;
-		$this->cache = $cache;
+	protected function setUp(): void {
+		$this->dataSource = $this->getMockForAbstractClass( DataSource::class, [
+			"someId",
+			new EmptyCache(),
+		] );
 	}
-
-	public function setCacheExpiry( int $seconds ): void {
-		$this->cache->setExpiry( $seconds );
-	}
-
-	/**
-	 * Fetches data
-	 * @param mixed ...$args
-	 * @return mixed
-	 */
-	abstract public function fetch( ...$args );
 
 }
