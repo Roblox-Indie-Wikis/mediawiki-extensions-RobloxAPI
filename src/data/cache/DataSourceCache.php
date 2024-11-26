@@ -30,9 +30,9 @@ abstract class DataSourceCache {
 	/**
 	 * Tries to search for a value in the cache.
 	 * @param string $endpoint
-	 * @return string|null
+	 * @return mixed|null
 	 */
-	abstract protected function getResultForEndpoint( string $endpoint ): ?string;
+	abstract protected function getResultForEndpoint( string $endpoint );
 
 	/**
 	 * Saves an entry to the cache.

@@ -24,9 +24,8 @@ namespace MediaWiki\Extension\RobloxAPI\data\cache;
  * A simple cache that expires after a set amount of seconds.
  */
 class SimpleExpiringCache extends DataSourceCache {
-
+	// TODO DOESNT WORK
 	private int $expireAfterSeconds;
-
 	private array $cache;
 
 	public function __construct( int $expireAfterSeconds ) {
@@ -37,7 +36,7 @@ class SimpleExpiringCache extends DataSourceCache {
 	/**
 	 * @inheritDoc
 	 */
-	protected function getResultForEndpoint( string $endpoint ): ?string {
+	protected function getResultForEndpoint( string $endpoint ) {
 		$cachedValue = $this->cache[$endpoint] ?? null;
 
 		if ( $cachedValue === null ) {

@@ -20,13 +20,16 @@
 				"gameData",
 				"groupRoles"
 			],
+			"merge_strategy": "provide_default",
 			"description": "The datasources that should be enabled and available."
 		},
 		"RobloxAPIEnabledParserFunctions": {
 			"value": [
 				"roblox_grouprank",
-				"roblox_activeplayers"
+				"roblox_activeplayers",
+				"roblox_visits"
 			],
+			"merge_strategy": "provide_default",
 			"description": "The parser functions that should be enabled."
 		}
 	},

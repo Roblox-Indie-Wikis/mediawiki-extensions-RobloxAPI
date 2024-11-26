@@ -63,4 +63,11 @@ class DataSourceProvider {
 		}
 	}
 
+	public function getDataSource( string $id ): ?DataSource {
+		if ( array_key_exists( $id, $this->dataSources ) ) {
+			return $this->dataSources[$id];
+		}
+		return null;
+	}
+
 }

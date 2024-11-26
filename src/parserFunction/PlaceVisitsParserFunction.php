@@ -23,9 +23,9 @@ namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 
 /**
- * Gets the amount of active players for a game in a universe.
+ * Gets the amount of visits for a game in a universe.
  */
-class ActivePlayersParserFunction extends RobloxApiParserFunction {
+class PlaceVisitsParserFunction extends RobloxApiParserFunction {
 
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
 		parent::__construct( $dataSourceProvider );
@@ -53,7 +53,7 @@ class ActivePlayersParserFunction extends RobloxApiParserFunction {
 			return 'Invalid game data';
 		}
 
-		return $gameData->playing;
+		return $gameData->visits;
 	}
 
 }

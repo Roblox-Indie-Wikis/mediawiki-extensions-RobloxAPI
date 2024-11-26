@@ -23,6 +23,7 @@ use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\parserFunction\ActivePlayersParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\GroupRankParserFunction;
+use MediaWiki\Extension\RobloxAPI\parserFunction\PlaceVisitsParserFunction;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\MediaWikiServices;
 
@@ -41,6 +42,7 @@ class Hooks implements ParserFirstCallInitHook {
 		$this->parserFunctions = [
 			'roblox_grouprank' => new GroupRankParserFunction( $this->dataSourceProvider ),
 			'roblox_activeplayers' => new ActivePlayersParserFunction( $this->dataSourceProvider ),
+			'roblox_visits' => new PlaceVisitsParserFunction( $this->dataSourceProvider ),
 		];
 	}
 
