@@ -31,6 +31,13 @@
 			],
 			"merge_strategy": "provide_default",
 			"description": "The parser functions that should be enabled."
+		},
+		"RobloxAPICachingExpiries": {
+			"value": {
+				"gameData": 60,
+				"groupRoles": 60
+			},
+			"description": "The amount of seconds after the cache for a data source expires"
 		}
 	},
 	"ConfigRegistry": {
@@ -48,7 +55,7 @@
 		"ParserFirstCallInit": "RobloxAPIHooks"
 	},
 	"MessagesDirs": {
-		"BoilerPlate": [
+		"RobloxAPI": [
 			"i18n"
 		]
 	},

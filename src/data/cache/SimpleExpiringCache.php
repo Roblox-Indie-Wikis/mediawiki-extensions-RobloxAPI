@@ -27,11 +27,9 @@ use MediaWiki\MediaWikiServices;
  * A simple cache that expires after a set amount of seconds.
  */
 class SimpleExpiringCache extends DataSourceCache {
-	private int $expireAfterSeconds;
 	private BagOStuff $cache;
 
-	public function __construct( int $expireAfterSeconds ) {
-		$this->expireAfterSeconds = $expireAfterSeconds;
+	public function __construct() {
 		$this->cache = MediaWikiServices::getInstance()->getLocalServerObjectCache();
 	}
 
@@ -43,6 +41,7 @@ class SimpleExpiringCache extends DataSourceCache {
 		if ( $value === false ) {
 			return null;
 		}
+
 		return $value;
 	}
 
@@ -50,6 +49,6 @@ class SimpleExpiringCache extends DataSourceCache {
 	 * @inheritDoc
 	 */
 	protected function registerCacheEntry( string $endpoint, $value ): void {
-		$this->cache->set( $endpoint, $value, $this->expireAfterSeconds );
+		$this->cache->set( $endpoint, $value, $this->expiry );
 	}
 }

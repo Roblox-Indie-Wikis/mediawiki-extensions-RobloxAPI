@@ -32,9 +32,15 @@ class DataSourceProvider {
 	 * @var array The currently enabled data sources.
 	 */
 	public array $dataSources = [];
+	/**
+	 * @var array|int the amount of time for each data source after which the cache expires
+	 */
+	public array $cachingExpiries;
 
 	public function __construct( Config $config ) {
 		$this->config = $config;
+
+		$this->cachingExpiries = $this->config->get( 'RobloxAPICachingExpiries' );
 
 		$this->registerDataSource( new GameDataSource() );
 		$this->registerDataSource( new GroupRolesDataSource() );
@@ -60,6 +66,7 @@ class DataSourceProvider {
 		$id = $dataSource->id;
 		if ( $this->isEnabled( $id ) ) {
 			$this->dataSources[$dataSource->id] = $dataSource;
+			$dataSource->setCacheExpiry( $this->cachingExpiries[$dataSource->id] );
 		}
 	}
 
@@ -67,6 +74,7 @@ class DataSourceProvider {
 		if ( array_key_exists( $id, $this->dataSources ) ) {
 			return $this->dataSources[$id];
 		}
+
 		return null;
 	}
 

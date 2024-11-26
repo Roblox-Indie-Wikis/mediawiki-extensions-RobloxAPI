@@ -41,6 +41,10 @@ abstract class DataSource {
 		$this->cache = $cache;
 	}
 
+	public function setCacheExpiry( int $seconds ): void {
+		$this->cache->setExpiry( $seconds );
+	}
+
 	/**
 	 * Checks whether a numeric ID is valid.
 	 * @param string|null $string

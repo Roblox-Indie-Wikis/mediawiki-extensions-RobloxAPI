@@ -21,7 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\data\cache;
 
 /**
- * A cache implementation that does not store anything.
+ * A caching implementation that does not store anything.
  */
 class EmptyCache extends DataSourceCache {
 

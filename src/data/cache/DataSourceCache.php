@@ -27,6 +27,8 @@ use FormatJson;
  */
 abstract class DataSourceCache {
 
+	protected int $expiry;
+
 	/**
 	 * Tries to search for a value in the cache.
 	 * @param string $endpoint
@@ -67,6 +69,10 @@ abstract class DataSourceCache {
 		$this->registerCacheEntry( $endpoint, $data );
 
 		return $data;
+	}
+
+	public function setExpiry( int $seconds ): void {
+		$this->expiry = $seconds;
 	}
 
 }
