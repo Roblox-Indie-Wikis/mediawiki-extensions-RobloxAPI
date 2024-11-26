@@ -20,36 +20,22 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\cache;
 
-use BagOStuff;
-use MediaWiki\MediaWikiServices;
-
 /**
- * A simple cache that expires after a set amount of seconds.
+ * A cache implementation that does not store anything.
  */
-class SimpleExpiringCache extends DataSourceCache {
-	private int $expireAfterSeconds;
-	private BagOStuff $cache;
-
-	public function __construct( int $expireAfterSeconds ) {
-		$this->expireAfterSeconds = $expireAfterSeconds;
-		$this->cache = MediaWikiServices::getInstance()->getLocalServerObjectCache();
-	}
+class EmptyCache extends DataSourceCache {
 
 	/**
 	 * @inheritDoc
 	 */
 	protected function getResultForEndpoint( string $endpoint ) {
-		$value = $this->cache->get( $endpoint );
-		if ( $value === false ) {
-			return null;
-		}
-		return $value;
+		return null;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	protected function registerCacheEntry( string $endpoint, $value ): void {
-		$this->cache->set( $endpoint, $value, $this->expireAfterSeconds );
 	}
+
 }
