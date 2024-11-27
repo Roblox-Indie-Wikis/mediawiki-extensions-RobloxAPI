@@ -27,7 +27,7 @@ class GroupRolesDataSource extends DataSource {
 
 	public function __construct() {
 		// TODO expiry config option
-		parent::__construct( 'groupRoles', new SimpleExpiringCache( 60 ) );
+		parent::__construct( 'groupRoles', new SimpleExpiringCache() );
 	}
 
 	/**

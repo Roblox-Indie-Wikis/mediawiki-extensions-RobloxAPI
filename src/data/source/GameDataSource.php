@@ -29,7 +29,7 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 class GameDataSource extends DataSource {
 
 	public function __construct() {
-		parent::__construct( 'gameData', new SimpleExpiringCache( 60 ) );
+		parent::__construct( 'gameData', new SimpleExpiringCache() );
 	}
 
 	/**
