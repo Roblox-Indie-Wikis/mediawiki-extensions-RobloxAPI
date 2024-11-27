@@ -20,8 +20,11 @@
 
 $magicWords = [];
 $magicWords['en'] = [
-	'roblox_grouprank' => [ 0, 'grouprank' ],
-	'roblox_activeplayers' => [ 0, 'activeplayers' ],
-	'roblox_visits' => [ 0, 'visits' ],
-	'roblox_favorites' => [ 0, 'favorites' ],
+	'roblox_grouprank' => [ 0, 'rblxGroupRank' ],
+	'roblox_activeplayers' => [ 0, 'rblxPlaceActivePlayers' ],
+	'roblox_visits' => [ 0, 'rblxPlaceVisits' ],
+	'roblox_favorites' => [ 0, 'rblxPlaceFavorites' ],
+	// data source parser functions
+	'roblox_GameData' => [ 0, 'rblxGameData' ],
+	'roblox_GroupRoles' => [ 0, 'rblxGroupRoles' ],
 ];

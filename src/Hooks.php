@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\parserFunction\ActivePlayersParserFunction;
+use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\GroupRankParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\PlaceVisitsParserFunction;
 use MediaWiki\Hook\ParserFirstCallInitHook;
@@ -44,6 +45,7 @@ class Hooks implements ParserFirstCallInitHook {
 			'roblox_activeplayers' => new ActivePlayersParserFunction( $this->dataSourceProvider ),
 			'roblox_visits' => new PlaceVisitsParserFunction( $this->dataSourceProvider ),
 		];
+		$this->parserFunctions += $this->dataSourceProvider->createParserFunctions();
 	}
 
 	/**
@@ -51,7 +53,12 @@ class Hooks implements ParserFirstCallInitHook {
 	 */
 	public function onParserFirstCallInit( $parser ) {
 		foreach ( $this->parserFunctions as $id => $function ) {
-			if ( in_array( $id, $this->config->get( 'RobloxAPIEnabledParserFunctions' ) ) ) {
+			// all data source parser functions are only enabled if the corresponding data source
+			// is enabled, so we don't need to check the config for that
+			$isEnabled =
+				$function instanceof DataSourceParserFunction ||
+				in_array( $id, $this->config->get( 'RobloxAPIEnabledParserFunctions' ) );
+			if ( $isEnabled ) {
 				$parser->setFunctionHook( $id, [ $function, 'exec' ] );
 			}
 		}

@@ -21,6 +21,8 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
+use MediaWiki\Extension\RobloxAPI\parserFunction\RobloxApiParserFunction;
 
 /**
  * Handles the registration of data sources and stores them.
@@ -76,6 +78,26 @@ class DataSourceProvider {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Creates parser functions for all enabled data sources.
+	 * @return array|DataSource
+	 */
+	public function createParserFunctions(): array {
+		$functions = [];
+
+		foreach ( $this->dataSources as $dataSource ) {
+			$id = "roblox_" . ucfirst( $dataSource->id );
+			$function = $this->createParserFunction( $dataSource );
+			$functions[$id] = $function;
+		}
+
+		return $functions;
+	}
+
+	private function createParserFunction( DataSource $dataSource ): RobloxApiParserFunction {
+		return new DataSourceParserFunction( $this, $dataSource );
 	}
 
 }
