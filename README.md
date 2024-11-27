@@ -1,18 +1,12 @@
-This is a blank extension template. It doesn't really do anything on its own.
-It is intended to provide a boiler template for an actual MediaWiki extension.
+# RobloxAPI
 
-If you are checking this out from Git and intend to use it, you may use the
-following commands to make a clean directory of just this template without the
-Git meta-data and other examples.
+A MediaWiki extension which provides access to the roblox API.
 
-	cd extensions
-	git clone https://gerrit.wikimedia.org/r/mediawiki/extensions/BoilerPlate.git
-	cp -r BoilerPlate ./MyExtension
-	rm -rf ./MyExtension/.git
+> [!WARNING]
+> This extension is not production-ready yet. It is recommended to
+> use [ExternalData](https://www.mediawiki.org/wiki/Extension:External_Data) instead.
 
-This automates the recommended code checkers for PHP and JavaScript code in Wikimedia projects
-(see https://www.mediawiki.org/wiki/Continuous_integration/Entry_points).
-To take advantage of this automation.
+## Development
 
 1. install nodejs, npm, and PHP composer
 2. change to the extension's directory
