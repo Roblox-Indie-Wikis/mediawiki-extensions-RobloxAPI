@@ -30,7 +30,7 @@
 				"roblox_visits"
 			],
 			"merge_strategy": "provide_default",
-			"description": "The parser functions that should be enabled."
+			"description": "The parser functions that should be enabled. Data parser functions cannot be enabled or disabled here, instead they are enabled if their corresponding data source is enabled."
 		},
 		"RobloxAPICachingExpiries": {
 			"value": {
