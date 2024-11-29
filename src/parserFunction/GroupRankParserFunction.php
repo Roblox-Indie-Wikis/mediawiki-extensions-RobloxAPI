@@ -35,11 +35,7 @@ class GroupRankParserFunction extends RobloxApiParserFunction {
 	public function exec( $parser, ...$args ): string {
 		[ $groupId, $userId ] = $args;
 
-		$source = $this->dataSourceProvider->getDataSource( 'groupRoles' );
-
-		if ( !$source ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found', 'groupRoles' );
-		}
+		$source = $this->dataSourceProvider->getDataSourceOrThrow( 'groupRoles' );
 
 		$groups = $source->fetch( $userId );
 

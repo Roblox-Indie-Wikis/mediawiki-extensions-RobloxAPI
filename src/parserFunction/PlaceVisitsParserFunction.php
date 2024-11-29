@@ -38,11 +38,7 @@ class PlaceVisitsParserFunction extends RobloxApiParserFunction {
 	public function exec( $parser, ...$args ): string {
 		[ $universeId, $gameId ] = $args;
 
-		$source = $this->dataSourceProvider->getDataSource( 'gameData' );
-
-		if ( !$source ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found', 'gameData' );
-		}
+		$source = $this->dataSourceProvider->getDataSourceOrThrow( 'gameData' );
 
 		$gameData = $source->fetch( $universeId, $gameId );
 
