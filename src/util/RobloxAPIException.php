@@ -40,7 +40,10 @@ class RobloxAPIException extends Exception {
 	 */
 	public function __construct( string $message = '', ...$messageParams ) {
 		parent::__construct( $message );
-		$this->messageParams = array_map( 'wfEscapeWikiText', $messageParams );
+		$this->messageParams = [];
+		foreach ( $messageParams as $param ) {
+			$this->messageParams[] = wfEscapeWikiText( $param );
+		}
 	}
 
 }

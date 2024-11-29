@@ -21,7 +21,7 @@
 				"groupRoles",
 				"groupData"
 			],
-			"merge_strategy": "provide_default",
+			"merge_strategy": "array_merge",
 			"description": "The datasources that should be enabled and available."
 		},
 		"RobloxAPIEnabledParserFunctions": {
