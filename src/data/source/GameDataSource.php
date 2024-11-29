@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 /**
@@ -38,10 +39,7 @@ class GameDataSource extends DataSource {
 	public function fetch( ...$args ) {
 		[ $universeId, $gameId ] = $args;
 
-		if ( !RobloxAPIUtil::areValidIds( [ $universeId, $gameId ] ) ) {
-			// TODO use an exception or sth
-			return 'Invalid ID!';
-		}
+		RobloxAPIUtil::assertValidIds( [ $universeId, $gameId ] );
 
 		$endpoint = "https://games.roblox.com/v1/games?universeIds=$universeId";
 		$data = $this->cache->fetchJson( $endpoint );
@@ -49,8 +47,7 @@ class GameDataSource extends DataSource {
 		$entries = $data->data;
 
 		if ( !$entries ) {
-			// TODO
-			return 'Endpoint returned invalid data!';
+			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
 		}
 
 		foreach ( $entries as $entry ) {

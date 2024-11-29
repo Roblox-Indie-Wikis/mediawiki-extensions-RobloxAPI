@@ -20,6 +20,7 @@
 
 namespace phpunit\unit;
 
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 /**
@@ -54,6 +55,14 @@ class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 		self::assertTrue( RobloxAPIUtil::areValidIds( [] ) );
 		self::assertTrue( RobloxAPIUtil::areValidIds( [ "12345" ] ) );
 		self::assertTrue( RobloxAPIUtil::areValidIds( [ "23598", "12345" ] ) );
+	}
+
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::assertValidIds
+	 */
+	public function testAssertValidIds(): void {
+		$this->expectException( RobloxAPIException::class );
+		RobloxAPIUtil::assertValidIds( [ "abc" ] );
 	}
 
 }

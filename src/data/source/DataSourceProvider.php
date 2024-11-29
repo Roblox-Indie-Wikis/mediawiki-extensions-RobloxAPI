@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\RobloxApiParserFunction;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
 /**
  * Handles the registration of data sources and stores them.
@@ -72,12 +73,32 @@ class DataSourceProvider {
 		}
 	}
 
+	/**
+	 * Gets a data source by its ID.
+	 * @param string $id
+	 * @return DataSource|null
+	 */
 	public function getDataSource( string $id ): ?DataSource {
 		if ( array_key_exists( $id, $this->dataSources ) ) {
 			return $this->dataSources[$id];
 		}
 
 		return null;
+	}
+
+	/**
+	 * @param string $id
+	 * @return DataSource
+	 * @throws RobloxAPIException
+	 */
+	public function getDataSourceOrThrow( string $id ): DataSource {
+		$source = $this->getDataSource( $id );
+
+		if ( !$source ) {
+			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found', $id );
+		}
+
+		return $source;
 	}
 
 	/**

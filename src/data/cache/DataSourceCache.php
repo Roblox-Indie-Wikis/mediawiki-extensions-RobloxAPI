@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\data\cache;
 
 use FormatJson;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
 /**
  * Defines a caching strategy for a data source.
@@ -48,6 +49,7 @@ abstract class DataSourceCache {
 	 * Fetches a JSON value from the given endpoint.
 	 * @param string $endpoint
 	 * @return false|mixed|string
+	 * @throws RobloxAPIException
 	 */
 	public function fetchJson( string $endpoint ) {
 		$cached_result = $this->getResultForEndpoint( $endpoint );
@@ -59,13 +61,15 @@ abstract class DataSourceCache {
 		$json = file_get_contents( $endpoint );
 
 		if ( $json === false ) {
-			// TODO
-			return FormatJson::encode( [
-				'error' => 'request_failed',
-			] );
+			throw new RobloxAPIException( 'robloxapi-error-request-failed' );
 		}
 
 		$data = FormatJson::decode( $json );
+
+		if ( $data === null ) {
+			throw new RobloxAPIException( 'robloxapi-error-decode-failure' );
+		}
+
 		$this->registerCacheEntry( $endpoint, $data );
 
 		return $data;

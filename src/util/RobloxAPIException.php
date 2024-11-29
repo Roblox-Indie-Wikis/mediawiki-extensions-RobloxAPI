@@ -18,32 +18,29 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source;
+namespace MediaWiki\Extension\RobloxAPI\util;
 
-use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
+use Exception;
 
 /**
- * A data source for the roblox user group roles API.
+ * Exception thrown if there are any errors happening when calling the roblox API or parsing the
+ * data it returns.
  */
-class GroupRolesDataSource extends DataSource {
-
-	public function __construct() {
-		parent::__construct( 'groupRoles', new SimpleExpiringCache() );
-	}
+class RobloxAPIException extends Exception {
 
 	/**
-	 * @inheritDoc
+	 * @var array The parameters to be used in the message.
 	 */
-	public function fetch( ...$args ) {
-		[ $userId ] = $args;
+	public $messageParams = [];
 
-		RobloxAPIUtil::assertValidIds( [ $userId ] );
-
-		$endpoint = "https://groups.roblox.com/v1/users/$userId/groups/roles";
-		$data = $this->cache->fetchJson( $endpoint );
-
-		return $data->data;
+	/**
+	 * Creates a new RobloxAPIException.
+	 * @param string $message
+	 * @param mixed ...$messageParams
+	 */
+	public function __construct( string $message = '', ...$messageParams ) {
+		parent::__construct( $message );
+		$this->messageParams = $messageParams;
 	}
+
 }

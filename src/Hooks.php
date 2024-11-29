@@ -25,7 +25,7 @@ use MediaWiki\Extension\RobloxAPI\parserFunction\ActivePlayersParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\GroupRankParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\PlaceVisitsParserFunction;
-use MediaWiki\Extension\RobloxAPI\parserFunction\RobloxApiParserFunction;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\MediaWikiServices;
 
@@ -61,8 +61,13 @@ class Hooks implements ParserFirstCallInitHook {
 				in_array( $id, $this->config->get( 'RobloxAPIEnabledParserFunctions' ) );
 			if ( $isEnabled ) {
 				$parser->setFunctionHook( $id, static function ( ...$args ) use ( $function ) {
-					// escape wikitext, we don't need any of the results to be parsed
-					return wfEscapeWikiText( $function->exec( ...$args ) );
+					try {
+						// escape wikitext, we don't need any of the results to be parsed
+						return wfEscapeWikiText( $function->exec( ...$args ) );
+					} catch ( RobloxAPIException $exception ) {
+						return wfMessage( $exception->getMessage(), ...
+							$exception->messageParams )->escaped();
+					}
 				} );
 			}
 		}

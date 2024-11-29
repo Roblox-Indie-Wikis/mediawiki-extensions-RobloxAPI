@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
 /**
  * Gets the amount of visits for a game in a universe.
@@ -37,20 +38,19 @@ class PlaceVisitsParserFunction extends RobloxApiParserFunction {
 	 * @param string $universeId
 	 * @param string $gameId
 	 * @return string
+	 * @throws RobloxAPIException
 	 */
 	public function exec( $parser, $universeId = '', $gameId = '' ) {
 		$source = $this->dataSourceProvider->getDataSource( 'gameData' );
 
 		if ( !$source ) {
-			// TODO
-			return 'Data source not found';
+			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found', 'gameData' );
 		}
 
 		$gameData = $source->fetch( $universeId, $gameId );
 
 		if ( !$gameData ) {
-			// TODO
-			return 'Invalid game data';
+			throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
 		}
 
 		return $gameData->visits;

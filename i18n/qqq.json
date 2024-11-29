@@ -4,5 +4,13 @@
 			"abaddriverlol"
 		]
 	},
-	"boilerplate-desc": "{{desc|name=RobloxAPI|url=https://www.mediawiki.org/wiki/Extension:RobloxAPI}}"
+	"robloxapi-desc": "{{desc|name=RobloxAPI|url=https://www.mediawiki.org/wiki/Extension:RobloxAPI}}",
+	"robloxapi-error-invalid-id": "Error message shown when an invalid ID is provided to a parser function",
+	"robloxapi-error-invalid-data": "Error message shown when the API returns invalid data",
+	"robloxapi-error-decode-failure": "Error message shown when the API response cannot be decoded",
+	"robloxapi-error-datasource-not-found": "Error message shown when a data source is not found",
+	"robloxapi-error-unexpected-data-structure": "Error message shown when the API returns an unexpected data structure",
+	"robloxapi-error-datasource-returned-no-data": "Error message shown when a data source returns no data",
+	"robloxapi-error-user-group-not-found": "Error message shown when the group data for a user cannot be found",
+	"robloxapi-error-request-failed": "Error message shown when a request to the API fails"
 }

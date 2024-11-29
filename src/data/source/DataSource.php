@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
 /**
  * A data source represents an endpoint of the roblox api.
@@ -49,6 +50,7 @@ abstract class DataSource {
 	 * Fetches data
 	 * @param mixed ...$args
 	 * @return mixed
+	 * @throws RobloxAPIException if there are any errors during the process
 	 */
 	abstract public function fetch( ...$args );
 
