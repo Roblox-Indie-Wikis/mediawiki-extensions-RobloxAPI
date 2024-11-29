@@ -6,6 +6,13 @@ A MediaWiki extension which provides access to the roblox API.
 > This extension is not production-ready yet.
 > It is still in development and breaking changes may occur at any time.
 
+### Current plans
+
+- [ ] Rewrite the parser function/data source system to be more simple and testable
+- [ ] Increase test coverage
+- [ ] Add more API endpoints
+- [ ] Add more config options, e.g. to disable the cache or have a group/place id whitelist
+
 ## Installation
 
 Currently, the only way to install the extension is to clone it from the repository directly.
