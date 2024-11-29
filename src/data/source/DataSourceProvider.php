@@ -47,6 +47,7 @@ class DataSourceProvider {
 
 		$this->registerDataSource( new GameDataSource() );
 		$this->registerDataSource( new GroupRolesDataSource() );
+		$this->registerDataSource( new GroupDataSource() );
 	}
 
 	/**

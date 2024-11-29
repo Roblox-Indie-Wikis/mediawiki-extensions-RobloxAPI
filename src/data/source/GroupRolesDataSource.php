@@ -36,7 +36,7 @@ class GroupRolesDataSource extends DataSource {
 	 * @inheritDoc
 	 */
 	public function fetch( ...$args ) {
-		[ $userId ] = RobloxAPIUtil::safeDeconstruct( $args, 1 );
+		[ $userId ] = RobloxAPIUtil::safeDestructure( $args, 1 );
 
 		RobloxAPIUtil::assertValidIds( $userId );
 

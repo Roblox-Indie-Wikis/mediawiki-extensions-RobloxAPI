@@ -34,7 +34,7 @@ class GroupRankParserFunction extends RobloxApiParserFunction {
 	 * @inheritDoc
 	 */
 	public function exec( $parser, ...$args ): string {
-		[ $groupId, $userId ] = RobloxAPIUtil::safeDeconstruct( $args, 2 );
+		[ $groupId, $userId ] = RobloxAPIUtil::safeDestructure( $args, 2 );
 
 		// validate here since the group id is not passed to the data source
 		RobloxAPIUtil::assertValidIds( $groupId, $userId );

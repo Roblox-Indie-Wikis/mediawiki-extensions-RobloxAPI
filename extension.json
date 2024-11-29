@@ -18,7 +18,8 @@
 		"RobloxAPIEnabledDatasources": {
 			"value": [
 				"gameData",
-				"groupRoles"
+				"groupRoles",
+				"groupData"
 			],
 			"merge_strategy": "provide_default",
 			"description": "The datasources that should be enabled and available."
@@ -35,7 +36,8 @@
 		"RobloxAPICachingExpiries": {
 			"value": {
 				"gameData": 60,
-				"groupRoles": 60
+				"groupRoles": 60,
+				"groupData": 60
 			},
 			"description": "The amount of seconds after the cache for a data source expires"
 		}

@@ -18,36 +18,31 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\parserFunction;
+namespace MediaWiki\Extension\RobloxAPI\data\source;
 
-use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 /**
- * Gets the amount of visits for a game in a universe.
+ * A data source for the roblox groups api (v1).
  */
-class PlaceVisitsParserFunction extends RobloxApiParserFunction {
+class GroupDataSource extends DataSource {
 
-	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider );
+	public function __construct() {
+		parent::__construct( 'groupData', new SimpleExpiringCache() );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( $parser, ...$args ): string {
-		[ $universeId, $gameId ] = RobloxAPIUtil::safeDestructure( $args, 2 );
+	public function fetch( ...$args ) {
+		[ $groupId ] = RobloxAPIUtil::safeDestructure( $args, 1 );
 
-		$source = $this->dataSourceProvider->getDataSourceOrThrow( 'gameData' );
+		RobloxAPIUtil::assertValidIds( $groupId );
 
-		$gameData = $source->fetch( $universeId, $gameId );
+		$endpoint = "https://groups.roblox.com/v1/groups/$groupId";
 
-		if ( !$gameData ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
-		}
-
-		return $gameData->visits;
+		return $this->cache->fetchJson( $endpoint );
 	}
 
 }

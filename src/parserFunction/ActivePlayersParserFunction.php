@@ -37,7 +37,7 @@ class ActivePlayersParserFunction extends RobloxApiParserFunction {
 	 * @inheritDoc
 	 */
 	public function exec( $parser, ...$args ): string {
-		[ $universeId, $gameId ] = RobloxAPIUtil::safeDeconstruct( $args, 2 );
+		[ $universeId, $gameId ] = RobloxAPIUtil::safeDestructure( $args, 2 );
 
 		$source = $this->dataSourceProvider->getDataSourceOrThrow( 'gameData' );
 

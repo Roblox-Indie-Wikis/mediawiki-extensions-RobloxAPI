@@ -26,4 +26,5 @@ $magicWords['en'] = [
 	// data source parser functions
 	'roblox_GameData' => [ 0, 'rblxGameData' ],
 	'roblox_GroupRoles' => [ 0, 'rblxGroupRoles' ],
+	'roblox_GroupData' => [ 0, 'rblxGroupData' ],
 ];
