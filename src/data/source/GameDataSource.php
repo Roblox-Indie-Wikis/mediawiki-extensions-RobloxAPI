@@ -37,7 +37,7 @@ class GameDataSource extends DataSource {
 	 * @inheritDoc
 	 */
 	public function fetch( ...$args ) {
-		[ $universeId, $gameId ] = $args;
+		[ $universeId, $gameId ] = RobloxAPIUtil::safeDeconstruct( $args, 2 );
 
 		RobloxAPIUtil::assertValidIds( [ $universeId, $gameId ] );
 

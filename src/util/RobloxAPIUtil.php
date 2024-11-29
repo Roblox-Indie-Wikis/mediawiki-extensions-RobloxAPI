@@ -67,4 +67,18 @@ class RobloxAPIUtil {
 		}
 	}
 
+	/**
+	 * Attempts to deconstruct the args.
+	 * @param mixed $args The args to deconstruct
+	 * @param int $amount The amount of args expected
+	 * @throws RobloxAPIException if the args are invalid
+	 */
+	public static function safeDeconstruct( $args, $amount ): array {
+		if ( count( $args ) !== $amount ) {
+			throw new RobloxAPIException( 'robloxapi-error-invalid-args-count' );
+		}
+
+		return $args;
+	}
+
 }

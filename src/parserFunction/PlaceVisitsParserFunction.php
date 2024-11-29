@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 /**
  * Gets the amount of visits for a game in a universe.
@@ -36,7 +37,7 @@ class PlaceVisitsParserFunction extends RobloxApiParserFunction {
 	 * @inheritDoc
 	 */
 	public function exec( $parser, ...$args ): string {
-		[ $universeId, $gameId ] = $args;
+		[ $universeId, $gameId ] = RobloxAPIUtil::safeDeconstruct( $args, 2 );
 
 		$source = $this->dataSourceProvider->getDataSourceOrThrow( 'gameData' );
 

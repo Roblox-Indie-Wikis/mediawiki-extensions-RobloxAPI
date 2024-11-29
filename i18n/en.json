@@ -5,6 +5,7 @@
 		]
 	},
 	"robloxapi-desc": "Adds parser words for querying the roblox api",
+	"robloxapi-error-invalid-args-count": "Invalid number of arguments!",
 	"robloxapi-error-invalid-id": "Invalid ID value '$1'!",
 	"robloxapi-error-invalid-data": "Endpoint returned invalid data!",
 	"robloxapi-error-decode-failure":  "Failed to decode response!",

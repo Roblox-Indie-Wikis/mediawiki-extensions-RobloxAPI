@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 class GroupRankParserFunction extends RobloxApiParserFunction {
 
@@ -33,7 +34,7 @@ class GroupRankParserFunction extends RobloxApiParserFunction {
 	 * @inheritDoc
 	 */
 	public function exec( $parser, ...$args ): string {
-		[ $groupId, $userId ] = $args;
+		[ $groupId, $userId ] = RobloxAPIUtil::safeDeconstruct( $args, 2 );
 
 		$source = $this->dataSourceProvider->getDataSourceOrThrow( 'groupRoles' );
 
