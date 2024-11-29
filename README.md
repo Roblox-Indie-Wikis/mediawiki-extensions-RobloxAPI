@@ -3,8 +3,22 @@
 A MediaWiki extension which provides access to the roblox API.
 
 > [!WARNING]
-> This extension is not production-ready yet. It is recommended to
-> use [ExternalData](https://www.mediawiki.org/wiki/Extension:External_Data) instead.
+> This extension is not production-ready yet.
+> It is still in development and breaking changes may occur at any time.
+
+## Installation
+
+Currently, the only way to install the extension is to clone it from the repository directly.
+
+1. Clone the repository:
+    ```sh
+   cd extensions/
+    git clone https://github.com/dovedalewiki/mediawiki-extensions-RobloxAPI.git
+    ```
+2. Add the following line to the end of your `LocalSettings.php` file:
+    ```php
+    wfLoadExtension( 'RobloxAPI' );
+    ```
 
 ## Development
 
