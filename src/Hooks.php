@@ -65,8 +65,8 @@ class Hooks implements ParserFirstCallInitHook {
 						// escape wikitext, we don't need any of the results to be parsed
 						return wfEscapeWikiText( $function->exec( ...$args ) );
 					} catch ( RobloxAPIException $exception ) {
-						return wfMessage( $exception->getMessage(), ...
-							$exception->messageParams )->escaped();
+						return wfMessage( $exception->getMessage(), ...$exception->messageParams )
+							->escaped();
 					}
 				} );
 			}
