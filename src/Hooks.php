@@ -23,6 +23,7 @@ use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\parserFunction\ActivePlayersParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
+use MediaWiki\Extension\RobloxAPI\parserFunction\GroupMembersParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\GroupRankParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\PlaceVisitsParserFunction;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
@@ -45,6 +46,7 @@ class Hooks implements ParserFirstCallInitHook {
 			'roblox_grouprank' => new GroupRankParserFunction( $this->dataSourceProvider ),
 			'roblox_activeplayers' => new ActivePlayersParserFunction( $this->dataSourceProvider ),
 			'roblox_visits' => new PlaceVisitsParserFunction( $this->dataSourceProvider ),
+			'roblox_groupmembers' => new GroupMembersParserFunction( $this->dataSourceProvider ),
 		];
 		$this->parserFunctions += $this->dataSourceProvider->createParserFunctions();
 	}
@@ -65,8 +67,12 @@ class Hooks implements ParserFirstCallInitHook {
 						// escape wikitext, we don't need any of the results to be parsed
 						return wfEscapeWikiText( $function->exec( ...$args ) );
 					} catch ( RobloxAPIException $exception ) {
+						// prevent the phpstorm formatter from wrapping the line between the
+						// spread operator and the parameter value
+						// @formatter:off
 						return wfMessage( $exception->getMessage(), ...$exception->messageParams )
 							->escaped();
+						// @formatter:on
 					}
 				} );
 			}
