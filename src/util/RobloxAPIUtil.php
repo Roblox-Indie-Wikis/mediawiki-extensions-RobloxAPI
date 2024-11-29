@@ -55,11 +55,11 @@ class RobloxAPIUtil {
 	}
 
 	/**
-	 * @param array $strings
+	 * @param string ...$strings
 	 * @return void
 	 * @throws RobloxAPIException if any of the IDs are invalid
 	 */
-	public static function assertValidIds( array $strings ): void {
+	public static function assertValidIds( ...$strings ): void {
 		foreach ( $strings as $string ) {
 			if ( !self::isValidId( $string ) ) {
 				throw new RobloxAPIException( 'robloxapi-error-invalid-id', $string );

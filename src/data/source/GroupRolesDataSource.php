@@ -38,7 +38,7 @@ class GroupRolesDataSource extends DataSource {
 	public function fetch( ...$args ) {
 		[ $userId ] = RobloxAPIUtil::safeDeconstruct( $args, 1 );
 
-		RobloxAPIUtil::assertValidIds( [ $userId ] );
+		RobloxAPIUtil::assertValidIds( $userId );
 
 		$endpoint = "https://groups.roblox.com/v1/users/$userId/groups/roles";
 		$data = $this->cache->fetchJson( $endpoint );

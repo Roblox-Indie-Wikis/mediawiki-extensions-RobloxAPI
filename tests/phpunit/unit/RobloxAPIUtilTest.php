@@ -63,7 +63,7 @@ class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 	 */
 	public function testAssertValidIds(): void {
 		$this->expectException( RobloxAPIException::class );
-		RobloxAPIUtil::assertValidIds( [ "abc" ] );
+		RobloxAPIUtil::assertValidIds( "abc" );
 	}
 
 }

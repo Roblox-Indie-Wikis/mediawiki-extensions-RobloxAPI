@@ -39,7 +39,7 @@ class GameDataSource extends DataSource {
 	public function fetch( ...$args ) {
 		[ $universeId, $gameId ] = RobloxAPIUtil::safeDeconstruct( $args, 2 );
 
-		RobloxAPIUtil::assertValidIds( [ $universeId, $gameId ] );
+		RobloxAPIUtil::assertValidIds( $universeId, $gameId );
 
 		$endpoint = "https://games.roblox.com/v1/games?universeIds=$universeId";
 		$data = $this->cache->fetchJson( $endpoint );
