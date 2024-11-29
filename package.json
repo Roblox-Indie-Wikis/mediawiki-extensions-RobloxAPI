@@ -1,5 +1,5 @@
 {
-	"name": "BoilerPlate",
+	"name": "RobloxAPI",
 	"private": true,
 	"scripts": {
 		"test": "grunt test"
