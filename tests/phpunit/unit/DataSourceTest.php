@@ -25,6 +25,7 @@ use MediaWiki\Extension\RobloxAPI\data\source\DataSource;
 
 /**
  * @covers \MediaWiki\Extension\RobloxAPI\data\source\DataSource
+ * @group RobloxAPI
  */
 class DataSourceTest extends \MediaWikiUnitTestCase {
 

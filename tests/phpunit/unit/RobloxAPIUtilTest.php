@@ -25,6 +25,7 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 /**
  * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil
+ * @group RobloxAPI
  */
 class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 
