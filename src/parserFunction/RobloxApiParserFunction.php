@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
 /**
  * Defines a parser function that can be used to access the Roblox API.
@@ -35,5 +36,14 @@ abstract class RobloxApiParserFunction {
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
 		$this->dataSourceProvider = $dataSourceProvider;
 	}
+
+	/**
+	 * Executes the parser function
+	 * @param \Parser $parser
+	 * @param mixed ...$args
+	 * @return string
+	 * @throws RobloxAPIException If any error regarding the API or data occurs during execution.
+	 */
+	abstract public function exec( $parser, ...$args ): string;
 
 }

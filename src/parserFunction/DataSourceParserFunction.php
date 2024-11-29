@@ -37,13 +37,10 @@ class DataSourceParserFunction extends RobloxApiParserFunction {
 		$this->dataSource = $dataSource;
 	}
 
-	/** Executes the parser function.
-	 * @param \Parser $parser
-	 * @param mixed ...$args
-	 * @return string
-	 * @throws RobloxAPIException
+	/**
+	 * @inheritDoc
 	 */
-	public function exec( $parser, ...$args ) {
+	public function exec( $parser, ...$args ): string {
 		// TODO consider directly returning the raw json instead
 		// right now, we encode the json because the data source is returning a StdClass object.
 		return FormatJson::encode( $this->dataSource->fetch( ...$args ) );

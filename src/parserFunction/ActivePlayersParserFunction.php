@@ -33,14 +33,11 @@ class ActivePlayersParserFunction extends RobloxApiParserFunction {
 	}
 
 	/**
-	 * Executes the parser function.
-	 * @param \Parser $parser
-	 * @param string $universeId
-	 * @param string $gameId
-	 * @return string
-	 * @throws RobloxAPIException
+	 * @inheritDoc
 	 */
-	public function exec( $parser, $universeId = '', $gameId = '' ) {
+	public function exec( $parser, ...$args ): string {
+		[ $universeId, $gameId ] = $args;
+
 		$source = $this->dataSourceProvider->getDataSource( 'gameData' );
 
 		if ( !$source ) {

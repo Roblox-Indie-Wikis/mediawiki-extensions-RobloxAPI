@@ -30,14 +30,11 @@ class GroupRankParserFunction extends RobloxApiParserFunction {
 	}
 
 	/**
-	 * Executes the parser function.
-	 * @param \Parser $parser
-	 * @param string $groupId
-	 * @param string $userId
-	 * @return string
-	 * @throws RobloxAPIException
+	 * @inheritDoc
 	 */
-	public function exec( $parser, $groupId = '', $userId = '' ) {
+	public function exec( $parser, ...$args ): string {
+		[ $groupId, $userId ] = $args;
+
 		$source = $this->dataSourceProvider->getDataSource( 'groupRoles' );
 
 		if ( !$source ) {
