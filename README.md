@@ -1,6 +1,6 @@
 # RobloxAPI
 
-A MediaWiki extension which provides easy access to the Roblox API via a parser function. 
+A MediaWiki extension which provides easy access to the Roblox API via parser functions. 
 
 > [!WARNING]
 > This extension is not production-ready yet.

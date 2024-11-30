@@ -7,7 +7,7 @@
 	"url": "https://www.mediawiki.org/wiki/Extension:RobloxAPI",
 	"descriptionmsg": "robloxapi-desc",
 	"license-name": "GPL-2.0-or-later",
-	"type": "other",
+	"type": "parserhook",
 	"requires": {
 		"MediaWiki": ">= 1.41.0"
 	},
