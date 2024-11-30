@@ -22,7 +22,6 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 /**
  * A data source for the roblox games API.
@@ -30,20 +29,20 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 class GameDataSource extends DataSource {
 
 	public function __construct() {
-		parent::__construct( 'gameData', new SimpleExpiringCache() );
+		parent::__construct( 'gameData', new SimpleExpiringCache(), 2 );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function fetch( ...$args ) {
-		[ $universeId, $gameId ] = RobloxAPIUtil::safeDestructure( $args, 2 );
+	public function getEndpoint( $args ): string {
+		return "https://games.roblox.com/v1/games?universeIds=$args[0]";
+	}
 
-		RobloxAPIUtil::assertValidIds( $universeId, $gameId );
-
-		$endpoint = "https://games.roblox.com/v1/games?universeIds=$universeId";
-		$data = $this->cache->fetchJson( $endpoint );
-
+	/**
+	 * @inheritDoc
+	 */
+	public function processData( $data, $args ) {
 		$entries = $data->data;
 
 		if ( !$entries ) {
@@ -51,7 +50,7 @@ class GameDataSource extends DataSource {
 		}
 
 		foreach ( $entries as $entry ) {
-			if ( $entry->rootPlaceId !== (int)$gameId ) {
+			if ( $entry->rootPlaceId !== (int)$args[1] ) {
 				continue;
 			}
 
@@ -60,4 +59,5 @@ class GameDataSource extends DataSource {
 
 		return null;
 	}
+
 }

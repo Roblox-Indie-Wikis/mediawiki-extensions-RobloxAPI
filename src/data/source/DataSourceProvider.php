@@ -36,7 +36,8 @@ class DataSourceProvider {
 	 */
 	public array $dataSources = [];
 	/**
-	 * @var array|int the amount of time for each data source after which the cache expires
+	 * @var array|int the amount of time for each data source after which the cache
+	 * expires
 	 */
 	public array $cachingExpiries;
 
@@ -46,8 +47,16 @@ class DataSourceProvider {
 		$this->cachingExpiries = $this->config->get( 'RobloxAPICachingExpiries' );
 
 		$this->registerDataSource( new GameDataSource() );
-		$this->registerDataSource( new GroupRolesDataSource() );
-		$this->registerDataSource( new GroupDataSource() );
+		$this->registerDataSource( new SimpleDataSource( 'groupRoles', 1,
+			static function ( $args ) {
+				return "https://groups.roblox.com/v1/users/$args[0]/groups/roles";
+			}, static function ( $data ) {
+				return $data->data;
+			} ) );
+		$this->registerDataSource( new SimpleDataSource( 'groupData', 1,
+			static function ( $args ) {
+				return "https://groups.roblox.com/v1/groups/$args[0]";
+			} ) );
 	}
 
 	/**
@@ -96,7 +105,8 @@ class DataSourceProvider {
 		$source = $this->getDataSource( $id );
 
 		if ( !$source ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found', $id );
+			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found',
+				$id );
 		}
 
 		return $source;
@@ -123,7 +133,8 @@ class DataSourceProvider {
 	 * @param DataSource $dataSource
 	 * @return RobloxApiParserFunction
 	 */
-	private function createParserFunction( DataSource $dataSource ): RobloxApiParserFunction {
+	private function createParserFunction( DataSource $dataSource
+	): RobloxApiParserFunction {
 		return new DataSourceParserFunction( $this, $dataSource );
 	}
 

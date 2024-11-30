@@ -21,28 +21,49 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 /**
- * A data source for the roblox user group roles API.
+ * A simple data source that does not process the data.
  */
-class GroupRolesDataSource extends DataSource {
+class SimpleDataSource extends DataSource {
 
-	public function __construct() {
-		parent::__construct( 'groupRoles', new SimpleExpiringCache() );
+	/**
+	 * @var callable The function to create the endpoint.
+	 */
+	protected $createEndpoint;
+
+	/**
+	 * @var callable|null The function to process the data.
+	 */
+	protected $processData;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function __construct(
+		string $id, int $expectedArgs, callable $createEndpoint,
+		callable $processData = null
+	) {
+		parent::__construct( $id, new SimpleExpiringCache(), $expectedArgs );
+		$this->createEndpoint = $createEndpoint;
+		$this->processData = $processData;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function fetch( ...$args ) {
-		[ $userId ] = RobloxAPIUtil::safeDestructure( $args, 1 );
-
-		RobloxAPIUtil::assertValidIds( $userId );
-
-		$endpoint = "https://groups.roblox.com/v1/users/$userId/groups/roles";
-		$data = $this->cache->fetchJson( $endpoint );
-
-		return $data->data;
+	public function getEndpoint( $args ): string {
+		return call_user_func( $this->createEndpoint, $args );
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function processData( $data, $args ) {
+		if ( $this->processData ) {
+			return call_user_func( $this->processData, $data, $args );
+		}
+		return $data;
+	}
+
 }

@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 /**
  * A data source represents an endpoint of the roblox api.
@@ -36,10 +37,23 @@ abstract class DataSource {
 	 * @var DataSourceCache The cache of this data source.
 	 */
 	protected DataSourceCache $cache;
+	/**
+	 * @var int The number of expected arguments.
+	 */
+	protected int $expectedArgs;
 
-	public function __construct( string $id, DataSourceCache $cache ) {
+	/**
+	 * Constructs a new data source.
+	 * @param string $id The ID of this data source.
+	 * @param DataSourceCache $cache The cache of this data source.
+	 * @param int $expectedArgs The number of expected arguments.
+	 */
+	public function __construct(
+		string $id, DataSourceCache $cache, int $expectedArgs
+	) {
 		$this->id = $id;
 		$this->cache = $cache;
+		$this->expectedArgs = $expectedArgs;
 	}
 
 	public function setCacheExpiry( int $seconds ): void {
@@ -52,6 +66,40 @@ abstract class DataSource {
 	 * @return mixed
 	 * @throws RobloxAPIException if there are any errors during the process
 	 */
-	abstract public function fetch( ...$args );
+	public function fetch( ...$args ) {
+		// assure that we have the correct number of arguments
+		RobloxAPIUtil::safeDestructure( $args, $this->expectedArgs );
+		// validate the ids
+		RobloxAPIUtil::assertValidIds( ...$args );
+
+		$endpoint = $this->getEndpoint( $args );
+		$data = $this->cache->fetchJson( $endpoint );
+
+		$processedData = $this->processData( $data, $args );
+
+		if ( !$processedData ) {
+			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
+		}
+
+		return $processedData;
+	}
+
+	/**
+	 * Returns the endpoint of this data source for the given arguments.
+	 * @param mixed $args The arguments to use.
+	 * @return string The endpoint of this data source.
+	 */
+	abstract public function getEndpoint( $args ): string;
+
+	/**
+	 * Processes the data before returning it.
+	 * @param mixed $data The data to process.
+	 * @param mixed $args The arguments used to fetch the data.
+	 * @return mixed The processed data.
+	 * @throws RobloxAPIException if there are any errors during the process
+	 */
+	public function processData( $data, $args ) {
+		return $data;
+	}
 
 }
