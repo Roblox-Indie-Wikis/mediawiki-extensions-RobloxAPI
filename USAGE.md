@@ -55,3 +55,100 @@ Allowed values: `30x30`, `48x48`, `60x60`, `75x75`, `100x100`, `110x110`, `140x1
 `250x250`, `352x352`, `420x420`, `720x720`
 
 ## Configuration
+
+### `$wgRobloxAPIEnabledDatasources`
+
+An array of data sources that should be enabled and available. By default, all data sources are enabled:
+
+```php
+$wgRobloxAPIEnabledDatasources = [
+    'gameData',
+    'groupRoles',
+    'groupData',
+    'userAvatarThumbnail',
+    'badgeInfo',
+    'userInfo',
+    'assetDetails',
+];
+```
+
+### `$wgRobloxAPIEnabledParserFunctions`
+
+An array of parser functions that should be enabled. JSON parser functions cannot be enabled or disabled here, instead
+they are enabled if their corresponding data source is enabled. By default, all data parser functions are enabled:
+
+```php
+$wgRobloxAPIEnabledParserFunctions = [
+    'roblox_grouprank',
+    'roblox_activeplayers',
+    'roblox_visits',
+    'roblox_groupmembers',
+    'roblox_useravatarthumbnailurl',
+];
+```
+
+### `$wgRobloxAPICachingExpiries`
+
+An array of cache expiry times (in seconds) for each data source. By default, all data sources have a cache expiry time
+of 60 seconds:
+
+```php
+$wgRobloxAPICachingExpiries = [
+    '*' => 60,
+];
+```
+
+If you want to set a different cache expiry time for specific data sources, you can do so like this:
+
+```php
+$wgRobloxAPICachingExpiries = [
+    '*' => 60,
+    'gameData' => 120,
+    'groupRoles' => 180,
+];
+```
+
+In this example, all other data sources will have a cache expiry time of 60 seconds.
+
+### `$wgRobloxAPIAllowedArguments`
+
+An array of allowed arguments per argument type. If empty, all arguments for the type are allowed. Any argument types
+that do not have an entry in this array will allow any value. This is useful for restricting arguments. By default, all
+arguments are allowed:
+
+```php
+$wgRobloxAPIAllowedArguments = [];
+```
+
+If you want to restrict the allowed arguments for a specific type, you can do so like this:
+
+```php
+$wgRobloxAPIAllowedArguments = [
+    'GameID' => [123456, 789012],
+];
+```
+
+In this example, only the Game IDs 123456 and 789012 are allowed.
+
+### `$wgRobloxAPIRequestUserAgent`
+
+The user agent that should be used when making requests to the Roblox API. By default, it is set to
+`RobloxAPI MediaWiki Extension`:
+
+```php
+$wgRobloxAPIRequestUserAgent = 'RobloxAPI MediaWiki Extension';
+```
+
+### `$wgRobloxAPIDisableCache`
+
+Whether to disable the cache for the extension. By default, caching is enabled:
+
+```php
+$wgRobloxAPIDisableCache = false;
+```
+
+If you want to disable caching, you can set this variable to `true`:
+
+```php
+$wgRobloxAPIDisableCache = true;
+```
