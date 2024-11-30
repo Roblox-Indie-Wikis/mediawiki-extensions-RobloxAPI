@@ -84,7 +84,7 @@ abstract class DataSource {
 		RobloxAPIUtil::assertArgsAllowed( $this->config, $this->expectedArgs, $args );
 
 		$endpoint = $this->getEndpoint( $args );
-		$data = $this->getDataFromEndpoint( $endpoint );
+		$data = $this->getDataFromEndpoint( $endpoint, $args );
 
 		$processedData = $this->processData( $data, $args );
 
@@ -98,17 +98,31 @@ abstract class DataSource {
 	/**
 	 * Fetches data from the given endpoint.
 	 * @param string $endpoint The endpoint to fetch data from.
+	 * @param array $args The arguments to use.
 	 * @return mixed The fetched data.
 	 * @throws RobloxAPIException if there are any errors during the process
 	 */
-	public function getDataFromEndpoint( string $endpoint ) {
-		$cached_result = $this->cache->getResultForEndpoint( $endpoint );
+	public function getDataFromEndpoint( string $endpoint, array $args ) {
+		$cached_result = $this->cache->getResultForEndpoint( $endpoint, $args );
 
 		if ( $cached_result !== null ) {
 			return $cached_result;
 		}
 
-		$json = file_get_contents( $endpoint );
+		global $wgRobloxAPIRequestUserAgent;
+		$options = [
+			'http' => [
+				'method' => 'GET',
+				'user_agent' => $wgRobloxAPIRequestUserAgent,
+				'accept' => 'application/json',
+				'header' => 'Content-Type: application/json',
+			],
+		];
+
+		$this->processRequestOptions( $options, $args );
+
+		$context = stream_context_create( $options );
+		$json = file_get_contents( $endpoint, false, $context );
 
 		if ( $json === false ) {
 			// TODO try to fetch from cache
@@ -121,7 +135,7 @@ abstract class DataSource {
 			throw new RobloxAPIException( 'robloxapi-error-decode-failure' );
 		}
 
-		$this->cache->registerCacheEntry( $endpoint, $data );
+		$this->cache->registerCacheEntry( $endpoint, $data, $args );
 
 		return $data;
 	}
@@ -144,6 +158,18 @@ abstract class DataSource {
 		return $data;
 	}
 
+	/**
+	 * Processes the request options before making the request. This allows modifying the request options.
+	 * @param array &$options The options to process.
+	 * @param array $args The arguments used to fetch the data.
+	 */
+	protected function processRequestOptions( array &$options, array $args ) {
+	}
+
+	/**
+	 * Creates a simple expiring cache. If we're in a unit test environment, an empty cache is created.
+	 * @return DataSourceCache The created cache.
+	 */
 	protected static function createSimpleCache(): DataSourceCache {
 		if ( defined( 'MW_PHPUNIT_TEST' ) ) {
 			// we're in a unit test environment, don't create cache

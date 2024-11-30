@@ -30,17 +30,19 @@ abstract class DataSourceCache {
 	/**
 	 * Tries to search for a value in the cache.
 	 * @param string $endpoint
+	 * @param array $args
 	 * @return mixed|null
 	 */
-	abstract public function getResultForEndpoint( string $endpoint );
+	abstract public function getResultForEndpoint( string $endpoint, array $args );
 
 	/**
 	 * Saves an entry to the cache.
 	 * @param string $endpoint
 	 * @param mixed $value
+	 * @param array $args
 	 * @return void
 	 */
-	abstract public function registerCacheEntry( string $endpoint, $value ): void;
+	abstract public function registerCacheEntry( string $endpoint, $value, array $args ): void;
 
 	public function setExpiry( int $seconds ): void {
 		$this->expiry = $seconds;
