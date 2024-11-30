@@ -71,6 +71,21 @@ class DataSourceProvider {
 	}
 
 	/**
+	 * Gets the caching expiry for a data source.
+	 * If a specific value is not set, the default value (key '*') is used.
+	 * @param string $id
+	 * @return int The caching expiry in seconds.
+	 */
+	protected function getCachingExpiry( $id ): int {
+		$specificValue = $this->cachingExpiries[$id];
+		if ( $specificValue ) {
+			return $specificValue;
+		}
+
+		return $this->cachingExpiries['*'];
+	}
+
+	/**
 	 * Registers a data source if it is enabled.
 	 * @param DataSource $dataSource
 	 * @return void
@@ -79,7 +94,7 @@ class DataSourceProvider {
 		$id = $dataSource->id;
 		if ( $this->isEnabled( $id ) ) {
 			$this->dataSources[$dataSource->id] = $dataSource;
-			$dataSource->setCacheExpiry( $this->cachingExpiries[$dataSource->id] );
+			$dataSource->setCacheExpiry( $this->getCachingExpiry( $dataSource->id ) );
 		}
 	}
 
