@@ -1,12 +1,26 @@
 # RobloxAPI
 
-A MediaWiki extension which provides access to the roblox API.
+A MediaWiki extension which provides easy access to the Roblox API via a parser function. 
 
 > [!WARNING]
 > This extension is not production-ready yet.
 > It is still in development and breaking changes may occur at any time.
 
-### Current plans
+<!--
+## Usage 
+### Group Ranks
+Get a users group rank: 
+### Experience Statistics
+> [!IMPORTANT]
+> The Universe ID is not the same as the Game ID. 
+
+Grab concurrent players for a set experience:
+``
+Grab number of favourites for a set experience: 
+
+Grab number of visits for a set experience: 
+!-->
+## Current plans
 
 - [ ] Rewrite the parser function/data source system to be more simple and testable
 - [ ] Increase test coverage
