@@ -53,6 +53,10 @@
 		"RobloxAPIRequestUserAgent": {
 			"value": "RobloxAPI MediaWiki Extension",
 			"description": "The user agent that should be used when making requests to the Roblox API."
+		},
+		"RobloxAPIDisableCache": {
+			"value": false,
+			"description": "Whether or not to disable the cache for the extension."
 		}
 	},
 	"ConfigRegistry": {

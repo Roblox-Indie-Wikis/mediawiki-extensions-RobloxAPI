@@ -171,7 +171,8 @@ abstract class DataSource {
 	 * @return DataSourceCache The created cache.
 	 */
 	protected static function createSimpleCache(): DataSourceCache {
-		if ( defined( 'MW_PHPUNIT_TEST' ) ) {
+		global $wgRobloxAPIDisableCache;
+		if ( defined( 'MW_PHPUNIT_TEST' ) || $wgRobloxAPIDisableCache ) {
 			// we're in a unit test environment, don't create cache
 			return new EmptyCache();
 		}
