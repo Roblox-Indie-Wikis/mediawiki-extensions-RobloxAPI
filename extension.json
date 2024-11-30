@@ -45,29 +45,10 @@
 			},
 			"description": "The amount of seconds after the cache for a data source expires. '*' is a wildcard for all data sources."
 		},
-		"RobloxAPIAllowedGroupIDs": {
-			"value": [],
-			"description": "The group IDs that are allowed to be used in the extension. If empty, all group IDs are allowed."
-		},
-		"RobloxAPIAllowedUniverseIDs": {
-			"value": [],
-			"description": "The universe IDs that are allowed to be used in the extension. If empty, all universe IDs are allowed."
-		},
-		"RobloxAPIAllowedPlaceIDs": {
-			"value": [],
-			"description": "The place IDs that are allowed to be used in the extension. If empty, all place IDs are allowed."
-		},
-		"RobloxAPIAllowedUserIDs": {
-			"value": [],
-			"description": "The user IDs that are allowed to be used in the extension. If empty, all user IDs are allowed."
-		},
-		"RobloxAPIAllowedBadgeIDs": {
-			"value": [],
-			"description": "The badge IDs that are allowed to be used in the extension. If empty, all badge IDs are allowed."
-		},
-		"RobloxAPIAllowedAssetIDs": {
-			"value": [],
-			"description": "The asset IDs that are allowed to be used in the extension. If empty, all asset IDs are allowed."
+		"RobloxAPIAllowedArguments": {
+			"value": {},
+			"description": "The arguments per argument type that are allowed to be used in the extension. If empty, all arguments for the type are allowed.",
+			"merge_strategy": "array_plus_2d"
 		},
 		"RobloxAPIRequestUserAgent": {
 			"value": "RobloxAPI MediaWiki Extension",

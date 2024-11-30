@@ -139,12 +139,11 @@ class RobloxAPIUtil {
 	) {
 		foreach ( $args as $index => $arg ) {
 			$expectedType = $expectedArgs[$index];
-			$configKey = "RobloxAPIAllowed{$expectedType}s";
-			if ( !$config->has( $configKey ) ) {
-				// cannot be configured, e.g. thumbnail size
+			$allowedArgs = $config->get( 'RobloxAPIAllowedArguments' );
+			if ( !array_key_exists( $expectedType, $allowedArgs ) ) {
 				continue;
 			}
-			$allowedValues = $config->get( $configKey );
+			$allowedValues = $allowedArgs[$expectedType];
 			if ( empty( $allowedValues ) ) {
 				// all values are allowed
 				continue;
