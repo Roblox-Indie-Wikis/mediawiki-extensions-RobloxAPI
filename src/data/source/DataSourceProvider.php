@@ -57,6 +57,21 @@ class DataSourceProvider {
 			static function ( $args ) {
 				return "https://groups.roblox.com/v1/groups/$args[0]";
 			} ) );
+		$this->registerDataSource( new SimpleDataSource( 'userAvatarThumbnail', $config, [ 'UserID' ],
+			static function ( $args ) {
+				// TODO allow configuring the size and more options
+				return "https://thumbnails.roblox.com/v1/users/avatar?userIds={$args[0]}&size=720x720&format=Png" .
+					"&isCircular=false";
+			}, static function ( $data ) {
+				return $data->data;
+			} ) );
+		$this->registerDataSource( new SimpleDataSource( 'badgeInfo', $config, [ 'BadgeID' ],
+			static function ( $args ) {
+				return "https://badges.roblox.com/v1/badges/$args[0]";
+			} ) );
+		$this->registerDataSource( new SimpleDataSource( 'userInfo', $config, [ 'UserID' ], static function ( $args ) {
+			return "https://users.roblox.com/v1/users/$args[0]";
+		} ) );
 	}
 
 	/**

@@ -28,4 +28,7 @@ $magicWords['en'] = [
 	'roblox_GameData' => [ 0, 'rblxGameData' ],
 	'roblox_GroupRoles' => [ 0, 'rblxGroupRoles' ],
 	'roblox_GroupData' => [ 0, 'rblxGroupData' ],
+	'roblox_UserAvatarThumbnail' => [ 0, 'rblxUserAvatarThumbnail' ],
+	'roblox_BadgeInfo' => [ 0, 'rblxBadgeInfo' ],
+	'roblox_UserInfo' => [ 0, 'rblxUserInfo' ],
 ];
