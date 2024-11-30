@@ -22,32 +22,46 @@ namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 /**
- * Defines a parser function that can be used to access the Roblox API.
+ * Gets the URL for a user's avatar thumbnail.
  */
-abstract class RobloxApiParserFunction {
-
-	/**
-	 * @var DataSourceProvider An instance of the data source provider.
-	 */
-	protected DataSourceProvider $dataSourceProvider;
+class UserAvatarThumbnailUrlParserFunction extends RobloxApiParserFunction {
 
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		$this->dataSourceProvider = $dataSourceProvider;
+		parent::__construct( $dataSourceProvider );
 	}
 
 	/**
-	 * Executes the parser function
-	 * @param \Parser $parser
-	 * @param mixed ...$args
-	 * @return string
-	 * @throws RobloxAPIException If any error regarding the API or data occurs during execution.
+	 * @inheritDoc
 	 */
-	abstract public function exec( $parser, ...$args ): string;
+	public function exec( $parser, ...$args ): string {
+		[ $userId ] = RobloxAPIUtil::safeDestructure( $args, 1 );
+
+		$source = $this->dataSourceProvider->getDataSourceOrThrow( 'userAvatarThumbnail' );
+		$data = $source->fetch( $userId );
+
+		if ( !$data ) {
+			throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
+		}
+
+		if ( count( $data ) == 0 ) {
+			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
+		}
+
+		$url = $data[0]->imageUrl;
+
+		if ( $url ) {
+			// allows embedding the image in the wiki
+			return $url . '.png';
+		}
+
+		return $url;
+	}
 
 	public function shouldEscapeResult(): bool {
-		return true;
+		return false;
 	}
 
 }

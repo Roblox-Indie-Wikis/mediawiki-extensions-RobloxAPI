@@ -26,6 +26,7 @@ use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\GroupMembersParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\GroupRankParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\PlaceVisitsParserFunction;
+use MediaWiki\Extension\RobloxAPI\parserFunction\UserAvatarThumbnailUrlParserFunction;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\MediaWikiServices;
@@ -37,8 +38,7 @@ class Hooks implements ParserFirstCallInitHook {
 	private array $parserFunctions;
 
 	public function __construct() {
-		$this->config =
-			MediaWikiServices::getInstance()->getConfigFactory()->makeConfig( 'RobloxAPI' );
+		$this->config = MediaWikiServices::getInstance()->getConfigFactory()->makeConfig( 'RobloxAPI' );
 
 		$this->dataSourceProvider = new DataSourceProvider( $this->config );
 
@@ -47,6 +47,7 @@ class Hooks implements ParserFirstCallInitHook {
 			'roblox_activeplayers' => new ActivePlayersParserFunction( $this->dataSourceProvider ),
 			'roblox_visits' => new PlaceVisitsParserFunction( $this->dataSourceProvider ),
 			'roblox_groupmembers' => new GroupMembersParserFunction( $this->dataSourceProvider ),
+			'roblox_useravatarthumbnailurl' => new UserAvatarThumbnailUrlParserFunction( $this->dataSourceProvider ),
 		];
 		$this->parserFunctions += $this->dataSourceProvider->createParserFunctions();
 	}
@@ -64,8 +65,13 @@ class Hooks implements ParserFirstCallInitHook {
 			if ( $isEnabled ) {
 				$parser->setFunctionHook( $id, static function ( ...$args ) use ( $function ) {
 					try {
+						$result = $function->exec( ...$args );
+						if ( !$function->shouldEscapeResult() ) {
+							return $result;
+						}
+
 						// escape wikitext, we don't need any of the results to be parsed
-						return wfEscapeWikiText( $function->exec( ...$args ) );
+						return wfEscapeWikiText( $result );
 					} catch ( RobloxAPIException $exception ) {
 						// prevent the phpstorm formatter from wrapping the line between the
 						// spread operator and the parameter value

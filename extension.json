@@ -32,7 +32,8 @@
 				"roblox_grouprank",
 				"roblox_activeplayers",
 				"roblox_visits",
-				"roblox_groupmembers"
+				"roblox_groupmembers",
+				"roblox_useravatarthumbnailurl"
 			],
 			"merge_strategy": "provide_default",
 			"description": "The parser functions that should be enabled. Data parser functions cannot be enabled or disabled here, instead they are enabled if their corresponding data source is enabled."
