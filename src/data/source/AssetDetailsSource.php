@@ -18,19 +18,26 @@
  * @file
  */
 
-$magicWords = [];
-$magicWords['en'] = [
-	'roblox_grouprank' => [ 0, 'rblxGroupRank' ],
-	'roblox_activeplayers' => [ 0, 'rblxPlaceActivePlayers' ],
-	'roblox_visits' => [ 0, 'rblxPlaceVisits' ],
-	'roblox_groupmembers' => [ 0, 'rblxGroupMembers' ],
-	'roblox_useravatarthumbnailurl' => [ 0, 'rblxUserAvatarThumbnailUrl' ],
-	// data source parser functions
-	'roblox_GameData' => [ 0, 'rblxGameData' ],
-	'roblox_GroupRoles' => [ 0, 'rblxGroupRoles' ],
-	'roblox_GroupData' => [ 0, 'rblxGroupData' ],
-	'roblox_UserAvatarThumbnail' => [ 0, 'rblxUserAvatarThumbnail' ],
-	'roblox_BadgeInfo' => [ 0, 'rblxBadgeInfo' ],
-	'roblox_UserInfo' => [ 0, 'rblxUserInfo' ],
-	'roblox_AssetDetails' => [ 0, 'rblxAssetDetails' ],
-];
+namespace MediaWiki\Extension\RobloxAPI\data\source;
+
+use MediaWiki\Config\Config;
+
+/**
+ * A data source for fetching data about a specific asset.
+ */
+class AssetDetailsSource extends DataSource {
+
+	public function __construct( Config $config ) {
+		parent::__construct( 'assetDetails', self::createSimpleCache(), $config, [
+			'AssetID',
+		] );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getEndpoint( $args ): string {
+		return "https://economy.roblox.com/v2/assets/{$args[0]}/details";
+	}
+
+}

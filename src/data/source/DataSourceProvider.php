@@ -47,6 +47,8 @@ class DataSourceProvider {
 		$this->cachingExpiries = $this->config->get( 'RobloxAPICachingExpiries' );
 
 		$this->registerDataSource( new GameDataSource( $config ) );
+		$this->registerDataSource( new AssetDetailsSource( $config ) );
+
 		$this->registerDataSource( new SimpleDataSource( 'groupRoles', $config, [ 'UserID' ],
 			static function ( $args ) {
 				return "https://groups.roblox.com/v1/users/$args[0]/groups/roles";

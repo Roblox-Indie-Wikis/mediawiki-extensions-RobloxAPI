@@ -36,8 +36,8 @@ class SimpleExpiringCache extends DataSourceCache {
 	/**
 	 * @inheritDoc
 	 */
-	public function getResultForEndpoint( string $endpoint ) {
-		$value = $this->cache->get( $endpoint );
+	public function getResultForEndpoint( string $endpoint, array $args ) {
+		$value = $this->cache->get( $this->getCacheKey( $endpoint, $args ) );
 		if ( $value === false ) {
 			return null;
 		}
@@ -48,7 +48,18 @@ class SimpleExpiringCache extends DataSourceCache {
 	/**
 	 * @inheritDoc
 	 */
-	public function registerCacheEntry( string $endpoint, $value ): void {
-		$this->cache->set( $endpoint, $value, $this->expiry );
+	public function registerCacheEntry( string $endpoint, $value, array $args ): void {
+		$this->cache->set( $this->getCacheKey( $endpoint, $args ), $value, $this->expiry );
 	}
+
+	/**
+	 * Generates a cache key for the given endpoint and arguments.
+	 * @param string $endpoint
+	 * @param array $args
+	 * @return string
+	 */
+	protected function getCacheKey( string $endpoint, array $args ): string {
+		return md5( json_encode( $args ) ) . '__roblox__' . $endpoint;
+	}
+
 }

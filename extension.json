@@ -22,7 +22,8 @@
 				"groupData",
 				"userAvatarThumbnail",
 				"badgeInfo",
-				"userInfo"
+				"userInfo",
+				"assetDetails"
 			],
 			"merge_strategy": "array_merge",
 			"description": "The datasources that should be enabled and available."
@@ -63,6 +64,14 @@
 		"RobloxAPIAllowedBadgeIDs": {
 			"value": [],
 			"description": "The badge IDs that are allowed to be used in the extension. If empty, all badge IDs are allowed."
+		},
+		"RobloxAPIAllowedAssetIDs": {
+			"value": [],
+			"description": "The asset IDs that are allowed to be used in the extension. If empty, all asset IDs are allowed."
+		},
+		"RobloxAPIRequestUserAgent": {
+			"value": "RobloxAPI MediaWiki Extension",
+			"description": "The user agent that should be used when making requests to the Roblox API."
 		}
 	},
 	"ConfigRegistry": {
