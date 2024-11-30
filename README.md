@@ -35,6 +35,10 @@ Currently, the only way to install the extension is to clone it from the reposit
     wfLoadExtension( 'RobloxAPI' );
     ```
 
+## Usage
+
+For more information on how to use the extension, see the [USAGE.md](USAGE.md) file.
+
 ## Development
 
 1. install nodejs, npm, and PHP composer
