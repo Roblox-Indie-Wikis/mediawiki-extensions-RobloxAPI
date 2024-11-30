@@ -20,6 +20,8 @@
 
 namespace MediaWiki\Extension\RobloxAPI\util;
 
+use MediaWiki\Config\Config;
+
 /**
  * Provides utilities for working with the Roblox API.
  */
@@ -78,12 +80,36 @@ class RobloxAPIUtil {
 	 * @param int $amount The amount of args expected
 	 * @throws RobloxAPIException if the args are invalid
 	 */
-	public static function safeDestructure( $args, $amount ): array {
+	public static function safeDestructure( array $args, int $amount ): array {
 		if ( count( $args ) !== $amount ) {
 			throw new RobloxAPIException( 'robloxapi-error-invalid-args-count' );
 		}
 
 		return $args;
+	}
+
+	/**
+	 * Asserts that the given args are allowed
+	 * @param Config $config The config object
+	 * @param array $expectedArgs The expected arg types
+	 * @param array $args The actual args
+	 * @throws RobloxAPIException if the args are invalid
+	 */
+	public static function assertArgsAllowed(
+		Config $config, array $expectedArgs, array $args
+	) {
+		foreach ( $args as $index => $arg ) {
+			$expectedType = $expectedArgs[$index];
+			$configKey = "RobloxAPIAllowed{$expectedType}s";
+			$allowedValues = $config->get( $configKey );
+			if ( empty( $allowedValues ) ) {
+				// all values are allowed
+				continue;
+			}
+			if ( !in_array( $arg, $allowedValues ) ) {
+				throw new RobloxAPIException( 'robloxapi-error-arg-not-allowed', $arg, $expectedType );
+			}
+		}
 	}
 
 }

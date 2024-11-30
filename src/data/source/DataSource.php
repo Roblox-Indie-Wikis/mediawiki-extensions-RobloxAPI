@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use FormatJson;
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
@@ -39,21 +40,27 @@ abstract class DataSource {
 	 */
 	protected DataSourceCache $cache;
 	/**
-	 * @var int The number of expected arguments.
+	 * @var Config The extension configuration.
 	 */
-	protected int $expectedArgs;
+	protected Config $config;
+	/**
+	 * @var array|string The expected argument types.
+	 */
+	protected array $expectedArgs;
 
 	/**
 	 * Constructs a new data source.
 	 * @param string $id The ID of this data source.
 	 * @param DataSourceCache $cache The cache of this data source.
-	 * @param int $expectedArgs The number of expected arguments.
+	 * @param Config $config The extension configuration.
+	 * @param array $expectedArgs The expected argument types.
 	 */
 	public function __construct(
-		string $id, DataSourceCache $cache, int $expectedArgs
+		string $id, DataSourceCache $cache, Config $config, array $expectedArgs
 	) {
 		$this->id = $id;
 		$this->cache = $cache;
+		$this->config = $config;
 		$this->expectedArgs = $expectedArgs;
 	}
 
@@ -69,9 +76,10 @@ abstract class DataSource {
 	 */
 	public function fetch( ...$args ) {
 		// assure that we have the correct number of arguments
-		RobloxAPIUtil::safeDestructure( $args, $this->expectedArgs );
+		RobloxAPIUtil::safeDestructure( $args, count( $this->expectedArgs ) );
 		// validate the ids
 		RobloxAPIUtil::assertValidIds( ...$args );
+		RobloxAPIUtil::assertArgsAllowed( $this->config, $this->expectedArgs, $args );
 
 		$endpoint = $this->getEndpoint( $args );
 		$data = $this->getDataFromEndpoint( $endpoint );

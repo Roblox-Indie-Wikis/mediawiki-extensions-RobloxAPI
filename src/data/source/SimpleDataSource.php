@@ -20,6 +20,7 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
 
 /**
@@ -41,10 +42,9 @@ class SimpleDataSource extends DataSource {
 	 * @inheritDoc
 	 */
 	public function __construct(
-		string $id, int $expectedArgs, callable $createEndpoint,
-		?callable $processData = null
+		string $id, Config $config, array $expectedArgs, callable $createEndpoint, ?callable $processData = null
 	) {
-		parent::__construct( $id, new SimpleExpiringCache(), $expectedArgs );
+		parent::__construct( $id, new SimpleExpiringCache(), $config, $expectedArgs );
 		$this->createEndpoint = $createEndpoint;
 		$this->processData = $processData;
 	}

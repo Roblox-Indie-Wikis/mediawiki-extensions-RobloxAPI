@@ -22,10 +22,10 @@ Grab number of visits for a set experience:
 !-->
 ## Current plans
 
-- [ ] Rewrite the parser function/data source system to be more simple and testable
+- [ ] Rewrite the parser functions to be more simple and testable
 - [ ] Increase test coverage
 - [ ] Add more API endpoints
-- [ ] Add more config options, e.g. to disable the cache or have a group/place id whitelist
+- [ ] Add more config options, e.g. to disable the cache
 
 ## Installation
 

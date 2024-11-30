@@ -13,5 +13,6 @@
 	"robloxapi-error-unexpected-data-structure": "Unexpected data structure!",
 	"robloxapi-error-datasource-returned-no-data": "Data source returned no data!",
 	"robloxapi-error-user-group-not-found": "Failed to find the group data for the given user! The user may not be in the group.",
-	"robloxapi-error-request-failed": "Request failed!"
+	"robloxapi-error-request-failed": "Request failed!",
+	"robloxapi-error-arg-not-allowed": "Argument '$1' is not allowed for type '$2'!"
 }

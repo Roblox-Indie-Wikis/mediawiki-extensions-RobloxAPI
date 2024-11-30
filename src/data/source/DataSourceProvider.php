@@ -46,14 +46,14 @@ class DataSourceProvider {
 
 		$this->cachingExpiries = $this->config->get( 'RobloxAPICachingExpiries' );
 
-		$this->registerDataSource( new GameDataSource() );
-		$this->registerDataSource( new SimpleDataSource( 'groupRoles', 1,
+		$this->registerDataSource( new GameDataSource( $config ) );
+		$this->registerDataSource( new SimpleDataSource( 'groupRoles', $config, [ 'UserID' ],
 			static function ( $args ) {
 				return "https://groups.roblox.com/v1/users/$args[0]/groups/roles";
 			}, static function ( $data ) {
 				return $data->data;
 			} ) );
-		$this->registerDataSource( new SimpleDataSource( 'groupData', 1,
+		$this->registerDataSource( new SimpleDataSource( 'groupData', $config, [ 'GroupID' ],
 			static function ( $args ) {
 				return "https://groups.roblox.com/v1/groups/$args[0]";
 			} ) );
@@ -76,13 +76,12 @@ class DataSourceProvider {
 	 * @param string $id
 	 * @return int The caching expiry in seconds.
 	 */
-	protected function getCachingExpiry( $id ): int {
-		$specificValue = $this->cachingExpiries[$id];
-		if ( $specificValue ) {
-			return $specificValue;
+	protected function getCachingExpiry( string $id ): int {
+		if ( !isset( $this->cachingExpiries[$id] ) ) {
+			return $this->cachingExpiries['*'];
 		}
 
-		return $this->cachingExpiries['*'];
+		return $this->cachingExpiries[$id];
 	}
 
 	/**
@@ -120,8 +119,7 @@ class DataSourceProvider {
 		$source = $this->getDataSource( $id );
 
 		if ( !$source ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found',
-				$id );
+			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found', $id );
 		}
 
 		return $source;
@@ -148,8 +146,7 @@ class DataSourceProvider {
 	 * @param DataSource $dataSource
 	 * @return RobloxApiParserFunction
 	 */
-	private function createParserFunction( DataSource $dataSource
-	): RobloxApiParserFunction {
+	private function createParserFunction( DataSource $dataSource ): RobloxApiParserFunction {
 		return new DataSourceParserFunction( $this, $dataSource );
 	}
 
