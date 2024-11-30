@@ -21,7 +21,6 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Config\Config;
-use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
 /**
@@ -30,7 +29,7 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 class GameDataSource extends DataSource {
 
 	public function __construct( Config $config ) {
-		parent::__construct( 'gameData', new SimpleExpiringCache(), $config, [
+		parent::__construct( 'gameData', self::createSimpleCache(), $config, [
 			'UniverseID',
 			'PlaceID',
 		] );

@@ -23,6 +23,8 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 use FormatJson;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
+use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
+use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
@@ -140,6 +142,15 @@ abstract class DataSource {
 	 */
 	public function processData( $data, $args ) {
 		return $data;
+	}
+
+	protected static function createSimpleCache(): DataSourceCache {
+		if ( defined( 'MW_PHPUNIT_TEST' ) ) {
+			// we're in a unit test environment, don't create cache
+			return new EmptyCache();
+		}
+
+		return new SimpleExpiringCache();
 	}
 
 }
