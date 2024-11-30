@@ -20,9 +20,6 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\cache;
 
-use FormatJson;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
-
 /**
  * Defines a caching strategy for a data source.
  */
@@ -35,7 +32,7 @@ abstract class DataSourceCache {
 	 * @param string $endpoint
 	 * @return mixed|null
 	 */
-	abstract protected function getResultForEndpoint( string $endpoint );
+	abstract public function getResultForEndpoint( string $endpoint );
 
 	/**
 	 * Saves an entry to the cache.
@@ -43,37 +40,7 @@ abstract class DataSourceCache {
 	 * @param mixed $value
 	 * @return void
 	 */
-	abstract protected function registerCacheEntry( string $endpoint, $value ): void;
-
-	/**
-	 * Fetches a JSON value from the given endpoint.
-	 * @param string $endpoint
-	 * @return false|mixed|string
-	 * @throws RobloxAPIException
-	 */
-	public function fetchJson( string $endpoint ) {
-		$cached_result = $this->getResultForEndpoint( $endpoint );
-
-		if ( $cached_result !== null ) {
-			return $cached_result;
-		}
-
-		$json = file_get_contents( $endpoint );
-
-		if ( $json === false ) {
-			throw new RobloxAPIException( 'robloxapi-error-request-failed' );
-		}
-
-		$data = FormatJson::decode( $json );
-
-		if ( $data === null ) {
-			throw new RobloxAPIException( 'robloxapi-error-decode-failure' );
-		}
-
-		$this->registerCacheEntry( $endpoint, $data );
-
-		return $data;
-	}
+	abstract public function registerCacheEntry( string $endpoint, $value ): void;
 
 	public function setExpiry( int $seconds ): void {
 		$this->expiry = $seconds;

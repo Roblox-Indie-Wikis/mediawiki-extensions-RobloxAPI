@@ -20,6 +20,7 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
+use FormatJson;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
@@ -73,7 +74,7 @@ abstract class DataSource {
 		RobloxAPIUtil::assertValidIds( ...$args );
 
 		$endpoint = $this->getEndpoint( $args );
-		$data = $this->cache->fetchJson( $endpoint );
+		$data = $this->getDataFromEndpoint( $endpoint );
 
 		$processedData = $this->processData( $data, $args );
 
@@ -82,6 +83,37 @@ abstract class DataSource {
 		}
 
 		return $processedData;
+	}
+
+	/**
+	 * Fetches data from the given endpoint.
+	 * @param string $endpoint The endpoint to fetch data from.
+	 * @return mixed The fetched data.
+	 * @throws RobloxAPIException if there are any errors during the process
+	 */
+	public function getDataFromEndpoint( string $endpoint ) {
+		$cached_result = $this->cache->getResultForEndpoint( $endpoint );
+
+		if ( $cached_result !== null ) {
+			return $cached_result;
+		}
+
+		$json = file_get_contents( $endpoint );
+
+		if ( $json === false ) {
+			// TODO try to fetch from cache
+			throw new RobloxAPIException( 'robloxapi-error-request-failed' );
+		}
+
+		$data = FormatJson::decode( $json );
+
+		if ( $data === null ) {
+			throw new RobloxAPIException( 'robloxapi-error-decode-failure' );
+		}
+
+		$this->cache->registerCacheEntry( $endpoint, $data );
+
+		return $data;
 	}
 
 	/**

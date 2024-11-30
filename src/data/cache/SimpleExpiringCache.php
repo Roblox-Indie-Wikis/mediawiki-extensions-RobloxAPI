@@ -36,7 +36,7 @@ class SimpleExpiringCache extends DataSourceCache {
 	/**
 	 * @inheritDoc
 	 */
-	protected function getResultForEndpoint( string $endpoint ) {
+	public function getResultForEndpoint( string $endpoint ) {
 		$value = $this->cache->get( $endpoint );
 		if ( $value === false ) {
 			return null;
@@ -48,7 +48,7 @@ class SimpleExpiringCache extends DataSourceCache {
 	/**
 	 * @inheritDoc
 	 */
-	protected function registerCacheEntry( string $endpoint, $value ): void {
+	public function registerCacheEntry( string $endpoint, $value ): void {
 		$this->cache->set( $endpoint, $value, $this->expiry );
 	}
 }
