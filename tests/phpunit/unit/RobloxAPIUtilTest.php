@@ -66,4 +66,34 @@ class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 		RobloxAPIUtil::assertValidIds( "abc" );
 	}
 
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::safeDestructure
+	 */
+	public function testSafeDestructure(): void {
+		self::assertEquals( [ 'test', 'some value' ], RobloxAPIUtil::safeDestructure( [ 'test', 'some value' ], 2 ) );
+
+		$this->expectException( RobloxAPIException::class );
+		$this->expectExceptionMessage( 'robloxapi-error-invalid-args-count' );
+		RobloxAPIUtil::safeDestructure( [ 'test', 'some value' ], 1 );
+	}
+
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::assertArgsAllowed
+	 */
+	public function testAssertArgsAllowed(): void {
+		$config = new \HashConfig( [
+			'RobloxAPIAllowedGroupIDs' => [],
+			'RobloxAPIAllowedUserIDs' => [ '123454321' ],
+		] );
+
+		RobloxAPIUtil::assertArgsAllowed( $config, [ 'UserID' ], [ '123454321' ] );
+		RobloxAPIUtil::assertArgsAllowed( $config, [ 'UserID', 'GroupID' ], [ '123454321', '14981124' ] );
+		RobloxAPIUtil::assertArgsAllowed( $config, [ 'GroupID', 'GroupID' ], [ '512512312', '901480124' ] );
+
+		$this->expectException( RobloxAPIException::class );
+		$this->expectExceptionMessage( 'robloxapi-error-arg-not-allowed' );
+		RobloxAPIUtil::assertArgsAllowed( $config, [ 'UserID' ], [ '54321' ] );
+		RobloxAPIUtil::assertArgsAllowed( $config, [ 'UserID', 'GroupID' ], [ '12345', '54321' ] );
+	}
+
 }

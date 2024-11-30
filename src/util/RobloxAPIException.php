@@ -41,6 +41,14 @@ class RobloxAPIException extends Exception {
 	public function __construct( string $message = '', ...$messageParams ) {
 		parent::__construct( $message );
 		$this->messageParams = [];
+
+		if ( defined( 'MW_PHPUNIT_TEST' ) ) {
+			// we're in a unit test environment, don't escape the message params
+			$this->messageParams = $messageParams;
+
+			return;
+		}
+
 		foreach ( $messageParams as $param ) {
 			$this->messageParams[] = wfEscapeWikiText( $param );
 		}
