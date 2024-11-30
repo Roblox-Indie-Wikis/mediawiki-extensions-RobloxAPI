@@ -96,4 +96,16 @@ class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 		RobloxAPIUtil::assertArgsAllowed( $config, [ 'UserID', 'GroupID' ], [ '12345', '54321' ] );
 	}
 
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::assertValidArgs
+	 */
+	public function testAssertValidArgs(): void {
+		RobloxAPIUtil::assertValidArgs( [ 'UserID' ], [ '123454321' ] );
+		RobloxAPIUtil::assertValidArgs( [ 'ThumbnailSize' ], [ '140x140' ] );
+
+		$this->expectException( RobloxAPIException::class );
+		$this->expectExceptionMessage( 'robloxapi-error-invalid-thumbnail-size' );
+		RobloxAPIUtil::assertValidArgs( [ 'ThumbnailSize' ], [ '12345' ] );
+	}
+
 }

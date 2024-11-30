@@ -57,10 +57,10 @@ class DataSourceProvider {
 			static function ( $args ) {
 				return "https://groups.roblox.com/v1/groups/$args[0]";
 			} ) );
-		$this->registerDataSource( new SimpleDataSource( 'userAvatarThumbnail', $config, [ 'UserID' ],
+		$this->registerDataSource( new SimpleDataSource( 'userAvatarThumbnail', $config, [ 'UserID', 'ThumbnailSize' ],
 			static function ( $args ) {
-				// TODO allow configuring the size and more options
-				return "https://thumbnails.roblox.com/v1/users/avatar?userIds={$args[0]}&size=720x720&format=Png" .
+				// TODO allow configuring more options
+				return "https://thumbnails.roblox.com/v1/users/avatar?userIds={$args[0]}&size={$args[1]}&format=Png" .
 					"&isCircular=false";
 			}, static function ( $data ) {
 				return $data->data;

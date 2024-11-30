@@ -37,10 +37,10 @@ class UserAvatarThumbnailUrlParserFunction extends RobloxApiParserFunction {
 	 * @inheritDoc
 	 */
 	public function exec( $parser, ...$args ): string {
-		[ $userId ] = RobloxAPIUtil::safeDestructure( $args, 1 );
+		[ $userId, $thumbnailSize ] = RobloxAPIUtil::safeDestructure( $args, 2 );
 
 		$source = $this->dataSourceProvider->getDataSourceOrThrow( 'userAvatarThumbnail' );
-		$data = $source->fetch( $userId );
+		$data = $source->fetch( $userId, $thumbnailSize );
 
 		if ( !$data ) {
 			throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );

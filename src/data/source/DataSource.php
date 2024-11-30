@@ -79,8 +79,8 @@ abstract class DataSource {
 	public function fetch( ...$args ) {
 		// assure that we have the correct number of arguments
 		RobloxAPIUtil::safeDestructure( $args, count( $this->expectedArgs ) );
-		// validate the ids
-		RobloxAPIUtil::assertValidIds( ...$args );
+		// validate the args
+		RobloxAPIUtil::assertValidArgs( $this->expectedArgs, $args );
 		RobloxAPIUtil::assertArgsAllowed( $this->config, $this->expectedArgs, $args );
 
 		$endpoint = $this->getEndpoint( $args );

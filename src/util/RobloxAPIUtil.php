@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\util;
 
 use MediaWiki\Config\Config;
+use Wikimedia\Stats\Exceptions\IllegalOperationException;
 
 /**
  * Provides utilities for working with the Roblox API.
@@ -74,6 +75,44 @@ class RobloxAPIUtil {
 		}
 	}
 
+	// TODO merge this with assertArgsAllowed
+
+	/**
+	 * Asserts that the given args are valid
+	 * @param array $expectedArgs The expected arg types
+	 * @param array $args The actual args
+	 * @return void
+	 * @throws RobloxAPIException if the args are invalid
+	 */
+	public static function assertValidArgs( array $expectedArgs, array $args ): void {
+		foreach ( $args as $index => $arg ) {
+			$expectedType = $expectedArgs[$index];
+			if ( substr( strtolower( $expectedType ), -2 ) === 'id' ) {
+				self::assertValidIds( $arg );
+			} else {
+				switch ( $expectedType ) {
+					case 'ThumbnailSize':
+						self::assertValidThumbnailSize( $arg );
+						break;
+					default:
+						throw new IllegalOperationException( "Unknown expected arg type: $expectedType" );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Asserts that the given thumbnail size is valid
+	 * @param string $size The thumbnail size
+	 * @return void
+	 * @throws RobloxAPIException if the size is invalid
+	 */
+	public static function assertValidThumbnailSize( string $size ): void {
+		if ( !preg_match( '/^\d{1,3}x\d{1,3}$/', $size ) ) {
+			throw new RobloxAPIException( 'robloxapi-error-invalid-thumbnail-size', $size );
+		}
+	}
+
 	/**
 	 * Validates the number of args and returns them so they can be destructured safely
 	 * @param array $args An array of args
@@ -101,6 +140,10 @@ class RobloxAPIUtil {
 		foreach ( $args as $index => $arg ) {
 			$expectedType = $expectedArgs[$index];
 			$configKey = "RobloxAPIAllowed{$expectedType}s";
+			if ( !$config->has( $configKey ) ) {
+				// cannot be configured, e.g. thumbnail size
+				continue;
+			}
 			$allowedValues = $config->get( $configKey );
 			if ( empty( $allowedValues ) ) {
 				// all values are allowed
