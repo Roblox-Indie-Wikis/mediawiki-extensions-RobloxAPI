@@ -42,7 +42,7 @@ class SimpleDataSource extends DataSource {
 	 */
 	public function __construct(
 		string $id, int $expectedArgs, callable $createEndpoint,
-		callable $processData = null
+		?callable $processData = null
 	) {
 		parent::__construct( $id, new SimpleExpiringCache(), $expectedArgs );
 		$this->createEndpoint = $createEndpoint;
@@ -63,6 +63,7 @@ class SimpleDataSource extends DataSource {
 		if ( $this->processData ) {
 			return call_user_func( $this->processData, $data, $args );
 		}
+
 		return $data;
 	}
 
