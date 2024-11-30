@@ -82,8 +82,10 @@ class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 	 */
 	public function testAssertArgsAllowed(): void {
 		$config = new \HashConfig( [
-			'RobloxAPIAllowedGroupIDs' => [],
-			'RobloxAPIAllowedUserIDs' => [ '123454321' ],
+			'RobloxAPIAllowedArguments' => [
+				'UserID' => [ '123454321' ],
+				'GroupID' => [],
+			],
 		] );
 
 		RobloxAPIUtil::assertArgsAllowed( $config, [ 'UserID' ], [ '123454321' ] );

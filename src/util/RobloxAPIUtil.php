@@ -35,7 +35,6 @@ class RobloxAPIUtil {
 	 */
 	public static function isValidId( ?string $string ): bool {
 		if ( $string === null ) {
-			// TODO handle this somewhere else
 			return false;
 		}
 
@@ -63,11 +62,6 @@ class RobloxAPIUtil {
 	 * @throws RobloxAPIException if any of the IDs are invalid
 	 */
 	public static function assertValidIds( ...$strings ): void {
-		// required because RobloxAPIException uses wfEscapeWikiText
-		// TODO find a better way to handle this
-		global $wgEnableMagicLinks;
-		$wgEnableMagicLinks = [];
-
 		foreach ( $strings as $string ) {
 			if ( !self::isValidId( $string ) ) {
 				throw new RobloxAPIException( 'robloxapi-error-invalid-id', $string );
