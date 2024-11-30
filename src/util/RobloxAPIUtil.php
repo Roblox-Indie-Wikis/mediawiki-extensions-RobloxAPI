@@ -86,24 +86,14 @@ class RobloxAPIUtil {
 			} else {
 				switch ( $expectedType ) {
 					case 'ThumbnailSize':
-						self::assertValidThumbnailSize( $arg );
+						if ( !preg_match( '/^\d{1,3}x\d{1,3}$/', $arg ) ) {
+							throw new RobloxAPIException( 'robloxapi-error-invalid-thumbnail-size', $arg );
+						}
 						break;
 					default:
 						throw new IllegalOperationException( "Unknown expected arg type: $expectedType" );
 				}
 			}
-		}
-	}
-
-	/**
-	 * Asserts that the given thumbnail size is valid
-	 * @param string $size The thumbnail size
-	 * @return void
-	 * @throws RobloxAPIException if the size is invalid
-	 */
-	public static function assertValidThumbnailSize( string $size ): void {
-		if ( !preg_match( '/^\d{1,3}x\d{1,3}$/', $size ) ) {
-			throw new RobloxAPIException( 'robloxapi-error-invalid-thumbnail-size', $size );
 		}
 	}
 
