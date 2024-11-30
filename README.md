@@ -20,12 +20,6 @@ Grab number of favourites for a set experience:
 
 Grab number of visits for a set experience: 
 !-->
-## Current plans
-
-- [ ] Rewrite the parser functions to be more simple and testable
-- [ ] Increase test coverage
-- [ ] Add more API endpoints
-- [ ] Add more config options, e.g. to disable the cache
 
 ## Installation
 
