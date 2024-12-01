@@ -1,25 +1,10 @@
 # RobloxAPI
 
-A MediaWiki extension which provides easy access to the Roblox API via parser functions. 
+A MediaWiki extension which provides easy access to the Roblox API via parser functions. The Roblox API is generally very poorly doccumented, and using ExternalData or Lua can be hard or not viable for all wiki users. This extension aims to make it easy for you to grab data from Roblox and put it on your wiki. 
 
 > [!WARNING]
 > This extension is not production-ready yet.
 > It is still in development and breaking changes may occur at any time.
-
-<!--
-## Usage 
-### Group Ranks
-Get a users group rank: 
-### Experience Statistics
-> [!IMPORTANT]
-> The Universe ID is not the same as the Game ID. 
-
-Grab concurrent players for a set experience:
-``
-Grab number of favourites for a set experience: 
-
-Grab number of visits for a set experience: 
-!-->
 
 ## Installation
 
@@ -37,7 +22,8 @@ Currently, the only way to install the extension is to clone it from the reposit
 
 ## Usage
 
-For more information on how to use the extension, see the [USAGE.md](USAGE.md) file.
+For more information on how to use the extension, see the [USAGE.md](USAGE.md) file. 
+<!-- See this extension in action on the [Dovedale Wiki])(https://dovedale.wiki) and the [Hybrid Cafe](https://hybridcafe.wiki)!-->  
 
 ## Development
 
@@ -47,3 +33,4 @@ For more information on how to use the extension, see the [USAGE.md](USAGE.md) f
 4. `composer install`
 
 Once set up, running `npm test` and `composer test` will run automated code checks.
+
