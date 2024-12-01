@@ -4,7 +4,7 @@
 
 ### Data parser functions
 
-These functions return processed data from the Roblox API.
+These functions return processed data from the Roblox API. See below on how to get the universe ID of any experience.
 
 | Name                              | Description                                  | Arguments                 | Example                                                   | Internal name                   |
 |-----------------------------------|----------------------------------------------|---------------------------|-----------------------------------------------------------|---------------------------------|
@@ -151,4 +151,10 @@ If you want to disable caching, you can set this variable to `true`:
 
 ```php
 $wgRobloxAPIDisableCache = true;
+```
+
+### Obtaining the Universe ID 
+To get an experience universe ID, input the game ID to this API: 
+```html
+https://apis.roblox.com/universes/v1/places/<GAMEID>/universe
 ```
