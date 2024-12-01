@@ -1,6 +1,8 @@
 # RobloxAPI
 
-A MediaWiki extension which provides easy access to the Roblox API via parser functions. The Roblox API is generally very poorly doccumented, and using ExternalData or Lua can be hard or not viable for all wiki users. This extension aims to make it easy for you to grab data from Roblox and put it on your wiki. 
+A MediaWiki extension which provides easy access to the Roblox API via parser functions. The Roblox API is generally
+very poorly documented, and using ExternalData or Lua can be hard or not viable for all wiki users. This extension aims
+to make it easy for you to grab data from Roblox and put it on your wiki.
 
 > [!WARNING]
 > This extension is not production-ready yet.
@@ -22,7 +24,7 @@ Currently, the only way to install the extension is to clone it from the reposit
 
 ## Usage
 
-For more information on how to use the extension, see the [USAGE.md](USAGE.md) file. 
+For more information on how to use the extension, see the [USAGE.md](USAGE.md) file.
 <!-- See this extension in action on the [Dovedale Wiki])(https://dovedale.wiki) and the [Hybrid Cafe](https://hybridcafe.wiki)!-->  
 
 ## Development

@@ -49,6 +49,12 @@ The following data sources are available:
 
 Allowed values: Any positive integer.
 
+#### Obtaining the Universe ID
+To get an experience universe ID, input the game ID to this API:
+```html
+https://apis.roblox.com/universes/v1/places/<GAMEID>/universe
+```
+
 #### `ThumbnailSize`
 
 Allowed values: `30x30`, `48x48`, `60x60`, `75x75`, `100x100`, `110x110`, `140x140`, `150x150`, `150x200`, `180x180`,
@@ -153,8 +159,16 @@ If you want to disable caching, you can set this variable to `true`:
 $wgRobloxAPIDisableCache = true;
 ```
 
-### Obtaining the Universe ID 
-To get an experience universe ID, input the game ID to this API: 
-```html
-https://apis.roblox.com/universes/v1/places/<GAMEID>/universe
+### `$wgRobloxAPIParserFunctionsExpensive`
+
+Whether to mark the extension's parser functions as expensive. By default, they are marked as expensive:
+
+```php
+$wgRobloxAPIParserFunctionsExpensive = true;
+```
+
+If you don't want to mark the extension's parser functions as expensive, you can set this variable to `false`:
+
+```php
+$wgRobloxAPIParserFunctionsExpensive = false;
 ```

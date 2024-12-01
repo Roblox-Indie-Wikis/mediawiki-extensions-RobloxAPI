@@ -30,6 +30,7 @@ use MediaWiki\Extension\RobloxAPI\parserFunction\UserAvatarThumbnailUrlParserFun
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\MediaWikiServices;
+use Parser;
 
 class Hooks implements ParserFirstCallInitHook {
 
@@ -63,9 +64,14 @@ class Hooks implements ParserFirstCallInitHook {
 				$function instanceof DataSourceParserFunction ||
 				in_array( $id, $this->config->get( 'RobloxAPIEnabledParserFunctions' ) );
 			if ( $isEnabled ) {
-				$parser->setFunctionHook( $id, static function ( ...$args ) use ( $function ) {
+				$parser->setFunctionHook( $id, function ( Parser $parser, ...$args ) use ( $function ) {
+					if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
+						!$parser->incrementExpensiveFunctionCount() ) {
+						return false;
+					}
 					try {
-						$result = $function->exec( ...$args );
+						$result = $function->exec( $parser, ...$args );
+
 						if ( !$function->shouldEscapeResult() ) {
 							return $result;
 						}
