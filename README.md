@@ -4,9 +4,8 @@ A MediaWiki extension which provides easy access to the Roblox API via parser fu
 very poorly documented, and using ExternalData or Lua can be hard or not viable for all wiki users. This extension aims
 to make it easy for you to grab data from Roblox and put it on your wiki.
 
-> [!WARNING]
-> This extension is not production-ready yet.
-> It is still in development and breaking changes may occur at any time.
+> [!NOTE]
+> This extension is still in development.
 
 ## Installation
 
