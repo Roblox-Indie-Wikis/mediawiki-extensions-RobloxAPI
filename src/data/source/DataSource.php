@@ -27,6 +27,9 @@ use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
+use MediaWiki\Http\HttpRequestFactory;
+use MediaWiki\Logger\LoggerFactory;
+use MediaWiki\MediaWikiServices;
 
 /**
  * A data source represents an endpoint of the roblox api.
@@ -109,22 +112,34 @@ abstract class DataSource {
 			return $cached_result;
 		}
 
+		$options = [];
+
 		global $wgRobloxAPIRequestUserAgent;
-		$options = [
-			'http' => [
-				'method' => 'GET',
-				'user_agent' => $wgRobloxAPIRequestUserAgent,
-				'accept' => 'application/json',
-				'header' => 'Content-Type: application/json',
-			],
-		];
+		if ( $wgRobloxAPIRequestUserAgent && $wgRobloxAPIRequestUserAgent !== '' ) {
+			$options['userAgent'] = $wgRobloxAPIRequestUserAgent;
+		}
 
 		$this->processRequestOptions( $options, $args );
 
-		$context = stream_context_create( $options );
-		$json = file_get_contents( $endpoint, false, $context );
+		$request = MediaWikiServices::getInstance()->getHttpRequestFactory()->create( $endpoint, $options );
+		$request->setHeader( 'Accept', 'application/json' );
 
-		if ( $json === false ) {
+		$status = $request->execute();
+
+		if ( !$status->isOK() ) {
+			$logger = LoggerFactory::getInstance( 'RobloxAPI' );
+			$errors = $status->getErrorsByType( 'error' );
+			$logger->warning( 'Failed to fetch data from Roblox API', [
+				'endpoint' => $endpoint,
+				'errors' => $errors,
+				'status' => $status->getStatusValue(),
+				'content' => $request->getContent(),
+			] );
+		}
+
+		$json = $request->getContent();
+
+		if ( !$status->isOK() || $json === null ) {
 			// TODO try to fetch from cache
 			throw new RobloxAPIException( 'robloxapi-error-request-failed' );
 		}

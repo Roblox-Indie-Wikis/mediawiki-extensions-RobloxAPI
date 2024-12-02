@@ -51,7 +51,7 @@
 			"merge_strategy": "array_plus_2d"
 		},
 		"RobloxAPIRequestUserAgent": {
-			"value": "RobloxAPI MediaWiki Extension",
+			"value": null,
 			"description": "The user agent that should be used when making requests to the Roblox API."
 		},
 		"RobloxAPIDisableCache": {
