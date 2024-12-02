@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
+use MediaWiki\Html\Html;
 
 /**
  * Gets the URL for a user's avatar thumbnail.
@@ -52,16 +53,11 @@ class UserAvatarThumbnailUrlParserFunction extends RobloxApiParserFunction {
 
 		$url = $data[0]->imageUrl;
 
-		if ( $url ) {
-			// allows embedding the image in the wiki
-			return $url . '.png';
+		if ( !$url || !RobloxAPIUtil::verifyIsRobloxCdnUrl( $url ) ) {
+			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
 		}
 
 		return $url;
-	}
-
-	public function shouldEscapeResult(): bool {
-		return false;
 	}
 
 }

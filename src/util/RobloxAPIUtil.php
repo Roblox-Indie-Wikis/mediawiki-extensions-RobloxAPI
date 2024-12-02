@@ -138,4 +138,13 @@ class RobloxAPIUtil {
 		}
 	}
 
+	/**
+	 * Verifies that a URL is a Roblox CDN URL
+	 * @param string $url The URL to verify
+	 * @return bool
+	 */
+	public static function verifyIsRobloxCdnUrl( string $url ): bool {
+		return preg_match( '/^https:\/\/[a-zA-Z0-9]{2}\.rbxcdn\.com\/.*$/', $url );
+	}
+
 }
