@@ -41,7 +41,7 @@
 		},
 		"RobloxAPICachingExpiries": {
 			"value": {
-				"*": 60
+				"*": 600
 			},
 			"description": "The amount of seconds after the cache for a data source expires. '*' is a wildcard for all data sources."
 		},

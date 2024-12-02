@@ -50,8 +50,10 @@ The following data sources are available:
 Allowed values: Any positive integer.
 
 #### Obtaining the Universe ID
+
 To get an experience universe ID, input the game ID to this API:
-```html
+
+```
 https://apis.roblox.com/universes/v1/places/<GAMEID>/universe
 ```
 
@@ -96,11 +98,11 @@ $wgRobloxAPIEnabledParserFunctions = [
 ### `$wgRobloxAPICachingExpiries`
 
 An array of cache expiry times (in seconds) for each data source. By default, all data sources have a cache expiry time
-of 60 seconds:
+of 10 minutes:
 
 ```php
 $wgRobloxAPICachingExpiries = [
-    '*' => 60,
+    '*' => 600,
 ];
 ```
 
@@ -108,7 +110,7 @@ If you want to set a different cache expiry time for specific data sources, you 
 
 ```php
 $wgRobloxAPICachingExpiries = [
-    '*' => 60,
+    '*' => 600,
     'gameData' => 120,
     'groupRoles' => 180,
 ];
@@ -138,8 +140,8 @@ In this example, only the Game IDs 123456 and 789012 are allowed.
 
 ### `$wgRobloxAPIRequestUserAgent`
 
-The user agent that should be used when making requests to the Roblox API. By default, it is set to
-`RobloxAPI MediaWiki Extension`:
+The user agent that should be used when making requests to the Roblox API. By default, it uses the
+default one provided by MediaWiki. If you want to change it, you can set this variable to a custom user agent:
 
 ```php
 $wgRobloxAPIRequestUserAgent = 'RobloxAPI MediaWiki Extension';
