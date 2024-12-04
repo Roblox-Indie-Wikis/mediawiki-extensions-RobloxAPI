@@ -13,11 +13,8 @@ See it live: https://dovedale.wiki
 
 Currently, the only way to install the extension is to clone it from the repository directly.
 
-1. Clone the repository:
-    ```sh
-   cd extensions/
-    git clone https://github.com/dovedalewiki/mediawiki-extensions-RobloxAPI.git
-    ```
+1. Download the repository using the following link: [Download ZIP](https://github.com/dovedalewiki/mediawiki-extensions-RobloxAPI/archive/master.zip)
+2. Place the files in a directory called `RobloxAPI` in your `extensions/` folder.
 2. Add the following line to the end of your `LocalSettings.php` file:
     ```php
     wfLoadExtension( 'RobloxAPI' );
