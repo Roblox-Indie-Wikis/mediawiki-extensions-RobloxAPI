@@ -7,6 +7,8 @@ to make it easy for you to grab data from Roblox and put it on your wiki.
 > [!NOTE]
 > This extension is still in development.
 
+See it live: https://dovedale.wiki
+
 ## Installation
 
 Currently, the only way to install the extension is to clone it from the repository directly.
@@ -21,10 +23,11 @@ Currently, the only way to install the extension is to clone it from the reposit
     wfLoadExtension( 'RobloxAPI' );
     ```
 
+<!--Are you on Miraheze? This extension is available on Special:ManageWiki! Search for 'RobloxAPI' and install it! !-->
+
 ## Usage
 
 For more information on how to use the extension, see the [USAGE.md](USAGE.md) file.
-<!-- See this extension in action on the [Dovedale Wiki])(https://dovedale.wiki) and the [Hybrid Cafe](https://hybridcafe.wiki)!-->  
 
 ## Development
 
