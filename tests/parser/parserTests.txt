@@ -1,0 +1,140 @@
+!! options
+version=2
+!! end
+
+!! test
+rblxGroupRank: handle invalid number of args
+!! wikitext
+{{#rblxGroupRank: 12345}}
+!! html
+<p>Invalid number of arguments!
+</p>
+!! end
+
+!! test
+rblxGroupRank: handle too many args
+!! wikitext
+{{#rblxGroupRank: 12345 | 1 | 2}}
+!! html
+<p>Invalid number of arguments!
+</p>
+!! end
+
+!! test
+rblxGroupRank: handle invalid groupId
+!! wikitext
+{{#rblxGroupRank: abc | 12345 }}
+!! html
+<p>Invalid ID value &#39;abc&#39;!
+</p>
+!! end
+
+!! test
+rblxGroupRank: handle invalid userId
+!! wikitext
+{{#rblxGroupRank: 12345 | def }}
+!! html
+<p>Invalid ID value &#39;def&#39;!
+</p>
+!! end
+
+
+!! test
+rblxPlaceActivePlayers: handle invalid number of args
+!! wikitext
+{{#rblxPlaceActivePlayers: 12345}}
+!! html
+<p>Invalid number of arguments!
+</p>
+!! end
+
+!! test
+rblxPlaceActivePlayers: handle invalid universeId
+!! wikitext
+{{#rblxPlaceActivePlayers: abc | 12345}}
+!! html
+<p>Invalid ID value &#39;abc&#39;!
+</p>
+!! end
+
+!! test
+rblxPlaceActivePlayers: handle invalid placeId
+!! wikitext
+{{#rblxPlaceActivePlayers: def | 54321}}
+!! html
+<p>Invalid ID value &#39;def&#39;!
+</p>
+!! end
+
+!! test
+rblxPlaceVisits: handle invalid number of args
+!! wikitext
+{{#rblxPlaceVisits: 12345}}
+!! html
+<p>Invalid number of arguments!
+</p>
+!! end
+
+
+!! test
+rblxPlaceVisits: handle invalid universeId
+!! wikitext
+{{#rblxPlaceVisits: abc | 12345}}
+!! html
+<p>Invalid ID value &#39;abc&#39;!
+</p>
+!! end
+
+!! test
+rblxPlaceVisits: handle invalid placeId
+!! wikitext
+{{#rblxPlaceVisits: def | 54321}}
+!! html
+<p>Invalid ID value &#39;def&#39;!
+</p>
+!! end
+
+!! test
+rblxGroupMembers: handle invalid number of args
+!! wikitext
+{{#rblxGroupMembers: 12345 | 54321}}
+!! html
+<p>Invalid number of arguments!
+</p>
+!! end
+
+!! test
+rblxGroupMembers: handle invalid groupId
+!! wikitext
+{{#rblxGroupMembers: invalidGroupId}}
+!! html
+<p>Invalid ID value &#39;invalidGroupId&#39;!
+</p>
+!! end
+
+!! test
+rblxUserAvatarThumbnailUrl: handle invalid number of args
+!! wikitext
+{{#rblxUserAvatarThumbnailUrl: 12345}}
+!! html
+<p>Invalid number of arguments!
+</p>
+!! end
+
+!! test
+rblxUserAvatarThumbnailUrl: handle invalid userId
+!! wikitext
+{{#rblxUserAvatarThumbnailUrl: invalidUserId | 12345}}
+!! html
+<p>Invalid ID value &#39;invalidUserId&#39;!
+</p>
+!! end
+
+!! test
+rblxUserAvatarThumbnailUrl: handle invalid thumbnail size
+!! wikitext
+{{#rblxUserAvatarThumbnailUrl: 12345 | invalidSize}}
+!! html
+<p>Invalid thumbnail size!
+</p>
+!! end

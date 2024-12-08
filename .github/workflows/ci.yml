@@ -73,3 +73,6 @@ jobs:
       - name: Run PHPUnit
         run: composer phpunit:entrypoint -- --group RobloxAPI -c tests/phpunit/suite.xml
 
+      - name: Run parser tests
+        run: php tests/parser/parserTests.php --file=extensions/RobloxAPI/tests/parser/parserTests.txt
+
