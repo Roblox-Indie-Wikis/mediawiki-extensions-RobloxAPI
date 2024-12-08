@@ -18,7 +18,7 @@ See it live: https://dovedale.wiki
     wfLoadExtension( 'RobloxAPI' );
     ```
 
-<!--Are you on Miraheze? This extension is available on Special:ManageWiki! Search for 'RobloxAPI' and install it! !-->
+Are you on Miraheze? This extension is available on Special:ManageWiki! Search for 'RobloxAPI' and install it with a click.
 
 ## Usage
 
