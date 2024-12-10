@@ -140,7 +140,7 @@ rblxUserAvatarThumbnailUrl: handle invalid thumbnail size
 !! end
 
 !! test
-rblxxUserId: handle invalid number of args
+rblxUserId: handle invalid number of args
 !! wikitext
 {{#rblxUserId: someUsername | someOtherUsername}}
 !! html
@@ -149,7 +149,7 @@ rblxxUserId: handle invalid number of args
 !! end
 
 !! test
-rblxxUserId: handle invalid username
+rblxUserId: handle invalid username
 !! wikitext
 {{#rblxUserId: __invalidUsername}}
 !! html
