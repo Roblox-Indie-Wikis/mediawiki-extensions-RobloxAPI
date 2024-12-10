@@ -46,7 +46,11 @@ abstract class RobloxApiParserFunction {
 	 */
 	abstract public function exec( $parser, ...$args ): string;
 
-	public function shouldEscapeResult(): bool {
+	/**
+	 * @param string $result The result of the parser function.
+	 * @return bool Whether the result should be escaped and url-encoded.
+	 */
+	public function shouldEscapeResult( string $result ): bool {
 		return true;
 	}
 

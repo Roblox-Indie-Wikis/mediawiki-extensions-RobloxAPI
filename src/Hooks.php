@@ -72,7 +72,7 @@ class Hooks implements ParserFirstCallInitHook {
 					try {
 						$result = $function->exec( $parser, ...$args );
 
-						if ( !$function->shouldEscapeResult() ) {
+						if ( !$function->shouldEscapeResult( $result ) ) {
 							return $result;
 						}
 
