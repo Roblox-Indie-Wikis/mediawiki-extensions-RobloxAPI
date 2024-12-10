@@ -27,6 +27,7 @@ use MediaWiki\Extension\RobloxAPI\parserFunction\GroupMembersParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\GroupRankParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\PlaceVisitsParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\UserAvatarThumbnailUrlParserFunction;
+use MediaWiki\Extension\RobloxAPI\parserFunction\UserIdParserFunction;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\MediaWikiServices;
@@ -49,6 +50,7 @@ class Hooks implements ParserFirstCallInitHook {
 			'roblox_visits' => new PlaceVisitsParserFunction( $this->dataSourceProvider ),
 			'roblox_groupmembers' => new GroupMembersParserFunction( $this->dataSourceProvider ),
 			'roblox_useravatarthumbnailurl' => new UserAvatarThumbnailUrlParserFunction( $this->dataSourceProvider ),
+			'roblox_userid' => new UserIdParserFunction( $this->dataSourceProvider ),
 		];
 		$this->parserFunctions += $this->dataSourceProvider->createParserFunctions();
 	}

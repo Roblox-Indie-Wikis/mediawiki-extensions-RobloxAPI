@@ -138,3 +138,21 @@ rblxUserAvatarThumbnailUrl: handle invalid thumbnail size
 <p>Invalid thumbnail size!
 </p>
 !! end
+
+!! test
+rblxxUserId: handle invalid number of args
+!! wikitext
+{{#rblxUserId: someUsername | someOtherUsername}}
+!! html
+<p>Invalid number of arguments!
+</p>
+!! end
+
+!! test
+rblxxUserId: handle invalid username
+!! wikitext
+{{#rblxUserId: __invalidUsername}}
+!! html
+<p>Invalid username!
+</p>
+!! end

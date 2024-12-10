@@ -104,10 +104,15 @@ class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 	public function testAssertValidArgs(): void {
 		RobloxAPIUtil::assertValidArgs( [ 'UserID' ], [ '123454321' ] );
 		RobloxAPIUtil::assertValidArgs( [ 'ThumbnailSize' ], [ '140x140' ] );
+		RobloxAPIUtil::assertValidArgs( [ 'Username' ], [ 'builderman_123' ] );
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-thumbnail-size' );
 		RobloxAPIUtil::assertValidArgs( [ 'ThumbnailSize' ], [ '12345' ] );
+
+		$this->expectException( RobloxAPIException::class );
+		$this->expectExceptionMessage( 'robloxapi-error-invalid-username' );
+		RobloxAPIUtil::assertValidArgs( [ 'Username' ], [ '__invalidusername' ] );
 	}
 
 }

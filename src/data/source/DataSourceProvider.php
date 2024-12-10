@@ -47,6 +47,7 @@ class DataSourceProvider {
 		$this->cachingExpiries = $this->config->get( 'RobloxAPICachingExpiries' );
 
 		$this->registerDataSource( new GameDataSource( $config ) );
+		$this->registerDataSource( new UserIdDataSource( $config ) );
 
 		$this->registerDataSource( new SimpleDataSource( 'groupRoles', $config, [ 'UserID' ],
 			static function ( $args ) {
@@ -153,6 +154,9 @@ class DataSourceProvider {
 		$functions = [];
 
 		foreach ( $this->dataSources as $dataSource ) {
+			if ( !$dataSource->provideParserFunction() ) {
+				continue;
+			}
 			$id = "roblox_" . ucfirst( $dataSource->id );
 			$function = $this->createParserFunction( $dataSource );
 			$functions[$id] = $function;

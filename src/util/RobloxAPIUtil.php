@@ -90,6 +90,11 @@ class RobloxAPIUtil {
 							throw new RobloxAPIException( 'robloxapi-error-invalid-thumbnail-size', $arg );
 						}
 						break;
+					case 'Username':
+						if ( !preg_match( '/^(?=^[^_]+_?[^_]+$)\w{3,20}$/', $arg ) ) {
+							throw new RobloxAPIException( 'robloxapi-error-invalid-username', $arg );
+						}
+						break;
 					default:
 						throw new IllegalOperationException( "Unknown expected arg type: $expectedType" );
 				}
