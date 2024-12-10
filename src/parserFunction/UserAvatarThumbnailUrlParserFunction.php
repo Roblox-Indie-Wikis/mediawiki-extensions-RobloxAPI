@@ -56,7 +56,7 @@ class UserAvatarThumbnailUrlParserFunction extends RobloxApiParserFunction {
 			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
 		}
 
-		return $url;
+		return "$url.png";
 	}
 
 	/**

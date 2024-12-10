@@ -144,7 +144,7 @@ class RobloxAPIUtil {
 	 * @return bool
 	 */
 	public static function verifyIsRobloxCdnUrl( string $url ): bool {
-		return preg_match( '/^https:\/\/[a-zA-Z0-9]{2}\.rbxcdn\.com\/[0-9A-Za-z\-\/]*$/', $url );
+		return preg_match( '/^https:\/\/[a-zA-Z0-9]{2}\.rbxcdn\.com\/[0-9A-Za-z\-\/]*(?:\.png)?$/', $url );
 	}
 
 }
