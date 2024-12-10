@@ -1,5 +1,24 @@
 # Usage
 
+- [Usage](#usage)
+    * [Parser functions](#parser-functions)
+        + [Data parser functions](#data-parser-functions)
+        + [JSON parser functions](#json-parser-functions)
+        + [Data sources](#data-sources)
+        + [Argument types](#argument-types)
+            - [IDs](#ids)
+            - [Obtaining the Universe ID](#obtaining-the-universe-id)
+            - [`ThumbnailSize`](#-thumbnailsize-)
+    * [Configuration](#configuration)
+        + [`$wgRobloxAPIEnabledDatasources`](#--wgrobloxapienableddatasources-)
+        + [`$wgRobloxAPIEnabledParserFunctions`](#--wgrobloxapienabledparserfunctions-)
+        + [`$wgRobloxAPICachingExpiries`](#--wgrobloxapicachingexpiries-)
+        + [`$wgRobloxAPIAllowedArguments`](#--wgrobloxapiallowedarguments-)
+        + [`$wgRobloxAPIRequestUserAgent`](#--wgrobloxapirequestuseragent-)
+        + [`$wgRobloxAPIDisableCache`](#--wgrobloxapidisablecache-)
+        + [`$wgRobloxAPIParserFunctionsExpensive`](#--wgrobloxapiparserfunctionsexpensive-)
+    * [Embedding avatar images](#embedding-avatar-images)
+
 ## Parser functions
 
 ### Data parser functions
@@ -173,4 +192,18 @@ If you don't want to mark the extension's parser functions as expensive, you can
 
 ```php
 $wgRobloxAPIParserFunctionsExpensive = false;
+```
+
+## Embedding avatar images
+
+The result of the `{{#rblxUserAvatarThumbnailUrl}}` parser function can be used to embed avatar images in your wiki.
+To do this, the `$wgEnableImageWhitelist` configuration variable must be set to `true`.
+
+Then, add the following line to the `MediaWiki:External image whitelist` page on your wiki:
+
+> [!WARNING]
+> This allows users to embed any image from the Roblox CDN on your wiki.
+
+```regex
+^https://([a-zA-Z0-9]{2})\.rbxcdn\.com/
 ```
