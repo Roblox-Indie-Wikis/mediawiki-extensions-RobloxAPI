@@ -79,12 +79,7 @@ class Hooks implements ParserFirstCallInitHook {
 						// escape wikitext, we don't need any of the results to be parsed
 						return wfEscapeWikiText( $result );
 					} catch ( RobloxAPIException $exception ) {
-						// prevent the phpstorm formatter from wrapping the line between the
-						// spread operator and the parameter value
-						// @formatter:off
-						return wfMessage( $exception->getMessage(), ...$exception->messageParams )
-							->escaped();
-						// @formatter:on
+						return wfMessage( $exception->getMessage(), ...$exception->messageParams )->escaped();
 					}
 				} );
 			}
