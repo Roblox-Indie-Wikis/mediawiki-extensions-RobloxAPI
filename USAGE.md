@@ -1,5 +1,24 @@
 # Usage
 
+- [Usage](#usage)
+    * [Parser functions](#parser-functions)
+        + [Data parser functions](#data-parser-functions)
+        + [JSON parser functions](#json-parser-functions)
+        + [Data sources](#data-sources)
+        + [Argument types](#argument-types)
+            - [IDs](#ids)
+            - [Obtaining the Universe ID](#obtaining-the-universe-id)
+            - [`ThumbnailSize`](#-thumbnailsize-)
+    * [Configuration](#configuration)
+        + [`$wgRobloxAPIEnabledDatasources`](#--wgrobloxapienableddatasources-)
+        + [`$wgRobloxAPIEnabledParserFunctions`](#--wgrobloxapienabledparserfunctions-)
+        + [`$wgRobloxAPICachingExpiries`](#--wgrobloxapicachingexpiries-)
+        + [`$wgRobloxAPIAllowedArguments`](#--wgrobloxapiallowedarguments-)
+        + [`$wgRobloxAPIRequestUserAgent`](#--wgrobloxapirequestuseragent-)
+        + [`$wgRobloxAPIDisableCache`](#--wgrobloxapidisablecache-)
+        + [`$wgRobloxAPIParserFunctionsExpensive`](#--wgrobloxapiparserfunctionsexpensive-)
+    * [Embedding avatar images](#embedding-avatar-images)
+
 ## Parser functions
 
 ### Data parser functions
