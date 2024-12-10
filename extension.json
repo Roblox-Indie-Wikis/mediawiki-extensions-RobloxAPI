@@ -23,7 +23,8 @@
 				"userAvatarThumbnail",
 				"badgeInfo",
 				"userInfo",
-				"assetDetails"
+				"assetDetails",
+				"userId"
 			],
 			"merge_strategy": "array_merge",
 			"description": "The datasources that should be enabled and available."
@@ -34,14 +35,16 @@
 				"roblox_activeplayers",
 				"roblox_visits",
 				"roblox_groupmembers",
-				"roblox_useravatarthumbnailurl"
+				"roblox_useravatarthumbnailurl",
+				"roblox_userid"
 			],
 			"merge_strategy": "provide_default",
 			"description": "The parser functions that should be enabled. JSON parser functions cannot be enabled or disabled here, instead they are enabled if their corresponding data source is enabled."
 		},
 		"RobloxAPICachingExpiries": {
 			"value": {
-				"*": 600
+				"*": 600,
+				"userId": 86400
 			},
 			"description": "The amount of seconds after the cache for a data source expires. '*' is a wildcard for all data sources."
 		},

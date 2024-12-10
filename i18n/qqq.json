@@ -15,5 +15,6 @@
 	"robloxapi-error-user-group-not-found": "Error message shown when the group data for a user cannot be found",
 	"robloxapi-error-request-failed": "Error message shown when a request to the API fails",
 	"robloxapi-error-arg-not-allowed": "Error message shown when an argument is not allowed for a specific type",
-	"robloxapi-error-invalid-thumbnail-size": "Error message shown when an invalid thumbnail size is provided"
+	"robloxapi-error-invalid-thumbnail-size": "Error message shown when an invalid thumbnail size is provided",
+	"robloxapi-error-invalid-username": "Error message shown when an invalid username is provided"
 }

@@ -123,6 +123,11 @@ abstract class DataSource {
 		$request = MediaWikiServices::getInstance()->getHttpRequestFactory()->create( $endpoint, $options );
 		$request->setHeader( 'Accept', 'application/json' );
 
+		$headers = $this->getAdditionalHeaders( $args );
+		foreach ( $headers as $header => $value ) {
+			$request->setHeader( $header, $value );
+		}
+
 		$status = $request->execute();
 
 		if ( !$status->isOK() ) {
@@ -192,6 +197,23 @@ abstract class DataSource {
 		}
 
 		return new SimpleExpiringCache();
+	}
+
+	/**
+	 * Allows specifying additional headers for the request.
+	 * @param array $args The arguments used to fetch the data.
+	 * @return array The additional headers.
+	 */
+	protected function getAdditionalHeaders( array $args ): array {
+		return [];
+	}
+
+	/**
+	 * Returns whether this data source should provide a parser function.
+	 * @return bool Whether this data source should provide a parser function.
+	 */
+	public function provideParserFunction(): bool {
+		return true;
 	}
 
 }

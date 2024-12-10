@@ -32,6 +32,7 @@ These functions return processed data from the Roblox API. See below on how to g
 | `{{#rblxPlaceVisits}}`            | Get the number of visits to a place.         | `UniverseId`, `PlaceId`   | `{{#rblxPlaceVisits: 4252370517 \| 12018816388}}`         | `roblox_visits`                 |
 | `{{#rblxGroupMembers}}`           | Get the number of members in a group.        | `GroupId`                 | `{{#rblxGroupMembers: 32670248}}`                         | `roblox_groupmembers`           |
 | `{{#rblxUserAvatarThumbnailUrl}}` | Get the URL of a user's avatar thumbnail.    | `UserId`, `ThumbnailSize` | `{{#rblxUserAvatarThumbnailUrl: 1995870730 \| 140x140 }}` | `roblox_useravatarthumbnailurl` |
+| `{{#rblxUserId}}`                 | Get the user ID of a user.                   | `Username`                | `{{#rblxUserId: builderman}}`                             | `roblox_userid`                 |
 
 ### JSON parser functions
 
@@ -61,6 +62,11 @@ The following data sources are available:
 | `badgeInfo`           | Returns information about a badge.            |
 | `userInfo`            | Returns information about a user.             |
 | `assetDetails`        | Returns information about an asset.           |
+| `userId`              | Returns the user ID of a user.                |
+
+Note that not all data sources have a corresponding JSON parser function.
+Check [JSON parser functions](#json-parser-functions) for more information on which data sources have JSON parser
+functions.
 
 ### Argument types
 
@@ -116,12 +122,13 @@ $wgRobloxAPIEnabledParserFunctions = [
 
 ### `$wgRobloxAPICachingExpiries`
 
-An array of cache expiry times (in seconds) for each data source. By default, all data sources have a cache expiry time
-of 10 minutes:
+An array of cache Lexpiry times (in seconds) for each data source. By default, all data sources except for userId have a
+cache expiry time of 10 minutes:
 
 ```php
 $wgRobloxAPICachingExpiries = [
     '*' => 600,
+    'userId' => 86400
 ];
 ```
 
@@ -129,7 +136,7 @@ If you want to set a different cache expiry time for specific data sources, you 
 
 ```php
 $wgRobloxAPICachingExpiries = [
-    '*' => 600,
+    '*' => 6000,
     'gameData' => 120,
     'groupRoles' => 180,
 ];
