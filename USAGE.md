@@ -134,6 +134,10 @@ Default caching expiries:
 | `userId`              | 86400 (24 hours)  |
 | `userInfo`            | 86400 (24 hours)  |
 
+> [!WARNING]
+> Lower cache expiry times can lead to more requests to the Roblox API, which can lead to rate limiting and decreased
+> wiki performance.
+
 If you want to set different cache expiry times for specific data sources, you can do so like this:
 
 ```php
