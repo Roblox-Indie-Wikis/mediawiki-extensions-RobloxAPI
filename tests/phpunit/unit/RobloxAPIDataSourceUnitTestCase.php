@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use GuzzleHttpRequest;
 use MediaWiki\Http\HttpRequestFactory;
+use MediaWiki\Status\Status;
 use MediaWikiUnitTestCase;
 use StatusValue;
 
@@ -44,12 +45,12 @@ abstract class RobloxAPIDataSourceUnitTestCase extends MediaWikiUnitTestCase {
 			$requestStatus = StatusValue::newFatal( $status );
 		}
 
-		$request->expects( $this->once() )->method( 'execute' )->willReturn( $requestStatus );
+		$request->expects( $this->once() )->method( 'execute' )->willReturn( Status::wrap( $requestStatus ) );
 
 		if ( $returnedContent ) {
 			$request->expects( $this->once() )->method( 'getContent' )->willReturn( $returnedContent );
 		} else {
-			$request->expects( $this->never() )->method( 'getContent' );
+			$request->expects( $this->atMost( 2 ) )->method( 'getContent' )->willReturn( '' );
 		}
 
 		$httpRequestFactory = $this->createPartialMock( HttpRequestFactory::class, [ 'create' ] );

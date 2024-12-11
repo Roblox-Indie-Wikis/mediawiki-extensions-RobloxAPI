@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\source\GameDataSource;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
 /**
  * @covers \MediaWiki\Extension\RobloxAPI\data\source\GameDataSource
@@ -53,13 +54,14 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 		self::assertEquals( $data->data[0], $this->subject->processData( $data, [ 12345, 12345 ] ) );
 
 		// test invalid data
-		$this->expectException( \MediaWiki\Extension\RobloxAPI\util\RobloxAPIException::class );
+		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-data' );
 		$this->subject->processData( (object)[ 'data' => null ], [ 12345, 12345 ] );
 	}
 
 	public function testFetch() {
-		$result = <<<EOD
+		$result = /** @lang JSON */
+			<<<EOD
 		{
 			"data": [
 				{
@@ -109,6 +111,32 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 
 		self::assertEquals( 4252370517, $data->id );
 		self::assertEquals( 12018816388, $data->rootPlaceId );
+		self::assertEquals( 'Dovedale Railway', $data->name );
+	}
+
+	public function testFetchEmptyResult() {
+		$result = /** @lang JSON */
+			<<<EOD
+		{
+			"data": []
+		}
+		EOD;
+
+		$dataSource = new GameDataSource( $this->createMock( Config::class ) );
+		$dataSource->setHttpRequestFactory( $this->createMockHttpRequestFactory( $result ) );
+
+		$this->expectException( RobloxAPIException::class );
+		$this->expectExceptionMessage( 'robloxapi-error-invalid-data' );
+		$dataSource->fetch( '4252370517', '12018816388' );
+	}
+
+	public function testFailedRequest() {
+		$dataSource = new GameDataSource( $this->createMock( Config::class ) );
+		$dataSource->setHttpRequestFactory( $this->createMockHttpRequestFactory( null, 429 ) );
+
+		$this->expectException( RobloxAPIException::class );
+		$this->expectExceptionMessage( 'robloxapi-error-request-failed' );
+		$dataSource->fetch( '4252370517', '12018816388' );
 	}
 
 }
