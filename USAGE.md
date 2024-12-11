@@ -122,17 +122,23 @@ $wgRobloxAPIEnabledParserFunctions = [
 
 ### `$wgRobloxAPICachingExpiries`
 
-An array of cache Lexpiry times (in seconds) for each data source. By default, all data sources except for userId have a
-cache expiry time of 10 minutes:
+An array of cache expiry times (in seconds) for each data source.
+Default caching expiries:
 
-```php
-$wgRobloxAPICachingExpiries = [
-    '*' => 600,
-    'userId' => 86400
-];
-```
+| Data source           | Expiry            |
+|-----------------------|-------------------|
+| `*` (default)         | 600 (10 minutes)  |
+| `userAvatarThumbnail` | 3600 (1 hour)     |
+| `groupData`           | 3600 (1 hour)     |
+| `badgeInfo`           | 1800 (30 minutes) |
+| `userId`              | 86400 (24 hours)  |
+| `userInfo`            | 86400 (24 hours)  |
 
-If you want to set a different cache expiry time for specific data sources, you can do so like this:
+> [!WARNING]
+> Lower cache expiry times can lead to more requests to the Roblox API, which can lead to rate limiting and decreased
+> wiki performance.
+
+If you want to set different cache expiry times for specific data sources, you can do so like this:
 
 ```php
 $wgRobloxAPICachingExpiries = [
