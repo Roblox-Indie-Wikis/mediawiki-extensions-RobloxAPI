@@ -18,7 +18,7 @@
  * @file
  */
 
-namespace phpunit\unit\datasource;
+namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\source\GameDataSource;
@@ -27,7 +27,7 @@ use MediaWiki\Extension\RobloxAPI\data\source\GameDataSource;
  * @covers \MediaWiki\Extension\RobloxAPI\data\source\GameDataSource
  * @group RobloxAPI
  */
-class GameDataSourceTest extends \MediaWikiUnitTestCase {
+class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 
 	private GameDataSource $subject;
 
@@ -37,7 +37,8 @@ class GameDataSourceTest extends \MediaWikiUnitTestCase {
 
 	public function testGetEndpoint() {
 		self::assertEquals( 'https://games.roblox.com/v1/games?universeIds=12345', $this->subject->getEndpoint( [
-			12345, 54321
+			12345,
+			54321,
 		] ) );
 	}
 
@@ -55,6 +56,59 @@ class GameDataSourceTest extends \MediaWikiUnitTestCase {
 		$this->expectException( \MediaWiki\Extension\RobloxAPI\util\RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-data' );
 		$this->subject->processData( (object)[ 'data' => null ], [ 12345, 12345 ] );
+	}
+
+	public function testFetch() {
+		$result = <<<EOD
+		{
+			"data": [
+				{
+					"id": 4252370517,
+					"rootPlaceId": 12018816388,
+					"name": "Dovedale Railway",
+					"description": "Description...",
+					"sourceName": "Dovedale Railway",
+					"sourceDescription": "Description...",
+					"creator": {
+						"id": 32670248,
+						"name": "Dovedale Community",
+						"type": "Group",
+						"isRNVAccount": false,
+						"hasVerifiedBadge": false
+					},
+					"price": null,
+					"allowedGearGenres": [
+						"Adventure"
+					],
+					"allowedGearCategories": [],
+					"isGenreEnforced": true,
+					"copyingAllowed": false,
+					"playing": 6,
+					"visits": 986575,
+					"maxPlayers": 40,
+					"created": "2023-01-03T17:06:38.54Z",
+					"updated": "2024-12-11T18:24:48.0139375Z",
+					"studioAccessToApisAllowed": false,
+					"createVipServersAllowed": false,
+					"universeAvatarType": "PlayerChoice",
+					"genre": "Adventure",
+					"genre_l1": "Simulation",
+					"genre_l2": "Vehicle Sim",
+					"isAllGenre": false,
+					"isFavoritedByUser": false,
+					"favoritedCount": 6228
+				}
+			]
+		}
+		EOD;
+
+		$dataSource = new GameDataSource( $this->createMock( Config::class ) );
+		$dataSource->setHttpRequestFactory( $this->createMockHttpRequestFactory( $result ) );
+
+		$data = $dataSource->fetch( '4252370517', '12018816388' );
+
+		self::assertEquals( 4252370517, $data->id );
+		self::assertEquals( 12018816388, $data->rootPlaceId );
 	}
 
 }
