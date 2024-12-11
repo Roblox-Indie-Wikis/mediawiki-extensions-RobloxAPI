@@ -113,9 +113,9 @@ abstract class DataSource {
 
 		$options = [];
 
-		global $wgRobloxAPIRequestUserAgent;
-		if ( $wgRobloxAPIRequestUserAgent && $wgRobloxAPIRequestUserAgent !== '' ) {
-			$options['userAgent'] = $wgRobloxAPIRequestUserAgent;
+		$userAgent = $this->config->get( 'RobloxAPIRequestUserAgent' );
+		if ( $userAgent && $userAgent !== '' ) {
+			$options['userAgent'] = $userAgent;
 		}
 
 		$this->processRequestOptions( $options, $args );
