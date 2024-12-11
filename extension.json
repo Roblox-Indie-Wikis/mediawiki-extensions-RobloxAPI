@@ -44,7 +44,11 @@
 		"RobloxAPICachingExpiries": {
 			"value": {
 				"*": 600,
-				"userId": 86400
+				"userAvatarThumbnail": 3600,
+				"groupData": 3600,
+				"badgeInfo": 1800,
+				"userId": 86400,
+				"userInfo": 86400
 			},
 			"description": "The amount of seconds after the cache for a data source expires. '*' is a wildcard for all data sources."
 		},
