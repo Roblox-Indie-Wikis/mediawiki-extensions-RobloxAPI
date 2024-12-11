@@ -189,7 +189,7 @@ abstract class DataSource {
 	 * @param array &$options The options to process.
 	 * @param array $args The arguments used to fetch the data.
 	 */
-	protected function processRequestOptions( array &$options, array $args ) {
+	public function processRequestOptions( array &$options, array $args ) {
 	}
 
 	/**
