@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
-			"abaddriverlol"
+			"SomeRandomDeveloper"
 		]
 	},
 	"robloxapi-desc": "Provides easy access to the Roblox API via parser functions.",
