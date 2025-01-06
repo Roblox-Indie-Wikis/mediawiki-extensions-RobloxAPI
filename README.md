@@ -15,7 +15,7 @@ https://utg.miraheze.org
 ## Installation
 
 1. Download the repository using the following
-   link: [Download ZIP](https://github.com/dovedalewiki/mediawiki-extensions-RobloxAPI/archive/master.zip)
+   link: [Download ZIP](https://github.com/Roblox-Indie-Wikis/mediawiki-extensions-RobloxAPI/archive/master.zip)
 2. Place the files in a directory called `RobloxAPI` in your `extensions/` folder.
 2. Add the following line to the end of your `LocalSettings.php` file:
     ```php
