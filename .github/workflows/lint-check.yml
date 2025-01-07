@@ -1,9 +1,9 @@
 name: Lint Tests
 on:
   push:
-    branches: [ master, feat/**, test/** ]
+    branches: [ master, development, feat/**, test/** ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, development ]
 jobs:
   lint-check:
     runs-on: ubuntu-latest
