@@ -21,8 +21,8 @@
 namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 
 use FormatJson;
-use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
 
 /**
  * A parser function that provides the data of a data source.

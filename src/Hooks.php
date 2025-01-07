@@ -20,9 +20,7 @@
 namespace MediaWiki\Extension\RobloxAPI;
 
 use MediaWiki\Config\Config;
-use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\data\source\IDataSource;
 use MediaWiki\Extension\RobloxAPI\parserFunction\ActivePlayersParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\GroupMembersParserFunction;

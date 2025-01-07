@@ -240,7 +240,8 @@ abstract class FetcherDataSource implements IDataSource {
 	}
 
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [], [] ); // TODO
+		// TODO
+		return new ArgumentSpecification( [], [] );
 	}
 
 }
