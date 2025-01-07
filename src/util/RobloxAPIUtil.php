@@ -128,18 +128,29 @@ class RobloxAPIUtil {
 	) {
 		foreach ( $args as $index => $arg ) {
 			$expectedType = $expectedArgs[$index];
-			$allowedArgs = $config->get( 'RobloxAPIAllowedArguments' ) ?? [];
-			if ( !array_key_exists( $expectedType, $allowedArgs ) ) {
-				continue;
-			}
-			$allowedValues = $allowedArgs[$expectedType];
-			if ( empty( $allowedValues ) ) {
-				// all values are allowed
-				continue;
-			}
-			if ( !in_array( $arg, $allowedValues ) ) {
-				throw new RobloxAPIException( 'robloxapi-error-arg-not-allowed', $arg, $expectedType );
-			}
+			self::assertArgAllowed( $config, $expectedType, $arg );
+		}
+	}
+
+	/**
+	 * Asserts that the given arg is allowed
+	 * @param Config $config The config object
+	 * @param string $expectedType The expected arg type
+	 * @param string $arg The actual arg
+	 * @throws RobloxAPIException if the arg is invalid
+	 */
+	public static function assertArgAllowed( Config $config, string $expectedType, string $arg ) {
+		$allowedArgs = $config->get( 'RobloxAPIAllowedArguments' ) ?? [];
+		if ( !array_key_exists( $expectedType, $allowedArgs ) ) {
+			return;
+		}
+		$allowedValues = $allowedArgs[$expectedType];
+		if ( empty( $allowedValues ) ) {
+			// all values are allowed
+			return;
+		}
+		if ( !in_array( $arg, $allowedValues ) ) {
+			throw new RobloxAPIException( 'robloxapi-error-arg-not-allowed', $arg, $expectedType );
 		}
 	}
 

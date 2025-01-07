@@ -27,7 +27,7 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 /**
  * A data source for getting a user's ID from their username.
  */
-class UserIdDataSource extends DataSource {
+class UserIdDataSource extends FetcherDataSource {
 
 	public function __construct( Config $config ) {
 		parent::__construct( 'userId', self::createSimpleCache(), $config, [
@@ -69,13 +69,6 @@ class UserIdDataSource extends DataSource {
 		return [
 			'Content-Type' => 'application/json',
 		];
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function provideParserFunction(): bool {
-		return false;
 	}
 
 }

@@ -21,7 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 
 use FormatJson;
-use MediaWiki\Extension\RobloxAPI\data\source\DataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 
 /**
@@ -29,9 +29,9 @@ use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
  */
 class DataSourceParserFunction extends RobloxApiParserFunction {
 
-	private DataSource $dataSource;
+	private FetcherDataSource $dataSource;
 
-	public function __construct( DataSourceProvider $dataSourceProvider, DataSource $dataSource ) {
+	public function __construct( DataSourceProvider $dataSourceProvider, FetcherDataSource $dataSource ) {
 		parent::__construct( $dataSourceProvider );
 		$this->dataSource = $dataSource;
 	}

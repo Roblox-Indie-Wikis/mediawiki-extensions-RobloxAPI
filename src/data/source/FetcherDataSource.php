@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use FormatJson;
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
@@ -30,11 +31,12 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
+use Parser;
 
 /**
- * A data source represents an endpoint of the roblox api.
+ * Represents an endpoint of the roblox api.
  */
-abstract class DataSource {
+abstract class FetcherDataSource implements IDataSource {
 
 	/**
 	 * @var string The ID of this data source.
@@ -216,11 +218,10 @@ abstract class DataSource {
 	}
 
 	/**
-	 * Returns whether this data source should provide a parser function.
-	 * @return bool Whether this data source should provide a parser function.
+	 * @inheritDoc
 	 */
-	public function provideParserFunction(): bool {
-		return true;
+	public function shouldRegisterLegacyParserFunction(): bool {
+		return false;
 	}
 
 	/**
@@ -229,6 +230,17 @@ abstract class DataSource {
 	 */
 	public function setHttpRequestFactory( HttpRequestFactory $httpRequestFactory ): void {
 		$this->httpRequestFactory = $httpRequestFactory;
+	}
+
+	public function exec(
+		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs
+	): string {
+		// TODO: Implement exec() method.
+		return "Not implemented!";
+	}
+
+	public function getArgumentSpecification(): ArgumentSpecification {
+		return new ArgumentSpecification( [], [] ); // TODO
 	}
 
 }

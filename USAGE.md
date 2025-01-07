@@ -1,5 +1,9 @@
 # Usage
 
+> [!NOTE]
+> As of development versions of 1.2.0, this documentation is outdated.
+> With the full release of version 1.2.0, this documentation will be updated.
+
 - [Usage](#usage)
     * [Parser functions](#parser-functions)
         + [Data parser functions](#data-parser-functions)

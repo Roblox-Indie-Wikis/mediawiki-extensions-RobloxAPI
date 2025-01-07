@@ -25,7 +25,7 @@ use MediaWiki\Config\Config;
 /**
  * A simple data source that does not process the data.
  */
-class SimpleDataSource extends DataSource {
+class SimpleFetcherDataSource extends FetcherDataSource {
 
 	/**
 	 * @var callable The function to create the endpoint.
@@ -38,14 +38,21 @@ class SimpleDataSource extends DataSource {
 	protected $processData;
 
 	/**
+	 * @var bool Whether to register a parser function.
+	 */
+	protected bool $registerParserFunction;
+
+	/**
 	 * @inheritDoc
 	 */
 	public function __construct(
-		string $id, Config $config, array $expectedArgs, callable $createEndpoint, ?callable $processData = null
+		string $id, Config $config, array $expectedArgs, callable $createEndpoint, ?callable $processData = null,
+		bool $registerParserFunction = false
 	) {
 		parent::__construct( $id, self::createSimpleCache(), $config, $expectedArgs );
 		$this->createEndpoint = $createEndpoint;
 		$this->processData = $processData;
+		$this->registerParserFunction = $registerParserFunction;
 	}
 
 	/**
@@ -64,6 +71,13 @@ class SimpleDataSource extends DataSource {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function shouldRegisterLegacyParserFunction(): bool {
+		return $this->registerParserFunction;
 	}
 
 }
