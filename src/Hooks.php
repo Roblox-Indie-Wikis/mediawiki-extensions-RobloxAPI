@@ -111,7 +111,7 @@ class Hooks implements ParserFirstCallInitHook {
 			return wfMessage( 'robloxapi-error-no-arguments' )->escaped();
 		}
 		$dataSourceId = $args[0];
-		$dataSource = $this->dataSourceProvider->getDataSource( $dataSourceId );
+		$dataSource = $this->dataSourceProvider->getDataSource( $dataSourceId, true );
 
 		if ( !$dataSource ) {
 			return wfMessage( 'robloxapi-error-datasource-not-found', $dataSourceId )->escaped();

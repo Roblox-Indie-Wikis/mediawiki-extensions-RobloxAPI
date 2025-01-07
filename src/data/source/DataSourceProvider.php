@@ -124,9 +124,17 @@ class DataSourceProvider {
 	 * @param string $id
 	 * @return IDataSource|null
 	 */
-	public function getDataSource( string $id ): ?IDataSource {
+	public function getDataSource( string $id, bool $ignoreCase = false ): ?IDataSource {
 		if ( array_key_exists( $id, $this->dataSources ) ) {
 			return $this->dataSources[$id];
+		}
+
+		if ( $ignoreCase ) {
+			foreach ( $this->dataSources as $dataSource ) {
+				if ( strcasecmp( $dataSource->id, $id ) === 0 ) {
+					return $dataSource;
+				}
+			}
 		}
 
 		return null;
