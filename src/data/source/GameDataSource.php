@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use Parser;
 
 /**
@@ -73,10 +74,10 @@ class GameDataSource extends FetcherDataSource {
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [
+		return ( new ArgumentSpecification( [
 			'UniverseID',
 			'PlaceID',
-		] );
+		] ) )->withJsonArgs();
 	}
 
 	/**
@@ -85,8 +86,7 @@ class GameDataSource extends FetcherDataSource {
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs
 	): string {
-		// TODO implement jsonKey option
-		return \FormatJson::encode( $this->fetch( ...$requiredArgs ) );
+		return RobloxAPIUtil::createJsonResult( $this->fetch( ...$requiredArgs ), $optionalArgs );
 	}
 
 }

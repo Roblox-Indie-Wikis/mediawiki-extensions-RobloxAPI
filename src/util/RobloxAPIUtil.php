@@ -107,6 +107,13 @@ class RobloxAPIUtil {
 						throw new RobloxAPIException( 'robloxapi-error-invalid-username', $arg );
 					}
 					break;
+				case 'Boolean':
+					if ( !in_array( strtolower( $arg ), [ 'true', 'false' ] ) ) {
+						throw new RobloxAPIException( 'robloxapi-error-invalid-boolean', $arg );
+					}
+					break;
+				case 'String':
+					break;
 				default:
 					throw new IllegalOperationException( "Unknown expected arg type: $expectedType" );
 			}
@@ -172,6 +179,56 @@ class RobloxAPIUtil {
 	 */
 	public static function verifyIsRobloxCdnUrl( string $url ): bool {
 		return preg_match( '/^https:\/\/[a-zA-Z0-9]{2}\.rbxcdn\.com\/[0-9A-Za-z\-\/]*(?:\.png)?$/', $url );
+	}
+
+	/**
+	 * Creates a JSON result
+	 * @param mixed $jsonObject The JSON object
+	 * @param array $optionalArgs The optional arguments
+	 * @return string
+	 */
+	public static function createJsonResult( $jsonObject, $optionalArgs ): string {
+		if ( isset( $optionalArgs['pretty'] ) && strtolower( $optionalArgs['pretty'] ) === 'true' ) {
+			return json_encode( $jsonObject, JSON_PRETTY_PRINT );
+		}
+		// only return the value of json_key in the JSON object
+		if ( isset ( $optionalArgs['json_key'] ) && is_object( $jsonObject ) && !empty( $optionalArgs['json_key'] ) ) {
+			$jsonObject = self::getJsonKey( $jsonObject, $optionalArgs['json_key'] );
+
+			if ( !is_object( $jsonObject ) ) {
+				return $jsonObject ?? 'null';
+			}
+		}
+
+		return json_encode( $jsonObject );
+	}
+
+	/**
+	 * Get a JSON key from a JSON object. This accepts recursively nested keys using '->' as a separator.
+	 * @param \stdClass|null $jsonObject The JSON object
+	 * @param string $jsonKey The JSON key
+	 * @return \stdClass|mixed|null
+	 */
+	protected static function getJsonKey( ?\stdClass $jsonObject, string $jsonKey ) {
+		if ( $jsonObject === null ) {
+			return null;
+		}
+
+		// recursion
+		if ( str_contains( $jsonKey, '->' ) ) {
+			// split only once by ->
+			$parts = explode( '->', $jsonKey, 2 );
+			$firstPart = $parts[0];
+			$secondPart = $parts[1];
+
+			return self::getJsonKey( self::getJsonKey( $jsonObject, $firstPart ), $secondPart );
+		}
+
+		if ( !property_exists( $jsonObject, $jsonKey ) ) {
+			return null;
+		}
+
+		return $jsonObject->{$jsonKey};
 	}
 
 }

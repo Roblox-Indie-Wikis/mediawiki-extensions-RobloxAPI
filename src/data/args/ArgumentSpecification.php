@@ -20,6 +20,9 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\args;
 
+/**
+ * Represents the specification for the arguments that a data source requires.
+ */
 class ArgumentSpecification {
 
 	/**
@@ -39,6 +42,16 @@ class ArgumentSpecification {
 	public function __construct( array $requiredArgs, array $optionalArgs = [] ) {
 		$this->requiredArgs = $requiredArgs;
 		$this->optionalArgs = $optionalArgs;
+	}
+
+	/**
+	 * Adds the default optional arguments for JSON data and returns the instance.
+	 * @return ArgumentSpecification
+	 */
+	public function withJsonArgs(): ArgumentSpecification {
+		$this->optionalArgs['pretty'] = 'Boolean';
+		$this->optionalArgs['json_key'] = 'String';
+		return $this;
 	}
 
 }

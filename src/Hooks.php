@@ -119,26 +119,25 @@ class Hooks implements ParserFirstCallInitHook {
 		}
 
 		if ( count( $args ) == 0 ) {
-			return wfMessage( 'robloxapi-error-no-arguments' )->escaped();
+			return wfMessage( 'robloxapi-error-no-arguments' );
 		}
 		$dataSourceId = $args[0];
 		$dataSource = $this->dataSourceProvider->getDataSource( $dataSourceId, true );
 
 		if ( !$dataSource ) {
-			return wfMessage( 'robloxapi-error-datasource-not-found', $dataSourceId )->escaped();
+			return wfMessage( 'robloxapi-error-datasource-not-found', $dataSourceId );
 		}
 
 		$otherArgs = array_slice( $args, 1 );
 
 		$argumentSpecification = $dataSource->getArgumentSpecification();
-		// TODO preprocess args
 		// TODO extract this logic into a separate method
 		$requiredArgs = [];
 		$optionalArgs = [];
 
 		foreach ( $argumentSpecification->requiredArgs as $type ) {
 			if ( count( $otherArgs ) === 0 ) {
-				return wfMessage( 'robloxapi-error-missing-argument', $type )->escaped();
+				return wfMessage( 'robloxapi-error-missing-argument', $type );
 			}
 			$value = array_shift( $otherArgs );
 			RobloxAPIUtil::assertValidArg( $type, $value );
@@ -151,14 +150,15 @@ class Hooks implements ParserFirstCallInitHook {
 			$parts = explode( '=', $string, 2 );
 
 			if ( count( $parts ) === 1 ) {
-				return wfMessage( 'robloxapi-error-missing-optional-argument-value', $parts[0] )->escaped();
+				return wfMessage( 'robloxapi-error-missing-optional-argument-value', $parts[0] );
 			}
 
 			$key = $parts[0];
+			$key = strtolower( $key );
 			$value = $parts[1];
 
 			if ( !array_key_exists( $key, $argumentSpecification->optionalArgs ) ) {
-				return wfMessage( 'robloxapi-error-unknown-optional-argument', $key )->escaped();
+				return wfMessage( 'robloxapi-error-unknown-optional-argument', $key );
 			}
 
 			$type = $argumentSpecification->optionalArgs[$key];
