@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use Parser;
 
 /**
@@ -35,6 +36,7 @@ interface IDataSource {
 	 * @param array<string> $requiredArgs
 	 * @param array<string, string> $optionalArgs
 	 * @return string
+	 * @throws RobloxAPIException If the data source fails to execute
 	 */
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs
@@ -51,5 +53,11 @@ interface IDataSource {
 	 * @return ArgumentSpecification
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification;
+
+	/**
+	 * @param string $result The result of the parser function.
+	 * @return bool Whether the result should be escaped and url-encoded.
+	 */
+	public function shouldEscapeResult( string $result ): bool;
 
 }

@@ -73,31 +73,42 @@ class RobloxAPIUtil {
 
 	/**
 	 * Asserts that the given args are valid
-	 * @param array $expectedArgs The expected arg types
-	 * @param array $args The actual args
+	 * @param string[] $expectedArgs The expected arg types
+	 * @param string[] $args The actual args
 	 * @return void
 	 * @throws RobloxAPIException if the args are invalid
 	 */
 	public static function assertValidArgs( array $expectedArgs, array $args ): void {
 		foreach ( $args as $index => $arg ) {
 			$expectedType = $expectedArgs[$index];
-			if ( substr( strtolower( $expectedType ), -2 ) === 'id' ) {
-				self::assertValidIds( $arg );
-			} else {
-				switch ( $expectedType ) {
-					case 'ThumbnailSize':
-						if ( !preg_match( '/^\d{1,3}x\d{1,3}$/', $arg ) ) {
-							throw new RobloxAPIException( 'robloxapi-error-invalid-thumbnail-size', $arg );
-						}
-						break;
-					case 'Username':
-						if ( !preg_match( '/^(?=^[^_]+_?[^_]+$)\w{3,20}$/', $arg ) ) {
-							throw new RobloxAPIException( 'robloxapi-error-invalid-username', $arg );
-						}
-						break;
-					default:
-						throw new IllegalOperationException( "Unknown expected arg type: $expectedType" );
-				}
+			self::assertValidArg( $expectedType, $arg );
+		}
+	}
+
+	/**
+	 * Asserts that the given arg is valid
+	 * @param string $expectedType The expected arg type
+	 * @param string $arg The actual arg
+	 * @return void
+	 * @throws RobloxAPIException if the arg is invalid
+	 */
+	public static function assertValidArg( string $expectedType, string $arg ) {
+		if ( substr( strtolower( $expectedType ), -2 ) === 'id' ) {
+			self::assertValidIds( $arg );
+		} else {
+			switch ( $expectedType ) {
+				case 'ThumbnailSize':
+					if ( !preg_match( '/^\d{1,3}x\d{1,3}$/', $arg ) ) {
+						throw new RobloxAPIException( 'robloxapi-error-invalid-thumbnail-size', $arg );
+					}
+					break;
+				case 'Username':
+					if ( !preg_match( '/^(?=^[^_]+_?[^_]+$)\w{3,20}$/', $arg ) ) {
+						throw new RobloxAPIException( 'robloxapi-error-invalid-username', $arg );
+					}
+					break;
+				default:
+					throw new IllegalOperationException( "Unknown expected arg type: $expectedType" );
 			}
 		}
 	}

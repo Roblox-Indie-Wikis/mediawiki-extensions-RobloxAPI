@@ -61,8 +61,21 @@ class Hooks implements ParserFirstCallInitHook {
 	 */
 	public function onParserFirstCallInit( $parser ) {
 		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, ...$args ) {
-			return $this->handleParserFunctionCall( $parser, $args );
+			try {
+				$result = $this->handleParserFunctionCall( $parser, $args );
+				$result_string = is_array( $result ) ? $result['result'] : $result;
+
+				if ( is_array( $result ) && !$result['shouldEscape'] ) {
+					return $result_string;
+				}
+
+				// escape wikitext, we don't need any of the results to be parsed
+				return wfEscapeWikiText( $result_string );
+			} catch ( RobloxAPIException $exception ) {
+				return wfMessage( $exception->getMessage(), ...$exception->messageParams )->escaped();
+			}
 		} );
+
 		foreach ( $this->legacyParserFunctions as $id => $function ) {
 			// all data source parser functions are only enabled if the corresponding data source
 			// is enabled, so we don't need to check the config for that
@@ -96,10 +109,10 @@ class Hooks implements ParserFirstCallInitHook {
 	 * Handles a call to the #robloxAPI parser function.
 	 * @param Parser $parser
 	 * @param array $args
-	 * @return void
+	 * @return array|bool|string
 	 * @throws RobloxAPIException
 	 */
-	private function handleParserFunctionCall( Parser $parser, array $args ): string {
+	private function handleParserFunctionCall( Parser $parser, array $args ) {
 		if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
 			!$parser->incrementExpensiveFunctionCount() ) {
 			return false;
@@ -128,6 +141,7 @@ class Hooks implements ParserFirstCallInitHook {
 				return wfMessage( 'robloxapi-error-missing-argument', $type )->escaped();
 			}
 			$value = array_shift( $otherArgs );
+			RobloxAPIUtil::assertValidArg( $type, $value );
 			RobloxAPIUtil::assertArgAllowed( $this->config, $type, $value );
 			$requiredArgs[] = $value;
 		}
@@ -148,11 +162,18 @@ class Hooks implements ParserFirstCallInitHook {
 			}
 
 			$type = $argumentSpecification->optionalArgs[$key];
+			RobloxAPIUtil::assertValidArg( $type, $value );
 			RobloxAPIUtil::assertArgAllowed( $this->config, $type, $value );
 
 			$optionalArgs[$key] = $value;
 		}
 
-		return $dataSource->exec( $this->dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
+		$result = $dataSource->exec( $this->dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
+		$shouldEscape = $dataSource->shouldEscapeResult( $result );
+
+		return [
+			'result' => $result,
+			'shouldEscape' => $shouldEscape
+		];
 	}
 }

@@ -18,7 +18,7 @@
 	"robloxapi-error-arg-not-allowed": "Error message shown when an argument is not allowed for a specific type",
 	"robloxapi-error-invalid-thumbnail-size": "Error message shown when an invalid thumbnail size is provided",
 	"robloxapi-error-invalid-username": "Error message shown when an invalid username is provided",
-	"robloxapi-error-missing-arguments": "Error message shown when a required argument is missing. $1 is the type of argument that is missing",
+	"robloxapi-error-missing-argument": "Error message shown when a required argument is missing. $1 is the type of argument that is missing",
 	"robloxapi-error-missing-optional-argument-value": "Error message shown when an optional argument is missing a value. The optional argument must be in the format 'key=value'",
 	"robloxapi-error-unknown-optional-argument": "Error message shown when an unknown optional argument is provided. $1 is the unknown argument's key"
 }

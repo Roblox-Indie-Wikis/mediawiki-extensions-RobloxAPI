@@ -21,7 +21,9 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use Parser;
 
 /**
  * A data source for the roblox games API.
@@ -29,10 +31,7 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 class GameDataSource extends FetcherDataSource {
 
 	public function __construct( Config $config ) {
-		parent::__construct( 'gameData', self::createSimpleCache(), $config, [
-			'UniverseID',
-			'PlaceID',
-		] );
+		parent::__construct( 'gameData', self::createSimpleCache(), $config );
 	}
 
 	/**
@@ -68,6 +67,26 @@ class GameDataSource extends FetcherDataSource {
 	 */
 	public function shouldRegisterLegacyParserFunction(): bool {
 		return true;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getArgumentSpecification(): ArgumentSpecification {
+		return new ArgumentSpecification( [
+			'UniverseID',
+			'PlaceID',
+		] );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function exec(
+		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs
+	): string {
+		// TODO implement jsonKey option
+		return \FormatJson::encode( $this->fetch( ...$requiredArgs ) );
 	}
 
 }

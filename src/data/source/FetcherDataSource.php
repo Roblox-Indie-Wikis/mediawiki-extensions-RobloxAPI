@@ -51,10 +51,6 @@ abstract class FetcherDataSource implements IDataSource {
 	 */
 	protected Config $config;
 	/**
-	 * @var array|string The expected argument types.
-	 */
-	protected array $expectedArgs;
-	/**
 	 * @var ?HttpRequestFactory The HTTP request factory. Can be overridden for testing.
 	 */
 	private ?HttpRequestFactory $httpRequestFactory;
@@ -67,12 +63,11 @@ abstract class FetcherDataSource implements IDataSource {
 	 * @param array $expectedArgs The expected argument types.
 	 */
 	public function __construct(
-		string $id, DataSourceCache $cache, Config $config, array $expectedArgs
+		string $id, DataSourceCache $cache, Config $config
 	) {
 		$this->id = $id;
 		$this->cache = $cache;
 		$this->config = $config;
-		$this->expectedArgs = $expectedArgs;
 	}
 
 	public function setCacheExpiry( int $seconds ): void {
@@ -87,10 +82,11 @@ abstract class FetcherDataSource implements IDataSource {
 	 */
 	public function fetch( ...$args ) {
 		// assure that we have the correct number of arguments
-		RobloxAPIUtil::safeDestructure( $args, count( $this->expectedArgs ) );
+		// TODO IMPLEMENT THIS SOMEWHERE ELSE FOR LEGACY PARSER FUNCTIONS
+//		RobloxAPIUtil::safeDestructure( $args, count( $this->expectedArgs ) );
 		// validate the args
-		RobloxAPIUtil::assertValidArgs( $this->expectedArgs, $args );
-		RobloxAPIUtil::assertArgsAllowed( $this->config, $this->expectedArgs, $args );
+//		RobloxAPIUtil::assertValidArgs( $this->expectedArgs, $args );
+//		RobloxAPIUtil::assertArgsAllowed( $this->config, $this->expectedArgs, $args );
 
 		$endpoint = $this->getEndpoint( $args );
 		$data = $this->getDataFromEndpoint( $endpoint, $args );
@@ -232,6 +228,9 @@ abstract class FetcherDataSource implements IDataSource {
 		$this->httpRequestFactory = $httpRequestFactory;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs
 	): string {
@@ -239,9 +238,19 @@ abstract class FetcherDataSource implements IDataSource {
 		return "Not implemented!";
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		// TODO
 		return new ArgumentSpecification( [], [] );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function shouldEscapeResult( string $result ): bool {
+		return true;
 	}
 
 }
