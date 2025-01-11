@@ -52,6 +52,7 @@ class Hooks implements ParserFirstCallInitHook {
 				$result = $this->handleParserFunctionCall( $parser, $args );
 				$result_string = is_array( $result ) ? $result['result'] : $result;
 
+				// if the data source specifically disables it, don't escape the result
 				if ( is_array( $result ) && !$result['shouldEscape'] ) {
 					return $result_string;
 				}
@@ -104,7 +105,7 @@ class Hooks implements ParserFirstCallInitHook {
 	 * Handles a call to the #robloxAPI parser function.
 	 * @param Parser $parser
 	 * @param array $args
-	 * @return array|bool|string
+	 * @return array|bool
 	 * @throws RobloxAPIException
 	 */
 	private function handleParserFunctionCall( Parser $parser, array $args ) {
@@ -114,7 +115,7 @@ class Hooks implements ParserFirstCallInitHook {
 		}
 
 		if ( count( $args ) == 0 ) {
-			return wfMessage( 'robloxapi-error-no-arguments' );
+			throw new RobloxAPIException( 'robloxapi-error-no-arguments' );
 		}
 		$dataSourceId = $args[0];
 		$dataSource = $this->dataSourceProvider->getDataSource( $dataSourceId, true );
