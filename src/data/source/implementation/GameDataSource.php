@@ -18,10 +18,12 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source;
+namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use Parser;
 

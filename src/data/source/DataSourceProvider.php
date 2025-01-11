@@ -22,6 +22,9 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\GroupRankDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserIdDataSource;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\RobloxApiParserFunction;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;

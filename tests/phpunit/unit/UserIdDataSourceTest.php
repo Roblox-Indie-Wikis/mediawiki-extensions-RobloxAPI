@@ -21,11 +21,11 @@
 namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use MediaWiki\Config\Config;
-use MediaWiki\Extension\RobloxAPI\data\source\UserIdDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserIdDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
 /**
- * @covers \MediaWiki\Extension\RobloxAPI\data\source\UserIdDataSource
+ * @covers \MediaWiki\Extension\RobloxAPI\data\source\implementation\UserIdDataSource
  * @group RobloxAPI
  */
 class UserIdDataSourceTest extends RobloxAPIDataSourceUnitTestCase {

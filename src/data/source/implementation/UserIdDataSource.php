@@ -18,11 +18,13 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source;
+namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
 use FormatJson;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use Parser;
 use PhpParser\Node\Arg;

@@ -21,11 +21,11 @@
 namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use MediaWiki\Config\Config;
-use MediaWiki\Extension\RobloxAPI\data\source\GameDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
 /**
- * @covers \MediaWiki\Extension\RobloxAPI\data\source\GameDataSource
+ * @covers \MediaWiki\Extension\RobloxAPI\data\source\implementation\GameDataSource
  * @group RobloxAPI
  */
 class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
