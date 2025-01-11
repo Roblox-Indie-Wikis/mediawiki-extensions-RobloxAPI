@@ -46,7 +46,6 @@ class Hooks implements ParserFirstCallInitHook {
 		$this->dataSourceProvider = new DataSourceProvider( $this->config );
 
 		$this->legacyParserFunctions = [
-			'roblox_grouprank' => new GroupRankParserFunction( $this->dataSourceProvider ),
 			'roblox_activeplayers' => new ActivePlayersParserFunction( $this->dataSourceProvider ),
 			'roblox_visits' => new PlaceVisitsParserFunction( $this->dataSourceProvider ),
 			'roblox_groupmembers' => new GroupMembersParserFunction( $this->dataSourceProvider ),

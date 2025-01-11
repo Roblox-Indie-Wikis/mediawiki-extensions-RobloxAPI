@@ -188,11 +188,11 @@ class DataSourceProvider {
 		/** @var IDataSource $dataSource */
 		foreach ( $this->dataSources as $dataSource ) {
 			// register parser function only if needed for legacy reasons
-			if ( !$dataSource->shouldRegisterLegacyParserFunction() || !( $dataSource instanceof FetcherDataSource ) ) {
+			if ( !$dataSource->shouldRegisterLegacyParserFunction() ) {
 				continue;
 			}
 
-			$id = "roblox_" . ucfirst( $dataSource->id );
+			$id = "roblox_" . ucfirst( $dataSource->getId() );
 			$function = $this->createParserFunction( $dataSource );
 			$functions[$id] = $function;
 		}
@@ -202,10 +202,10 @@ class DataSourceProvider {
 
 	/**
 	 * Creates a parser function for the given data source.
-	 * @param FetcherDataSource $dataSource
+	 * @param IDataSource $dataSource
 	 * @return RobloxApiParserFunction
 	 */
-	private function createParserFunction( FetcherDataSource $dataSource ): RobloxApiParserFunction {
+	private function createParserFunction( IDataSource $dataSource ): RobloxApiParserFunction {
 		return new DataSourceParserFunction( $this, $dataSource );
 	}
 

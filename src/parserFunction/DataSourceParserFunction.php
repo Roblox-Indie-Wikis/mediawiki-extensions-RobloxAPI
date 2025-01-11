@@ -21,7 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\IDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 /**
@@ -29,9 +29,9 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
  */
 class DataSourceParserFunction extends RobloxApiParserFunction {
 
-	private FetcherDataSource $dataSource;
+	private IDataSource $dataSource;
 
-	public function __construct( DataSourceProvider $dataSourceProvider, FetcherDataSource $dataSource ) {
+	public function __construct( DataSourceProvider $dataSourceProvider, IDataSource $dataSource ) {
 		parent::__construct( $dataSourceProvider );
 		$this->dataSource = $dataSource;
 	}

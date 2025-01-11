@@ -65,4 +65,11 @@ class GroupRankDataSource extends DependentDataSource {
 		return new ArgumentSpecification( [ "GroupId", "UserID" ] );
 	}
 
+	/**
+	 * @inheritDoc
+	 */
+	public function shouldRegisterLegacyParserFunction(): bool {
+		return true;
+	}
+
 }
