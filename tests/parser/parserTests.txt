@@ -7,7 +7,7 @@ rblxGroupRank: handle invalid number of args
 !! wikitext
 {{#rblxGroupRank: 12345}}
 !! html
-<p>Invalid number of arguments!
+<p>A required argument of type UserID is missing!
 </p>
 !! end
 
@@ -16,7 +16,7 @@ rblxGroupRank: handle too many args
 !! wikitext
 {{#rblxGroupRank: 12345 | 1 | 2}}
 !! html
-<p>Invalid number of arguments!
+<p>Incorrectly formatted optional argument! Note that optional arguments must be in the format of &#39;key=value&#39;.
 </p>
 !! end
 
@@ -44,7 +44,7 @@ rblxPlaceActivePlayers: handle invalid number of args
 !! wikitext
 {{#rblxPlaceActivePlayers: 12345}}
 !! html
-<p>Invalid number of arguments!
+<p>A required argument of type GameID is missing!
 </p>
 !! end
 
@@ -71,7 +71,7 @@ rblxPlaceVisits: handle invalid number of args
 !! wikitext
 {{#rblxPlaceVisits: 12345}}
 !! html
-<p>Invalid number of arguments!
+<p>A required argument of type GameID is missing!
 </p>
 !! end
 
@@ -99,7 +99,7 @@ rblxGroupMembers: handle invalid number of args
 !! wikitext
 {{#rblxGroupMembers: 12345 | 54321}}
 !! html
-<p>Invalid number of arguments!
+<p>Incorrectly formatted optional argument! Note that optional arguments must be in the format of &#39;key=value&#39;.
 </p>
 !! end
 
@@ -117,7 +117,7 @@ rblxUserAvatarThumbnailUrl: handle invalid number of args
 !! wikitext
 {{#rblxUserAvatarThumbnailUrl: 12345}}
 !! html
-<p>Invalid number of arguments!
+<p>A required argument of type ThumbnailSize is missing!
 </p>
 !! end
 
@@ -144,7 +144,7 @@ rblxUserId: handle invalid number of args
 !! wikitext
 {{#rblxUserId: someUsername | someOtherUsername}}
 !! html
-<p>Invalid number of arguments!
+<p>Incorrectly formatted optional argument! Note that optional arguments must be in the format of &#39;key=value&#39;.
 </p>
 !! end
 

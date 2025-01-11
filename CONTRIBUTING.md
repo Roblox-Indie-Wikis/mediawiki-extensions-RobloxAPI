@@ -1,5 +1,29 @@
 # Contributing
 
+- [Contributing](#contributing)
+   * [Requesting a new data source](#requesting-a-new-data-source)
+      + [Requirements](#requirements)
+   * [Developing on the RobloxAPI extension](#developing-on-the-robloxapi-extension)
+      + [Installing dependencies](#installing-dependencies)
+      + [Running tests](#running-tests)
+         - [PHP unit tests](#php-unit-tests)
+         - [Parser tests](#parser-tests)
+         - [JavaScript tests](#javascript-tests)
+      + [Code Style](#code-style)
+
+## Requesting a new data source
+
+If you would like to request a new data source, please open an issue on the GitHub repository. Please use the
+*Roblox API endpoint request* template.
+
+### Requirements
+
+A data source must fulfill the following requirements:
+
+* It must be accessible without authentication
+* It must be an official endpoint provided by Roblox
+* It must not require multiple requests to be made (if this is required, consider requesting two separate data sources)
+
 ## Developing on the RobloxAPI extension
 
 ### Installing dependencies

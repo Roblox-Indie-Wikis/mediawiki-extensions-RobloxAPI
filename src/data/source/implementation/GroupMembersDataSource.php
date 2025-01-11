@@ -18,36 +18,49 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\parserFunction;
+namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
+use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
+use MediaWiki\Extension\RobloxAPI\data\source\DependentDataSource;
+use Parser;
 
-/**
- * Gets the amount of visits for a game in a universe.
- */
-class PlaceVisitsParserFunction extends RobloxApiParserFunction {
+class GroupMembersDataSource extends DependentDataSource {
 
+	/**
+	 * @inheritDoc
+	 */
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider );
+		parent::__construct( $dataSourceProvider, 'groupMembers', 'groupData' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( $parser, ...$args ): string {
-		[ $universeId, $gameId ] = RobloxAPIUtil::safeDestructure( $args, 2 );
+	public function exec(
+		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
+	) {
+		$groupData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
 
-		$source = $this->dataSourceProvider->getDataSourceOrThrow( 'gameData' );
-
-		$gameData = $source->fetch( $universeId, $gameId );
-
-		if ( !$gameData ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
+		if ( !$groupData ) {
+			return $this->failNoData();
 		}
 
-		return $gameData->visits;
+		return $groupData->memberCount;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getArgumentSpecification(): ArgumentSpecification {
+		return new ArgumentSpecification( [ 'GroupID' ] );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function shouldRegisterLegacyParserFunction(): bool {
+		return true;
 	}
 
 }

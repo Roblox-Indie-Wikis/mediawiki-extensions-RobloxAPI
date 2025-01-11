@@ -5,6 +5,7 @@
 		]
 	},
 	"robloxapi-desc": "Provides easy access to the Roblox API via parser functions.",
+	"robloxapi-error-no-arguments": "Please provide a valid data source!",
 	"robloxapi-error-invalid-args-count": "Invalid number of arguments!",
 	"robloxapi-error-invalid-id": "Invalid ID value '$1'!",
 	"robloxapi-error-invalid-data": "Endpoint returned invalid data!",
@@ -16,5 +17,8 @@
 	"robloxapi-error-request-failed": "Request failed!",
 	"robloxapi-error-arg-not-allowed": "Argument '$1' is not allowed for type '$2'!",
 	"robloxapi-error-invalid-thumbnail-size": "Invalid thumbnail size!",
-	"robloxapi-error-invalid-username": "Invalid username!"
+	"robloxapi-error-invalid-username": "Invalid username!",
+	"robloxapi-error-missing-argument": "A required argument of type $1 is missing!",
+	"robloxapi-error-missing-optional-argument-value": "Incorrectly formatted optional argument! Note that optional arguments must be in the format of 'key=value'.",
+	"robloxapi-error-unknown-optional-argument": "Unknown optional argument '$1'!"
 }

@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\util;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use Wikimedia\Stats\Exceptions\IllegalOperationException;
 
 /**
@@ -73,31 +74,49 @@ class RobloxAPIUtil {
 
 	/**
 	 * Asserts that the given args are valid
-	 * @param array $expectedArgs The expected arg types
-	 * @param array $args The actual args
+	 * @param string[] $expectedArgs The expected arg types
+	 * @param string[] $args The actual args
 	 * @return void
 	 * @throws RobloxAPIException if the args are invalid
 	 */
 	public static function assertValidArgs( array $expectedArgs, array $args ): void {
 		foreach ( $args as $index => $arg ) {
 			$expectedType = $expectedArgs[$index];
-			if ( substr( strtolower( $expectedType ), -2 ) === 'id' ) {
-				self::assertValidIds( $arg );
-			} else {
-				switch ( $expectedType ) {
-					case 'ThumbnailSize':
-						if ( !preg_match( '/^\d{1,3}x\d{1,3}$/', $arg ) ) {
-							throw new RobloxAPIException( 'robloxapi-error-invalid-thumbnail-size', $arg );
-						}
-						break;
-					case 'Username':
-						if ( !preg_match( '/^(?=^[^_]+_?[^_]+$)\w{3,20}$/', $arg ) ) {
-							throw new RobloxAPIException( 'robloxapi-error-invalid-username', $arg );
-						}
-						break;
-					default:
-						throw new IllegalOperationException( "Unknown expected arg type: $expectedType" );
-				}
+			self::assertValidArg( $expectedType, $arg );
+		}
+	}
+
+	/**
+	 * Asserts that the given arg is valid
+	 * @param string $expectedType The expected arg type
+	 * @param string $arg The actual arg
+	 * @return void
+	 * @throws RobloxAPIException if the arg is invalid
+	 */
+	public static function assertValidArg( string $expectedType, string $arg ) {
+		if ( substr( strtolower( $expectedType ), -2 ) === 'id' ) {
+			self::assertValidIds( $arg );
+		} else {
+			switch ( $expectedType ) {
+				case 'ThumbnailSize':
+					if ( !preg_match( '/^\d{1,3}x\d{1,3}$/', $arg ) ) {
+						throw new RobloxAPIException( 'robloxapi-error-invalid-thumbnail-size', $arg );
+					}
+					break;
+				case 'Username':
+					if ( !preg_match( '/^(?=^[^_]+_?[^_]+$)\w{3,20}$/', $arg ) ) {
+						throw new RobloxAPIException( 'robloxapi-error-invalid-username', $arg );
+					}
+					break;
+				case 'Boolean':
+					if ( !in_array( strtolower( $arg ), [ 'true', 'false' ] ) ) {
+						throw new RobloxAPIException( 'robloxapi-error-invalid-boolean', $arg );
+					}
+					break;
+				case 'String':
+					break;
+				default:
+					throw new IllegalOperationException( "Unknown expected arg type: $expectedType" );
 			}
 		}
 	}
@@ -128,18 +147,29 @@ class RobloxAPIUtil {
 	) {
 		foreach ( $args as $index => $arg ) {
 			$expectedType = $expectedArgs[$index];
-			$allowedArgs = $config->get( 'RobloxAPIAllowedArguments' ) ?? [];
-			if ( !array_key_exists( $expectedType, $allowedArgs ) ) {
-				continue;
-			}
-			$allowedValues = $allowedArgs[$expectedType];
-			if ( empty( $allowedValues ) ) {
-				// all values are allowed
-				continue;
-			}
-			if ( !in_array( $arg, $allowedValues ) ) {
-				throw new RobloxAPIException( 'robloxapi-error-arg-not-allowed', $arg, $expectedType );
-			}
+			self::assertArgAllowed( $config, $expectedType, $arg );
+		}
+	}
+
+	/**
+	 * Asserts that the given arg is allowed
+	 * @param Config $config The config object
+	 * @param string $expectedType The expected arg type
+	 * @param string $arg The actual arg
+	 * @throws RobloxAPIException if the arg is invalid
+	 */
+	public static function assertArgAllowed( Config $config, string $expectedType, string $arg ) {
+		$allowedArgs = $config->get( 'RobloxAPIAllowedArguments' ) ?? [];
+		if ( !array_key_exists( $expectedType, $allowedArgs ) ) {
+			return;
+		}
+		$allowedValues = $allowedArgs[$expectedType];
+		if ( empty( $allowedValues ) ) {
+			// all values are allowed
+			return;
+		}
+		if ( !in_array( $arg, $allowedValues ) ) {
+			throw new RobloxAPIException( 'robloxapi-error-arg-not-allowed', $arg, $expectedType );
 		}
 	}
 
@@ -150,6 +180,115 @@ class RobloxAPIUtil {
 	 */
 	public static function verifyIsRobloxCdnUrl( string $url ): bool {
 		return preg_match( '/^https:\/\/[a-zA-Z0-9]{2}\.rbxcdn\.com\/[0-9A-Za-z\-\/]*(?:\.png)?$/', $url );
+	}
+
+	/**
+	 * Decides whether a result should be returned as JSON
+	 * @param mixed $value The value to check
+	 * @return bool
+	 */
+	public static function shouldReturnJson( $value ): bool {
+		return $value instanceof \stdClass || is_array( $value );
+	}
+
+	/**
+	 * Creates a JSON result
+	 * @param mixed $jsonObject The JSON object
+	 * @param array $optionalArgs The optional arguments
+	 * @return string
+	 */
+	public static function createJsonResult( $jsonObject, array $optionalArgs ): string {
+		if ( isset( $optionalArgs['pretty'] ) && strtolower( $optionalArgs['pretty'] ) === 'true' ) {
+			return json_encode( $jsonObject, JSON_PRETTY_PRINT );
+		}
+		// only return the value of json_key in the JSON object
+		if ( is_object( $jsonObject ) && !empty( $optionalArgs['json_key'] ) ) {
+			$jsonObject = self::getJsonKey( $jsonObject, $optionalArgs['json_key'] );
+
+			if ( !is_object( $jsonObject ) ) {
+				return $jsonObject ?? 'null';
+			}
+		}
+
+		return json_encode( $jsonObject );
+	}
+
+	/**
+	 * Get a JSON key from a JSON object. This accepts recursively nested keys using '->' as a separator.
+	 * @param \stdClass|null $jsonObject The JSON object
+	 * @param string $jsonKey The JSON key
+	 * @return \stdClass|mixed|null
+	 */
+	protected static function getJsonKey( ?\stdClass $jsonObject, string $jsonKey ) {
+		if ( $jsonObject === null ) {
+			return null;
+		}
+
+		// recursion
+		if ( str_contains( $jsonKey, '->' ) ) {
+			// split only once by ->
+			$parts = explode( '->', $jsonKey, 2 );
+			$firstPart = $parts[0];
+			$secondPart = $parts[1];
+
+			return self::getJsonKey( self::getJsonKey( $jsonObject, $firstPart ), $secondPart );
+		}
+
+		if ( !property_exists( $jsonObject, $jsonKey ) ) {
+			return null;
+		}
+
+		return $jsonObject->{$jsonKey};
+	}
+
+	/**
+	 * Verifies that the given arguments are valid
+	 * @param ArgumentSpecification $argumentSpecification The argument specification
+	 * @param string[] $args The arguments
+	 * @param Config $config The config object
+	 * @return array[]
+	 * @throws RobloxAPIException if the arguments are invalid
+	 */
+	public static function validateArguments( ArgumentSpecification $argumentSpecification, array $args, Config $config
+	): array {
+		// TODO extract this logic into a separate method
+		$requiredArgs = [];
+		$optionalArgs = [];
+
+		foreach ( $argumentSpecification->requiredArgs as $type ) {
+			if ( count( $args ) === 0 ) {
+				throw new RobloxAPIException( 'robloxapi-error-missing-argument', $type );
+			}
+			$value = array_shift( $args );
+			self::assertValidArg( $type, $value );
+			self::assertArgAllowed( $config, $type, $value );
+			$requiredArgs[] = $value;
+		}
+
+		// optional args are named, e.g. name=value
+		foreach ( $args as $string ) {
+			$parts = explode( '=', $string, 2 );
+
+			if ( count( $parts ) === 1 ) {
+				throw new RobloxAPIException( 'robloxapi-error-missing-optional-argument-value', $parts[0] );
+			}
+
+			$key = $parts[0];
+			$key = strtolower( $key );
+			$value = $parts[1];
+
+			if ( !array_key_exists( $key, $argumentSpecification->optionalArgs ) ) {
+				throw new RobloxAPIException( 'robloxapi-error-unknown-optional-argument', $key );
+			}
+
+			$type = $argumentSpecification->optionalArgs[$key];
+			self::assertValidArg( $type, $value );
+			self::assertArgAllowed( $config, $type, $value );
+
+			$optionalArgs[$key] = $value;
+		}
+
+		return [ $requiredArgs, $optionalArgs ];
 	}
 
 }

@@ -1,6 +1,6 @@
 {
 	"name": "RobloxAPI",
-	"version": "1.1.0",
+	"version": "1.2.0-alpha",
 	"author": [
 		"SomeRandomDeveloper"
 	],
@@ -27,22 +27,15 @@
 				"badgeInfo",
 				"userInfo",
 				"assetDetails",
-				"userId"
-			],
-			"merge_strategy": "array_merge",
-			"description": "The datasources that should be enabled and available."
-		},
-		"RobloxAPIEnabledParserFunctions": {
-			"value": [
-				"roblox_grouprank",
-				"roblox_activeplayers",
-				"roblox_visits",
-				"roblox_groupmembers",
-				"roblox_useravatarthumbnailurl",
-				"roblox_userid"
+				"userId",
+				"groupRank",
+				"activePlayers",
+				"visits",
+				"groupMembers",
+				"userAvatarThumbnailUrl"
 			],
 			"merge_strategy": "provide_default",
-			"description": "The parser functions that should be enabled. JSON parser functions cannot be enabled or disabled here, instead they are enabled if their corresponding data source is enabled."
+			"description": "The datasources that should be enabled and available."
 		},
 		"RobloxAPICachingExpiries": {
 			"value": {

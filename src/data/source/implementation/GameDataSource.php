@@ -18,34 +18,35 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source;
+namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use Parser;
 
 /**
  * A data source for the roblox games API.
  */
-class GameDataSource extends DataSource {
+class GameDataSource extends FetcherDataSource {
 
 	public function __construct( Config $config ) {
-		parent::__construct( 'gameData', self::createSimpleCache(), $config, [
-			'UniverseID',
-			'PlaceID',
-		] );
+		parent::__construct( 'gameData', self::createSimpleCache(), $config );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getEndpoint( $args ): string {
-		return "https://games.roblox.com/v1/games?universeIds=$args[0]";
+	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
+		return "https://games.roblox.com/v1/games?universeIds=$requiredArgs[0]";
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function processData( $data, $args ) {
+	public function processData( $data, array $requiredArgs, array $optionalArgs ) {
 		$entries = $data->data;
 
 		if ( !$entries ) {
@@ -53,7 +54,7 @@ class GameDataSource extends DataSource {
 		}
 
 		foreach ( $entries as $entry ) {
-			if ( $entry->rootPlaceId !== (int)$args[1] ) {
+			if ( $entry->rootPlaceId !== (int)$requiredArgs[1] ) {
 				continue;
 			}
 
@@ -61,6 +62,32 @@ class GameDataSource extends DataSource {
 		}
 
 		return null;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function shouldRegisterLegacyParserFunction(): bool {
+		return true;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getArgumentSpecification(): ArgumentSpecification {
+		return ( new ArgumentSpecification( [
+			'UniverseID',
+			'PlaceID',
+		] ) )->withJsonArgs();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function exec(
+		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
+	) {
+		return $this->fetch( $requiredArgs, $optionalArgs );
 	}
 
 }

@@ -18,46 +18,60 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\parserFunction;
+namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
+use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\data\source\DependentDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
+use Parser;
 
-class GroupRankParserFunction extends RobloxApiParserFunction {
+class GroupRankDataSource extends DependentDataSource {
 
+	/**
+	 * @inheritDoc
+	 */
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider );
+		parent::__construct( $dataSourceProvider, 'groupRank', 'groupRoles' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( $parser, ...$args ): string {
-		[ $groupId, $userId ] = RobloxAPIUtil::safeDestructure( $args, 2 );
-
-		// validate here since the group id is not passed to the data source
-		RobloxAPIUtil::assertValidIds( $groupId, $userId );
-
-		$source = $this->dataSourceProvider->getDataSourceOrThrow( 'groupRoles' );
-
-		$groups = $source->fetch( $userId );
+	public function exec(
+		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
+	) {
+		$groups = $this->dataSource->exec( $dataSourceProvider, $parser, [ $requiredArgs[1] ] );
 
 		if ( !$groups ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
+			return $this->failNoData();
 		}
 
 		if ( !is_array( $groups ) ) {
-			throw new RobloxAPIException( 'robloxapi-error-unexpected-data-structure' );
+			$this->failUnexpectedDataStructure();
 		}
 
 		foreach ( $groups as $group ) {
-			if ( $group->group->id === (int)$groupId ) {
+			if ( $group->group->id === (int)$requiredArgs[0] ) {
 				return $group->role->name;
 			}
 		}
 
 		throw new RobloxAPIException( 'robloxapi-error-user-group-not-found' );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getArgumentSpecification(): ArgumentSpecification {
+		return new ArgumentSpecification( [ 'GroupId', 'UserID' ] );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function shouldRegisterLegacyParserFunction(): bool {
+		return true;
 	}
 
 }

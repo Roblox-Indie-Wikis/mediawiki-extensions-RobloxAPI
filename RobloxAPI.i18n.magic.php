@@ -20,13 +20,14 @@
 
 $magicWords = [];
 $magicWords['en'] = [
-	'roblox_grouprank' => [ 0, 'rblxGroupRank' ],
-	'roblox_activeplayers' => [ 0, 'rblxPlaceActivePlayers' ],
-	'roblox_visits' => [ 0, 'rblxPlaceVisits' ],
-	'roblox_groupmembers' => [ 0, 'rblxGroupMembers' ],
-	'roblox_useravatarthumbnailurl' => [ 0, 'rblxUserAvatarThumbnailUrl' ],
-	'roblox_userid' => [ 0, 'rblxUserId' ],
-	// data source parser functions
+	'robloxapi' => [ 0, 'robloxAPI' ],
+	// DEPRECATED - all of these parser functions are replaced by #robloxAPI and might be removed in the future
+	'roblox_GroupRank' => [ 0, 'rblxGroupRank' ],
+	'roblox_ActivePlayers' => [ 0, 'rblxPlaceActivePlayers' ],
+	'roblox_Visits' => [ 0, 'rblxPlaceVisits' ],
+	'roblox_GroupMembers' => [ 0, 'rblxGroupMembers' ],
+	'roblox_UserAvatarThumbnailUrl' => [ 0, 'rblxUserAvatarThumbnailUrl' ],
+	'roblox_UserId' => [ 0, 'rblxUserId' ],
 	'roblox_GameData' => [ 0, 'rblxGameData' ],
 	'roblox_GroupRoles' => [ 0, 'rblxGroupRoles' ],
 	'roblox_GroupData' => [ 0, 'rblxGroupData' ],

@@ -21,14 +21,8 @@ namespace MediaWiki\Extension\RobloxAPI;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\parserFunction\ActivePlayersParserFunction;
-use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
-use MediaWiki\Extension\RobloxAPI\parserFunction\GroupMembersParserFunction;
-use MediaWiki\Extension\RobloxAPI\parserFunction\GroupRankParserFunction;
-use MediaWiki\Extension\RobloxAPI\parserFunction\PlaceVisitsParserFunction;
-use MediaWiki\Extension\RobloxAPI\parserFunction\UserAvatarThumbnailUrlParserFunction;
-use MediaWiki\Extension\RobloxAPI\parserFunction\UserIdParserFunction;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\MediaWikiServices;
 use Parser;
@@ -37,55 +31,112 @@ class Hooks implements ParserFirstCallInitHook {
 
 	private Config $config;
 	private DataSourceProvider $dataSourceProvider;
-	private array $parserFunctions;
+	private array $legacyParserFunctions;
 
 	public function __construct() {
 		$this->config = MediaWikiServices::getInstance()->getConfigFactory()->makeConfig( 'RobloxAPI' );
 
 		$this->dataSourceProvider = new DataSourceProvider( $this->config );
 
-		$this->parserFunctions = [
-			'roblox_grouprank' => new GroupRankParserFunction( $this->dataSourceProvider ),
-			'roblox_activeplayers' => new ActivePlayersParserFunction( $this->dataSourceProvider ),
-			'roblox_visits' => new PlaceVisitsParserFunction( $this->dataSourceProvider ),
-			'roblox_groupmembers' => new GroupMembersParserFunction( $this->dataSourceProvider ),
-			'roblox_useravatarthumbnailurl' => new UserAvatarThumbnailUrlParserFunction( $this->dataSourceProvider ),
-			'roblox_userid' => new UserIdParserFunction( $this->dataSourceProvider ),
-		];
-		$this->parserFunctions += $this->dataSourceProvider->createParserFunctions();
+		$this->legacyParserFunctions = [];
+		$this->legacyParserFunctions += $this->dataSourceProvider->createLegacyParserFunctions();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function onParserFirstCallInit( $parser ) {
-		foreach ( $this->parserFunctions as $id => $function ) {
+		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, ...$args ) {
+			try {
+				$result = $this->handleParserFunctionCall( $parser, $args );
+				$result_string = is_array( $result ) ? $result['result'] : $result;
+
+				// if the data source specifically disables it, don't escape the result
+				if ( is_array( $result ) && !$result['shouldEscape'] ) {
+					return $result_string;
+				}
+
+				// escape wikitext, we don't need any of the results to be parsed
+				return wfEscapeWikiText( $result_string );
+			} catch ( RobloxAPIException $exception ) {
+				return wfMessage( $exception->getMessage(), ...$exception->messageParams )->escaped();
+			}
+		} );
+
+		foreach ( $this->legacyParserFunctions as $id => $function ) {
 			// all data source parser functions are only enabled if the corresponding data source
 			// is enabled, so we don't need to check the config for that
-			$isEnabled =
-				$function instanceof DataSourceParserFunction ||
-				in_array( $id, $this->config->get( 'RobloxAPIEnabledParserFunctions' ) );
-			if ( $isEnabled ) {
-				$parser->setFunctionHook( $id, function ( Parser $parser, ...$args ) use ( $function ) {
-					if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
-						!$parser->incrementExpensiveFunctionCount() ) {
-						return false;
-					}
-					try {
-						$result = $function->exec( $parser, ...$args );
+			$parser->setFunctionHook( $id, function ( Parser $parser, ...$args ) use ( $function ) {
+				if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
+					!$parser->incrementExpensiveFunctionCount() ) {
+					return false;
+				}
+				try {
+					$result = $function->exec( $parser, ...$args );
 
-						if ( !$function->shouldEscapeResult( $result ) ) {
-							return $result;
-						}
+					$shouldEscape = $function->shouldEscapeResult( $result );
 
-						// escape wikitext, we don't need any of the results to be parsed
-						return wfEscapeWikiText( $result );
-					} catch ( RobloxAPIException $exception ) {
-						return wfMessage( $exception->getMessage(), ...$exception->messageParams )->escaped();
+					if ( RobloxAPIUtil::shouldReturnJson( $result ) ) {
+						$result = RobloxAPIUtil::createJsonResult( $result, [] );
+						// always escape json, there is no need for it to be parsed
+						$shouldEscape = true;
 					}
-				} );
-			}
+
+					if ( !$shouldEscape ) {
+						return $result;
+					}
+
+					// escape wikitext, we don't need any of the results to be parsed
+					return wfEscapeWikiText( $result );
+				} catch ( RobloxAPIException $exception ) {
+					return wfMessage( $exception->getMessage(), ...$exception->messageParams )->escaped();
+				}
+			} );
 		}
 	}
 
+	/**
+	 * Handles a call to the #robloxAPI parser function.
+	 * @param Parser $parser
+	 * @param array $args
+	 * @return array|bool
+	 * @throws RobloxAPIException
+	 */
+	private function handleParserFunctionCall( Parser $parser, array $args ) {
+		if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
+			!$parser->incrementExpensiveFunctionCount() ) {
+			return false;
+		}
+
+		if ( count( $args ) == 0 ) {
+			throw new RobloxAPIException( 'robloxapi-error-no-arguments' );
+		}
+		$dataSourceId = $args[0];
+		$dataSource = $this->dataSourceProvider->getDataSource( $dataSourceId, true );
+
+		if ( !$dataSource ) {
+			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found', $dataSourceId );
+		}
+
+		$otherArgs = array_slice( $args, 1 );
+
+		$argumentSpecification = $dataSource->getArgumentSpecification();
+
+		[ $requiredArgs, $optionalArgs ] =
+			RobloxAPIUtil::validateArguments( $argumentSpecification, $otherArgs, $this->config );
+
+		$result = $dataSource->exec( $this->dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
+		$shouldEscape = $dataSource->shouldEscapeResult( $result );
+
+		if ( RobloxAPIUtil::shouldReturnJson( $result ) ) {
+			$result = RobloxAPIUtil::createJsonResult( $result, $optionalArgs );
+			// always escape json, there is no need for it to be parsed
+			$shouldEscape = true;
+		}
+
+		return [
+			'result' => $result,
+			'shouldEscape' => $shouldEscape,
+		];
+	}
 }
