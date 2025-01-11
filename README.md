@@ -6,7 +6,11 @@ to make it easy for you to grab data from Roblox and put it on your wiki. Former
 by [Dovedale Wiki](https://github.com/dovedalewiki).
 
 > [!NOTE]
-> This extension is still in development.
+> In version 1.2.0, major changes have been made to the extension. The new `{{#robloxAPI}}` parser function provides new
+> features and should now be the only one used to access the Roblox API. While the old parser functions remain working
+> as before, they might be removed in a future version.
+>
+> Please see the [USAGE.md](USAGE.md) file for more information.
 
 Live Examples:
 https://dovedale.wiki
