@@ -64,7 +64,7 @@ class GroupRankDataSource extends DependentDataSource {
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [ "GroupId", "UserID" ] );
+		return new ArgumentSpecification( [ 'GroupId', 'UserID' ] );
 	}
 
 	/**

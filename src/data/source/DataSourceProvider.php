@@ -24,6 +24,7 @@ use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GroupRankDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\PlaceActivePlayersDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserIdDataSource;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\RobloxApiParserFunction;
@@ -87,6 +88,9 @@ class DataSourceProvider {
 
 		$this->tryRegisterDataSource( function () {
 			return new GroupRankDataSource( $this );
+		} );
+		$this->tryRegisterDataSource( function () {
+			return new PlaceActivePlayersDataSource( $this );
 		} );
 	}
 
@@ -157,7 +161,8 @@ class DataSourceProvider {
 
 		if ( $ignoreCase ) {
 			foreach ( $this->dataSources as $dataSource ) {
-				if ( strcasecmp( $dataSource->id, $id ) === 0 ) {
+				/* @var IDataSource $dataSource */
+				if ( strcasecmp( $dataSource->getId(), $id ) === 0 ) {
 					return $dataSource;
 				}
 			}

@@ -23,7 +23,7 @@ $magicWords['en'] = [
 	'robloxapi' => [ 0, 'robloxAPI' ],
 	// DEPRECATED - all of these parser functions are replaced by #robloxAPI and might be removed in the future
 	'roblox_GroupRank' => [ 0, 'rblxGroupRank' ],
-	'roblox_activeplayers' => [ 0, 'rblxPlaceActivePlayers' ],
+	'roblox_ActivePlayers' => [ 0, 'rblxPlaceActivePlayers' ],
 	'roblox_visits' => [ 0, 'rblxPlaceVisits' ],
 	'roblox_groupmembers' => [ 0, 'rblxGroupMembers' ],
 	'roblox_useravatarthumbnailurl' => [ 0, 'rblxUserAvatarThumbnailUrl' ],

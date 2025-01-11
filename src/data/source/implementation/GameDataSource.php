@@ -86,8 +86,8 @@ class GameDataSource extends FetcherDataSource {
 	 */
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	): string {
-		return $this->fetch( ...$requiredArgs );
+	) {
+		return $this->fetch( $requiredArgs, $optionalArgs );
 	}
 
 }
