@@ -51,6 +51,9 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 
 	/**
 	 * @inheritDoc
+	 * @param callable( array, array ): string $createEndpoint The function to create the endpoint.
+	 * @param callable( mixed, array, array ): mixed|null $processData The function to process the data.
+	 * @param bool $registerParserFunction Whether to register a legacy parser function.
 	 */
 	public function __construct(
 		string $id, Config $config, ArgumentSpecification $argumentSpecification, callable $createEndpoint,
@@ -66,16 +69,16 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function getEndpoint( $args ): string {
-		return call_user_func( $this->createEndpoint, $args );
+	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
+		return call_user_func( $this->createEndpoint, $requiredArgs, $optionalArgs );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function processData( $data, $args ) {
+	public function processData( $data, array $requiredArgs, array $optionalArgs ) {
 		if ( $this->processData ) {
-			return call_user_func( $this->processData, $data, $args );
+			return call_user_func( $this->processData, $data, $requiredArgs, $optionalArgs );
 		}
 
 		return $data;
@@ -98,7 +101,7 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
 	) {
-		return $this->fetch( ...$requiredArgs );
+		return $this->fetch( $requiredArgs, $optionalArgs );
 	}
 
 }

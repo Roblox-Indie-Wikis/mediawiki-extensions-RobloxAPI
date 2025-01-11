@@ -23,7 +23,6 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use Parser;
 
 /**
@@ -38,14 +37,14 @@ class GameDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function getEndpoint( $args ): string {
-		return "https://games.roblox.com/v1/games?universeIds=$args[0]";
+	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
+		return "https://games.roblox.com/v1/games?universeIds=$requiredArgs[0]";
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function processData( $data, $args ) {
+	public function processData( $data, array $requiredArgs, array $optionalArgs ) {
 		$entries = $data->data;
 
 		if ( !$entries ) {
@@ -53,7 +52,7 @@ class GameDataSource extends FetcherDataSource {
 		}
 
 		foreach ( $entries as $entry ) {
-			if ( $entry->rootPlaceId !== (int)$args[1] ) {
+			if ( $entry->rootPlaceId !== (int)$requiredArgs[1] ) {
 				continue;
 			}
 
@@ -86,7 +85,7 @@ class GameDataSource extends FetcherDataSource {
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
 	): string {
-		return RobloxAPIUtil::createJsonResult( $this->fetch( ...$requiredArgs ), $optionalArgs );
+		return $this->fetch( ...$requiredArgs );
 	}
 
 }

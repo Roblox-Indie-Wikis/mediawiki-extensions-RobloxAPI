@@ -39,14 +39,14 @@ class UserIdDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function getEndpoint( $args ): string {
+	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
 		return "https://users.roblox.com/v1/usernames/users";
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function processData( $data, $args ) {
+	public function processData( $data, array $requiredArgs, array $optionalArgs ) {
 		$entries = $data->data;
 		if ( $entries === null || count( $entries ) === 0 ) {
 			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
@@ -58,15 +58,15 @@ class UserIdDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function processRequestOptions( array &$options, array $args ) {
+	public function processRequestOptions( array &$options, array $requiredArgs, array $optionalArgs ) {
 		$options['method'] = 'POST';
-		$options['postData'] = FormatJson::encode( [ 'usernames' => [ $args[0] ] ] );
+		$options['postData'] = FormatJson::encode( [ 'usernames' => [ $requiredArgs[0] ] ] );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	protected function getAdditionalHeaders( array $args ): array {
+	protected function getAdditionalHeaders( array $requiredArgs, array $optionalArgs ): array {
 		return [
 			'Content-Type' => 'application/json',
 		];
