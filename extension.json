@@ -38,8 +38,7 @@
 		},
 		"RobloxAPIEnabledParserFunctions": {
 			"value": [
-				"roblox_useravatarthumbnailurl",
-				"roblox_userid"
+				"roblox_useravatarthumbnailurl"
 			],
 			"merge_strategy": "provide_default",
 			"description": "The parser functions that should be enabled. JSON parser functions cannot be enabled or disabled here, instead they are enabled if their corresponding data source is enabled."

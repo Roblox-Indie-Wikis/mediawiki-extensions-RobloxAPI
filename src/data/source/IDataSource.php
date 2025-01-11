@@ -55,10 +55,10 @@ interface IDataSource {
 	public function getArgumentSpecification(): ArgumentSpecification;
 
 	/**
-	 * @param string $result The result of the parser function.
+	 * @param mixed $result The result of the parser function.
 	 * @return bool Whether the result should be escaped and url-encoded.
 	 */
-	public function shouldEscapeResult( string $result ): bool;
+	public function shouldEscapeResult( $result ): bool;
 
 	/**
 	 * Gets the ID of the data source.

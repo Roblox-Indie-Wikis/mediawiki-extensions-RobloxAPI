@@ -229,7 +229,7 @@ abstract class FetcherDataSource implements IDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function shouldEscapeResult( string $result ): bool {
+	public function shouldEscapeResult( $result ): bool {
 		return true;
 	}
 

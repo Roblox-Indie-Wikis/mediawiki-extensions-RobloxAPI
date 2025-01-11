@@ -33,6 +33,9 @@ use Parser;
  */
 class UserIdDataSource extends FetcherDataSource {
 
+	/**
+	 * @inheritDoc
+	 */
 	public function __construct( Config $config ) {
 		parent::__construct( 'userId', self::createSimpleCache(), $config );
 	}
@@ -73,13 +76,38 @@ class UserIdDataSource extends FetcherDataSource {
 		];
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	): string {
-		return $this->fetch( ...$requiredArgs );
+	) {
+		$data = $this->fetch( $requiredArgs, $optionalArgs );
+
+		if ( !$data ) {
+			throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
+		}
+
+		return $data->id;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return new ArgumentSpecification( [ 'Username' ] );
 	}
+
+	// special case:
+	// for legacy reasons, this data source does not return the full json.
+	// instead, it returns the id directly.
+	// this is because the id is the same as the one of the legacy parser function.
+
+	/**
+	 * @inheritDoc
+	 */
+	public function shouldRegisterLegacyParserFunction(): bool {
+		return true;
+	}
+
 }

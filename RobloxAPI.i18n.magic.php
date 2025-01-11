@@ -27,7 +27,7 @@ $magicWords['en'] = [
 	'roblox_Visits' => [ 0, 'rblxPlaceVisits' ],
 	'roblox_GroupMembers' => [ 0, 'rblxGroupMembers' ],
 	'roblox_useravatarthumbnailurl' => [ 0, 'rblxUserAvatarThumbnailUrl' ],
-	'roblox_userid' => [ 0, 'rblxUserId' ],
+	'roblox_UserId' => [ 0, 'rblxUserId' ],
 	// data source parser functions
 	'roblox_GameData' => [ 0, 'rblxGameData' ],
 	'roblox_GroupRoles' => [ 0, 'rblxGroupRoles' ],

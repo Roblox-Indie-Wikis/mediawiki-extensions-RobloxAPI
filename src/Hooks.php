@@ -43,7 +43,6 @@ class Hooks implements ParserFirstCallInitHook {
 
 		$this->legacyParserFunctions = [
 			'roblox_useravatarthumbnailurl' => new UserAvatarThumbnailUrlParserFunction( $this->dataSourceProvider ),
-			'roblox_userid' => new UserIdParserFunction( $this->dataSourceProvider ),
 		];
 		$this->legacyParserFunctions += $this->dataSourceProvider->createLegacyParserFunctions();
 	}
