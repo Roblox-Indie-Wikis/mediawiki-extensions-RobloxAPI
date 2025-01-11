@@ -25,7 +25,7 @@ $magicWords['en'] = [
 	'roblox_GroupRank' => [ 0, 'rblxGroupRank' ],
 	'roblox_ActivePlayers' => [ 0, 'rblxPlaceActivePlayers' ],
 	'roblox_Visits' => [ 0, 'rblxPlaceVisits' ],
-	'roblox_groupmembers' => [ 0, 'rblxGroupMembers' ],
+	'roblox_GroupMembers' => [ 0, 'rblxGroupMembers' ],
 	'roblox_useravatarthumbnailurl' => [ 0, 'rblxUserAvatarThumbnailUrl' ],
 	'roblox_userid' => [ 0, 'rblxUserId' ],
 	// data source parser functions

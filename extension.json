@@ -30,14 +30,14 @@
 				"userId",
 				"groupRank",
 				"activePlayers",
-				"visits"
+				"visits",
+				"groupMembers"
 			],
 			"merge_strategy": "array_merge",
 			"description": "The datasources that should be enabled and available."
 		},
 		"RobloxAPIEnabledParserFunctions": {
 			"value": [
-				"roblox_groupmembers",
 				"roblox_useravatarthumbnailurl",
 				"roblox_userid"
 			],

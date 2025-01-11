@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\GroupMembersDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GroupRankDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\PlaceActivePlayersDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\PlaceVisitsDataSource;
@@ -95,6 +96,9 @@ class DataSourceProvider {
 		} );
 		$this->tryRegisterDataSource( function () {
 			return new PlaceVisitsDataSource( $this );
+		} );
+		$this->tryRegisterDataSource( function () {
+			return new GroupMembersDataSource( $this );
 		} );
 	}
 

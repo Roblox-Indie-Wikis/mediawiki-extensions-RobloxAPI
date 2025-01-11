@@ -21,10 +21,7 @@ namespace MediaWiki\Extension\RobloxAPI;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\parserFunction\ActivePlayersParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
-use MediaWiki\Extension\RobloxAPI\parserFunction\GroupMembersParserFunction;
-use MediaWiki\Extension\RobloxAPI\parserFunction\PlaceVisitsParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\UserAvatarThumbnailUrlParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\UserIdParserFunction;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
@@ -45,7 +42,6 @@ class Hooks implements ParserFirstCallInitHook {
 		$this->dataSourceProvider = new DataSourceProvider( $this->config );
 
 		$this->legacyParserFunctions = [
-			'roblox_groupmembers' => new GroupMembersParserFunction( $this->dataSourceProvider ),
 			'roblox_useravatarthumbnailurl' => new UserAvatarThumbnailUrlParserFunction( $this->dataSourceProvider ),
 			'roblox_userid' => new UserIdParserFunction( $this->dataSourceProvider ),
 		];
