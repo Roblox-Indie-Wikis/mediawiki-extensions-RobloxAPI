@@ -26,6 +26,7 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 /**
  * A parser function that provides the data of a data source.
+ * @deprecated Replaced by data sources in v1.2.0.
  */
 class DataSourceParserFunction extends RobloxApiParserFunction {
 

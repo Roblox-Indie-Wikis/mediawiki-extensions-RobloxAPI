@@ -26,6 +26,7 @@ use Parser;
 
 /**
  * Defines a parser function that can be used to access the Roblox API.
+ * @deprecated Replaced by data sources in v1.2.0.
  */
 abstract class RobloxApiParserFunction {
 
