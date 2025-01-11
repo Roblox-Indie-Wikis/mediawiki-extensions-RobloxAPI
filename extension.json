@@ -31,15 +31,14 @@
 				"groupRank",
 				"activePlayers",
 				"visits",
-				"groupMembers"
+				"groupMembers",
+				"userAvatarThumbnailUrl"
 			],
 			"merge_strategy": "array_merge",
 			"description": "The datasources that should be enabled and available."
 		},
 		"RobloxAPIEnabledParserFunctions": {
-			"value": [
-				"roblox_useravatarthumbnailurl"
-			],
+			"value": [],
 			"merge_strategy": "provide_default",
 			"description": "The parser functions that should be enabled. JSON parser functions cannot be enabled or disabled here, instead they are enabled if their corresponding data source is enabled."
 		},

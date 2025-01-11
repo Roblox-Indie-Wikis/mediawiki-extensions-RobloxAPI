@@ -18,42 +18,43 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\parserFunction;
+namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
+use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\data\source\DependentDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
+use Parser;
 
-/**
- * Gets the URL for a user's avatar thumbnail.
- */
-class UserAvatarThumbnailUrlParserFunction extends RobloxApiParserFunction {
+class UserAvatarThumbnailUrlDataSource extends DependentDataSource {
 
+	/**
+	 * @inheritDoc
+	 */
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider );
+		parent::__construct( $dataSourceProvider, 'userAvatarThumbnailUrl', 'userAvatarThumbnail' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( $parser, ...$args ): string {
-		[ $userId, $thumbnailSize ] = RobloxAPIUtil::safeDestructure( $args, 2 );
-
-		$source = $this->dataSourceProvider->getDataSourceOrThrow( 'userAvatarThumbnail' );
-		$data = $source->fetch( $userId, $thumbnailSize );
+	public function exec(
+		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
+	) {
+		$data = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
 
 		if ( !$data ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
+			return $this->failNoData();
 		}
 
 		if ( count( $data ) == 0 ) {
-			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
+			return $this->failInvalidData();
 		}
 
 		$url = $data[0]->imageUrl;
 
 		if ( !$url || !RobloxAPIUtil::verifyIsRobloxCdnUrl( $url ) ) {
-			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
+			return $this->failInvalidData();
 		}
 
 		return "$url.png";
@@ -62,10 +63,24 @@ class UserAvatarThumbnailUrlParserFunction extends RobloxApiParserFunction {
 	/**
 	 * @inheritDoc
 	 */
-	public function shouldEscapeResult( string $result ): bool {
+	public function shouldEscapeResult( $result ): bool {
 		// The url should not be escaped here in order to be embedded correctly using $wgEnableImageWhitelist.
 		// If the URL was escaped here, it would be URL-encoded and not recognized by MediaWiki as an image URL.
 		return !RobloxAPIUtil::verifyIsRobloxCdnUrl( $result );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getArgumentSpecification(): ArgumentSpecification {
+		return new ArgumentSpecification( [ 'UserID', 'ThumbnailSize' ] );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function shouldRegisterLegacyParserFunction(): bool {
+		return true;
 	}
 
 }

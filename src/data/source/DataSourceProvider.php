@@ -27,6 +27,7 @@ use MediaWiki\Extension\RobloxAPI\data\source\implementation\GroupMembersDataSou
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GroupRankDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\PlaceActivePlayersDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\PlaceVisitsDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserAvatarThumbnailUrlDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserIdDataSource;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\RobloxApiParserFunction;
@@ -99,6 +100,9 @@ class DataSourceProvider {
 		} );
 		$this->tryRegisterDataSource( function () {
 			return new GroupMembersDataSource( $this );
+		} );
+		$this->tryRegisterDataSource( function () {
+			return new UserAvatarThumbnailUrlDataSource( $this );
 		} );
 	}
 

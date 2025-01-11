@@ -183,6 +183,15 @@ class RobloxAPIUtil {
 	}
 
 	/**
+	 * Decides whether a result should be returned as JSON
+	 * @param mixed $value The value to check
+	 * @return bool
+	 */
+	public static function shouldReturnJson( $value ): bool {
+		return $value instanceof \stdClass || is_array( $value );
+	}
+
+	/**
 	 * Creates a JSON result
 	 * @param mixed $jsonObject The JSON object
 	 * @param array $optionalArgs The optional arguments

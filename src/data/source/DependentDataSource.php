@@ -76,6 +76,14 @@ abstract class DependentDataSource implements IDataSource {
 	}
 
 	/**
+	 * Throws an exception stating that the data source returned invalid data.
+	 * @throws RobloxAPIException
+	 */
+	protected function failInvalidData() {
+		throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
+	}
+
+	/**
 	 * @inheritDoc
 	 */
 	public function getId(): string {

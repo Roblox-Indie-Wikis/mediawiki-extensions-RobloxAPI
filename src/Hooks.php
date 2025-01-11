@@ -22,8 +22,6 @@ namespace MediaWiki\Extension\RobloxAPI;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
-use MediaWiki\Extension\RobloxAPI\parserFunction\UserAvatarThumbnailUrlParserFunction;
-use MediaWiki\Extension\RobloxAPI\parserFunction\UserIdParserFunction;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Hook\ParserFirstCallInitHook;
@@ -41,9 +39,7 @@ class Hooks implements ParserFirstCallInitHook {
 
 		$this->dataSourceProvider = new DataSourceProvider( $this->config );
 
-		$this->legacyParserFunctions = [
-			'roblox_useravatarthumbnailurl' => new UserAvatarThumbnailUrlParserFunction( $this->dataSourceProvider ),
-		];
+		$this->legacyParserFunctions = [];
 		$this->legacyParserFunctions += $this->dataSourceProvider->createLegacyParserFunctions();
 	}
 
@@ -84,7 +80,7 @@ class Hooks implements ParserFirstCallInitHook {
 
 						$shouldEscape = $function->shouldEscapeResult( $result );
 
-						if ( $result instanceof \stdClass ) {
+						if ( RobloxAPIUtil::shouldReturnJson( $result ) ) {
 							$result = RobloxAPIUtil::createJsonResult( $result, [] );
 							// always escape json, there is no need for it to be parsed
 							$shouldEscape = true;
@@ -124,7 +120,7 @@ class Hooks implements ParserFirstCallInitHook {
 		$dataSource = $this->dataSourceProvider->getDataSource( $dataSourceId, true );
 
 		if ( !$dataSource ) {
-			return wfMessage( 'robloxapi-error-datasource-not-found', $dataSourceId );
+			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found', $dataSourceId );
 		}
 
 		$otherArgs = array_slice( $args, 1 );
@@ -137,7 +133,7 @@ class Hooks implements ParserFirstCallInitHook {
 		$result = $dataSource->exec( $this->dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
 		$shouldEscape = $dataSource->shouldEscapeResult( $result );
 
-		if ( $result instanceof \stdClass ) {
+		if ( RobloxAPIUtil::shouldReturnJson( $result ) ) {
 			$result = RobloxAPIUtil::createJsonResult( $result, $optionalArgs );
 			// always escape json, there is no need for it to be parsed
 			$shouldEscape = true;
