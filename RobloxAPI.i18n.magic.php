@@ -24,7 +24,7 @@ $magicWords['en'] = [
 	// DEPRECATED - all of these parser functions are replaced by #robloxAPI and might be removed in the future
 	'roblox_GroupRank' => [ 0, 'rblxGroupRank' ],
 	'roblox_ActivePlayers' => [ 0, 'rblxPlaceActivePlayers' ],
-	'roblox_visits' => [ 0, 'rblxPlaceVisits' ],
+	'roblox_Visits' => [ 0, 'rblxPlaceVisits' ],
 	'roblox_groupmembers' => [ 0, 'rblxGroupMembers' ],
 	'roblox_useravatarthumbnailurl' => [ 0, 'rblxUserAvatarThumbnailUrl' ],
 	'roblox_userid' => [ 0, 'rblxUserId' ],

@@ -25,6 +25,7 @@ use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GroupRankDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\PlaceActivePlayersDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\PlaceVisitsDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserIdDataSource;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\RobloxApiParserFunction;
@@ -91,6 +92,9 @@ class DataSourceProvider {
 		} );
 		$this->tryRegisterDataSource( function () {
 			return new PlaceActivePlayersDataSource( $this );
+		} );
+		$this->tryRegisterDataSource( function () {
+			return new PlaceVisitsDataSource( $this );
 		} );
 	}
 
