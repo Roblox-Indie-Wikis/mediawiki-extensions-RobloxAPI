@@ -42,10 +42,10 @@ abstract class RobloxApiParserFunction {
 	 * Executes the parser function
 	 * @param Parser $parser
 	 * @param mixed ...$args
-	 * @return string
+	 * @return mixed
 	 * @throws RobloxAPIException If any error regarding the API or data occurs during execution.
 	 */
-	abstract public function exec( Parser $parser, ...$args ): string;
+	abstract public function exec( Parser $parser, ...$args );
 
 	/**
 	 * @param mixed $result The result of the parser function.

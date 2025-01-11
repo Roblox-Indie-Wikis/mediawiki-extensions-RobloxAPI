@@ -39,7 +39,7 @@ class DataSourceParserFunction extends RobloxApiParserFunction {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( $parser, ...$args ): string {
+	public function exec( $parser, ...$args ) {
 		[ $requiredArgs, $optionalArgs ] =
 			RobloxAPIUtil::validateArguments( $this->dataSource->getArgumentSpecification(), $args,
 				$this->dataSourceProvider->config );
