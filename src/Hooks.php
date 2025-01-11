@@ -24,7 +24,6 @@ use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\parserFunction\ActivePlayersParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\GroupMembersParserFunction;
-use MediaWiki\Extension\RobloxAPI\parserFunction\GroupRankParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\PlaceVisitsParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\UserAvatarThumbnailUrlParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\UserIdParserFunction;

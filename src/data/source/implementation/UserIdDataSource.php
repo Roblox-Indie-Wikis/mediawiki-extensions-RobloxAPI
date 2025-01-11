@@ -27,7 +27,6 @@ use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use Parser;
-use PhpParser\Node\Arg;
 
 /**
  * A data source for getting a user's ID from their username.

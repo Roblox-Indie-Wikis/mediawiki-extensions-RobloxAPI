@@ -22,7 +22,6 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use FormatJson;
 use MediaWiki\Config\Config;
-use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
@@ -30,7 +29,6 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
-use Parser;
 
 /**
  * Represents an endpoint of the roblox api.
