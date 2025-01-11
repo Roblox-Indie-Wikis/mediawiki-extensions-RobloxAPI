@@ -40,7 +40,7 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 		self::assertEquals( 'https://games.roblox.com/v1/games?universeIds=12345', $this->subject->getEndpoint( [
 			12345,
 			54321,
-		] ) );
+		], [] ) );
 	}
 
 	public function testProcessData() {
@@ -51,12 +51,12 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 				],
 			],
 		];
-		self::assertEquals( $data->data[0], $this->subject->processData( $data, [ 12345, 12345 ] ) );
+		self::assertEquals( $data->data[0], $this->subject->processData( $data, [ 12345, 12345 ], [] ) );
 
 		// test invalid data
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-data' );
-		$this->subject->processData( (object)[ 'data' => null ], [ 12345, 12345 ] );
+		$this->subject->processData( (object)[ 'data' => null ], [ 12345, 12345 ], [] );
 	}
 
 	public function testFetch() {
@@ -107,7 +107,7 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 		$dataSource = new GameDataSource( $this->createMock( Config::class ) );
 		$dataSource->setHttpRequestFactory( $this->createMockHttpRequestFactory( $result ) );
 
-		$data = $dataSource->fetch( '4252370517', '12018816388' );
+		$data = $dataSource->fetch( [ '4252370517', '12018816388' ] );
 
 		self::assertEquals( 4252370517, $data->id );
 		self::assertEquals( 12018816388, $data->rootPlaceId );
@@ -127,7 +127,7 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-data' );
-		$dataSource->fetch( '4252370517', '12018816388' );
+		$dataSource->fetch( [ '4252370517', '12018816388' ] );
 	}
 
 	public function testFailedRequest() {
@@ -136,7 +136,7 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-request-failed' );
-		$dataSource->fetch( '4252370517', '12018816388' );
+		$dataSource->fetch( [ '4252370517', '12018816388' ] );
 	}
 
 }

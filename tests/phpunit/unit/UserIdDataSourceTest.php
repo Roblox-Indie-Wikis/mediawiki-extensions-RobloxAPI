@@ -44,12 +44,12 @@ class UserIdDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 				],
 			],
 		];
-		self::assertEquals( $data->data[0], $this->subject->processData( $data, [ 'username' ] ) );
+		self::assertEquals( $data->data[0], $this->subject->processData( $data, [ 'username' ], [] ) );
 
 		// test invalid data
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-data' );
-		$this->subject->processData( (object)[ 'data' => null ], [ 'username' ] );
+		$this->subject->processData( (object)[ 'data' => null ], [ 'username' ], [] );
 	}
 
 	public function testFetch() {
@@ -71,7 +71,7 @@ class UserIdDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 		$dataSource = new UserIdDataSource( $this->createMock( Config::class ) );
 		$dataSource->setHttpRequestFactory( $this->createMockHttpRequestFactory( $result ) );
 
-		$data = $dataSource->fetch( 'abaddriverlol' );
+		$data = $dataSource->fetch( [ 'abaddriverlol' ] );
 
 		self::assertEquals( 4182456156, $data->id );
 		self::assertEquals( 'abaddriverlol', $data->name );
@@ -90,7 +90,7 @@ class UserIdDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-data' );
-		$dataSource->fetch( 'thisuserdoesntexist' );
+		$dataSource->fetch( [ 'thisuserdoesntexist' ] );
 	}
 
 	public function testFailedRequest() {
@@ -99,14 +99,14 @@ class UserIdDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-request-failed' );
-		$dataSource->fetch( 'thisrequestwillfail' );
+		$dataSource->fetch( [ 'thisrequestwillfail' ] );
 	}
 
 	public function testProcessRequestOptions() {
 		$dataSource = new UserIdDataSource( $this->createMock( Config::class ) );
 		$options = [];
 		$args = [ 'example_user' ];
-		$dataSource->processRequestOptions( $options, $args );
+		$dataSource->processRequestOptions( $options, $args, [] );
 
 		self::assertEquals( 'POST', $options['method'] );
 		self::assertEquals( '{"usernames":["example_user"]}', $options['postData'] );
