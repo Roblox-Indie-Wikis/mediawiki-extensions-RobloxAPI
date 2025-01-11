@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use Parser;
 
 /**
  * Defines a parser function that can be used to access the Roblox API.
@@ -39,11 +40,19 @@ abstract class RobloxApiParserFunction {
 
 	/**
 	 * Executes the parser function
-	 * @param \Parser $parser
+	 * @param Parser $parser
 	 * @param mixed ...$args
 	 * @return string
 	 * @throws RobloxAPIException If any error regarding the API or data occurs during execution.
 	 */
-	abstract public function exec( $parser, ...$args ): string;
+	abstract public function exec( Parser $parser, ...$args ): string;
+
+	/**
+	 * @param string $result The result of the parser function.
+	 * @return bool Whether the result should be escaped and url-encoded.
+	 */
+	public function shouldEscapeResult( string $result ): bool {
+		return true;
+	}
 
 }

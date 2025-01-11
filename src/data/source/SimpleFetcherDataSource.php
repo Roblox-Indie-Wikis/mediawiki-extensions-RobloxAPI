@@ -21,6 +21,9 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
+use Parser;
 
 /**
  * A simple data source that does not process the data.
@@ -43,16 +46,22 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 	protected bool $registerParserFunction;
 
 	/**
+	 * @var ArgumentSpecification The argument specification.
+	 */
+	protected ArgumentSpecification $argumentSpecification;
+
+	/**
 	 * @inheritDoc
 	 */
 	public function __construct(
-		string $id, Config $config, array $expectedArgs, callable $createEndpoint, ?callable $processData = null,
-		bool $registerParserFunction = false
+		string $id, Config $config, ArgumentSpecification $argumentSpecification, callable $createEndpoint,
+		?callable $processData = null, bool $registerParserFunction = false
 	) {
-		parent::__construct( $id, self::createSimpleCache(), $config, $expectedArgs );
+		parent::__construct( $id, self::createSimpleCache(), $config );
 		$this->createEndpoint = $createEndpoint;
 		$this->processData = $processData;
 		$this->registerParserFunction = $registerParserFunction;
+		$this->argumentSpecification = $argumentSpecification;
 	}
 
 	/**
@@ -78,6 +87,19 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 	 */
 	public function shouldRegisterLegacyParserFunction(): bool {
 		return $this->registerParserFunction;
+	}
+
+	public function getArgumentSpecification(): ArgumentSpecification {
+		return $this->argumentSpecification;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function exec(
+		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs
+	): string {
+		return RobloxAPIUtil::createJsonResult( $this->fetch( ...$requiredArgs ), $optionalArgs );
 	}
 
 }

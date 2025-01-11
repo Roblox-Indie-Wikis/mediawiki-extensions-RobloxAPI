@@ -22,7 +22,10 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use FormatJson;
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use Parser;
+use PhpParser\Node\Arg;
 
 /**
  * A data source for getting a user's ID from their username.
@@ -30,9 +33,7 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 class UserIdDataSource extends FetcherDataSource {
 
 	public function __construct( Config $config ) {
-		parent::__construct( 'userId', self::createSimpleCache(), $config, [
-			'Username',
-		] );
+		parent::__construct( 'userId', self::createSimpleCache(), $config );
 	}
 
 	/**
@@ -71,4 +72,13 @@ class UserIdDataSource extends FetcherDataSource {
 		];
 	}
 
+	public function exec(
+		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs
+	): string {
+		return $this->fetch( ...$requiredArgs );
+	}
+
+	public function getArgumentSpecification(): ArgumentSpecification {
+		return new ArgumentSpecification( [ 'Username' ] );
+	}
 }

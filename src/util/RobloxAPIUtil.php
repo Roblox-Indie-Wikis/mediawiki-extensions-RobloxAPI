@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\util;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use Wikimedia\Stats\Exceptions\IllegalOperationException;
 
 /**
@@ -187,12 +188,12 @@ class RobloxAPIUtil {
 	 * @param array $optionalArgs The optional arguments
 	 * @return string
 	 */
-	public static function createJsonResult( $jsonObject, $optionalArgs ): string {
+	public static function createJsonResult( $jsonObject, array $optionalArgs ): string {
 		if ( isset( $optionalArgs['pretty'] ) && strtolower( $optionalArgs['pretty'] ) === 'true' ) {
 			return json_encode( $jsonObject, JSON_PRETTY_PRINT );
 		}
 		// only return the value of json_key in the JSON object
-		if ( isset ( $optionalArgs['json_key'] ) && is_object( $jsonObject ) && !empty( $optionalArgs['json_key'] ) ) {
+		if ( is_object( $jsonObject ) && !empty( $optionalArgs['json_key'] ) ) {
 			$jsonObject = self::getJsonKey( $jsonObject, $optionalArgs['json_key'] );
 
 			if ( !is_object( $jsonObject ) ) {
@@ -229,6 +230,56 @@ class RobloxAPIUtil {
 		}
 
 		return $jsonObject->{$jsonKey};
+	}
+
+	/**
+	 * Verifies that the given arguments are valid
+	 * @param ArgumentSpecification $argumentSpecification The argument specification
+	 * @param string[] $args The arguments
+	 * @param Config $config The config object
+	 * @return array[]
+	 * @throws RobloxAPIException if the arguments are invalid
+	 */
+	public static function validateArguments( ArgumentSpecification $argumentSpecification, array $args, Config $config
+	): array {
+		// TODO extract this logic into a separate method
+		$requiredArgs = [];
+		$optionalArgs = [];
+
+		foreach ( $argumentSpecification->requiredArgs as $type ) {
+			if ( count( $args ) === 0 ) {
+				throw new RobloxAPIException( 'robloxapi-error-missing-argument', $type );
+			}
+			$value = array_shift( $args );
+			self::assertValidArg( $type, $value );
+			self::assertArgAllowed( $config, $type, $value );
+			$requiredArgs[] = $value;
+		}
+
+		// optional args are named, e.g. name=value
+		foreach ( $args as $string ) {
+			$parts = explode( '=', $string, 2 );
+
+			if ( count( $parts ) === 1 ) {
+				throw new RobloxAPIException( 'robloxapi-error-missing-optional-argument-value', $parts[0] );
+			}
+
+			$key = $parts[0];
+			$key = strtolower( $key );
+			$value = $parts[1];
+
+			if ( !array_key_exists( $key, $argumentSpecification->optionalArgs ) ) {
+				throw new RobloxAPIException( 'robloxapi-error-unknown-optional-argument', $key );
+			}
+
+			$type = $argumentSpecification->optionalArgs[$key];
+			self::assertValidArg( $type, $value );
+			self::assertArgAllowed( $config, $type, $value );
+
+			$optionalArgs[$key] = $value;
+		}
+
+		return [ $requiredArgs, $optionalArgs ];
 	}
 
 }

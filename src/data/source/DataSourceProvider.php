@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\RobloxApiParserFunction;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
@@ -30,7 +31,7 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
  */
 class DataSourceProvider {
 
-	private Config $config;
+	public Config $config;
 	/**
 	 * @var array The currently enabled data sources.
 	 */
@@ -49,36 +50,37 @@ class DataSourceProvider {
 		$this->registerDataSource( new GameDataSource( $config ) );
 		$this->registerDataSource( new UserIdDataSource( $config ) );
 
-		$this->registerDataSource( new SimpleFetcherDataSource( 'groupRoles', $config, [ 'UserID' ],
-			static function ( $args ) {
+		$this->registerDataSource( new SimpleFetcherDataSource( 'groupRoles', $config,
+			new ArgumentSpecification( [ 'UserID' ] ), static function ( $args ) {
 				return "https://groups.roblox.com/v1/users/$args[0]/groups/roles";
 			}, static function ( $data ) {
 				return $data->data;
 			}, true ) );
-		$this->registerDataSource( new SimpleFetcherDataSource( 'groupData', $config, [ 'GroupID' ],
-			static function ( $args ) {
+		$this->registerDataSource( new SimpleFetcherDataSource( 'groupData', $config,
+			new ArgumentSpecification( [ 'GroupID' ] ), static function ( $args ) {
 				return "https://groups.roblox.com/v1/groups/$args[0]";
 			}, null, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'userAvatarThumbnail', $config,
-			[ 'UserID', 'ThumbnailSize' ], static function ( $args ) {
+			new ArgumentSpecification( [ 'UserID', 'ThumbnailSize' ] ), static function ( $args ) {
 				// TODO allow configuring more options
 				return "https://thumbnails.roblox.com/v1/users/avatar?userIds={$args[0]}&size={$args[1]}&format=Png" .
 					"&isCircular=false";
 			}, static function ( $data ) {
 				return $data->data;
 			}, true ) );
-		$this->registerDataSource( new SimpleFetcherDataSource( 'badgeInfo', $config, [ 'BadgeID' ],
-			static function ( $args ) {
+		$this->registerDataSource( new SimpleFetcherDataSource( 'badgeInfo', $config,
+			new ArgumentSpecification( [ 'BadgeID' ] ), static function ( $args ) {
 				return "https://badges.roblox.com/v1/badges/$args[0]";
 			}, null, true ) );
-		$this->registerDataSource( new SimpleFetcherDataSource( 'userInfo', $config, [ 'UserID' ],
-			static function ( $args ) {
+		$this->registerDataSource( new SimpleFetcherDataSource( 'userInfo', $config,
+			new ArgumentSpecification( [ 'UserID' ] ), static function ( $args ) {
 				return "https://users.roblox.com/v1/users/$args[0]";
 			}, null, true ) );
-		$this->registerDataSource( new SimpleFetcherDataSource( 'assetDetails', $config, [ 'AssetID' ],
-			static function ( $args ) {
-				return "https://economy.roblox.com/v2/assets/$args[0]/details";
-			}, null, true ) );
+		$this->registerDataSource( new SimpleFetcherDataSource( 'assetDetails', $config, new ArgumentSpecification( [
+			'AssetID',
+		] ), static function ( $args ) {
+			return "https://economy.roblox.com/v2/assets/$args[0]/details";
+		}, null, true ) );
 	}
 
 	/**

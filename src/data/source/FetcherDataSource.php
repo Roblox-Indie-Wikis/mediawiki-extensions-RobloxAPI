@@ -27,7 +27,6 @@ use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
@@ -60,7 +59,6 @@ abstract class FetcherDataSource implements IDataSource {
 	 * @param string $id The ID of this data source.
 	 * @param DataSourceCache $cache The cache of this data source.
 	 * @param Config $config The extension configuration.
-	 * @param array $expectedArgs The expected argument types.
 	 */
 	public function __construct(
 		string $id, DataSourceCache $cache, Config $config
@@ -226,24 +224,6 @@ abstract class FetcherDataSource implements IDataSource {
 	 */
 	public function setHttpRequestFactory( HttpRequestFactory $httpRequestFactory ): void {
 		$this->httpRequestFactory = $httpRequestFactory;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function exec(
-		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs
-	): string {
-		// TODO: Implement exec() method.
-		return "Not implemented!";
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getArgumentSpecification(): ArgumentSpecification {
-		// TODO
-		return new ArgumentSpecification( [], [] );
 	}
 
 	/**
