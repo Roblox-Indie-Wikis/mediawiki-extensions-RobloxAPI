@@ -73,7 +73,7 @@ class UserIdDataSource extends FetcherDataSource {
 	}
 
 	public function exec(
-		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs
+		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
 	): string {
 		return $this->fetch( ...$requiredArgs );
 	}

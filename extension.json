@@ -27,7 +27,8 @@
 				"badgeInfo",
 				"userInfo",
 				"assetDetails",
-				"userId"
+				"userId",
+				"groupRank"
 			],
 			"merge_strategy": "array_merge",
 			"description": "The datasources that should be enabled and available."

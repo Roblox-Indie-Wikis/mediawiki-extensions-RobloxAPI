@@ -233,4 +233,11 @@ abstract class FetcherDataSource implements IDataSource {
 		return true;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
+	public function getId(): string {
+		return $this->id;
+	}
+
 }

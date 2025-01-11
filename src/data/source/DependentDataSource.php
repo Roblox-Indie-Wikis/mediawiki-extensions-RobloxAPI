@@ -20,8 +20,34 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+
 abstract class DependentDataSource implements IDataSource {
 
+	/**
+	 * @var string The id of this data source.
+	 */
+	protected string $id;
+
+	/**
+	 * @var IDataSource The data source that this data source depends on.
+	 */
+	protected IDataSource $dataSource;
+
+	/**
+	 * @param DataSourceProvider $dataSourceProvider
+	 * @param string $id
+	 * @param string $dependencyId
+	 * @throws RobloxAPIException If the data source could not be registered.
+	 */
+	public function __construct( DataSourceProvider $dataSourceProvider, string $id, string $dependencyId ) {
+		$this->id = $id;
+		$this->dataSource = $dataSourceProvider->getDataSourceOrThrow( $dependencyId );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function shouldRegisterLegacyParserFunction(): bool {
 		return false;
 	}
@@ -31,6 +57,29 @@ abstract class DependentDataSource implements IDataSource {
 	 */
 	public function shouldEscapeResult( string $result ): bool {
 		return true;
+	}
+
+	/**
+	 * Throws an exception stating that the data source returned no data.
+	 * @throws RobloxAPIException
+	 */
+	protected function failNoData() {
+		throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
+	}
+
+	/**
+	 * Throws an exception stating that the data source returned an unexpected data structure.
+	 * @throws RobloxAPIException
+	 */
+	protected function failUnexpectedDataStructure() {
+		throw new RobloxAPIException( 'robloxapi-error-unexpected-data-structure' );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getId(): string {
+		return $this->id;
 	}
 
 }

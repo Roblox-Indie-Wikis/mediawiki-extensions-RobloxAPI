@@ -91,7 +91,15 @@ class Hooks implements ParserFirstCallInitHook {
 					try {
 						$result = $function->exec( $parser, ...$args );
 
-						if ( !$function->shouldEscapeResult( $result ) ) {
+						$shouldEscape = $function->shouldEscapeResult( $result );
+
+						if ( $result instanceof \stdClass ) {
+							$result = RobloxAPIUtil::createJsonResult( $result, [] );
+							// always escape json, there is no need for it to be parsed
+							$shouldEscape = true;
+						}
+
+						if ( !$shouldEscape ) {
 							return $result;
 						}
 
@@ -137,6 +145,12 @@ class Hooks implements ParserFirstCallInitHook {
 
 		$result = $dataSource->exec( $this->dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
 		$shouldEscape = $dataSource->shouldEscapeResult( $result );
+
+		if ( $result instanceof \stdClass ) {
+			$result = RobloxAPIUtil::createJsonResult( $result, $optionalArgs );
+			// always escape json, there is no need for it to be parsed
+			$shouldEscape = true;
+		}
 
 		return [
 			'result' => $result,

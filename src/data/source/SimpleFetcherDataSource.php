@@ -22,7 +22,6 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use Parser;
 
 /**
@@ -97,9 +96,9 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 	 * @inheritDoc
 	 */
 	public function exec(
-		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs
-	): string {
-		return RobloxAPIUtil::createJsonResult( $this->fetch( ...$requiredArgs ), $optionalArgs );
+		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
+	) {
+		return $this->fetch( ...$requiredArgs );
 	}
 
 }

@@ -35,12 +35,12 @@ interface IDataSource {
 	 * @param Parser $parser
 	 * @param array<string> $requiredArgs
 	 * @param array<string, string> $optionalArgs
-	 * @return string
+	 * @return mixed
 	 * @throws RobloxAPIException If the data source fails to execute
 	 */
 	public function exec(
-		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs
-	): string;
+		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
+	);
 
 	/**
 	 * Determines whether a legacy parser function should be registered.
@@ -59,5 +59,11 @@ interface IDataSource {
 	 * @return bool Whether the result should be escaped and url-encoded.
 	 */
 	public function shouldEscapeResult( string $result ): bool;
+
+	/**
+	 * Gets the ID of the data source.
+	 * @return string
+	 */
+	public function getId(): string;
 
 }

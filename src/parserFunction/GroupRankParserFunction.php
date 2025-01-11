@@ -21,7 +21,6 @@
 namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 class GroupRankParserFunction extends RobloxApiParserFunction {
@@ -39,25 +38,9 @@ class GroupRankParserFunction extends RobloxApiParserFunction {
 		// validate here since the group id is not passed to the data source
 		RobloxAPIUtil::assertValidIds( $groupId, $userId );
 
-		$source = $this->dataSourceProvider->getDataSourceOrThrow( 'groupRoles' );
+		$source = $this->dataSourceProvider->getDataSourceOrThrow( 'groupRank' );
 
-		$groups = $source->fetch( $userId );
-
-		if ( !$groups ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
-		}
-
-		if ( !is_array( $groups ) ) {
-			throw new RobloxAPIException( 'robloxapi-error-unexpected-data-structure' );
-		}
-
-		foreach ( $groups as $group ) {
-			if ( $group->group->id === (int)$groupId ) {
-				return $group->role->name;
-			}
-		}
-
-		throw new RobloxAPIException( 'robloxapi-error-user-group-not-found' );
+		return $source->exec( $this->dataSourceProvider, $parser, [ $groupId, $userId ] );
 	}
 
 }

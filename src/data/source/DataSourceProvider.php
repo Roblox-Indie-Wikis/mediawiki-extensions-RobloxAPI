@@ -81,6 +81,10 @@ class DataSourceProvider {
 		] ), static function ( $args ) {
 			return "https://economy.roblox.com/v2/assets/$args[0]/details";
 		}, null, true ) );
+
+		$this->tryRegisterDataSource( function () {
+			return new GroupRankDataSource( $this );
+		} );
 	}
 
 	/**
@@ -114,16 +118,33 @@ class DataSourceProvider {
 	 * @return void
 	 */
 	public function registerDataSource( IDataSource $dataSource ): void {
-		$id = $dataSource->id;
+		$id = $dataSource->getId();
 		if ( $this->isEnabled( $id ) ) {
-			$this->dataSources[$dataSource->id] = $dataSource;
-			$dataSource->setCacheExpiry( $this->getCachingExpiry( $dataSource->id ) );
+			$this->dataSources[$id] = $dataSource;
+			if ( $dataSource instanceof FetcherDataSource ) {
+				$dataSource->setCacheExpiry( $this->getCachingExpiry( $id ) );
+			}
+		}
+	}
+
+	/**
+	 * Tries to register a data source, but ignores any exceptions.
+	 * @param callable(): IDataSource $dataSourceFactory
+	 * @return void
+	 */
+	public function tryRegisterDataSource( callable $dataSourceFactory ): void {
+		try {
+			$dataSource = $dataSourceFactory();
+			$this->registerDataSource( $dataSource );
+		} catch ( RobloxAPIException $e ) {
+			// ignore
 		}
 	}
 
 	/**
 	 * Gets a data source by its ID.
 	 * @param string $id
+	 * @param bool $ignoreCase
 	 * @return IDataSource|null
 	 */
 	public function getDataSource( string $id, bool $ignoreCase = false ): ?IDataSource {
