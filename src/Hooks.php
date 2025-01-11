@@ -21,7 +21,6 @@ namespace MediaWiki\Extension\RobloxAPI;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Hook\ParserFirstCallInitHook;
@@ -67,37 +66,32 @@ class Hooks implements ParserFirstCallInitHook {
 		foreach ( $this->legacyParserFunctions as $id => $function ) {
 			// all data source parser functions are only enabled if the corresponding data source
 			// is enabled, so we don't need to check the config for that
-			$isEnabled =
-				$function instanceof DataSourceParserFunction ||
-				in_array( $id, $this->config->get( 'RobloxAPIEnabledParserFunctions' ) );
-			if ( $isEnabled ) {
-				$parser->setFunctionHook( $id, function ( Parser $parser, ...$args ) use ( $function ) {
-					if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
-						!$parser->incrementExpensiveFunctionCount() ) {
-						return false;
+			$parser->setFunctionHook( $id, function ( Parser $parser, ...$args ) use ( $function ) {
+				if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
+					!$parser->incrementExpensiveFunctionCount() ) {
+					return false;
+				}
+				try {
+					$result = $function->exec( $parser, ...$args );
+
+					$shouldEscape = $function->shouldEscapeResult( $result );
+
+					if ( RobloxAPIUtil::shouldReturnJson( $result ) ) {
+						$result = RobloxAPIUtil::createJsonResult( $result, [] );
+						// always escape json, there is no need for it to be parsed
+						$shouldEscape = true;
 					}
-					try {
-						$result = $function->exec( $parser, ...$args );
 
-						$shouldEscape = $function->shouldEscapeResult( $result );
-
-						if ( RobloxAPIUtil::shouldReturnJson( $result ) ) {
-							$result = RobloxAPIUtil::createJsonResult( $result, [] );
-							// always escape json, there is no need for it to be parsed
-							$shouldEscape = true;
-						}
-
-						if ( !$shouldEscape ) {
-							return $result;
-						}
-
-						// escape wikitext, we don't need any of the results to be parsed
-						return wfEscapeWikiText( $result );
-					} catch ( RobloxAPIException $exception ) {
-						return wfMessage( $exception->getMessage(), ...$exception->messageParams )->escaped();
+					if ( !$shouldEscape ) {
+						return $result;
 					}
-				} );
-			}
+
+					// escape wikitext, we don't need any of the results to be parsed
+					return wfEscapeWikiText( $result );
+				} catch ( RobloxAPIException $exception ) {
+					return wfMessage( $exception->getMessage(), ...$exception->messageParams )->escaped();
+				}
+			} );
 		}
 	}
 
