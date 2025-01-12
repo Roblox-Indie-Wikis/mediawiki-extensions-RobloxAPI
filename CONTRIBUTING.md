@@ -1,15 +1,16 @@
 # Contributing
 
 - [Contributing](#contributing)
-   * [Requesting a new data source](#requesting-a-new-data-source)
-      + [Requirements](#requirements)
-   * [Developing on the RobloxAPI extension](#developing-on-the-robloxapi-extension)
-      + [Installing dependencies](#installing-dependencies)
-      + [Running tests](#running-tests)
-         - [PHP unit tests](#php-unit-tests)
-         - [Parser tests](#parser-tests)
-         - [JavaScript tests](#javascript-tests)
-      + [Code Style](#code-style)
+    * [Requesting a new data source](#requesting-a-new-data-source)
+        + [Requirements](#requirements)
+    * [Developing on the RobloxAPI extension](#developing-on-the-robloxapi-extension)
+        + [Installing dependencies](#installing-dependencies)
+        + [Running tests](#running-tests)
+            - [PHP unit tests](#php-unit-tests)
+            - [Parser tests](#parser-tests)
+            - [JavaScript tests](#javascript-tests)
+        + [Code Style](#code-style)
+    * [Releasing a new version](#releasing-a-new-version)
 
 ## Requesting a new data source
 
@@ -62,3 +63,14 @@ Running `npm test`will run automated code checks.
 The PHP part of this project follows
 the [MediaWiki coding conventions](https://www.mediawiki.org/wiki/Manual:Coding_conventions/PHP). The code formatting is
 enforced by the CI pipeline which runs phan before a PR can be merged.
+
+## Releasing a new version
+
+This guide is only for maintainers of the extension.
+
+1. Update the version number in `extension.json`
+2. Update the documentation if there were any relevant changes
+3. Merge development into master
+4. Create a new release on GitHub
+5. Create a branch from master with the version number as the branch name, e.g. `ver/1.1.0`
+6. Update the documentation on mediawiki.org if there were any relevant changes
