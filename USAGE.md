@@ -1,29 +1,92 @@
 # Usage
 
-> [!NOTE]
-> As of development versions of 1.2.0, this documentation is outdated.
-> With the full release of version 1.2.0, this documentation will be updated.
+TODO: REGENERATE TOC
 
-- [Usage](#usage)
-    * [Parser functions](#parser-functions)
-        + [Data parser functions](#data-parser-functions)
-        + [JSON parser functions](#json-parser-functions)
-        + [Data sources](#data-sources)
-        + [Argument types](#argument-types)
-            - [IDs](#ids)
-            - [Obtaining the Universe ID](#obtaining-the-universe-id)
-            - [`ThumbnailSize`](#-thumbnailsize-)
-    * [Configuration](#configuration)
-        + [`$wgRobloxAPIEnabledDatasources`](#--wgrobloxapienableddatasources-)
-        + [`$wgRobloxAPIEnabledParserFunctions`](#--wgrobloxapienabledparserfunctions-)
-        + [`$wgRobloxAPICachingExpiries`](#--wgrobloxapicachingexpiries-)
-        + [`$wgRobloxAPIAllowedArguments`](#--wgrobloxapiallowedarguments-)
-        + [`$wgRobloxAPIRequestUserAgent`](#--wgrobloxapirequestuseragent-)
-        + [`$wgRobloxAPIDisableCache`](#--wgrobloxapidisablecache-)
-        + [`$wgRobloxAPIParserFunctionsExpensive`](#--wgrobloxapiparserfunctionsexpensive-)
-    * [Embedding avatar images](#embedding-avatar-images)
+## Basic Usage
 
-## Parser functions
+To use any data source, you can use the `{{#robloxAPI: ... }}` parser function. The first argument is the name of the
+data source, and the rest of the arguments are the arguments for the data source.
+
+For example, to get the ID of a user named `builderman`, you can use:
+
+```
+{{#robloxAPI: userId | builderman }}
+```
+
+This example uses the data source `userId` and provides one required argument, `builderman`.
+
+Each data source has a set number of required arguments. Additionally, there are some optional arguments that are
+specified in the `key=value` format.
+
+## Data Sources
+
+### gameData
+
+Provides information about a game/place in the [JSON format](#Handling-JSON-data).
+
+#### Example
+
+Get all JSON data of a game:
+
+```
+{{#robloxAPI: gameData | 6483209208 | 132813250731469 }}
+```
+
+Get the name of the creator of a game:
+
+```
+{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=creator->name }}
+```
+
+#### Required arguments
+
+| Name         | Description                                  | Type       |
+|--------------|----------------------------------------------|------------|
+| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
+| `PlaceId`    | The place ID of the game.                    | Numeric ID |
+
+## Handling JSON data
+
+### JSON keys
+
+Some data sources return plain JSON data from the Roblox API. To parse this data, you can either use Lua (with the
+Scribunto extension) or use the `json_key` optional argument:
+
+```
+{{#robloxAPI: userInfo | 156 | json_key=created }}
+```
+
+This example gets the user info of the user with the ID `156` and returns the `created` key from the JSON data.
+
+Nested keys can be accessed by separating them with '->', e.g.:
+
+```
+{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=creator->name }}
+```
+
+### Pretty-printing JSON data
+
+To pretty-print JSON data, you can use the `pretty` optional argument:
+
+```
+{{#robloxAPI: userInfo | 156 | pretty=true }}
+```
+
+## FAQs
+
+<a id="universe-id"></a>
+
+### How do I obtain the Universe ID of a game?
+
+To get the universe ID of a place, input the place ID to this API:
+
+```
+https://apis.roblox.com/universes/v1/places/<GAMEID>/universe
+```
+
+---
+
+---
 
 ### Data parser functions
 

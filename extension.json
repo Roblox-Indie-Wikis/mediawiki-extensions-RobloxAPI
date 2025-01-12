@@ -21,25 +21,25 @@
 		"RobloxAPIEnabledDatasources": {
 			"value": [
 				"gameData",
-				"groupRoles",
-				"groupData",
-				"userAvatarThumbnail",
-				"badgeInfo",
-				"userInfo",
-				"assetDetails",
-				"userId",
-				"groupRank",
 				"activePlayers",
 				"visits",
-				"groupMembers",
+				"userId",
+				"userAvatarThumbnail",
 				"userAvatarThumbnailUrl",
 				"assetThumbnail",
 				"assetThumbnailUrl",
 				"gameIcon",
-				"gameIconUrl"
+				"gameIconUrl",
+				"groupRoles",
+				"groupData",
+				"groupRank",
+				"groupMembers",
+				"badgeInfo",
+				"userInfo",
+				"assetDetails"
 			],
 			"merge_strategy": "provide_default",
-			"description": "The datasources that should be enabled and available."
+			"description": "The data sources that should be enabled and available."
 		},
 		"RobloxAPICachingExpiries": {
 			"value": {
