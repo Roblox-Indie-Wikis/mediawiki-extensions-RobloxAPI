@@ -45,6 +45,127 @@ Get the name of the creator of a game:
 | `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
 | `PlaceId`    | The place ID of the game.                    | Numeric ID |
 
+### activePlayers
+
+Provides the number of active players in a place. Requires [gameData](#gameData) to be enabled.
+
+#### Example
+
+Get the number of active players in a place:
+
+```
+{{#robloxAPI: activePlayers | 6483209208 | 132813250731469 }}
+```
+
+Get the formatted number of active players in a place:
+
+```
+{{formatnum: {{#robloxAPI: activePlayers | 6483209208 | 132813250731469 }} }}
+```
+
+#### Required Arguments
+
+| Name         | Description                                  | Type       |
+|--------------|----------------------------------------------|------------|
+| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
+| `PlaceId`    | The place ID of the game.                    | Numeric ID |
+
+### visits
+
+Provides the number of visits to a place. Requires [gameData](#gameData) to be enabled.
+
+#### Example
+
+Get the number of visits to a place:
+
+```
+{{#robloxAPI: visits | 6483209208 | 132813250731469 }}
+```
+
+Get the formatted number of visits to a place:
+
+```
+{{formatnum: {{#robloxAPI: visits | 6483209208 | 132813250731469 }} }}
+```
+
+#### Required Arguments
+
+| Name         | Description                                  | Type       |
+|--------------|----------------------------------------------|------------|
+| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
+| `PlaceId`    | The place ID of the game.                    | Numeric ID |
+
+### userId
+
+Provides the user ID for a given username.
+
+#### Example
+
+Get the user ID of a user:
+
+```
+{{#robloxAPI: userId | builderman }}
+```
+
+#### Required Arguments
+
+| Name       | Description               | Type   |
+|------------|---------------------------|--------|
+| `Username` | The username of the user. | String |
+
+### userAvatarThumbnail
+
+Provides data about a user's avatar thumbnail in the [JSON format](#Handling-JSON-data).
+
+#### Example
+
+Get the data about the user avatar thumbnail of builderman (ID 156):
+
+```
+{{#robloxAPI: userAvatarThumbnail | 156 | 150x150 }}
+```
+
+#### Required Arguments
+
+| Name            | Description                | Type                                                                                                                                                      |
+|-----------------|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `UserId`        | The user ID of the user.   | Numeric ID                                                                                                                                                |
+| `ThumbnailSize` | The size of the thumbnail. | String (`30x30`, `48x48`, `60x60`, `75x75`, `100x100`, `110x110`, `140x140`, `150x150`, `150x200`, `180x180`, `250x250`, `352x352`, `420x420`, `720x720`) |
+
+#### Optional Arguments
+
+| Name          | Description                               | Type                   | Default | Example            |
+|---------------|-------------------------------------------|------------------------|---------|--------------------|
+| `is_circular` | Whether the thumbnail should be circular. | Boolean                | `false` | `is_circular=true` |
+| `format`      | The format of the thumbnail.              | String (`Png`, `Webp`) | `Png`   | `format=Webp`      |
+
+### userAvatarThumbnailUrl
+
+Provides the URL of a user's avatar thumbnail. Allows [embedding](#Embedding-images-from-the-Roblox-CDN) the avatar
+image. Requires [userAvatarThumbnail](#userAvatarThumbnail) to be enabled.
+
+#### Example
+
+Get the URL of the user avatar thumbnail of builderman (ID 156):
+
+```
+{{#robloxAPI: userAvatarThumbnailUrl | 156 | 150x150 }}
+```
+
+#### Required Arguments
+
+| Name            | Description                | Type                                                                                                                                                      |
+|-----------------|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `UserId`        | The user ID of the user.   | Numeric ID                                                                                                                                                |
+| `ThumbnailSize` | The size of the thumbnail. | String (`30x30`, `48x48`, `60x60`, `75x75`, `100x100`, `110x110`, `140x140`, `150x150`, `150x200`, `180x180`, `250x250`, `352x352`, `420x420`, `720x720`) |
+
+#### Optional Arguments
+
+| Name          | Description                               | Type                   | Default | Example            |
+|---------------|-------------------------------------------|------------------------|---------|--------------------|
+| `is_circular` | Whether the thumbnail should be circular. | Boolean                | `false` | `is_circular=true` |
+| `format`      | The format of the thumbnail.              | String (`Png`, `Webp`) | `Png`   | `format=Webp`      |
+
 ## Handling JSON data
 
 ### JSON keys
@@ -82,6 +203,20 @@ To get the universe ID of a place, input the place ID to this API:
 
 ```
 https://apis.roblox.com/universes/v1/places/<GAMEID>/universe
+```
+
+#### Embedding images from the Roblox CDN
+
+The result of the `{{#rblxUserAvatarThumbnailUrl}}` parser function can be used to embed avatar images in your wiki.
+To do this, the `$wgEnableImageWhitelist` configuration variable must be set to `true`.
+
+Then, add the following line to the `MediaWiki:External image whitelist` page on your wiki:
+
+> [!WARNING]
+> This allows users to embed any image from the Roblox CDN on your wiki.
+
+```regex
+^https://([a-zA-Z0-9]{2})\.rbxcdn\.com/
 ```
 
 ---
@@ -274,16 +409,4 @@ If you don't want to mark the extension's parser functions as expensive, you can
 $wgRobloxAPIParserFunctionsExpensive = false;
 ```
 
-## Embedding avatar images
 
-The result of the `{{#rblxUserAvatarThumbnailUrl}}` parser function can be used to embed avatar images in your wiki.
-To do this, the `$wgEnableImageWhitelist` configuration variable must be set to `true`.
-
-Then, add the following line to the `MediaWiki:External image whitelist` page on your wiki:
-
-> [!WARNING]
-> This allows users to embed any image from the Roblox CDN on your wiki.
-
-```regex
-^https://([a-zA-Z0-9]{2})\.rbxcdn\.com/
-```
