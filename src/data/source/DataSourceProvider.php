@@ -27,6 +27,7 @@ use MediaWiki\Extension\RobloxAPI\data\source\implementation\GroupMembersDataSou
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GroupRankDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\PlaceActivePlayersDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\PlaceVisitsDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserAvatarThumbnailDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserAvatarThumbnailUrlDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserIdDataSource;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
@@ -56,6 +57,7 @@ class DataSourceProvider {
 
 		$this->registerDataSource( new GameDataSource( $config ) );
 		$this->registerDataSource( new UserIdDataSource( $config ) );
+		$this->registerDataSource( new UserAvatarThumbnailDataSource( $config ) );
 
 		$this->registerDataSource( new SimpleFetcherDataSource( 'groupRoles', $config,
 			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(), static function ( $args ) {
@@ -67,14 +69,6 @@ class DataSourceProvider {
 			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(), static function ( $args ) {
 				return "https://groups.roblox.com/v1/groups/$args[0]";
 			}, null, true ) );
-		$this->registerDataSource( new SimpleFetcherDataSource( 'userAvatarThumbnail', $config,
-			( new ArgumentSpecification( [ 'UserID', 'ThumbnailSize' ] ) )->withJsonArgs(), static function ( $args ) {
-				// TODO allow configuring more options
-				return "https://thumbnails.roblox.com/v1/users/avatar?userIds={$args[0]}&size={$args[1]}&format=Png" .
-					"&isCircular=false";
-			}, static function ( $data ) {
-				return $data->data;
-			}, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'badgeInfo', $config,
 			( new ArgumentSpecification( [ 'BadgeID' ] ) )->withJsonArgs(), static function ( $args ) {
 				return "https://badges.roblox.com/v1/badges/$args[0]";
@@ -89,6 +83,7 @@ class DataSourceProvider {
 			return "https://economy.roblox.com/v2/assets/$args[0]/details";
 		}, null, true ) );
 
+		// dependent data sources will throw an exception if the required data source is not enabled
 		$this->tryRegisterDataSource( function () {
 			return new GroupRankDataSource( $this );
 		} );

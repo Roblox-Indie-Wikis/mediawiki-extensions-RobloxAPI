@@ -115,6 +115,11 @@ class RobloxAPIUtil {
 					break;
 				case 'String':
 					break;
+				case 'ThumbnailFormat':
+					if ( !in_array( $arg, [ 'Png', 'Webp' ] ) ) {
+						throw new RobloxAPIException( 'robloxapi-error-invalid-thumbnail-format', $arg );
+					}
+					break;
 				default:
 					throw new IllegalOperationException( "Unknown expected arg type: $expectedType" );
 			}
@@ -179,7 +184,7 @@ class RobloxAPIUtil {
 	 * @return bool
 	 */
 	public static function verifyIsRobloxCdnUrl( string $url ): bool {
-		return preg_match( '/^https:\/\/[a-zA-Z0-9]{2}\.rbxcdn\.com\/[0-9A-Za-z\-\/]*(?:\.png)?$/', $url );
+		return preg_match( '/^https:\/\/[a-zA-Z0-9]{2}\.rbxcdn\.com\/[0-9A-Za-z\-\/]*(?:\.(png|webp))?$/', $url );
 	}
 
 	/**

@@ -20,5 +20,7 @@
 	"robloxapi-error-invalid-username": "Error message shown when an invalid username is provided",
 	"robloxapi-error-missing-argument": "Error message shown when a required argument is missing. $1 is the type of argument that is missing",
 	"robloxapi-error-missing-optional-argument-value": "Error message shown when an optional argument is missing a value. The optional argument must be in the format 'key=value'",
-	"robloxapi-error-unknown-optional-argument": "Error message shown when an unknown optional argument is provided. $1 is the unknown argument's key"
+	"robloxapi-error-unknown-optional-argument": "Error message shown when an unknown optional argument is provided. $1 is the unknown argument's key",
+	"robloxapi-error-invalid-thumbnail-format": "Error message shown when an invalid thumbnail format is provided. $1 is the invalid format. Possible values are 'Webp' and 'Png'",
+	"robloxapi-error-invalid-boolean": "Error message shown when an invalid boolean value is provided. $1 is the invalid value. Must be 'true' or 'false'"
 }

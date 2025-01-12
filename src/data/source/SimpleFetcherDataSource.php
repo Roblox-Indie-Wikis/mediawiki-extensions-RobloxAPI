@@ -95,13 +95,4 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 		return $this->argumentSpecification;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function exec(
-		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	) {
-		return $this->fetch( $requiredArgs, $optionalArgs );
-	}
-
 }

@@ -20,69 +20,50 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\data\source\DependentDataSource;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
-use Parser;
+use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
 
-class UserAvatarThumbnailUrlDataSource extends DependentDataSource {
+class UserAvatarThumbnailDataSource extends FetcherDataSource {
 
 	/**
 	 * @inheritDoc
 	 */
-	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider, 'userAvatarThumbnailUrl', 'userAvatarThumbnail' );
+	public function __construct( Config $config ) {
+		parent::__construct( 'userAvatarThumbnail', self::createSimpleCache(), $config );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function exec(
-		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	) {
-		$data = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
-
-		if ( !$data ) {
-			return $this->failNoData();
-		}
-
-		if ( count( $data ) == 0 ) {
-			return $this->failInvalidData();
-		}
-
-		$url = $data[0]->imageUrl;
-
-		if ( !$url || !RobloxAPIUtil::verifyIsRobloxCdnUrl( $url ) ) {
-			return $this->failInvalidData();
-		}
-
+	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
+		$userId = $requiredArgs[0];
+		$size = $requiredArgs[1];
+		$isCircular = $optionalArgs['is_circular'] ?? false;
 		$format = $optionalArgs['format'] ?? 'Png';
-		$lowerFormat = strtolower( $format );
 
-		return "$url.$lowerFormat";
+		return "https://thumbnails.roblox.com/v1/users/avatar" .
+			"?userIds=$userId&size=$size&format=$format&isCircular=$isCircular";
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function shouldEscapeResult( $result ): bool {
-		// The url should not be escaped here in order to be embedded correctly using $wgEnableImageWhitelist.
-		// If the URL was escaped here, it would be URL-encoded and not recognized by MediaWiki as an image URL.
-		return !RobloxAPIUtil::verifyIsRobloxCdnUrl( $result );
+	public function processData( $data, array $requiredArgs, array $optionalArgs ) {
+		return $data->data;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [
+		return ( new ArgumentSpecification( [
 			'UserID',
 			'ThumbnailSize',
 		], [
 			'is_circular' => 'Boolean',
 			'format' => 'ThumbnailFormat',
-		], );
+		], ) )->withJsonArgs();
 	}
 
 	/**

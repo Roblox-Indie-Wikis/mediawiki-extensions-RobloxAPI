@@ -29,6 +29,7 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
+use Parser;
 
 /**
  * Represents an endpoint of the roblox api.
@@ -238,6 +239,15 @@ abstract class FetcherDataSource implements IDataSource {
 	 */
 	public function getId(): string {
 		return $this->id;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function exec(
+		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
+	) {
+		return $this->fetch( $requiredArgs, $optionalArgs );
 	}
 
 }

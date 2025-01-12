@@ -20,5 +20,7 @@
 	"robloxapi-error-invalid-username": "Invalid username!",
 	"robloxapi-error-missing-argument": "A required argument of type $1 is missing!",
 	"robloxapi-error-missing-optional-argument-value": "Incorrectly formatted optional argument! Note that optional arguments must be in the format of 'key=value'.",
-	"robloxapi-error-unknown-optional-argument": "Unknown optional argument '$1'!"
+	"robloxapi-error-unknown-optional-argument": "Unknown optional argument '$1'!",
+	"robloxapi-error-invalid-thumbnail-format": "Invalid thumbnail format '$1'! Possible values are 'Webp' and 'Png'.",
+	"robloxapi-error-invalid-boolean": "Invalid boolean value '$1'! Must be 'true' or 'false'."
 }
