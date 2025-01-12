@@ -22,7 +22,6 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
-use Parser;
 
 /**
  * A simple data source that does not process the data.

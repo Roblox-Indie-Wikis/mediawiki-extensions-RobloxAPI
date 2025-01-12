@@ -32,7 +32,9 @@
 				"activePlayers",
 				"visits",
 				"groupMembers",
-				"userAvatarThumbnailUrl"
+				"userAvatarThumbnailUrl",
+				"assetThumbnail",
+				"assetThumbnailUrl"
 			],
 			"merge_strategy": "provide_default",
 			"description": "The datasources that should be enabled and available."

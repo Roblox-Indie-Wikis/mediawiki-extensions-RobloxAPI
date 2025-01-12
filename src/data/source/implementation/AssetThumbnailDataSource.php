@@ -23,50 +23,34 @@ namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
-/**
- * A data source for the roblox games API.
- */
-class GameDataSource extends FetcherDataSource {
+class AssetThumbnailDataSource extends FetcherDataSource {
 
+	/**
+	 * @inheritDoc
+	 */
 	public function __construct( Config $config ) {
-		parent::__construct( 'gameData', self::createSimpleCache(), $config );
+		parent::__construct( 'assetThumbnail', self::createSimpleCache(), $config );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
-		return "https://games.roblox.com/v1/games?universeIds=$requiredArgs[0]";
+		$assetId = $requiredArgs[0];
+		$size = $requiredArgs[1];
+		$isCircular = $optionalArgs['is_circular'] ?? false;
+		$format = $optionalArgs['format'] ?? 'Png';
+
+		return "https://thumbnails.roblox.com/v1/assets" .
+			"?assetIds=$assetId&size=$size&format=$format&isCircular=$isCircular";
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function processData( $data, array $requiredArgs, array $optionalArgs ) {
-		$entries = $data->data;
-
-		if ( !$entries ) {
-			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
-		}
-
-		foreach ( $entries as $entry ) {
-			if ( $entry->rootPlaceId !== (int)$requiredArgs[1] ) {
-				continue;
-			}
-
-			return $entry;
-		}
-
-		return null;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function shouldRegisterLegacyParserFunction(): bool {
-		return true;
+		return $data->data;
 	}
 
 	/**
@@ -74,9 +58,12 @@ class GameDataSource extends FetcherDataSource {
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return ( new ArgumentSpecification( [
-			'UniverseID',
-			'PlaceID',
-		] ) )->withJsonArgs();
+			'AssetID',
+			'ThumbnailSize',
+		], [
+			'is_circular' => 'Boolean',
+			'format' => 'ThumbnailFormat',
+		], ) )->withJsonArgs();
 	}
 
 }
