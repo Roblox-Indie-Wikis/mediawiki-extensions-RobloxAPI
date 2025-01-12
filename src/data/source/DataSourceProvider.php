@@ -25,6 +25,8 @@ use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailUrlDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameIconDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameIconUrlDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GroupMembersDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GroupRankDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\PlaceActivePlayersDataSource;
@@ -61,6 +63,7 @@ class DataSourceProvider {
 		$this->registerDataSource( new UserIdDataSource( $config ) );
 		$this->registerDataSource( new UserAvatarThumbnailDataSource( $config ) );
 		$this->registerDataSource( new AssetThumbnailDataSource( $config ) );
+		$this->registerDataSource( new GameIconDataSource( $config ) );
 
 		$this->registerDataSource( new SimpleFetcherDataSource( 'groupRoles', $config,
 			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(), static function ( $args ) {
@@ -104,6 +107,9 @@ class DataSourceProvider {
 		} );
 		$this->tryRegisterDataSource( function () {
 			return new AssetThumbnailUrlDataSource( $this );
+		} );
+		$this->tryRegisterDataSource( function () {
+			return new GameIconUrlDataSource( $this );
 		} );
 	}
 

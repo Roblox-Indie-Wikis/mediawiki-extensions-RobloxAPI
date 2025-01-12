@@ -34,7 +34,9 @@
 				"groupMembers",
 				"userAvatarThumbnailUrl",
 				"assetThumbnail",
-				"assetThumbnailUrl"
+				"assetThumbnailUrl",
+				"gameIcon",
+				"gameIconUrl"
 			],
 			"merge_strategy": "provide_default",
 			"description": "The datasources that should be enabled and available."
