@@ -22,35 +22,15 @@ namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\ThumbnailDataSource;
 
-class AssetThumbnailDataSource extends FetcherDataSource {
+class AssetThumbnailDataSource extends ThumbnailDataSource {
 
 	/**
 	 * @inheritDoc
 	 */
 	public function __construct( Config $config ) {
-		parent::__construct( 'assetThumbnail', self::createSimpleCache(), $config );
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
-		$assetId = $requiredArgs[0];
-		$size = $requiredArgs[1];
-		$isCircular = $optionalArgs['is_circular'] ?? false;
-		$format = $optionalArgs['format'] ?? 'Png';
-
-		return "https://thumbnails.roblox.com/v1/assets" .
-			"?assetIds=$assetId&size=$size&format=$format&isCircular=$isCircular";
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function processData( $data, array $requiredArgs, array $optionalArgs ) {
-		return $data->data;
+		parent::__construct( 'assetThumbnail', self::createSimpleCache(), $config, 'assets', 'assetIds' );
 	}
 
 	/**

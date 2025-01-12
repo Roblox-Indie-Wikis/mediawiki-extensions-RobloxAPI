@@ -22,35 +22,15 @@ namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\ThumbnailDataSource;
 
-class UserAvatarThumbnailDataSource extends FetcherDataSource {
+class UserAvatarThumbnailDataSource extends ThumbnailDataSource {
 
 	/**
 	 * @inheritDoc
 	 */
 	public function __construct( Config $config ) {
-		parent::__construct( 'userAvatarThumbnail', self::createSimpleCache(), $config );
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
-		$userId = $requiredArgs[0];
-		$size = $requiredArgs[1];
-		$isCircular = $optionalArgs['is_circular'] ?? false;
-		$format = $optionalArgs['format'] ?? 'Png';
-
-		return "https://thumbnails.roblox.com/v1/users/avatar" .
-			"?userIds=$userId&size=$size&format=$format&isCircular=$isCircular";
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function processData( $data, array $requiredArgs, array $optionalArgs ) {
-		return $data->data;
+		parent::__construct( 'userAvatarThumbnail', self::createSimpleCache(), $config, 'users/avatar', 'userIds' );
 	}
 
 	/**
