@@ -20,6 +20,7 @@
 
 namespace MediaWiki\Extension\RobloxAPI\util;
 
+use FormatJson;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use Wikimedia\Stats\Exceptions\IllegalOperationException;
@@ -133,20 +134,6 @@ class RobloxAPIUtil {
 	}
 
 	/**
-	 * Validates the number of args and returns them so they can be destructured safely
-	 * @param array $args An array of args
-	 * @param int $amount The amount of args expected
-	 * @throws RobloxAPIException if the args are invalid
-	 */
-	public static function safeDestructure( array $args, int $amount ): array {
-		if ( count( $args ) !== $amount ) {
-			throw new RobloxAPIException( 'robloxapi-error-invalid-args-count' );
-		}
-
-		return $args;
-	}
-
-	/**
 	 * Asserts that the given args are allowed
 	 * @param Config $config The config object
 	 * @param array $expectedArgs The expected arg types
@@ -209,9 +196,7 @@ class RobloxAPIUtil {
 	 * @return string
 	 */
 	public static function createJsonResult( $jsonObject, array $optionalArgs ): string {
-		if ( isset( $optionalArgs['pretty'] ) && strtolower( $optionalArgs['pretty'] ) === 'true' ) {
-			return json_encode( $jsonObject, JSON_PRETTY_PRINT );
-		}
+		$pretty = isset( $optionalArgs['pretty'] ) && strtolower( $optionalArgs['pretty'] ) === 'true';
 		// only return the value of json_key in the JSON object
 		if ( is_object( $jsonObject ) && !empty( $optionalArgs['json_key'] ) ) {
 			$jsonObject = self::getJsonKey( $jsonObject, $optionalArgs['json_key'] );
@@ -221,7 +206,7 @@ class RobloxAPIUtil {
 			}
 		}
 
-		return json_encode( $jsonObject );
+		return FormatJson::encode( $jsonObject, $pretty );
 	}
 
 	/**
