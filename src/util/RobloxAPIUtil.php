@@ -260,7 +260,7 @@ class RobloxAPIUtil {
 	 * @return array[]
 	 * @throws RobloxAPIException if the arguments are invalid
 	 */
-	public static function validateArguments( ArgumentSpecification $argumentSpecification, array $args, Config $config
+	public static function parseArguments( ArgumentSpecification $argumentSpecification, array $args, Config $config
 	): array {
 		// TODO extract this logic into a separate method
 		$requiredArgs = [];

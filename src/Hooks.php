@@ -123,7 +123,7 @@ class Hooks implements ParserFirstCallInitHook {
 		$argumentSpecification = $dataSource->getArgumentSpecification();
 
 		[ $requiredArgs, $optionalArgs ] =
-			RobloxAPIUtil::validateArguments( $argumentSpecification, $otherArgs, $this->config );
+			RobloxAPIUtil::parseArguments( $argumentSpecification, $otherArgs, $this->config );
 
 		$result = $dataSource->exec( $this->dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
 		$shouldEscape = $dataSource->shouldEscapeResult( $result );
