@@ -126,4 +126,20 @@ class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 			RobloxAPIUtil::createJsonResult( $jsonObject, [] ) );
 	}
 
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::getJsonKey
+	 */
+	public function testGetJsonKey(): void {
+		$jsonString = /** @lang JSON */
+			<<<EOD
+				{
+					"someData": {
+						"someNestedData": "someValue"
+					}
+				}
+		EOD;
+		$jsonObject = \FormatJson::decode( $jsonString );
+		self::assertEquals( 'someValue', RobloxAPIUtil::getJsonKey( $jsonObject, 'someData->someNestedData' ) );
+	}
+
 }

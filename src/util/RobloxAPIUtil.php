@@ -215,7 +215,7 @@ class RobloxAPIUtil {
 	 * @param string $jsonKey The JSON key
 	 * @return \stdClass|mixed|null
 	 */
-	protected static function getJsonKey( ?\stdClass $jsonObject, string $jsonKey ) {
+	public static function getJsonKey( ?\stdClass $jsonObject, string $jsonKey ) {
 		if ( $jsonObject === null ) {
 			return null;
 		}
