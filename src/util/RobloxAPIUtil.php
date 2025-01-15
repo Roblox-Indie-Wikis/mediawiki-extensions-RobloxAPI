@@ -262,7 +262,7 @@ class RobloxAPIUtil {
 	 */
 	public static function parseArguments( ArgumentSpecification $argumentSpecification, array $args, Config $config
 	): array {
-		// TODO extract this logic into a separate method
+		// TODO extract some parts of this method into separate methods
 		$requiredArgs = [];
 		$optionalArgs = [];
 
@@ -276,11 +276,17 @@ class RobloxAPIUtil {
 			$requiredArgs[] = $value;
 		}
 
+		$first = true;
+
 		// optional args are named, e.g. name=value
 		foreach ( $args as $string ) {
 			$parts = explode( '=', $string, 2 );
 
 			if ( count( $parts ) === 1 ) {
+				if ( $first ) {
+					// assume that the user intended to provide more required args than actually required
+					throw new RobloxAPIException( 'robloxapi-error-too-many-required-args', $parts[0] );
+				}
 				throw new RobloxAPIException( 'robloxapi-error-missing-optional-argument-value', $parts[0] );
 			}
 
@@ -297,6 +303,8 @@ class RobloxAPIUtil {
 			self::assertArgAllowed( $config, $type, $value );
 
 			$optionalArgs[$key] = $value;
+
+			$first = false;
 		}
 
 		return [ $requiredArgs, $optionalArgs ];
