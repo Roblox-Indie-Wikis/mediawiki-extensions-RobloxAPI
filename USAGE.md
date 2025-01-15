@@ -166,6 +166,114 @@ Get the URL of the user avatar thumbnail of builderman (ID 156):
 | `is_circular` | Whether the thumbnail should be circular. | Boolean                | `false` | `is_circular=true` |
 | `format`      | The format of the thumbnail.              | String (`Png`, `Webp`) | `Png`   | `format=Webp`      |
 
+### assetThumbnail
+
+Provides the data about an asset thumbnail in the [JSON format](#Handling-JSON-data).
+
+#### Example
+
+Get the data about the asset thumbnail of the asset with ID 102611803:
+
+```
+{{#robloxAPI: assetThumbnail | 1962446128 | 140x140 }}
+```
+
+#### Required Arguments
+
+| Name            | Description                | Type                                                                                                                                                                                                                                                                 |
+|-----------------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `AssetId`       | The asset ID of the asset. | Numeric ID                                                                                                                                                                                                                                                           |
+| `ThumbnailSize` | The size of the thumbnail. | String (`30x30`, `42x42`, `50x50`, `60x62`, `75x75`, `110x110`, `140x140`, `150x150`, `160x100`, `160x600`, `250x250`, `256x144`, `300x250`, `304x166`, `384x216`, `396x216`, `420x420`, `480x270`, `512x512`, `576x324`, `700x700`, `728x90`, `768x432`, `1200x80`) |
+
+#### Optional Arguments
+
+| Name          | Description                               | Type                   | Default | Example            |
+|---------------|-------------------------------------------|------------------------|---------|--------------------|
+| `is_circular` | Whether the thumbnail should be circular. | Boolean                | `false` | `is_circular=true` |
+| `format`      | The format of the thumbnail.              | String (`Png`, `Webp`) | `Png`   | `format=Webp`      |
+
+### assetThumbnailUrl
+
+Provides the URL of an asset thumbnail. Allows [embedding](#Embedding-images-from-the-Roblox-CDN) the asset image.
+Requires [assetThumbnail](#assetThumbnail) to be enabled.
+
+#### Example
+
+Get the URL of the asset thumbnail of the asset with ID 102611803:
+
+```
+{{#robloxAPI: assetThumbnailUrl | 1962446128 | 140x140 }}
+```
+
+#### Required Arguments
+
+| Name            | Description                | Type                                                                                                                                                                                                                                                                 |
+|-----------------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `AssetId`       | The asset ID of the asset. | Numeric ID                                                                                                                                                                                                                                                           |
+| `ThumbnailSize` | The size of the thumbnail. | String (`30x30`, `42x42`, `50x50`, `60x62`, `75x75`, `110x110`, `140x140`, `150x150`, `160x100`, `160x600`, `250x250`, `256x144`, `300x250`, `304x166`, `384x216`, `396x216`, `420x420`, `480x270`, `512x512`, `576x324`, `700x700`, `728x90`, `768x432`, `1200x80`) |
+
+#### Optional Arguments
+
+| Name          | Description                               | Type                   | Default | Example            |
+|---------------|-------------------------------------------|------------------------|---------|--------------------|
+| `is_circular` | Whether the thumbnail should be circular. | Boolean                | `false` | `is_circular=true` |
+| `format`      | The format of the thumbnail.              | String (`Png`, `Webp`) | `Png`   | `format=Webp`      |
+
+### gameIcon
+
+Provides the data about a game icon in the [JSON format](#Handling-JSON-data).
+
+#### Example
+
+Get the data about the game icon of the game with ID 132813250731469:
+
+```
+{{#robloxAPI: gameIcon | 132813250731469 | 150x150 }}
+```
+
+#### Required Arguments
+
+| Name            | Description               | Type                                                                    |
+|-----------------|---------------------------|-------------------------------------------------------------------------|
+| `PlaceId`       | The place ID of the game. | Numeric ID                                                              |
+| `ThumbnailSize` | The size of the icon.     | String (`50x50`, `128x128`, `150x150`, `256x256`, `420x420`, `512x512`) |
+
+#### Optional Arguments
+
+| Name            | Description                          | Type                                                                              | Default       | Example                     |
+|-----------------|--------------------------------------|-----------------------------------------------------------------------------------|---------------|-----------------------------|
+| `is_circular`   | Whether the icon should be circular. | Boolean                                                                           | `false`       | `is_circular=true`          |
+| `format`        | The format of the icon.              | String (`Png`, `Webp`)                                                            | `Png`         | `format=Webp`               |
+| `return_policy` | The return policy of the icon.       | String (`PlaceHolder`, `ForcePlaceHolder`, `AutoGenerated`, `ForceAutoGenerated`) | `PlaceHolder` | `return_policy=PlaceHolder` |
+
+### gameIconUrl
+
+Provides the URL of a game icon. Allows [embedding](#Embedding-images-from-the-Roblox-CDN) the game icon image.
+Requires [gameIcon](#gameIcon) to be enabled.
+
+#### Example
+
+Get the URL of the game icon of the game with ID 132813250731469:
+
+```
+{{#robloxAPI: gameIconUrl | 132813250731469 | 150x150 }}
+```
+
+#### Required Arguments
+
+| Name            | Description               | Type                                                                    |
+|-----------------|---------------------------|-------------------------------------------------------------------------|
+| `PlaceId`       | The place ID of the game. | Numeric ID                                                              |
+| `ThumbnailSize` | The size of the icon.     | String (`50x50`, `128x128`, `150x150`, `256x256`, `420x420`, `512x512`) |
+
+#### Optional Arguments
+
+| Name            | Description                          | Type                                                                              | Default       | Example                     |
+|-----------------|--------------------------------------|-----------------------------------------------------------------------------------|---------------|-----------------------------|
+| `is_circular`   | Whether the icon should be circular. | Boolean                                                                           | `false`       | `is_circular=true`          |
+| `format`        | The format of the icon.              | String (`Png`, `Webp`)                                                            | `Png`         | `format=Webp`               |
+| `return_policy` | The return policy of the icon.       | String (`PlaceHolder`, `ForcePlaceHolder`, `AutoGenerated`, `ForceAutoGenerated`) | `PlaceHolder` | `return_policy=PlaceHolder` |
+
 ## Handling JSON data
 
 ### JSON keys
