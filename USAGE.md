@@ -499,6 +499,22 @@ Then, add the following line to the `MediaWiki:External image whitelist` page on
 ^https://([a-zA-Z0-9]{2})\.rbxcdn\.com/
 ```
 
+### Migrating from the old parser functions
+
+If you are using the old parser functions, it is highly recommended to migrate to the new `{{#robloxAPI}}` parser
+function by replacing the old parser function with the new one. Please refer to the documentation above for examples on
+how to use each data source with the new parser function. For example, replace:
+
+```
+{{#rblxUserId: builderman}}
+```
+
+with:
+
+```
+{{#robloxAPI: userId | builderman}}
+```
+
 ## Configuration
 
 ### `$wgRobloxAPIEnabledDatasources`
