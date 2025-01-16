@@ -39,7 +39,9 @@ class Hooks implements ParserFirstCallInitHook {
 		$this->dataSourceProvider = new DataSourceProvider( $this->config );
 
 		$this->legacyParserFunctions = [];
-		$this->legacyParserFunctions += $this->dataSourceProvider->createLegacyParserFunctions();
+		if ( $this->config->get( 'RobloxAPIRegisterLegacyParserFunctions' ) ) {
+			$this->legacyParserFunctions += $this->dataSourceProvider->createLegacyParserFunctions();
+		}
 	}
 
 	/**

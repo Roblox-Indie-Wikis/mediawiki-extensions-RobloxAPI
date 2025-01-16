@@ -581,4 +581,17 @@ If you don't want to mark the extension's parser functions as expensive, you can
 $wgRobloxAPIParserFunctionsExpensive = false;
 ```
 
+### `$wgRobloxAPIRegisterLegacyParserFunctions`
 
+Whether to register the legacy parser functions for the extension that were deprecated in version 1.2.0.
+By default, they are registered for backwards compatibility:
+
+```php
+$wgRobloxAPIRegisterLegacyParserFunctions = true;
+```
+
+If you do not need the legacy parser functions, you can set this variable to `false`:
+
+```php
+$wgRobloxAPIRegisterLegacyParserFunctions = false;
+```
