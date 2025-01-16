@@ -359,6 +359,60 @@ Get the formatted number of members in a group:
 |-----------|----------------------------|------------|
 | `GroupId` | The group ID of the group. | Numeric ID |
 
+### badgeInfo
+
+Provides information about a badge in the [JSON format](#Handling-JSON-data).
+
+#### Example
+
+Get all JSON data of a badge:
+
+```
+{{#robloxAPI: badgeInfo | 4488119458388820}}
+```
+
+#### Required Arguments
+
+| Name      | Description                | Type       |
+|-----------|----------------------------|------------|
+| `BadgeId` | The badge ID of the badge. | Numeric ID |
+
+### userInfo
+
+Provides information about a user in the [JSON format](#Handling-JSON-data).
+
+#### Example
+
+Get all JSON data of a user:
+
+```
+{{#robloxAPI: userInfo | 156 }}
+```
+
+#### Required Arguments
+
+| Name     | Description              | Type       |
+|----------|--------------------------|------------|
+| `UserId` | The user ID of the user. | Numeric ID |
+
+### assetDetails
+
+Provides information about an asset in the [JSON format](#Handling-JSON-data).
+
+#### Example
+
+Get all JSON data of an asset:
+
+```
+{{#robloxAPI: assetDetails | 102611803 }}
+```
+
+#### Required Arguments
+
+| Name      | Description                | Type       |
+|-----------|----------------------------|------------|
+| `AssetId` | The asset ID of the asset. | Numeric ID |
+
 ## Handling JSON data
 
 ### JSON keys
