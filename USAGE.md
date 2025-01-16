@@ -1,6 +1,39 @@
 # Usage
 
-TODO: REGENERATE TOC
+- [Usage](#usage)
+    * [Basic Usage](#basic-usage)
+    * [Data Sources](#data-sources)
+        + [gameData](#gamedata)
+        + [activePlayers](#activeplayers)
+        + [visits](#visits)
+        + [userId](#userid)
+        + [userAvatarThumbnail](#useravatarthumbnail)
+        + [userAvatarThumbnailUrl](#useravatarthumbnailurl)
+        + [assetThumbnail](#assetthumbnail)
+        + [assetThumbnailUrl](#assetthumbnailurl)
+        + [gameIcon](#gameicon)
+        + [gameIconUrl](#gameiconurl)
+        + [groupRoles](#grouproles)
+        + [groupRank](#grouprank)
+        + [groupData](#groupdata)
+        + [groupMembers](#groupmembers)
+        + [badgeInfo](#badgeinfo)
+        + [userInfo](#userinfo)
+        + [assetDetails](#assetdetails)
+    * [Handling JSON data](#handling-json-data)
+        + [JSON keys](#json-keys)
+        + [Pretty-printing JSON data](#pretty-printing-json-data)
+    * [FAQs](#faqs)
+        + [How do I obtain the Universe ID of a game?](#how-do-i-obtain-the-universe-id-of-a-game)
+        + [Embedding images from the Roblox CDN](#embedding-images-from-the-roblox-cdn)
+    * [Configuration](#configuration)
+        + [`$wgRobloxAPIEnabledDatasources`](#wgrobloxapienableddatasources)
+        + [`$wgRobloxAPICachingExpiries`](#wgrobloxapicachingexpiries)
+        + [`$wgRobloxAPIAllowedArguments`](#wgrobloxapiallowedarguments)
+        + [`$wgRobloxAPIRequestUserAgent`](#wgrobloxapirequestuseragent)
+        + [`$wgRobloxAPIDisableCache`](#wgrobloxapidisablecache)
+        + [`$wgRobloxAPIParserFunctionsExpensive`](#wgrobloxapiparserfunctionsexpensive)
+        + [`$wgRobloxAPIRegisterLegacyParserFunctions`](#wgrobloxapiregisterlegacyparserfunctions)
 
 ## Basic Usage
 
@@ -452,7 +485,7 @@ To get the universe ID of a place, input the place ID to this API:
 https://apis.roblox.com/universes/v1/places/<GAMEID>/universe
 ```
 
-#### Embedding images from the Roblox CDN
+### Embedding images from the Roblox CDN
 
 The result of the `{{#rblxUserAvatarThumbnailUrl}}` parser function can be used to embed avatar images in your wiki.
 To do this, the `$wgEnableImageWhitelist` configuration variable must be set to `true`.
