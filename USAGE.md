@@ -466,12 +466,6 @@ Then, add the following line to the `MediaWiki:External image whitelist` page on
 ^https://([a-zA-Z0-9]{2})\.rbxcdn\.com/
 ```
 
----
-
----
-
-TODO update this section
-
 ## Configuration
 
 ### `$wgRobloxAPIEnabledDatasources`
@@ -480,10 +474,20 @@ An array of data sources that should be enabled and available. By default, all d
 
 ```php
 $wgRobloxAPIEnabledDatasources = [
-    'gameData',
+    'gameData',    
+    'activePlayers',
+    'visits',
+    'userId',
+    'userAvatarThumbnail',
+    'userAvatarThumbnailUrl',
+    'assetThumbnail',
+    'assetThumbnailUrl',
+    'gameIcon',
+    'gameIconUrl',
     'groupRoles',
     'groupData',
-    'userAvatarThumbnail',
+    'groupRank',
+    'groupMembers',
     'badgeInfo',
     'userInfo',
     'assetDetails',
