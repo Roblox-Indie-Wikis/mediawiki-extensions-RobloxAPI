@@ -55,6 +55,8 @@ interface IDataSource {
 	public function getArgumentSpecification(): ArgumentSpecification;
 
 	/**
+	 * Determines whether the result of the parser function should be escaped.
+	 * Note that this is ignored and the result is always escaped if the data source returns JSON data.
 	 * @param mixed $result The result of the parser function.
 	 * @return bool Whether the result should be escaped and url-encoded.
 	 */
