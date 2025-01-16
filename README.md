@@ -10,26 +10,26 @@ by [Dovedale Wiki](https://github.com/dovedalewiki).
 > features and should now be the only one used to access the Roblox API. While the old parser functions remain working
 > as before, they might be removed in a future version.
 >
-> Please see the [USAGE.md](USAGE.md) file for more information.
+> Please see the [USAGE.md](USAGE.md) file for the latest documentation on how to use the extension.
 
 Live Examples:
-https://dovedale.wiki
-https://hybridcafe.wiki
-https://utg.miraheze.org
+
+* https://dovedale.wiki/
+* https://hybridcafe.wiki/
+* https://utg.miraheze.org/
 
 ## Installation
 
 1. Download the repository using the following
    link: [Download ZIP](https://github.com/Roblox-Indie-Wikis/mediawiki-extensions-RobloxAPI/archive/master.zip)
 2. Place the files in a directory called `RobloxAPI` in your `extensions/` folder.
-2. Add the following line to the end of your `LocalSettings.php` file:
+3. Add the following line to the end of your `LocalSettings.php` file:
     ```php
     wfLoadExtension( 'RobloxAPI' );
     ```
 
-Miraheze users may use ManageWiki to install this extension. Search for 'RobloxAPI' in [[Special:ManageWiki]] and
-install it with a
-click.
+Miraheze users may use ManageWiki to install this extension. Search for 'RobloxAPI' in *Special:ManageWiki* and
+install it with a click.
 
 ## Usage
 
