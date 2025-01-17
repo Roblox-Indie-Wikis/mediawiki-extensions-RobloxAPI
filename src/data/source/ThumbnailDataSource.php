@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
 abstract class ThumbnailDataSource extends FetcherDataSource {
 
@@ -52,6 +53,10 @@ abstract class ThumbnailDataSource extends FetcherDataSource {
 	 * @inheritDoc
 	 */
 	public function processData( $data, array $requiredArgs, array $optionalArgs ) {
+		if ( !is_object( $data ) || !property_exists( $data, 'data' ) ) {
+			throw new RobloxAPIException( 'robloxapi-error-unexpected-data-structure' );
+		}
+
 		return $data->data;
 	}
 
