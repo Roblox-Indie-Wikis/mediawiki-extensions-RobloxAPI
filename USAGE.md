@@ -26,6 +26,7 @@
     * [FAQs](#faqs)
         + [How do I obtain the Universe ID of a game?](#how-do-i-obtain-the-universe-id-of-a-game)
         + [Embedding images from the Roblox CDN](#embedding-images-from-the-roblox-cdn)
+        + [Migrating from the old parser functions](#migrating-from-the-old-parser-functions)
     * [Configuration](#configuration)
         + [`$wgRobloxAPIEnabledDatasources`](#wgrobloxapienableddatasources)
         + [`$wgRobloxAPICachingExpiries`](#wgrobloxapicachingexpiries)
