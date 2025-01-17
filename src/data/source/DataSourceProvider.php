@@ -21,6 +21,19 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailUrlDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameIconDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameIconUrlDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\GroupMembersDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\GroupRankDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\PlaceActivePlayersDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\PlaceVisitsDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserAvatarThumbnailDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserAvatarThumbnailUrlDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserIdDataSource;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\RobloxApiParserFunction;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
@@ -30,7 +43,7 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
  */
 class DataSourceProvider {
 
-	private Config $config;
+	public Config $config;
 	/**
 	 * @var array The currently enabled data sources.
 	 */
@@ -48,36 +61,56 @@ class DataSourceProvider {
 
 		$this->registerDataSource( new GameDataSource( $config ) );
 		$this->registerDataSource( new UserIdDataSource( $config ) );
+		$this->registerDataSource( new UserAvatarThumbnailDataSource( $config ) );
+		$this->registerDataSource( new AssetThumbnailDataSource( $config ) );
+		$this->registerDataSource( new GameIconDataSource( $config ) );
 
-		$this->registerDataSource( new SimpleDataSource( 'groupRoles', $config, [ 'UserID' ],
-			static function ( $args ) {
+		$this->registerDataSource( new SimpleFetcherDataSource( 'groupRoles', $config,
+			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(), static function ( $args ) {
 				return "https://groups.roblox.com/v1/users/$args[0]/groups/roles";
 			}, static function ( $data ) {
 				return $data->data;
-			} ) );
-		$this->registerDataSource( new SimpleDataSource( 'groupData', $config, [ 'GroupID' ],
-			static function ( $args ) {
+			}, true ) );
+		$this->registerDataSource( new SimpleFetcherDataSource( 'groupData', $config,
+			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(), static function ( $args ) {
 				return "https://groups.roblox.com/v1/groups/$args[0]";
-			} ) );
-		$this->registerDataSource( new SimpleDataSource( 'userAvatarThumbnail', $config, [ 'UserID', 'ThumbnailSize' ],
-			static function ( $args ) {
-				// TODO allow configuring more options
-				return "https://thumbnails.roblox.com/v1/users/avatar?userIds={$args[0]}&size={$args[1]}&format=Png" .
-					"&isCircular=false";
-			}, static function ( $data ) {
-				return $data->data;
-			} ) );
-		$this->registerDataSource( new SimpleDataSource( 'badgeInfo', $config, [ 'BadgeID' ],
-			static function ( $args ) {
+			}, null, true ) );
+		$this->registerDataSource( new SimpleFetcherDataSource( 'badgeInfo', $config,
+			( new ArgumentSpecification( [ 'BadgeID' ] ) )->withJsonArgs(), static function ( $args ) {
 				return "https://badges.roblox.com/v1/badges/$args[0]";
-			} ) );
-		$this->registerDataSource( new SimpleDataSource( 'userInfo', $config, [ 'UserID' ], static function ( $args ) {
-			return "https://users.roblox.com/v1/users/$args[0]";
-		} ) );
-		$this->registerDataSource( new SimpleDataSource( 'assetDetails', $config, [ 'AssetID' ],
-			static function ( $args ) {
-				return "https://economy.roblox.com/v2/assets/$args[0]/details";
-			} ) );
+			}, null, true ) );
+		$this->registerDataSource( new SimpleFetcherDataSource( 'userInfo', $config,
+			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(), static function ( $args ) {
+				return "https://users.roblox.com/v1/users/$args[0]";
+			}, null, true ) );
+		$this->registerDataSource( new SimpleFetcherDataSource( 'assetDetails', $config, ( new ArgumentSpecification( [
+			'AssetID',
+		] ) )->withJsonArgs(), static function ( $args ) {
+			return "https://economy.roblox.com/v2/assets/$args[0]/details";
+		}, null, true ) );
+
+		// dependent data sources will throw an exception if the required data source is not enabled
+		$this->tryRegisterDataSource( function () {
+			return new GroupRankDataSource( $this );
+		} );
+		$this->tryRegisterDataSource( function () {
+			return new PlaceActivePlayersDataSource( $this );
+		} );
+		$this->tryRegisterDataSource( function () {
+			return new PlaceVisitsDataSource( $this );
+		} );
+		$this->tryRegisterDataSource( function () {
+			return new GroupMembersDataSource( $this );
+		} );
+		$this->tryRegisterDataSource( function () {
+			return new UserAvatarThumbnailUrlDataSource( $this );
+		} );
+		$this->tryRegisterDataSource( function () {
+			return new AssetThumbnailUrlDataSource( $this );
+		} );
+		$this->tryRegisterDataSource( function () {
+			return new GameIconUrlDataSource( $this );
+		} );
 	}
 
 	/**
@@ -107,25 +140,51 @@ class DataSourceProvider {
 
 	/**
 	 * Registers a data source if it is enabled.
-	 * @param DataSource $dataSource
+	 * @param IDataSource $dataSource
 	 * @return void
 	 */
-	public function registerDataSource( DataSource $dataSource ): void {
-		$id = $dataSource->id;
+	public function registerDataSource( IDataSource $dataSource ): void {
+		$id = $dataSource->getId();
 		if ( $this->isEnabled( $id ) ) {
-			$this->dataSources[$dataSource->id] = $dataSource;
-			$dataSource->setCacheExpiry( $this->getCachingExpiry( $dataSource->id ) );
+			$this->dataSources[$id] = $dataSource;
+			if ( $dataSource instanceof FetcherDataSource ) {
+				$dataSource->setCacheExpiry( $this->getCachingExpiry( $id ) );
+			}
+		}
+	}
+
+	/**
+	 * Tries to register a data source, but ignores any exceptions.
+	 * @param callable(): IDataSource $dataSourceFactory
+	 * @return void
+	 */
+	public function tryRegisterDataSource( callable $dataSourceFactory ): void {
+		try {
+			$dataSource = $dataSourceFactory();
+			$this->registerDataSource( $dataSource );
+		} catch ( RobloxAPIException $e ) {
+			wfDebugLog( 'RobloxAPI', "Failed to register data source: {$e->getMessage()}" );
 		}
 	}
 
 	/**
 	 * Gets a data source by its ID.
 	 * @param string $id
-	 * @return DataSource|null
+	 * @param bool $ignoreCase
+	 * @return IDataSource|null
 	 */
-	public function getDataSource( string $id ): ?DataSource {
+	public function getDataSource( string $id, bool $ignoreCase = false ): ?IDataSource {
 		if ( array_key_exists( $id, $this->dataSources ) ) {
 			return $this->dataSources[$id];
+		}
+
+		if ( $ignoreCase ) {
+			foreach ( $this->dataSources as $dataSource ) {
+				/* @var IDataSource $dataSource */
+				if ( strcasecmp( $dataSource->getId(), $id ) === 0 ) {
+					return $dataSource;
+				}
+			}
 		}
 
 		return null;
@@ -133,10 +192,10 @@ class DataSourceProvider {
 
 	/**
 	 * @param string $id
-	 * @return DataSource
+	 * @return IDataSource
 	 * @throws RobloxAPIException
 	 */
-	public function getDataSourceOrThrow( string $id ): DataSource {
+	public function getDataSourceOrThrow( string $id ): IDataSource {
 		$source = $this->getDataSource( $id );
 
 		if ( !$source ) {
@@ -148,16 +207,19 @@ class DataSourceProvider {
 
 	/**
 	 * Creates parser functions for all enabled data sources.
-	 * @return array|DataSource
+	 * @return RobloxApiParserFunction[]
 	 */
-	public function createParserFunctions(): array {
+	public function createLegacyParserFunctions(): array {
 		$functions = [];
 
+		/** @var IDataSource $dataSource */
 		foreach ( $this->dataSources as $dataSource ) {
-			if ( !$dataSource->provideParserFunction() ) {
+			// register parser function only if needed for legacy reasons
+			if ( !$dataSource->shouldRegisterLegacyParserFunction() ) {
 				continue;
 			}
-			$id = "roblox_" . ucfirst( $dataSource->id );
+
+			$id = "roblox_" . ucfirst( $dataSource->getId() );
 			$function = $this->createParserFunction( $dataSource );
 			$functions[$id] = $function;
 		}
@@ -167,10 +229,10 @@ class DataSourceProvider {
 
 	/**
 	 * Creates a parser function for the given data source.
-	 * @param DataSource $dataSource
+	 * @param IDataSource $dataSource
 	 * @return RobloxApiParserFunction
 	 */
-	private function createParserFunction( DataSource $dataSource ): RobloxApiParserFunction {
+	private function createParserFunction( IDataSource $dataSource ): RobloxApiParserFunction {
 		return new DataSourceParserFunction( $this, $dataSource );
 	}
 

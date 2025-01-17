@@ -67,17 +67,6 @@ class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::safeDestructure
-	 */
-	public function testSafeDestructure(): void {
-		self::assertEquals( [ 'test', 'some value' ], RobloxAPIUtil::safeDestructure( [ 'test', 'some value' ], 2 ) );
-
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-invalid-args-count' );
-		RobloxAPIUtil::safeDestructure( [ 'test', 'some value' ], 1 );
-	}
-
-	/**
 	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::assertArgsAllowed
 	 */
 	public function testAssertArgsAllowed(): void {
@@ -113,6 +102,55 @@ class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-username' );
 		RobloxAPIUtil::assertValidArgs( [ 'Username' ], [ '__invalidusername' ] );
+	}
+
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::createJsonResult
+	 */
+	public function testCreateJsonResult(): void {
+		$jsonString = /** @lang JSON */
+			<<<EOD
+				{
+					"requestedUsername": "abaddriverlol",
+					"hasVerifiedBadge": false,
+					"id": 4182456156,
+					"name": "abaddriverlol",
+					"displayName": "abaddriverlol"
+				}
+		EOD;
+		$jsonObject = \FormatJson::decode( $jsonString );
+		self::assertEquals( 'abaddriverlol',
+			RobloxAPIUtil::createJsonResult( $jsonObject, [ 'json_key' => 'requestedUsername' ] ) );
+		self::assertEquals( '{"requestedUsername":"abaddriverlol","hasVerifiedBadge":false,"id":4182456156,' .
+			'"name":"abaddriverlol","displayName":"abaddriverlol"}',
+			RobloxAPIUtil::createJsonResult( $jsonObject, [] ) );
+
+		// test non-existent key
+		self::assertEquals( 'null', RobloxAPIUtil::createJsonResult( $jsonObject, [ 'json_key' => 'doesnotexist' ] ) );
+
+		// test invalid key path
+		self::assertEquals( 'null',
+			RobloxAPIUtil::createJsonResult( $jsonObject, [ 'json_key' => 'doesnotexist->->' ] ) );
+
+		// test keys pointing to non-objects
+		self::assertEquals( 'null',
+			RobloxAPIUtil::createJsonResult( $jsonObject, [ 'json_key' => 'requestedUsername->id' ] ) );
+	}
+
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::getJsonKey
+	 */
+	public function testGetJsonKey(): void {
+		$jsonString = /** @lang JSON */
+			<<<EOD
+				{
+					"someData": {
+						"someNestedData": "someValue"
+					}
+				}
+		EOD;
+		$jsonObject = \FormatJson::decode( $jsonString );
+		self::assertEquals( 'someValue', RobloxAPIUtil::getJsonKey( $jsonObject, 'someData->someNestedData' ) );
 	}
 
 }

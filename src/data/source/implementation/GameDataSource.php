@@ -18,64 +18,69 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source;
+namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
-use FormatJson;
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
 /**
- * A data source for getting a user's ID from their username.
+ * A data source for the roblox games API.
  */
-class UserIdDataSource extends DataSource {
+class GameDataSource extends FetcherDataSource {
 
 	public function __construct( Config $config ) {
-		parent::__construct( 'userId', self::createSimpleCache(), $config, [
-			'Username',
-		] );
+		parent::__construct( 'gameData', self::createSimpleCache(), $config );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getEndpoint( $args ): string {
-		return "https://users.roblox.com/v1/usernames/users";
+	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
+		return "https://games.roblox.com/v1/games?universeIds=$requiredArgs[0]";
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function processData( $data, $args ) {
+	public function processData( $data, array $requiredArgs, array $optionalArgs ) {
 		$entries = $data->data;
-		if ( $entries === null || count( $entries ) === 0 ) {
+
+		if ( !$entries ) {
 			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
 		}
 
-		return $entries[0];
+		foreach ( $entries as $entry ) {
+			if ( !property_exists( $entry, 'rootPlaceId' ) ) {
+				continue;
+			}
+
+			if ( $entry->rootPlaceId !== (int)$requiredArgs[1] ) {
+				continue;
+			}
+
+			return $entry;
+		}
+
+		return null;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function processRequestOptions( array &$options, array $args ) {
-		$options['method'] = 'POST';
-		$options['postData'] = FormatJson::encode( [ 'usernames' => [ $args[0] ] ] );
+	public function shouldRegisterLegacyParserFunction(): bool {
+		return true;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	protected function getAdditionalHeaders( array $args ): array {
-		return [
-			'Content-Type' => 'application/json',
-		];
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function provideParserFunction(): bool {
-		return false;
+	public function getArgumentSpecification(): ArgumentSpecification {
+		return ( new ArgumentSpecification( [
+			'UniverseID',
+			'PlaceID',
+		] ) )->withJsonArgs();
 	}
 
 }

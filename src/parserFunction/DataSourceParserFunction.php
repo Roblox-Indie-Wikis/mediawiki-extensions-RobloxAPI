@@ -20,18 +20,19 @@
 
 namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 
-use FormatJson;
-use MediaWiki\Extension\RobloxAPI\data\source\DataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\data\source\IDataSource;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 
 /**
  * A parser function that provides the data of a data source.
+ * @deprecated Replaced by data sources in v1.2.0.
  */
 class DataSourceParserFunction extends RobloxApiParserFunction {
 
-	private DataSource $dataSource;
+	private IDataSource $dataSource;
 
-	public function __construct( DataSourceProvider $dataSourceProvider, DataSource $dataSource ) {
+	public function __construct( DataSourceProvider $dataSourceProvider, IDataSource $dataSource ) {
 		parent::__construct( $dataSourceProvider );
 		$this->dataSource = $dataSource;
 	}
@@ -39,10 +40,19 @@ class DataSourceParserFunction extends RobloxApiParserFunction {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( $parser, ...$args ): string {
-		// TODO consider directly returning the raw json instead
-		// right now, we encode the json because the data source is returning a StdClass object.
-		return FormatJson::encode( $this->dataSource->fetch( ...$args ) );
+	public function exec( $parser, ...$args ) {
+		[ $requiredArgs, $optionalArgs ] =
+			RobloxAPIUtil::parseArguments( $this->dataSource->getArgumentSpecification(), $args,
+				$this->dataSourceProvider->config );
+
+		return $this->dataSource->exec( $this->dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function shouldEscapeResult( $result ): bool {
+		return $this->dataSource->shouldEscapeResult( $result );
 	}
 
 }

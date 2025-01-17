@@ -26,15 +26,15 @@ use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
+use Parser;
 
 /**
- * A data source represents an endpoint of the roblox api.
+ * Represents an endpoint of the roblox api.
  */
-abstract class DataSource {
+abstract class FetcherDataSource implements IDataSource {
 
 	/**
 	 * @var string The ID of this data source.
@@ -49,10 +49,6 @@ abstract class DataSource {
 	 */
 	protected Config $config;
 	/**
-	 * @var array|string The expected argument types.
-	 */
-	protected array $expectedArgs;
-	/**
 	 * @var ?HttpRequestFactory The HTTP request factory. Can be overridden for testing.
 	 */
 	private ?HttpRequestFactory $httpRequestFactory;
@@ -62,15 +58,13 @@ abstract class DataSource {
 	 * @param string $id The ID of this data source.
 	 * @param DataSourceCache $cache The cache of this data source.
 	 * @param Config $config The extension configuration.
-	 * @param array $expectedArgs The expected argument types.
 	 */
 	public function __construct(
-		string $id, DataSourceCache $cache, Config $config, array $expectedArgs
+		string $id, DataSourceCache $cache, Config $config
 	) {
 		$this->id = $id;
 		$this->cache = $cache;
 		$this->config = $config;
-		$this->expectedArgs = $expectedArgs;
 	}
 
 	public function setCacheExpiry( int $seconds ): void {
@@ -79,21 +73,16 @@ abstract class DataSource {
 
 	/**
 	 * Fetches data
-	 * @param mixed ...$args
+	 * @param array<string> $requiredArgs
+	 * @param array<string, string> $optionalArgs
 	 * @return mixed
 	 * @throws RobloxAPIException if there are any errors during the process
 	 */
-	public function fetch( ...$args ) {
-		// assure that we have the correct number of arguments
-		RobloxAPIUtil::safeDestructure( $args, count( $this->expectedArgs ) );
-		// validate the args
-		RobloxAPIUtil::assertValidArgs( $this->expectedArgs, $args );
-		RobloxAPIUtil::assertArgsAllowed( $this->config, $this->expectedArgs, $args );
+	public function fetch( array $requiredArgs, array $optionalArgs = [] ) {
+		$endpoint = $this->getEndpoint( $requiredArgs, $optionalArgs );
+		$data = $this->getDataFromEndpoint( $endpoint, $requiredArgs, $optionalArgs );
 
-		$endpoint = $this->getEndpoint( $args );
-		$data = $this->getDataFromEndpoint( $endpoint, $args );
-
-		$processedData = $this->processData( $data, $args );
+		$processedData = $this->processData( $data, $requiredArgs, $optionalArgs );
 
 		if ( !$processedData ) {
 			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
@@ -105,12 +94,15 @@ abstract class DataSource {
 	/**
 	 * Fetches data from the given endpoint.
 	 * @param string $endpoint The endpoint to fetch data from.
-	 * @param array $args The arguments to use.
+	 * @param array<string> $requiredArgs
+	 * @param array<string, string> $optionalArgs
 	 * @return mixed The fetched data.
 	 * @throws RobloxAPIException if there are any errors during the process
 	 */
-	public function getDataFromEndpoint( string $endpoint, array $args ) {
-		$cached_result = $this->cache->getResultForEndpoint( $endpoint, $args );
+	public function getDataFromEndpoint( string $endpoint, array $requiredArgs, array $optionalArgs ) {
+		// TODO consider also passing optional args in here and below where registerCacheEntry is called
+		// this is not necessary right now and would degrade performance, but it might become necessary in the future.
+		$cached_result = $this->cache->getResultForEndpoint( $endpoint, $requiredArgs );
 
 		if ( $cached_result !== null ) {
 			return $cached_result;
@@ -123,14 +115,14 @@ abstract class DataSource {
 			$options['userAgent'] = $userAgent;
 		}
 
-		$this->processRequestOptions( $options, $args );
+		$this->processRequestOptions( $options, $requiredArgs, $optionalArgs );
 
 		$this->httpRequestFactory =
 			$this->httpRequestFactory ?? MediaWikiServices::getInstance()->getHttpRequestFactory();
 		$request = $this->httpRequestFactory->create( $endpoint, $options );
 		$request->setHeader( 'Accept', 'application/json' );
 
-		$headers = $this->getAdditionalHeaders( $args );
+		$headers = $this->getAdditionalHeaders( $requiredArgs, $optionalArgs );
 		foreach ( $headers as $header => $value ) {
 			$request->setHeader( $header, $value );
 		}
@@ -161,35 +153,39 @@ abstract class DataSource {
 			throw new RobloxAPIException( 'robloxapi-error-decode-failure' );
 		}
 
-		$this->cache->registerCacheEntry( $endpoint, $data, $args );
+		$this->cache->registerCacheEntry( $endpoint, $data, $requiredArgs );
 
 		return $data;
 	}
 
 	/**
 	 * Returns the endpoint of this data source for the given arguments.
-	 * @param mixed $args The arguments to use.
+	 * @param array<string> $requiredArgs
+	 * @param array<string, string> $optionalArgs
 	 * @return string The endpoint of this data source.
 	 */
-	abstract public function getEndpoint( $args ): string;
+	abstract public function getEndpoint( array $requiredArgs, array $optionalArgs ): string;
 
 	/**
 	 * Processes the data before returning it.
 	 * @param mixed $data The data to process.
-	 * @param mixed $args The arguments used to fetch the data.
+	 * @param array<string> $requiredArgs
+	 * @param array<string, string> $optionalArgs
 	 * @return mixed The processed data.
 	 * @throws RobloxAPIException if there are any errors during the process
 	 */
-	public function processData( $data, $args ) {
+	public function processData( $data, array $requiredArgs, array $optionalArgs ) {
 		return $data;
 	}
 
 	/**
 	 * Processes the request options before making the request. This allows modifying the request options.
 	 * @param array &$options The options to process.
-	 * @param array $args The arguments used to fetch the data.
+	 * @param array<string> $requiredArgs
+	 * @param array<string, string> $optionalArgs
 	 */
-	public function processRequestOptions( array &$options, array $args ) {
+	public function processRequestOptions( array &$options, array $requiredArgs, array $optionalArgs ) {
+		// do nothing by default
 	}
 
 	/**
@@ -208,19 +204,19 @@ abstract class DataSource {
 
 	/**
 	 * Allows specifying additional headers for the request.
-	 * @param array $args The arguments used to fetch the data.
+	 * @param array<string> $requiredArgs
+	 * @param array<string, string> $optionalArgs
 	 * @return array The additional headers.
 	 */
-	protected function getAdditionalHeaders( array $args ): array {
+	protected function getAdditionalHeaders( array $requiredArgs, array $optionalArgs ): array {
 		return [];
 	}
 
 	/**
-	 * Returns whether this data source should provide a parser function.
-	 * @return bool Whether this data source should provide a parser function.
+	 * @inheritDoc
 	 */
-	public function provideParserFunction(): bool {
-		return true;
+	public function shouldRegisterLegacyParserFunction(): bool {
+		return false;
 	}
 
 	/**
@@ -229,6 +225,29 @@ abstract class DataSource {
 	 */
 	public function setHttpRequestFactory( HttpRequestFactory $httpRequestFactory ): void {
 		$this->httpRequestFactory = $httpRequestFactory;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function shouldEscapeResult( $result ): bool {
+		return true;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getId(): string {
+		return $this->id;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function exec(
+		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
+	) {
+		return $this->fetch( $requiredArgs, $optionalArgs );
 	}
 
 }

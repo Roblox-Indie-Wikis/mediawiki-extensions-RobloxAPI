@@ -18,36 +18,18 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\parserFunction;
+namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
+use MediaWiki\Extension\RobloxAPI\data\source\ThumbnailUrlDataSource;
 
-/**
- * Gets the amount of members in a group.
- */
-class GroupMembersParserFunction extends RobloxApiParserFunction {
-
-	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider );
-	}
+class AssetThumbnailUrlDataSource extends ThumbnailUrlDataSource {
 
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( $parser, ...$args ): string {
-		[ $groupId ] = RobloxAPIUtil::safeDestructure( $args, 1 );
-
-		$source = $this->dataSourceProvider->getDataSourceOrThrow( 'groupData' );
-
-		$groupData = $source->fetch( $groupId );
-
-		if ( !$groupData ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
-		}
-
-		return $groupData->memberCount;
+	public function __construct( DataSourceProvider $dataSourceProvider ) {
+		parent::__construct( $dataSourceProvider, 'assetThumbnailUrl', 'assetThumbnail' );
 	}
 
 }

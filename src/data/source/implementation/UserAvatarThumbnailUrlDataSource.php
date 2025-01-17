@@ -18,36 +18,25 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\parserFunction;
+namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
+use MediaWiki\Extension\RobloxAPI\data\source\ThumbnailUrlDataSource;
 
-/**
- * Gets the amount of active players for a game in a universe.
- */
-class ActivePlayersParserFunction extends RobloxApiParserFunction {
+class UserAvatarThumbnailUrlDataSource extends ThumbnailUrlDataSource {
 
+	/**
+	 * @inheritDoc
+	 */
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider );
+		parent::__construct( $dataSourceProvider, 'userAvatarThumbnailUrl', 'userAvatarThumbnail' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( $parser, ...$args ): string {
-		[ $universeId, $gameId ] = RobloxAPIUtil::safeDestructure( $args, 2 );
-
-		$source = $this->dataSourceProvider->getDataSourceOrThrow( 'gameData' );
-
-		$gameData = $source->fetch( $universeId, $gameId );
-
-		if ( !$gameData ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
-		}
-
-		return $gameData->playing;
+	public function shouldRegisterLegacyParserFunction(): bool {
+		return true;
 	}
 
 }

@@ -18,49 +18,39 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source;
+namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
 use MediaWiki\Config\Config;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\source\ThumbnailDataSource;
 
-/**
- * A data source for the roblox games API.
- */
-class GameDataSource extends DataSource {
+class UserAvatarThumbnailDataSource extends ThumbnailDataSource {
 
+	/**
+	 * @inheritDoc
+	 */
 	public function __construct( Config $config ) {
-		parent::__construct( 'gameData', self::createSimpleCache(), $config, [
-			'UniverseID',
-			'PlaceID',
-		] );
+		parent::__construct( 'userAvatarThumbnail', self::createSimpleCache(), $config, 'users/avatar', 'userIds' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getEndpoint( $args ): string {
-		return "https://games.roblox.com/v1/games?universeIds=$args[0]";
+	public function getArgumentSpecification(): ArgumentSpecification {
+		return ( new ArgumentSpecification( [
+			'UserID',
+			'ThumbnailSize',
+		], [
+			'is_circular' => 'Boolean',
+			'format' => 'ThumbnailFormat',
+		], ) )->withJsonArgs();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function processData( $data, $args ) {
-		$entries = $data->data;
-
-		if ( !$entries ) {
-			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
-		}
-
-		foreach ( $entries as $entry ) {
-			if ( $entry->rootPlaceId !== (int)$args[1] ) {
-				continue;
-			}
-
-			return $entry;
-		}
-
-		return null;
+	public function shouldRegisterLegacyParserFunction(): bool {
+		return true;
 	}
 
 }
