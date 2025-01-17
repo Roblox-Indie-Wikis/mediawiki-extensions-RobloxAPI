@@ -211,12 +211,12 @@ class RobloxAPIUtil {
 
 	/**
 	 * Get a JSON key from a JSON object. This accepts recursively nested keys using '->' as a separator.
-	 * @param \stdClass|null $jsonObject The JSON object
+	 * @param \stdClass|mixed|null $jsonObject The JSON object
 	 * @param string $jsonKey The JSON key
 	 * @return \stdClass|mixed|null
 	 */
-	public static function getJsonKey( ?\stdClass $jsonObject, string $jsonKey ) {
-		if ( $jsonObject === null ) {
+	public static function getJsonKey( $jsonObject, string $jsonKey ) {
+		if ( !is_object( $jsonObject ) ) {
 			return null;
 		}
 

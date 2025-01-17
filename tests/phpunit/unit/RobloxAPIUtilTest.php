@@ -131,6 +131,10 @@ class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 		// test invalid key path
 		self::assertEquals( 'null',
 			RobloxAPIUtil::createJsonResult( $jsonObject, [ 'json_key' => 'doesnotexist->->' ] ) );
+
+		// test keys pointing to non-objects
+		self::assertEquals( 'null',
+			RobloxAPIUtil::createJsonResult( $jsonObject, [ 'json_key' => 'requestedUsername->id' ] ) );
 	}
 
 	/**
