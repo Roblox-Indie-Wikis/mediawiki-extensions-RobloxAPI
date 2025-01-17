@@ -69,8 +69,14 @@ abstract class ThumbnailDataSource extends FetcherDataSource {
 		$isCircular = $optionalArgs['is_circular'] ?? false;
 		$format = $optionalArgs['format'] ?? 'Png';
 
-		return "https://thumbnails.roblox.com/v1/$this->apiPath" .
-			"?$this->thumbnailIdParamName=$thumbnailId&size=$size&format=$format&isCircular=$isCircular";
+		$query = http_build_query( [
+			$this->thumbnailIdParamName => $thumbnailId,
+			'size' => $size,
+			'format' => $format,
+			'isCircular' => $isCircular ? 'true' : 'false',
+		] );
+
+		return "https://thumbnails.roblox.com/v1/$this->apiPath?" . $query;
 	}
 
 }
