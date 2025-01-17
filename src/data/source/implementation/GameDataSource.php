@@ -52,6 +52,10 @@ class GameDataSource extends FetcherDataSource {
 		}
 
 		foreach ( $entries as $entry ) {
+			if ( !property_exists( $entry, 'rootPlaceId' ) ) {
+				continue;
+			}
+
 			if ( $entry->rootPlaceId !== (int)$requiredArgs[1] ) {
 				continue;
 			}

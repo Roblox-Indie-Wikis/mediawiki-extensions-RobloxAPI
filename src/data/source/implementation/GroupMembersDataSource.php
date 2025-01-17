@@ -46,6 +46,10 @@ class GroupMembersDataSource extends DependentDataSource {
 			return $this->failNoData();
 		}
 
+		if ( !property_exists( $groupData, 'memberCount' ) ) {
+			return $this->failUnexpectedDataStructure();
+		}
+
 		return $groupData->memberCount;
 	}
 

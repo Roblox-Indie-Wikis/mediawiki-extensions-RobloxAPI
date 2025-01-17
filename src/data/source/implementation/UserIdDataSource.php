@@ -88,6 +88,10 @@ class UserIdDataSource extends FetcherDataSource {
 			throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
 		}
 
+		if ( !property_exists( $data, 'id' ) ) {
+			throw new RobloxAPIException( 'robloxapi-error-unexpected-data-structure' );
+		}
+
 		return $data->id;
 	}
 
