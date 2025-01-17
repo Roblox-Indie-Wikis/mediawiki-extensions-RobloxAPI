@@ -72,5 +72,6 @@ This guide is only for maintainers of the extension.
 2. Update the documentation if there were any relevant changes
 3. Merge development into master
 4. Create a new release on GitHub
-5. Create a branch from master with the version number as the branch name, e.g. `ver/1.1.0`
-6. Update the documentation on mediawiki.org if there were any relevant changes
+5. Close milestone (if applicable)
+6. Create a branch from master with the version number as the branch name, e.g. `ver/1.1.0`
+7. Update the documentation on mediawiki.org if there were any relevant changes
