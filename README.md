@@ -10,13 +10,14 @@ by [Dovedale Wiki](https://github.com/dovedalewiki).
 > features and should now be the only one used to access the Roblox API. While the old parser functions remain working
 > as before, they might be removed in a future version.
 >
-> Please see the [USAGE.md](USAGE.md#Migrating-from-the-old-parser-functions) file for the latest documentation on how to use the extension.
+> Please see the [USAGE.md](USAGE.md#Migrating-from-the-old-parser-functions) file for the latest documentation on how
+> to use the extension.
 
 Live Examples:
 
-* https://dovedale.wiki/
-* https://hybridcafe.wiki/
-* https://utg.miraheze.org/
+* [Dovedale Wiki](https://dovedale.wiki/)
+* [Hybrid Cafe Wiki](https://hybridcafe.wiki/)
+* [UTG Wiki](https://utg.miraheze.org/)
 
 ## Installation
 
