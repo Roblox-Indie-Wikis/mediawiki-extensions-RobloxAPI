@@ -163,7 +163,7 @@ class DataSourceProvider {
 			$dataSource = $dataSourceFactory();
 			$this->registerDataSource( $dataSource );
 		} catch ( RobloxAPIException $e ) {
-			// ignore
+			wfDebugLog( 'RobloxAPI', "Failed to register data source: {$e->getMessage()}" );
 		}
 	}
 
