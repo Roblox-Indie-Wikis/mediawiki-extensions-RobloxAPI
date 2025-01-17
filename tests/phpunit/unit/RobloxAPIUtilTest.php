@@ -124,6 +124,13 @@ class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 		self::assertEquals( '{"requestedUsername":"abaddriverlol","hasVerifiedBadge":false,"id":4182456156,' .
 			'"name":"abaddriverlol","displayName":"abaddriverlol"}',
 			RobloxAPIUtil::createJsonResult( $jsonObject, [] ) );
+
+		// test non-existent key
+		self::assertEquals( 'null', RobloxAPIUtil::createJsonResult( $jsonObject, [ 'json_key' => 'doesnotexist' ] ) );
+
+		// test invalid key path
+		self::assertEquals( 'null',
+			RobloxAPIUtil::createJsonResult( $jsonObject, [ 'json_key' => 'doesnotexist->->' ] ) );
 	}
 
 	/**
