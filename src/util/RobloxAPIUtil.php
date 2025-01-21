@@ -23,6 +23,8 @@ namespace MediaWiki\Extension\RobloxAPI\util;
 use FormatJson;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\MediaWikiServices;
+use MediaWiki\Utils\UrlUtils;
 use Wikimedia\Stats\Exceptions\IllegalOperationException;
 
 /**
@@ -174,10 +176,31 @@ class RobloxAPIUtil {
 	/**
 	 * Verifies that a URL is a Roblox CDN URL
 	 * @param string $url The URL to verify
+	 * @param UrlUtils|null $urlUtils The URL utils object
 	 * @return bool
 	 */
-	public static function verifyIsRobloxCdnUrl( string $url ): bool {
-		return preg_match( '/^https:\/\/[a-zA-Z0-9]{2}\.rbxcdn\.com\/[0-9A-Za-z\-\/]*(?:\.(png|webp))?$/', $url );
+	public static function verifyIsRobloxCdnUrl( string $url, ?UrlUtils $urlUtils = null ): bool {
+		if ( $urlUtils === null ) {
+			$urlUtils = MediaWikiServices::getInstance()->getUrlUtils();
+		}
+		$urlParts = $urlUtils->parse( $url );
+		if ( $urlParts === null ) {
+			return false;
+		}
+		if ( isset( $urlParts['port'] ) || isset( $urlParts['query'] ) || isset( $urlParts['fragment'] ) ) {
+			return false;
+		}
+		if ( $urlParts['scheme'] !== 'https' ) {
+			return false;
+		}
+		if ( !preg_match( "/^[a-zA-Z0-9]{2}\.rbxcdn\.com/", $urlParts['host'] ) ) {
+			return false;
+		}
+		if ( !preg_match( "/[0-9A-Za-z\-\/]*\.(png|webp)?$/", $urlParts['path'] ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

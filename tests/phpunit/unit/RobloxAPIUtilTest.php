@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
+use MediaWiki\Utils\UrlUtils;
 
 /**
  * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil
@@ -151,6 +152,22 @@ class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 		EOD;
 		$jsonObject = \FormatJson::decode( $jsonString );
 		self::assertEquals( 'someValue', RobloxAPIUtil::getJsonKey( $jsonObject, 'someData->someNestedData' ) );
+	}
+
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::verifyIsRobloxCdnUrl
+	 */
+	public function testVerifyIsRobloxCdnUrl(): void {
+		$urlUtils = new UrlUtils();
+
+		self::assertTrue( RobloxAPIUtil::verifyIsRobloxCdnUrl( 'https://tr.rbxcdn.com/30DAY-Avatar-7B1E1A9240F5DE0598D6FD97DBC8859F-Png/140/140/Avatar/Png/noFilter.png',
+			$urlUtils ) );
+		self::assertTrue( RobloxAPIUtil::verifyIsRobloxCdnUrl( 'https://tr.rbxcdn.com/30DAY-Avatar-7B1E1A9240F5DE0598D6FD97DBC8859F-Png/140/140/Avatar/Png/noFilter.webp',
+			$urlUtils ) );
+
+		self::assertFalse( RobloxAPIUtil::verifyIsRobloxCdnUrl( 'https://roblox.com/1234/', $urlUtils ) );
+		self::assertFalse( RobloxAPIUtil::verifyIsRobloxCdnUrl( 'https://t0.rbxcdn.com///https://google.com/',
+			$urlUtils ) );
 	}
 
 }
