@@ -52,7 +52,9 @@ class Hooks implements ParserFirstCallInitHook {
 			try {
 				return $this->handleParserFunctionCall( $parser, $args );
 			} catch ( RobloxAPIException $exception ) {
-				return wfMessage( $exception->getMessage(), ...$exception->messageParams )->escaped();
+				return wfMessage( $exception->getMessage() )
+					->plaintextParams( ...$exception->messageParams )
+					->escaped();
 			}
 		} );
 
@@ -80,7 +82,9 @@ class Hooks implements ParserFirstCallInitHook {
 						'nowiki' => $shouldEscape,
 					];
 				} catch ( RobloxAPIException $exception ) {
-					return wfMessage( $exception->getMessage(), ...$exception->messageParams )->escaped();
+					return wfMessage( $exception->getMessage() )
+						->plaintextParams( ...$exception->messageParams )
+						->escaped();
 				}
 			} );
 		}
