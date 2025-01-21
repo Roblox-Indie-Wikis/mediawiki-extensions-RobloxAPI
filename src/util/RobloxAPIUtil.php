@@ -193,7 +193,7 @@ class RobloxAPIUtil {
 		if ( $urlParts['scheme'] !== 'https' ) {
 			return false;
 		}
-		if ( !preg_match( "/^[a-zA-Z0-9]{2}\.rbxcdn\.com/", $urlParts['host'] ) ) {
+		if ( !preg_match( "/^[a-zA-Z0-9]{2}\.rbxcdn\.com$/", $urlParts['host'] ) ) {
 			return false;
 		}
 		if ( !preg_match( "/[0-9A-Za-z\-\/]*\.(png|webp)?$/", $urlParts['path'] ) ) {
