@@ -17,7 +17,7 @@ Live Examples:
 
 * [Dovedale Wiki](https://dovedale.wiki/)
 * [Hybrid Cafe Wiki](https://hybridcafe.wiki/)
-* [UTG Wiki](https://utg.miraheze.org/)
+* [Untitled Tag Game Wiki](https://utg.miraheze.org/)
 
 ## Installation
 
@@ -29,7 +29,7 @@ Live Examples:
     wfLoadExtension( 'RobloxAPI' );
     ```
 
-Miraheze users may use ManageWiki to install this extension. Search for 'RobloxAPI' in *Special:ManageWiki* and
+Miraheze users may use ManageWiki to install this extension. Search for 'RobloxAPI' in *Special:ManageWiki/extensions* and
 install it with a click.
 
 ## Usage
