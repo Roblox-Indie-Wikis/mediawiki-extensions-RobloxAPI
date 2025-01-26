@@ -111,7 +111,7 @@ abstract class FetcherDataSource implements IDataSource {
 		$options = [];
 
 		$userAgent = $this->config->get( 'RobloxAPIRequestUserAgent' );
-		if ( $userAgent && $userAgent !== '' ) {
+		if ( $userAgent !== null && $userAgent !== '' ) {
 			$options['userAgent'] = $userAgent;
 		}
 
