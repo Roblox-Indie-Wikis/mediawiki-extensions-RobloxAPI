@@ -77,7 +77,7 @@ class DataSourceProvider {
 			}, null, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'groupRolesList', $config,
 			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(), static function ( $args ) {
-				return "https://groups.roblox.com/v1/groups/$args[0]/users";
+				return "https://groups.roblox.com/v1/groups/$args[0]/roles";
 			}, null, false ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'badgeInfo', $config,
 			( new ArgumentSpecification( [ 'BadgeID' ] ) )->withJsonArgs(), static function ( $args ) {
