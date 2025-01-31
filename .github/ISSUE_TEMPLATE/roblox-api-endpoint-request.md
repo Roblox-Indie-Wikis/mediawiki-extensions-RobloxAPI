@@ -4,6 +4,7 @@ about: Request an endpoint of the Roblox API to be added.
 title: ''
 labels: enhancement
 assignees: SomeMWDev
+type: feature
 
 ---
 
