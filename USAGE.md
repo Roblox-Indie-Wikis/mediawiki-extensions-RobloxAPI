@@ -489,6 +489,15 @@ https://apis.roblox.com/universes/v1/places/<GAMEID>/universe
 ### Embedding images from the Roblox CDN
 
 The result of the `{{#rblxUserAvatarThumbnailUrl}}` parser function can be used to embed avatar images in your wiki.
+
+#### Wikis on Miraheze
+
+Go to `Special:ManageWiki/settings` on your wiki, search for "External Images" and make sure this option is enabled:
+![image](https://github.com/user-attachments/assets/78e86d78-c3d1-487f-8974-1b4e5dbeaab7)
+
+
+#### 3rd party wikis
+
 To do this, the `$wgEnableImageWhitelist` configuration variable must be set to `true`.
 
 Then, add the following line to the `MediaWiki:External image whitelist` page on your wiki:
