@@ -4,6 +4,7 @@ about: Suggest an idea for the extension
 title: ''
 labels: enhancement
 assignees: SomeMWDev
+type: feature
 
 ---
 
