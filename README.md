@@ -3,7 +3,7 @@
 A MediaWiki extension which provides easy access to the Roblox API via parser functions. The Roblox API is generally
 very poorly documented, and using ExternalData or Lua can be hard or not viable for all wiki users. This extension aims
 to make it easy for you to grab data from Roblox and put it on your wiki. Formerly developed
-by [Dovedale Wiki](https://github.com/dovedalewiki).
+for [Dovedale Wiki](https://github.com/dovedalewiki).
 
 > [!NOTE]
 > In version 1.2.0, major changes have been made to the extension. The new `{{#robloxAPI}}` parser function provides new
@@ -15,11 +15,14 @@ by [Dovedale Wiki](https://github.com/dovedalewiki).
 
 Live Examples:
 
-* [Dovedale Wiki](https://dovedale.wiki/)
 * [Hybrid Cafe Wiki](https://hybridcafe.wiki/)
 * [Untitled Tag Game Wiki](https://utg.miraheze.org/)
 
 ## Installation
+
+> [!TIP]
+> Miraheze users may use ManageWiki to install this extension. Search for 'RobloxAPI' in *Special:ManageWiki/extensions*
+> and install it with a click.
 
 1. Download the repository using the following
    link: [Download ZIP](https://github.com/Roblox-Indie-Wikis/mediawiki-extensions-RobloxAPI/archive/master.zip)
@@ -28,9 +31,6 @@ Live Examples:
     ```php
     wfLoadExtension( 'RobloxAPI' );
     ```
-
-Miraheze users may use ManageWiki to install this extension. Search for 'RobloxAPI' in *Special:ManageWiki/extensions* and
-install it with a click.
 
 ## Usage
 
