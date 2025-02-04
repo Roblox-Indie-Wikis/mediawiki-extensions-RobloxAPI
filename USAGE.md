@@ -484,6 +484,12 @@ Nested keys can be accessed by separating them with '->', e.g.:
 {{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=creator->name }}
 ```
 
+To access an item in an array, you can use the index of the item, e.g.:
+
+```
+{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=allowedGearGenres->0 }}
+```
+
 ### Pretty-printing JSON data
 
 To pretty-print JSON data, you can use the `pretty` optional argument:

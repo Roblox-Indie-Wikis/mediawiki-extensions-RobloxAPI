@@ -136,6 +136,19 @@ class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 		// test keys pointing to non-objects
 		self::assertEquals( 'null',
 			RobloxAPIUtil::createJsonResult( $jsonObject, [ 'json_key' => 'requestedUsername->id' ] ) );
+
+		// test array index
+		$jsonString = /** @lang JSON */
+			<<<EOD
+				{
+					"someData": [
+						"someValue"
+					]
+				}
+		EOD;
+		$jsonObject = \FormatJson::decode( $jsonString );
+		self::assertEquals( 'someValue',
+			RobloxAPIUtil::createJsonResult( $jsonObject, [ 'json_key' => 'someData->0' ] ) );
 	}
 
 	/**

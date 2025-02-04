@@ -224,7 +224,7 @@ class RobloxAPIUtil {
 		if ( is_object( $jsonObject ) && !empty( $optionalArgs['json_key'] ) ) {
 			$jsonObject = self::getJsonKey( $jsonObject, $optionalArgs['json_key'] );
 
-			if ( !is_object( $jsonObject ) ) {
+			if ( !is_object( $jsonObject ) && !is_array( $jsonObject ) ) {
 				return $jsonObject ?? 'null';
 			}
 		}
@@ -234,12 +234,12 @@ class RobloxAPIUtil {
 
 	/**
 	 * Get a JSON key from a JSON object. This accepts recursively nested keys using '->' as a separator.
-	 * @param \stdClass|mixed|null $jsonObject The JSON object
+	 * @param \stdClass|array|mixed|null $jsonObject The JSON object
 	 * @param string $jsonKey The JSON key
 	 * @return \stdClass|mixed|null
 	 */
-	public static function getJsonKey( $jsonObject, string $jsonKey ) {
-		if ( !is_object( $jsonObject ) ) {
+	public static function getJsonKey( mixed $jsonObject, string $jsonKey ): mixed {
+		if ( !is_object( $jsonObject ) && !is_array( $jsonObject ) ) {
 			return null;
 		}
 
@@ -251,6 +251,11 @@ class RobloxAPIUtil {
 			$secondPart = $parts[1];
 
 			return self::getJsonKey( self::getJsonKey( $jsonObject, $firstPart ), $secondPart );
+		}
+
+		// allow array access
+		if ( is_array( $jsonObject ) && is_numeric( $jsonKey ) ) {
+			return $jsonObject[intval($jsonKey)] ?? null;
 		}
 
 		if ( !property_exists( $jsonObject, $jsonKey ) ) {
