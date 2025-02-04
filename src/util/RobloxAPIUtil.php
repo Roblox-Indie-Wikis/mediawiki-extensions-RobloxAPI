@@ -255,7 +255,7 @@ class RobloxAPIUtil {
 
 		// allow array access
 		if ( is_array( $jsonObject ) && is_numeric( $jsonKey ) ) {
-			return $jsonObject[intval($jsonKey)] ?? null;
+			return $jsonObject[intval( $jsonKey )] ?? null;
 		}
 
 		if ( !property_exists( $jsonObject, $jsonKey ) ) {
