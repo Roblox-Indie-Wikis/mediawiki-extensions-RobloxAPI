@@ -447,6 +447,24 @@ Get all JSON data of an asset:
 |-----------|----------------------------|------------|
 | `AssetId` | The asset ID of the asset. | Numeric ID |
 
+### groupRolesList
+
+Provides a list of roles in a group in the [JSON format](#Handling-JSON-data).
+
+#### Example
+
+Get the roles of a group:
+
+```
+{{#robloxAPI: groupRolesList | 32670248 }}
+```
+
+#### Required Arguments
+
+| Name      | Description                | Type       |
+|-----------|----------------------------|------------|
+| `GroupId` | The group ID of the group. | Numeric ID |
+
 ## Handling JSON data
 
 ### JSON keys
