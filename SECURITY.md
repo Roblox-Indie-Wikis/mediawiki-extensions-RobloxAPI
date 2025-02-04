@@ -1,5 +1,15 @@
 # Security Policy
 
+## Supported Versions
+
+* MediaWiki: >= 1.42.x (until 1.42 reaches EOL)
+
+| Version | Supported | Notes                |
+|---------|-----------|----------------------|
+| 1.2.0   | ✅         | Latest minor release |
+| 1.1.0   | ❌         | Use 1.2.0 instead    |
+| 1.0.0   | ❌         | Use 1.2.0 instead    |
+
 ## Reporting a Vulnerability
 
 To report a vulnerability, it is strongly advised to file a security advisory on GitHub:
