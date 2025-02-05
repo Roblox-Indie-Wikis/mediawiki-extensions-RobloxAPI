@@ -9,7 +9,7 @@
 	"license-name": "GPL-2.0-or-later",
 	"type": "parserhook",
 	"requires": {
-		"MediaWiki": ">= 1.41.0"
+		"MediaWiki": ">= 1.42.0"
 	},
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\RobloxAPI\\": "src/"
