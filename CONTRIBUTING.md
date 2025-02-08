@@ -68,11 +68,12 @@ enforced by the CI pipeline which runs phan before a PR can be merged.
 
 This guide is only for maintainers of the extension.
 
+This extension uses [Semantic Versioning](https://semver.org/). To release a new version, follow these steps:
 1. Update the version number in `extension.json`
 2. Update the documentation if there were any relevant changes
-3. Update the 'Supported Versions' section at SECURITY.md
-4. Merge development into master
-5. Create a new release on GitHub
+3. Update the 'Supported Versions' section at [SECURITY.md](SECURITY.md)
+4. Merge the *development* branch into *master*
+5. Create a new tag and release on GitHub
 6. Close milestone (if applicable)
 7. Create a branch from master with the version number as the branch name, e.g. `ver/1.1.0`
-8. Update the documentation on mediawiki.org if there were any relevant changes
+8. Update the information on mediawiki.org if there were any relevant changes
