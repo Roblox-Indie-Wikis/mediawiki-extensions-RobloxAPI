@@ -20,6 +20,7 @@
         + [badgeInfo](#badgeinfo)
         + [userInfo](#userinfo)
         + [assetDetails](#assetdetails)
+        + [groupRolesList](#grouproleslist)
     * [Handling JSON data](#handling-json-data)
         + [JSON keys](#json-keys)
         + [Pretty-printing JSON data](#pretty-printing-json-data)
@@ -456,7 +457,7 @@ Provides a list of roles in a group in the [JSON format](#Handling-JSON-data).
 Get the roles of a group:
 
 ```
-{{#robloxAPI: groupRolesList | 32670248 }}
+{{#robloxAPI: groupRolesList | 5353743 }}
 ```
 
 #### Required Arguments
@@ -518,7 +519,6 @@ The result of the `{{#rblxUserAvatarThumbnailUrl}}` parser function can be used 
 
 Go to `Special:ManageWiki/settings` on your wiki, search for "External Images" and make sure this option is enabled:
 ![image](https://github.com/user-attachments/assets/78e86d78-c3d1-487f-8974-1b4e5dbeaab7)
-
 
 #### 3rd party wikis
 
