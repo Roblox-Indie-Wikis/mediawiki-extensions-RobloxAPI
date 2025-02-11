@@ -40,3 +40,5 @@ For more information on how to use the extension, see the [USAGE.md](USAGE.md) f
 
 See the [CONTRIBUTING.md](CONTRIBUTING.md) file for information on how to contribute to the project.
 
+## Indie Roblox Wikis 
+If you are interested in the work we do - like developing this extension, please do check out our website and members [here](https://indierobloxwikis.org). 
