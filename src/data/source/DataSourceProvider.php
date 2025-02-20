@@ -98,6 +98,11 @@ class DataSourceProvider {
 			] ) )->withJsonArgs(), static function ( $args ) {
 				return "https://gameinternationalization.roblox.com/v1/name-description/games/$args[0]";
 			} ) );
+		$this->registerDataSource( new SimpleFetcherDataSource( 'universeInfo', $config, ( new ArgumentSpecification( [
+			'UniverseID',
+		] ) )->withJsonArgs(), static function ( $args ) {
+			return "https://develop.roblox.com/v1/universes/$args[0]";
+		} ) );
 
 		// dependent data sources will throw an exception if the required data source is not enabled
 		$this->tryRegisterDataSource( function () {
