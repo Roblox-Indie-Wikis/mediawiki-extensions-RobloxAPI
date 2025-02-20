@@ -466,6 +466,30 @@ Get the roles of a group:
 |-----------|----------------------------|------------|
 | `GroupId` | The group ID of the group. | Numeric ID |
 
+### gameNameDescription
+
+Provides the name and description of a game in all supported languages.
+
+#### Example
+
+Get the name and description of a game:
+
+```
+{{#robloxAPI: gameNameDescription | 6483209208 }}
+```
+
+Get the description of a game in English:
+
+```
+{{#robloxAPI: gameNameDescription | 6483209208 | json_key=data->0->description }}
+```
+
+#### Required Arguments
+
+| Name         | Description                                  | Type       |
+|--------------|----------------------------------------------|------------|
+| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
+
 ## Handling JSON data
 
 ### JSON keys

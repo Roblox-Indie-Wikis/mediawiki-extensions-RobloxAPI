@@ -37,7 +37,8 @@
 				"badgeInfo",
 				"userInfo",
 				"assetDetails",
-				"groupRolesList"
+				"groupRolesList",
+				"gameNameDescription"
 			],
 			"merge_strategy": "provide_default",
 			"description": "The data sources that should be enabled and available."
