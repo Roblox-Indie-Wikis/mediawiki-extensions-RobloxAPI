@@ -10,8 +10,8 @@ type: feature
 
 **Describe the possible use cases**
 
-** API Endpoint URL **
+**API Endpoint URL**
 
-** API documentation (if available) **
+**API documentation (if available)**
 
 **Additional context**
