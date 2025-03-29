@@ -20,17 +20,17 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\cache;
 
-use BagOStuff;
 use MediaWiki\MediaWikiServices;
 
 /**
  * A simple cache that expires after a set amount of seconds.
  */
 class SimpleExpiringCache extends DataSourceCache {
-	private BagOStuff $cache;
+	// ToDo: replace this alias with the actual class once support for 1.42 is dropped
+	private \WANObjectCache $cache;
 
 	public function __construct() {
-		$this->cache = MediaWikiServices::getInstance()->getLocalServerObjectCache();
+		$this->cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
 	}
 
 	/**

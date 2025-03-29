@@ -65,40 +65,40 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 		{
 			"data": [
 				{
-					"id": 4252370517,
-					"rootPlaceId": 12018816388,
-					"name": "Dovedale Railway",
-					"description": "Description...",
-					"sourceName": "Dovedale Railway",
-					"sourceDescription": "Description...",
+					"id": 6483209208,
+					"rootPlaceId": 132813250731469,
+					"name": "The Hybrid Cafe",
+					"description": "[shortened]",
+					"sourceName": "[\\ud83d\\udc7d] The Hybrid Cafe \\u2615",
+					"sourceDescription": "[shortened]",
 					"creator": {
-						"id": 32670248,
-						"name": "Dovedale Community",
+						"id": 5353743,
+						"name": "ArenaDev",
 						"type": "Group",
 						"isRNVAccount": false,
-						"hasVerifiedBadge": false
+						"hasVerifiedBadge": true
 					},
 					"price": null,
 					"allowedGearGenres": [
-						"Adventure"
+						"All"
 					],
 					"allowedGearCategories": [],
-					"isGenreEnforced": true,
+					"isGenreEnforced": false,
 					"copyingAllowed": false,
-					"playing": 6,
-					"visits": 986575,
-					"maxPlayers": 40,
-					"created": "2023-01-03T17:06:38.54Z",
-					"updated": "2024-12-11T18:24:48.0139375Z",
+					"playing": 982,
+					"visits": 5410307,
+					"maxPlayers": 20,
+					"created": "2024-08-29T02:54:27.323Z",
+					"updated": "2025-02-01T14:01:05.03Z",
 					"studioAccessToApisAllowed": false,
 					"createVipServersAllowed": false,
-					"universeAvatarType": "PlayerChoice",
-					"genre": "Adventure",
-					"genre_l1": "Simulation",
-					"genre_l2": "Vehicle Sim",
-					"isAllGenre": false,
+					"universeAvatarType": "MorphToR6",
+					"genre": "All",
+					"genre_l1": "Adventure",
+					"genre_l2": "Story",
+					"isAllGenre": true,
 					"isFavoritedByUser": false,
-					"favoritedCount": 6228
+					"favoritedCount": 71987
 				}
 			]
 		}
@@ -107,11 +107,11 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 		$dataSource = new GameDataSource( $this->createMock( Config::class ) );
 		$dataSource->setHttpRequestFactory( $this->createMockHttpRequestFactory( $result ) );
 
-		$data = $dataSource->fetch( [ '4252370517', '12018816388' ] );
+		$data = $dataSource->fetch( [ '6483209208', '132813250731469' ] );
 
-		self::assertEquals( 4252370517, $data->id );
-		self::assertEquals( 12018816388, $data->rootPlaceId );
-		self::assertEquals( 'Dovedale Railway', $data->name );
+		self::assertEquals( 6483209208, $data->id );
+		self::assertEquals( 132813250731469, $data->rootPlaceId );
+		self::assertEquals( 'The Hybrid Cafe', $data->name );
 	}
 
 	public function testFetchEmptyResult() {

@@ -50,18 +50,11 @@ class Hooks implements ParserFirstCallInitHook {
 	public function onParserFirstCallInit( $parser ) {
 		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, ...$args ) {
 			try {
-				$result = $this->handleParserFunctionCall( $parser, $args );
-				$result_string = is_array( $result ) ? $result['result'] : $result;
-
-				// if the data source specifically disables it, don't escape the result
-				if ( is_array( $result ) && !$result['shouldEscape'] ) {
-					return $result_string;
-				}
-
-				// escape wikitext, we don't need any of the results to be parsed
-				return wfEscapeWikiText( $result_string );
+				return $this->handleParserFunctionCall( $parser, $args );
 			} catch ( RobloxAPIException $exception ) {
-				return wfMessage( $exception->getMessage(), ...$exception->messageParams )->escaped();
+				return wfMessage( $exception->getMessage() )
+					->plaintextParams( ...$exception->messageParams )
+					->escaped();
 			}
 		} );
 
@@ -84,14 +77,14 @@ class Hooks implements ParserFirstCallInitHook {
 						$shouldEscape = true;
 					}
 
-					if ( !$shouldEscape ) {
-						return $result;
-					}
-
-					// escape wikitext, we don't need any of the results to be parsed
-					return wfEscapeWikiText( $result );
+					return [
+						$result,
+						'nowiki' => $shouldEscape,
+					];
 				} catch ( RobloxAPIException $exception ) {
-					return wfMessage( $exception->getMessage(), ...$exception->messageParams )->escaped();
+					return wfMessage( $exception->getMessage() )
+						->plaintextParams( ...$exception->messageParams )
+						->escaped();
 				}
 			} );
 		}
@@ -137,8 +130,8 @@ class Hooks implements ParserFirstCallInitHook {
 		}
 
 		return [
-			'result' => $result,
-			'shouldEscape' => $shouldEscape,
+			$result,
+			'nowiki' => $shouldEscape,
 		];
 	}
 }

@@ -20,6 +20,7 @@
         + [badgeInfo](#badgeinfo)
         + [userInfo](#userinfo)
         + [assetDetails](#assetdetails)
+        + [groupRolesList](#grouproleslist)
     * [Handling JSON data](#handling-json-data)
         + [JSON keys](#json-keys)
         + [Pretty-printing JSON data](#pretty-printing-json-data)
@@ -447,6 +448,72 @@ Get all JSON data of an asset:
 |-----------|----------------------------|------------|
 | `AssetId` | The asset ID of the asset. | Numeric ID |
 
+### groupRolesList
+
+Provides a list of roles in a group in the [JSON format](#Handling-JSON-data).
+
+#### Example
+
+Get the roles of a group:
+
+```
+{{#robloxAPI: groupRolesList | 5353743 }}
+```
+
+#### Required Arguments
+
+| Name      | Description                | Type       |
+|-----------|----------------------------|------------|
+| `GroupId` | The group ID of the group. | Numeric ID |
+
+### gameNameDescription
+
+Provides the name and description of a game in all supported languages in the [JSON format](#Handling-JSON-data).
+
+#### Example
+
+Get the name and description of a game:
+
+```
+{{#robloxAPI: gameNameDescription | 6483209208 }}
+```
+
+Get the description of a game in English:
+
+```
+{{#robloxAPI: gameNameDescription | 6483209208 | json_key=data->0->description }}
+```
+
+#### Required Arguments
+
+| Name         | Description                                  | Type       |
+|--------------|----------------------------------------------|------------|
+| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
+
+### universeInfo
+
+Provides info about a universe in the [JSON format](#Handling-JSON-data).
+
+#### Example
+
+Get info about a universe:
+
+```
+{{#robloxAPI: universeInfo | 4864117649 }}
+```
+
+Get the privacy type of a universe:
+
+```
+{{#robloxAPI: universeInfo | 4864117649 | json_key=privacyType }}
+```
+
+#### Required Arguments
+
+| Name         | Description                                  | Type       |
+|--------------|----------------------------------------------|------------|
+| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
+
 ## Handling JSON data
 
 ### JSON keys
@@ -464,6 +531,12 @@ Nested keys can be accessed by separating them with '->', e.g.:
 
 ```
 {{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=creator->name }}
+```
+
+To access an item in an array, you can use the index of the item, e.g.:
+
+```
+{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=allowedGearGenres->0 }}
 ```
 
 ### Pretty-printing JSON data
@@ -494,7 +567,6 @@ The result of the `{{#rblxUserAvatarThumbnailUrl}}` parser function can be used 
 
 Go to `Special:ManageWiki/settings` on your wiki, search for "External Images" and make sure this option is enabled:
 ![image](https://github.com/user-attachments/assets/78e86d78-c3d1-487f-8974-1b4e5dbeaab7)
-
 
 #### 3rd party wikis
 

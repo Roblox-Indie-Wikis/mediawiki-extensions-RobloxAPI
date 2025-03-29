@@ -1,6 +1,6 @@
 {
 	"name": "RobloxAPI",
-	"version": "1.2.0",
+	"version": "1.3.0",
 	"author": [
 		"SomeRandomDeveloper"
 	],
@@ -9,7 +9,7 @@
 	"license-name": "GPL-2.0-or-later",
 	"type": "parserhook",
 	"requires": {
-		"MediaWiki": ">= 1.41.0"
+		"MediaWiki": ">= 1.42.0"
 	},
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\RobloxAPI\\": "src/"
@@ -36,7 +36,10 @@
 				"groupMembers",
 				"badgeInfo",
 				"userInfo",
-				"assetDetails"
+				"assetDetails",
+				"groupRolesList",
+				"gameNameDescription",
+				"universeInfo"
 			],
 			"merge_strategy": "provide_default",
 			"description": "The data sources that should be enabled and available."

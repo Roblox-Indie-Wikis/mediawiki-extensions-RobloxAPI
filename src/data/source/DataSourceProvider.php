@@ -75,6 +75,10 @@ class DataSourceProvider {
 			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(), static function ( $args ) {
 				return "https://groups.roblox.com/v1/groups/$args[0]";
 			}, null, true ) );
+		$this->registerDataSource( new SimpleFetcherDataSource( 'groupRolesList', $config,
+			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(), static function ( $args ) {
+				return "https://groups.roblox.com/v1/groups/$args[0]/roles";
+			}, null, false ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'badgeInfo', $config,
 			( new ArgumentSpecification( [ 'BadgeID' ] ) )->withJsonArgs(), static function ( $args ) {
 				return "https://badges.roblox.com/v1/badges/$args[0]";
@@ -88,6 +92,17 @@ class DataSourceProvider {
 		] ) )->withJsonArgs(), static function ( $args ) {
 			return "https://economy.roblox.com/v2/assets/$args[0]/details";
 		}, null, true ) );
+		$this->registerDataSource( new SimpleFetcherDataSource( 'gameNameDescription', $config,
+			( new ArgumentSpecification( [
+				'UniverseID',
+			] ) )->withJsonArgs(), static function ( $args ) {
+				return "https://gameinternationalization.roblox.com/v1/name-description/games/$args[0]";
+			} ) );
+		$this->registerDataSource( new SimpleFetcherDataSource( 'universeInfo', $config, ( new ArgumentSpecification( [
+			'UniverseID',
+		] ) )->withJsonArgs(), static function ( $args ) {
+			return "https://develop.roblox.com/v1/universes/$args[0]";
+		} ) );
 
 		// dependent data sources will throw an exception if the required data source is not enabled
 		$this->tryRegisterDataSource( function () {
