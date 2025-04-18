@@ -24,10 +24,11 @@ use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Hook\ParserFirstCallInitHook;
+use MediaWiki\Hook\ParserTestGlobalsHook;
 use MediaWiki\MediaWikiServices;
 use Parser;
 
-class Hooks implements ParserFirstCallInitHook {
+class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 	private Config $config;
 	private DataSourceProvider $dataSourceProvider;
@@ -132,6 +133,15 @@ class Hooks implements ParserFirstCallInitHook {
 		return [
 			$result,
 			'nowiki' => $shouldEscape,
+		];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function onParserTestGlobals( &$globals ) {
+		$globals += [
+			'wgRobloxAPIAllowedArguments' => [ 'UserID' => [ 54321 ] ],
 		];
 	}
 }

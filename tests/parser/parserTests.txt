@@ -59,7 +59,7 @@ robloxAPI: handle invalid optional arg
 !! test
 rblxGroupRank: handle invalid number of args
 !! wikitext
-{{#rblxGroupRank: 12345}}
+{{#rblxGroupRank: 54321}}
 !! html
 <p>A required argument of type UserID is missing!
 </p>
@@ -68,7 +68,7 @@ rblxGroupRank: handle invalid number of args
 !! test
 rblxGroupRank: handle too many args
 !! wikitext
-{{#rblxGroupRank: 12345 | 1 | 2}}
+{{#rblxGroupRank: 12345 | 54321 | 2}}
 !! html
 <p>The argument &#39;2&#39; exceeds the maximum number of required arguments for this data source! Please refer to the documentation.
 </p>
@@ -169,7 +169,7 @@ rblxGroupMembers: handle invalid groupId
 !! test
 rblxUserAvatarThumbnailUrl: handle invalid number of args
 !! wikitext
-{{#rblxUserAvatarThumbnailUrl: 12345}}
+{{#rblxUserAvatarThumbnailUrl: 54321}}
 !! html
 <p>A required argument of type ThumbnailSize is missing!
 </p>
@@ -178,7 +178,7 @@ rblxUserAvatarThumbnailUrl: handle invalid number of args
 !! test
 rblxUserAvatarThumbnailUrl: handle invalid userId
 !! wikitext
-{{#rblxUserAvatarThumbnailUrl: invalidUserId | 12345}}
+{{#rblxUserAvatarThumbnailUrl: invalidUserId | 54321}}
 !! html
 <p>Invalid ID value &#39;invalidUserId&#39;!
 </p>
@@ -187,7 +187,7 @@ rblxUserAvatarThumbnailUrl: handle invalid userId
 !! test
 rblxUserAvatarThumbnailUrl: handle invalid thumbnail size
 !! wikitext
-{{#rblxUserAvatarThumbnailUrl: 12345 | invalidSize}}
+{{#rblxUserAvatarThumbnailUrl: 54321 | invalidSize}}
 !! html
 <p>Invalid thumbnail size!
 </p>
@@ -208,5 +208,14 @@ rblxUserId: handle invalid username
 {{#rblxUserId: __invalidUsername}}
 !! html
 <p>Invalid username!
+</p>
+!! end
+
+!! test
+robloxAPI: return error message for arguments that are not allowed
+!! wikitext
+{{#robloxAPI: userInfo | 12345 }}
+!! html
+<p>Argument &#39;12345&#39; is not allowed for type &#39;UserID&#39;!
 </p>
 !! end
