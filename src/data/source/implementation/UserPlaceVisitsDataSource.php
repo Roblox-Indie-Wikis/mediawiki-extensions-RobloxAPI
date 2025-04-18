@@ -35,6 +35,9 @@ class UserPlaceVisitsDataSource extends DependentDataSource {
 		parent::__construct( $dataSourceProvider, 'userPlaceVisits', 'userGames' );
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
 	) {
@@ -55,10 +58,13 @@ class UserPlaceVisitsDataSource extends DependentDataSource {
 			}
 			$totalVisits += $game->placeVisits;
 		}
+
 		return $totalVisits;
 	}
 
-
+	/**
+	 * @inheritDoc
+	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return $this->dataSource->getArgumentSpecification();
 	}
