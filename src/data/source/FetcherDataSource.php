@@ -84,7 +84,7 @@ abstract class FetcherDataSource implements IDataSource {
 
 		$processedData = $this->processData( $data, $requiredArgs, $optionalArgs );
 
-		if ( !$processedData ) {
+		if ( $processedData === null ) {
 			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
 		}
 
