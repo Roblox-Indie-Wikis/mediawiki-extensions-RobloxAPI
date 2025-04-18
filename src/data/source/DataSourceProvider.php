@@ -34,6 +34,7 @@ use MediaWiki\Extension\RobloxAPI\data\source\implementation\PlaceVisitsDataSour
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserAvatarThumbnailDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserAvatarThumbnailUrlDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserIdDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserPlaceVisitsDataSource;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\RobloxApiParserFunction;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
@@ -103,6 +104,18 @@ class DataSourceProvider {
 		] ) )->withJsonArgs(), static function ( $args ) {
 			return "https://develop.roblox.com/v1/universes/$args[0]";
 		} ) );
+		$this->registerDataSource( new SimpleFetcherDataSource( 'userGames', $config, ( new ArgumentSpecification( [
+			'UserID',
+		], [ 'limit' => 'UserGamesLimit', 'sort_order' => 'SortOrder' ] ) )->withJsonArgs(), static function (
+			$args, $optionalArgs
+		) {
+			$limit = $optionalArgs['limit'] ?? 50;
+			$sortOrder = $optionalArgs['sort_order'] ?? 'Asc';
+
+			return "https://games.roblox.com/v2/users/$args[0]/games?limit=$limit&sortOrder=$sortOrder";
+		}, static function ( $data ) {
+			return $data->data;
+		} ) );
 
 		// dependent data sources will throw an exception if the required data source is not enabled
 		$this->tryRegisterDataSource( function () {
@@ -125,6 +138,9 @@ class DataSourceProvider {
 		} );
 		$this->tryRegisterDataSource( function () {
 			return new GameIconUrlDataSource( $this );
+		} );
+		$this->tryRegisterDataSource( function () {
+			return new UserPlaceVisitsDataSource( $this );
 		} );
 	}
 

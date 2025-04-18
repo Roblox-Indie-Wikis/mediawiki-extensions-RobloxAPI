@@ -21,6 +21,10 @@
         + [userInfo](#userinfo)
         + [assetDetails](#assetdetails)
         + [groupRolesList](#grouproleslist)
+        + [gameNameDescription](#gamenamedescription)
+        + [universeInfo](#universeinfo)
+        + [userGames](#usergames)
+        + [userBadges](#userbadges)
     * [Handling JSON data](#handling-json-data)
         + [JSON keys](#json-keys)
         + [Pretty-printing JSON data](#pretty-printing-json-data)
@@ -513,6 +517,60 @@ Get the privacy type of a universe:
 | Name         | Description                                  | Type       |
 |--------------|----------------------------------------------|------------|
 | `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
+
+### userGames
+
+Provides a list of games a user has created in the [JSON format](#Handling-JSON-data).
+
+Note that it is not possible to get more than 50 games.
+
+#### Example
+
+Get the list of games a user has created:
+
+```
+{{#robloxAPI: userGames | 1995870730 }}
+```
+
+#### Required Arguments
+
+| Name     | Description              | Type       |
+|----------|--------------------------|------------|
+| `UserId` | The user ID of the user. | Numeric ID |
+
+#### Optional Arguments
+
+| Name         | Description                            | Type                      | Default |
+|--------------|----------------------------------------|---------------------------|---------|
+| `limit`      | The maximum number of games to return. | Numeric ID (10, 25 or 50) | `50`    |
+| `sort_order` | The order to sort the games.           | String (`Asc`, `Desc`)    | `Asc`   |
+
+### userPlaceVisits
+
+Provides the number of visits of all places a user has created.
+
+Note that due to performance reasons, only the views of the first 50 places of the user are returned.
+
+#### Example
+
+Get the number of visits of all places a user has created:
+
+```
+{{#robloxAPI: userPlaceVisits | 1995870730 }}
+```
+
+#### Required Arguments
+
+| Name     | Description              | Type       |
+|----------|--------------------------|------------|
+| `UserId` | The user ID of the user. | Numeric ID |
+
+#### Optional Arguments
+
+| Name         | Description                                                                                                                       | Type                      | Default |
+|--------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------|---------|
+| `limit`      | The maximum number of games to consider in the calculation.                                                                       | Numeric ID (10, 25 or 50) | `50`    |
+| `sort_order` | The order to sort the games. This is used by the api and may change the results if the user has more games than the limit allows. | String (`Asc`, `Desc`)    | `Asc`   |
 
 ## Handling JSON data
 

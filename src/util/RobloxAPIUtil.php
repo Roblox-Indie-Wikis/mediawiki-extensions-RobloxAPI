@@ -129,6 +129,16 @@ class RobloxAPIUtil {
 						throw new RobloxAPIException( 'robloxapi-error-invalid-return-policy', $arg );
 					}
 					break;
+				case 'UserGamesLimit':
+					if ( !in_array( $arg, [ '10', '25', '50' ] ) ) {
+						throw new RobloxAPIException( 'robloxapi-error-invalid-user-games-limit', $arg );
+					}
+					break;
+				case 'SortOrder':
+					if ( !in_array( $arg, [ 'Asc', 'Desc' ] ) ) {
+						throw new RobloxAPIException( 'robloxapi-error-invalid-sort-order', $arg );
+					}
+					break;
 				default:
 					throw new IllegalOperationException( "Unknown expected arg type: $expectedType" );
 			}
