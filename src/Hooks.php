@@ -92,11 +92,14 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	}
 
 	/**
-	 * Handles a call to the #robloxAPI parser function.
-	 * @param Parser $parser
-	 * @param array $args
-	 * @return array|bool
-	 * @throws RobloxAPIException
+	 * Processes a call to the #robloxapi parser function, executing the specified data source with parsed arguments.
+	 *
+	 * Validates arguments, retrieves the appropriate data source, parses required and optional arguments, and executes the data source. Returns the result along with a flag indicating whether the output should be escaped. Throws a RobloxAPIException if arguments are missing or the data source is not found.
+	 *
+	 * @param Parser $parser The MediaWiki parser instance.
+	 * @param array $args Arguments passed to the parser function.
+	 * @return array|bool An array containing the result and escape flag, or false if expensive parser functions are not allowed.
+	 * @throws RobloxAPIException If no arguments are provided or the data source is not found.
 	 */
 	private function handleParserFunctionCall( Parser $parser, array $args ) {
 		if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
@@ -137,7 +140,9 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	}
 
 	/**
-	 * @inheritDoc
+	 * Adds test globals for RobloxAPI parser functions during parser tests.
+	 *
+	 * Sets the 'wgRobloxAPIAllowedArguments' global to provide sample allowed arguments for testing.
 	 */
 	public function onParserTestGlobals( &$globals ) {
 		$globals += [

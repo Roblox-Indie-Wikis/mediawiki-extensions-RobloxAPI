@@ -55,6 +55,14 @@ class DataSourceProvider {
 	 */
 	public array $cachingExpiries;
 
+	/**
+	 * Initializes the DataSourceProvider with configuration and registers all enabled Roblox API data sources.
+	 *
+	 * Loads cache expiry settings and registers core, simple fetcher, and dependent data sources based on configuration.
+	 * Dependent data sources are registered conditionally and may be skipped if their requirements are not met.
+	 *
+	 * @param Config $config Configuration object for data source setup.
+	 */
 	public function __construct( Config $config ) {
 		$this->config = $config;
 

@@ -72,11 +72,14 @@ abstract class FetcherDataSource implements IDataSource {
 	}
 
 	/**
-	 * Fetches data
-	 * @param array<string> $requiredArgs
-	 * @param array<string, string> $optionalArgs
-	 * @return mixed
-	 * @throws RobloxAPIException if there are any errors during the process
+	 * Retrieves and processes data from the Roblox API endpoint.
+	 *
+	 * Calls the subclass-defined endpoint, fetches data (using cache if available), processes it, and returns the result. Throws a RobloxAPIException if the processed data is null.
+	 *
+	 * @param array<string> $requiredArgs Required arguments for the endpoint.
+	 * @param array<string, string> $optionalArgs Optional arguments for the endpoint.
+	 * @return mixed The processed data from the API.
+	 * @throws RobloxAPIException If data retrieval or processing fails, or if processed data is null.
 	 */
 	public function fetch( array $requiredArgs, array $optionalArgs = [] ) {
 		$endpoint = $this->getEndpoint( $requiredArgs, $optionalArgs );

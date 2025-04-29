@@ -89,12 +89,16 @@ class RobloxAPIUtil {
 		}
 	}
 
-	/**
-	 * Asserts that the given arg is valid
-	 * @param string $expectedType The expected arg type
-	 * @param string $arg The actual arg
+	/****
+	 * Validates that an argument matches the expected type and value constraints.
+	 *
+	 * Throws a RobloxAPIException if the argument does not conform to the expected type or allowed values. For unknown expected types, throws an IllegalOperationException.
+	 *
+	 * @param string $expectedType The expected argument type (e.g., 'Username', 'ThumbnailSize', 'UserGamesLimit').
+	 * @param string $arg The argument value to validate.
 	 * @return void
-	 * @throws RobloxAPIException if the arg is invalid
+	 * @throws RobloxAPIException If the argument is invalid for the expected type.
+	 * @throws IllegalOperationException If the expected type is unrecognized.
 	 */
 	public static function assertValidArg( string $expectedType, string $arg ) {
 		if ( substr( strtolower( $expectedType ), -2 ) === 'id' ) {

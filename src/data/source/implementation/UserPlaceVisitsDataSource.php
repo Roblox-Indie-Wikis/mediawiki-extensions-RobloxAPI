@@ -31,12 +31,21 @@ use Parser;
  */
 class UserPlaceVisitsDataSource extends DependentDataSource {
 
+	/**
+	 * Initializes the data source for calculating total visits across a user's places.
+	 *
+	 * Sets up the dependency on the 'userGames' data source.
+	 */
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
 		parent::__construct( $dataSourceProvider, 'userPlaceVisits', 'userGames' );
 	}
 
 	/**
-	 * @inheritDoc
+	 * Calculates the total number of visits across a user's places.
+	 *
+	 * Retrieves the user's games from the dependent data source and sums the `placeVisits` property for each game. Returns a failure if the data is missing or not in the expected structure.
+	 *
+	 * @return int|array Returns the total number of visits as an integer, or a failure response array if data is missing or malformed.
 	 */
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
@@ -63,7 +72,9 @@ class UserPlaceVisitsDataSource extends DependentDataSource {
 	}
 
 	/**
-	 * @inheritDoc
+	 * Retrieves the argument specification from the dependent data source.
+	 *
+	 * @return ArgumentSpecification The argument specification required by this data source.
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return $this->dataSource->getArgumentSpecification();
