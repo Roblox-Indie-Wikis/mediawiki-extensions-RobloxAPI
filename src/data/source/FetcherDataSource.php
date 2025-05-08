@@ -29,7 +29,7 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
-use Parser;
+use MediaWiki\Parser\Parser;
 
 /**
  * Represents an endpoint of the roblox api.

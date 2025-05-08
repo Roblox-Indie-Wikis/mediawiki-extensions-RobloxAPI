@@ -22,7 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
-use Parser;
+use MediaWiki\Parser\Parser;
 
 /**
  * Defines a parser function that can be used to access the Roblox API.

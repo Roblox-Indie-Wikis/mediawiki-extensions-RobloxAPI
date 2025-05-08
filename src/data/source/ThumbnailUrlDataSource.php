@@ -22,7 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
-use Parser;
+use MediaWiki\Parser\Parser;
 
 abstract class ThumbnailUrlDataSource extends DependentDataSource {
 

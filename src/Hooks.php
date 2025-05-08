@@ -26,7 +26,7 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Hook\ParserTestGlobalsHook;
-use Parser;
+use MediaWiki\Parser\Parser;
 
 class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
