@@ -70,7 +70,7 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function shouldEscapeResult( $result ): bool {
+	public function shouldEscapeResult( mixed $result ): bool {
 		// The url should not be escaped here in order to be embedded correctly using $wgEnableImageWhitelist.
 		// If the URL was escaped here, it would be URL-encoded and not recognized by MediaWiki as an image URL.
 		return !RobloxAPIUtil::verifyIsRobloxCdnUrl( $result );

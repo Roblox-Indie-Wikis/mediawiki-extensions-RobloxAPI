@@ -51,7 +51,7 @@ class DataSourceParserFunction extends RobloxApiParserFunction {
 	/**
 	 * @inheritDoc
 	 */
-	public function shouldEscapeResult( $result ): bool {
+	public function shouldEscapeResult( mixed $result ): bool {
 		return $this->dataSource->shouldEscapeResult( $result );
 	}
 

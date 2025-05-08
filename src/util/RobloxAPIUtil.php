@@ -25,6 +25,7 @@ use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Utils\UrlUtils;
+use stdClass;
 use Wikimedia\Stats\Exceptions\IllegalOperationException;
 
 /**
@@ -96,8 +97,8 @@ class RobloxAPIUtil {
 	 * @return void
 	 * @throws RobloxAPIException if the arg is invalid
 	 */
-	public static function assertValidArg( string $expectedType, string $arg ) {
-		if ( substr( strtolower( $expectedType ), -2 ) === 'id' ) {
+	public static function assertValidArg( string $expectedType, string $arg ): void {
+		if ( str_ends_with( strtolower( $expectedType ), 'id' ) ) {
 			self::assertValidIds( $arg );
 		} else {
 			switch ( $expectedType ) {
@@ -154,7 +155,7 @@ class RobloxAPIUtil {
 	 */
 	public static function assertArgsAllowed(
 		Config $config, array $expectedArgs, array $args
-	) {
+	): void {
 		foreach ( $args as $index => $arg ) {
 			$expectedType = $expectedArgs[$index];
 			self::assertArgAllowed( $config, $expectedType, $arg );
@@ -168,7 +169,7 @@ class RobloxAPIUtil {
 	 * @param string $arg The actual arg
 	 * @throws RobloxAPIException if the arg is invalid
 	 */
-	public static function assertArgAllowed( Config $config, string $expectedType, string $arg ) {
+	public static function assertArgAllowed( Config $config, string $expectedType, string $arg ): void {
 		$allowedArgs = $config->get( 'RobloxAPIAllowedArguments' ) ?? [];
 		if ( !array_key_exists( $expectedType, $allowedArgs ) ) {
 			return;
@@ -218,8 +219,8 @@ class RobloxAPIUtil {
 	 * @param mixed $value The value to check
 	 * @return bool
 	 */
-	public static function shouldReturnJson( $value ): bool {
-		return $value instanceof \stdClass || is_array( $value );
+	public static function shouldReturnJson( mixed $value ): bool {
+		return $value instanceof stdClass || is_array( $value );
 	}
 
 	/**
@@ -228,7 +229,7 @@ class RobloxAPIUtil {
 	 * @param array $optionalArgs The optional arguments
 	 * @return string
 	 */
-	public static function createJsonResult( $jsonObject, array $optionalArgs ): string {
+	public static function createJsonResult( mixed $jsonObject, array $optionalArgs ): string {
 		$pretty = isset( $optionalArgs['pretty'] ) && strtolower( $optionalArgs['pretty'] ) === 'true';
 		// only return the value of json_key in the JSON object
 		if ( is_object( $jsonObject ) && !empty( $optionalArgs['json_key'] ) ) {
@@ -244,9 +245,9 @@ class RobloxAPIUtil {
 
 	/**
 	 * Get a JSON key from a JSON object. This accepts recursively nested keys using '->' as a separator.
-	 * @param \stdClass|array|mixed|null $jsonObject The JSON object
+	 * @param stdClass|array|mixed|null $jsonObject The JSON object
 	 * @param string $jsonKey The JSON key
-	 * @return \stdClass|mixed|null
+	 * @return stdClass|mixed|null
 	 */
 	public static function getJsonKey( mixed $jsonObject, string $jsonKey ): mixed {
 		if ( !is_object( $jsonObject ) && !is_array( $jsonObject ) ) {

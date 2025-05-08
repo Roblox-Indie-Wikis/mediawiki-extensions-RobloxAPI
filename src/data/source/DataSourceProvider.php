@@ -50,7 +50,7 @@ class DataSourceProvider {
 	 */
 	public array $dataSources = [];
 	/**
-	 * @var array|int the amount of time for each data source after which the cache
+	 * @var int[] the amount of time for each data source after which the cache
 	 * expires
 	 */
 	public array $cachingExpiries;

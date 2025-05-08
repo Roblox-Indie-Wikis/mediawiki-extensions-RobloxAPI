@@ -75,7 +75,7 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function processData( $data, array $requiredArgs, array $optionalArgs ) {
+	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ) {
 		if ( $this->processData ) {
 			return call_user_func( $this->processData, $data, $requiredArgs, $optionalArgs );
 		}

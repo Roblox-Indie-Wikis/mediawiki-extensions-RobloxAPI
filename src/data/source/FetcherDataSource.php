@@ -78,7 +78,7 @@ abstract class FetcherDataSource implements IDataSource {
 	 * @return mixed
 	 * @throws RobloxAPIException if there are any errors during the process
 	 */
-	public function fetch( array $requiredArgs, array $optionalArgs = [] ) {
+	public function fetch( array $requiredArgs, array $optionalArgs = [] ): mixed {
 		$endpoint = $this->getEndpoint( $requiredArgs, $optionalArgs );
 		$data = $this->getDataFromEndpoint( $endpoint, $requiredArgs, $optionalArgs );
 
@@ -99,7 +99,7 @@ abstract class FetcherDataSource implements IDataSource {
 	 * @return mixed The fetched data.
 	 * @throws RobloxAPIException if there are any errors during the process
 	 */
-	public function getDataFromEndpoint( string $endpoint, array $requiredArgs, array $optionalArgs ) {
+	public function getDataFromEndpoint( string $endpoint, array $requiredArgs, array $optionalArgs ): mixed {
 		// TODO consider also passing optional args in here and below where registerCacheEntry is called
 		// this is not necessary right now and would degrade performance, but it might become necessary in the future.
 		$cached_result = $this->cache->getResultForEndpoint( $endpoint, $requiredArgs );
@@ -131,6 +131,8 @@ abstract class FetcherDataSource implements IDataSource {
 
 		if ( !$status->isOK() ) {
 			$logger = LoggerFactory::getInstance( 'RobloxAPI' );
+			// ToDo replace when 1.42 support is dropped
+			/** @noinspection PhpDeprecationInspection */
 			$errors = $status->getErrorsByType( 'error' );
 			$logger->warning( 'Failed to fetch data from Roblox API', [
 				'endpoint' => $endpoint,
@@ -174,7 +176,7 @@ abstract class FetcherDataSource implements IDataSource {
 	 * @return mixed The processed data.
 	 * @throws RobloxAPIException if there are any errors during the process
 	 */
-	public function processData( $data, array $requiredArgs, array $optionalArgs ) {
+	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
 		return $data;
 	}
 
@@ -230,7 +232,7 @@ abstract class FetcherDataSource implements IDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function shouldEscapeResult( $result ): bool {
+	public function shouldEscapeResult( mixed $result ): bool {
 		return true;
 	}
 

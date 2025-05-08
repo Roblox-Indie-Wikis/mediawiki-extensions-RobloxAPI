@@ -44,7 +44,7 @@ class GameDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function processData( $data, array $requiredArgs, array $optionalArgs ) {
+	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ) {
 		$entries = $data->data;
 
 		if ( !$entries ) {

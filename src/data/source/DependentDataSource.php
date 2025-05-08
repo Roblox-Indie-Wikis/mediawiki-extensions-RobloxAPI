@@ -55,7 +55,7 @@ abstract class DependentDataSource implements IDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function shouldEscapeResult( $result ): bool {
+	public function shouldEscapeResult( mixed $result ): bool {
 		return true;
 	}
 

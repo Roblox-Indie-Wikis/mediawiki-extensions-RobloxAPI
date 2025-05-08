@@ -46,13 +46,13 @@ abstract class RobloxApiParserFunction {
 	 * @return mixed
 	 * @throws RobloxAPIException If any error regarding the API or data occurs during execution.
 	 */
-	abstract public function exec( Parser $parser, ...$args );
+	abstract public function exec( Parser $parser, ...$args ): mixed;
 
 	/**
 	 * @param mixed $result The result of the parser function.
 	 * @return bool Whether the result should be escaped and url-encoded.
 	 */
-	public function shouldEscapeResult( $result ): bool {
+	public function shouldEscapeResult( mixed $result ): bool {
 		return true;
 	}
 

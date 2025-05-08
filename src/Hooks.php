@@ -48,7 +48,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	/**
 	 * @inheritDoc
 	 */
-	public function onParserFirstCallInit( $parser ) {
+	public function onParserFirstCallInit( $parser ): void {
 		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, ...$args ) {
 			try {
 				return $this->handleParserFunctionCall( $parser, $args );
@@ -98,7 +98,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 * @return array|bool
 	 * @throws RobloxAPIException
 	 */
-	private function handleParserFunctionCall( Parser $parser, array $args ) {
+	private function handleParserFunctionCall( Parser $parser, array $args ): bool|array {
 		if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
 			!$parser->incrementExpensiveFunctionCount() ) {
 			return false;
@@ -139,7 +139,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	/**
 	 * @inheritDoc
 	 */
-	public function onParserTestGlobals( &$globals ) {
+	public function onParserTestGlobals( &$globals ): void {
 		$globals += [
 			'wgRobloxAPIAllowedArguments' => [ 'UserID' => [ 54321 ] ],
 		];
