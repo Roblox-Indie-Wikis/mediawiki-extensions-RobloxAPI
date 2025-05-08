@@ -36,7 +36,7 @@ class SimpleExpiringCache extends DataSourceCache {
 	/**
 	 * @inheritDoc
 	 */
-	public function getResultForEndpoint( string $endpoint, array $args ) {
+	public function getResultForEndpoint( string $endpoint, array $args ): mixed {
 		$value = $this->cache->get( $this->getCacheKey( $endpoint, $args ) );
 		if ( $value === false ) {
 			return null;

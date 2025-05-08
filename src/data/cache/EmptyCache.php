@@ -28,7 +28,7 @@ class EmptyCache extends DataSourceCache {
 	/**
 	 * @inheritDoc
 	 */
-	public function getResultForEndpoint( string $endpoint, array $args ) {
+	public function getResultForEndpoint( string $endpoint, array $args ): mixed {
 		return null;
 	}
 

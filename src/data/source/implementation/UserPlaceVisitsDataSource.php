@@ -40,7 +40,7 @@ class UserPlaceVisitsDataSource extends DependentDataSource {
 	 */
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	) {
+	): mixed {
 		$userGames = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
 
 		if ( $userGames === null ) {

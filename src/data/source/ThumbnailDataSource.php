@@ -52,7 +52,7 @@ abstract class ThumbnailDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ) {
+	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
 		if ( !is_object( $data ) || !property_exists( $data, 'data' ) ) {
 			throw new RobloxAPIException( 'robloxapi-error-unexpected-data-structure' );
 		}

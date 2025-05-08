@@ -50,7 +50,7 @@ class UserIdDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ) {
+	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
 		$entries = $data->data;
 		if ( $entries === null || count( $entries ) === 0 ) {
 			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
@@ -81,7 +81,7 @@ class UserIdDataSource extends FetcherDataSource {
 	 */
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	) {
+	): mixed {
 		$data = $this->fetch( $requiredArgs, $optionalArgs );
 
 		if ( !$data ) {
