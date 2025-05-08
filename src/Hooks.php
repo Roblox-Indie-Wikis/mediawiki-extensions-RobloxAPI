@@ -20,12 +20,12 @@
 namespace MediaWiki\Extension\RobloxAPI;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Config\ConfigFactory;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Hook\ParserTestGlobalsHook;
-use MediaWiki\MediaWikiServices;
 use Parser;
 
 class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
@@ -34,8 +34,8 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	private DataSourceProvider $dataSourceProvider;
 	private array $legacyParserFunctions;
 
-	public function __construct() {
-		$this->config = MediaWikiServices::getInstance()->getConfigFactory()->makeConfig( 'RobloxAPI' );
+	public function __construct( ConfigFactory $configFactory ) {
+		$this->config = $configFactory->makeConfig( 'RobloxAPI' );
 
 		$this->dataSourceProvider = new DataSourceProvider( $this->config );
 

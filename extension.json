@@ -87,7 +87,10 @@
 	},
 	"HookHandlers": {
 		"RobloxAPIHooks": {
-			"class": "MediaWiki\\Extension\\RobloxAPI\\Hooks"
+			"class": "MediaWiki\\Extension\\RobloxAPI\\Hooks",
+			"services": [
+				"ConfigFactory"
+			]
 		}
 	},
 	"Hooks": {
