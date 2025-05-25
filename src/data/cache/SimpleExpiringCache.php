@@ -28,7 +28,7 @@ use WANObjectCache;
  * A simple cache that expires after a set amount of seconds.
  */
 class SimpleExpiringCache extends DataSourceCache {
-	// ToDo: replace this alias with the actual class once support for 1.42 is dropped
+	/** ToDo: replace this alias with the actual class once support for 1.42 is dropped */
 	private WANObjectCache $cache;
 
 	public function __construct() {
@@ -54,7 +54,6 @@ class SimpleExpiringCache extends DataSourceCache {
 		$this->cache->set( $this->getCacheKey( $endpoint, $args, $optionalArgs ), $value, $this->expiry );
 	}
 
-	// ToDo consider using cache->makeKey() here
 	/**
 	 * Generates a cache key for the given endpoint and arguments.
 	 * @param string $endpoint
@@ -67,6 +66,8 @@ class SimpleExpiringCache extends DataSourceCache {
 
 		$argsJson = json_encode( $args );
 		$optionalArgsJson = json_encode( $cacheAffectingOptionalArgs );
+
+		// ToDo consider using cache->makeKey() here
 
 		return '__roblox__' . $endpoint . '__' . md5( $argsJson ) . '__' . md5( $optionalArgsJson );
 	}
