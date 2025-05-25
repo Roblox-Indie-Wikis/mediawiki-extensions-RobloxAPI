@@ -100,9 +100,7 @@ abstract class FetcherDataSource implements IDataSource {
 	 * @throws RobloxAPIException if there are any errors during the process
 	 */
 	public function getDataFromEndpoint( string $endpoint, array $requiredArgs, array $optionalArgs ): mixed {
-		// TODO consider also passing optional args in here and below where registerCacheEntry is called
-		// this is not necessary right now and would degrade performance, but it might become necessary in the future.
-		$cached_result = $this->cache->getResultForEndpoint( $endpoint, $requiredArgs );
+		$cached_result = $this->cache->getResultForEndpoint( $endpoint, $requiredArgs, $optionalArgs );
 
 		if ( $cached_result !== null ) {
 			return $cached_result;
@@ -145,7 +143,6 @@ abstract class FetcherDataSource implements IDataSource {
 		$json = $request->getContent();
 
 		if ( !$status->isOK() || $json === null ) {
-			// TODO try to fetch from cache
 			throw new RobloxAPIException( 'robloxapi-error-request-failed' );
 		}
 
@@ -155,7 +152,7 @@ abstract class FetcherDataSource implements IDataSource {
 			throw new RobloxAPIException( 'robloxapi-error-decode-failure' );
 		}
 
-		$this->cache->registerCacheEntry( $endpoint, $data, $requiredArgs );
+		$this->cache->registerCacheEntry( $endpoint, $data, $requiredArgs, $optionalArgs );
 
 		return $data;
 	}

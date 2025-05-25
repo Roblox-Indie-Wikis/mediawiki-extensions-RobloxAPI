@@ -34,6 +34,17 @@ use Wikimedia\Stats\Exceptions\IllegalOperationException;
 class RobloxAPIUtil {
 
 	/**
+	 * The optional arguments that affect caching.
+	 * Some optional arguments such as 'pretty' do not affect the API result.
+	 * Some arguments that change the API result, such as 'format', are not included since
+	 * it does not matter a lot which image format is served.
+	 * @var array
+	 */
+	private static array $CACHE_AFFECTING_OPTIONAL_ARGS = [
+		'is_circular',
+	];
+
+	/**
 	 * Checks whether a numeric ID is valid.
 	 * @param string|null $string
 	 * @return bool
@@ -332,6 +343,22 @@ class RobloxAPIUtil {
 		}
 
 		return [ $requiredArgs, $optionalArgs ];
+	}
+
+	/**
+	 * Filters the optional arguments to only include those that affect caching.
+	 * @param array $optionalArgs
+	 * @return array
+	 */
+	public static function getCacheAffectingArgs( array $optionalArgs ): array {
+		$cacheAffectingArgs = [];
+		foreach ( self::$CACHE_AFFECTING_OPTIONAL_ARGS as $arg ) {
+			if ( array_key_exists( $arg, $optionalArgs ) ) {
+				$cacheAffectingArgs[$arg] = $optionalArgs[$arg];
+			}
+		}
+
+		return $cacheAffectingArgs;
 	}
 
 }
