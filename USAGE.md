@@ -207,6 +207,10 @@ Get the URL of the user avatar thumbnail of builderman (ID 156):
 
 ### assetThumbnail
 
+> [!WARNING]
+> Roblox enforces a stricter rate limit on the API used for this than on the other APIs.
+> It is in general recommended to use it at most once per page.
+
 Provides the data about an asset thumbnail in the [JSON format](#Handling-JSON-data).
 
 #### Example
@@ -232,6 +236,10 @@ Get the data about the asset thumbnail of the asset with ID 102611803:
 | `format`      | The format of the thumbnail.              | String (`Png`, `Webp`) | `Png`   | `format=Webp`      |
 
 ### assetThumbnailUrl
+
+> [!WARNING]
+> Roblox enforces a stricter rate limit on the API used for this than on the other APIs.
+> It is in general recommended to use it at most once per page.
 
 Provides the URL of an asset thumbnail. Allows [embedding](#Embedding-images-from-the-Roblox-CDN) the asset image.
 Requires [assetThumbnail](#assetThumbnail) to be enabled.
