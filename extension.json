@@ -49,9 +49,10 @@
 		"RobloxAPICachingExpiries": {
 			"value": {
 				"*": 600,
-				"userAvatarThumbnail": 3600,
-				"groupData": 3600,
+				"assetThumbnail": 7200,
 				"badgeInfo": 1800,
+				"groupData": 3600,
+				"userAvatarThumbnail": 3600,
 				"userId": 86400,
 				"userInfo": 86400
 			},

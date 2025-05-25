@@ -691,9 +691,10 @@ Default caching expiries:
 | Data source           | Expiry            |
 |-----------------------|-------------------|
 | `*` (default)         | 600 (10 minutes)  |
-| `userAvatarThumbnail` | 3600 (1 hour)     |
-| `groupData`           | 3600 (1 hour)     |
+| `assetThumbnail`      | 7200 (2 hours)    |
 | `badgeInfo`           | 1800 (30 minutes) |
+| `groupData`           | 3600 (1 hour)     |
+| `userAvatarThumbnail` | 3600 (1 hour)     |
 | `userId`              | 86400 (24 hours)  |
 | `userInfo`            | 86400 (24 hours)  |
 
@@ -710,8 +711,6 @@ $wgRobloxAPICachingExpiries = [
     'groupRoles' => 180,
 ];
 ```
-
-In this example, all other data sources will have a cache expiry time of 60 seconds.
 
 ### `$wgRobloxAPIAllowedArguments`
 
