@@ -61,7 +61,7 @@ specified in the `key=value` format.
 
 ### gameData
 
-Provides information about a game/place in the [JSON format](#Handling-JSON-data).
+Provides information about a game/place in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -154,7 +154,7 @@ Get the user ID of a user:
 
 ### userAvatarThumbnail
 
-Provides data about a user's avatar thumbnail in the [JSON format](#Handling-JSON-data).
+Provides data about a user's avatar thumbnail in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -211,7 +211,7 @@ Get the URL of the user avatar thumbnail of builderman (ID 156):
 > Roblox enforces a stricter rate limit on the API used for this than on the other APIs.
 > It is in general recommended to use it at most once per page.
 
-Provides the data about an asset thumbnail in the [JSON format](#Handling-JSON-data).
+Provides the data about an asset thumbnail in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -268,7 +268,7 @@ Get the URL of the asset thumbnail of the asset with ID 102611803:
 
 ### gameIcon
 
-Provides the data about a game icon in the [JSON format](#Handling-JSON-data).
+Provides the data about a game icon in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -323,7 +323,7 @@ Get the URL of the game icon of the game with ID 132813250731469:
 
 ### groupRoles
 
-Provides all group roles a user has in all groups they have joined in the [JSON format](#Handling-JSON-data).
+Provides all group roles a user has in all groups they have joined in the [JSON format](#handling-json-data).
 
 [Official API documentation](https://groups.roblox.com//docs/index.html?urls.primaryName=Groups%20Api%20v1#operations-Membership-get_v1_users__userId__groups_roles)
 
@@ -363,7 +363,7 @@ Get the name of the rank of the user with ID `4182456156` in the group with ID `
 
 ### groupData
 
-Provides data about a group in the [JSON format](#Handling-JSON-data).
+Provides data about a group in the [JSON format](#handling-json-data).
 
 [Official API documentation](https://groups.roblox.com//docs/index.html?urls.primaryName=Groups%20Api%20v1#operations-Groups-get_v1_groups__groupId_)
 
@@ -408,7 +408,7 @@ Get the formatted number of members in a group:
 
 ### badgeInfo
 
-Provides information about a badge in the [JSON format](#Handling-JSON-data).
+Provides information about a badge in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -426,7 +426,7 @@ Get all JSON data of a badge:
 
 ### userInfo
 
-Provides information about a user in the [JSON format](#Handling-JSON-data).
+Provides information about a user in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -444,7 +444,7 @@ Get all JSON data of a user:
 
 ### assetDetails
 
-Provides information about an asset in the [JSON format](#Handling-JSON-data).
+Provides information about an asset in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -462,7 +462,7 @@ Get all JSON data of an asset:
 
 ### groupRolesList
 
-Provides a list of roles in a group in the [JSON format](#Handling-JSON-data).
+Provides a list of roles in a group in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -480,7 +480,7 @@ Get the roles of a group:
 
 ### gameNameDescription
 
-Provides the name and description of a game in all supported languages in the [JSON format](#Handling-JSON-data).
+Provides the name and description of a game in all supported languages in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -504,7 +504,7 @@ Get the description of a game in English:
 
 ### universeInfo
 
-Provides info about a universe in the [JSON format](#Handling-JSON-data).
+Provides info about a universe in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -528,7 +528,7 @@ Get the privacy type of a universe:
 
 ### userGames
 
-Provides a list of games a user has created in the [JSON format](#Handling-JSON-data).
+Provides a list of games a user has created in the [JSON format](#handling-json-data).
 
 Note that it is not possible to get more than 50 games.
 
