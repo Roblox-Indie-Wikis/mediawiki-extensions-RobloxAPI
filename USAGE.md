@@ -24,7 +24,7 @@
         + [gameNameDescription](#gamenamedescription)
         + [universeInfo](#universeinfo)
         + [userGames](#usergames)
-        + [userBadges](#userbadges)
+        + [userPlaceVisits](#userplacevisits)
     * [Handling JSON data](#handling-json-data)
         + [JSON keys](#json-keys)
         + [Pretty-printing JSON data](#pretty-printing-json-data)
