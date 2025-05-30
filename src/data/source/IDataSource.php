@@ -22,7 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
-use Parser;
+use MediaWiki\Parser\Parser;
 
 /**
  * Represents a data source.
@@ -40,7 +40,7 @@ interface IDataSource {
 	 */
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	);
+	): mixed;
 
 	/**
 	 * Determines whether a legacy parser function should be registered.
@@ -60,7 +60,7 @@ interface IDataSource {
 	 * @param mixed $result The result of the parser function.
 	 * @return bool Whether the result should be escaped and url-encoded.
 	 */
-	public function shouldEscapeResult( $result ): bool;
+	public function shouldEscapeResult( mixed $result ): bool;
 
 	/**
 	 * Gets the ID of the data source.

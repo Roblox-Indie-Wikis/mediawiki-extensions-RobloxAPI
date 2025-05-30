@@ -29,7 +29,7 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
-use Parser;
+use MediaWiki\Parser\Parser;
 
 /**
  * Represents an endpoint of the roblox api.
@@ -78,13 +78,13 @@ abstract class FetcherDataSource implements IDataSource {
 	 * @return mixed
 	 * @throws RobloxAPIException if there are any errors during the process
 	 */
-	public function fetch( array $requiredArgs, array $optionalArgs = [] ) {
+	public function fetch( array $requiredArgs, array $optionalArgs = [] ): mixed {
 		$endpoint = $this->getEndpoint( $requiredArgs, $optionalArgs );
 		$data = $this->getDataFromEndpoint( $endpoint, $requiredArgs, $optionalArgs );
 
 		$processedData = $this->processData( $data, $requiredArgs, $optionalArgs );
 
-		if ( !$processedData ) {
+		if ( $processedData === null ) {
 			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
 		}
 
@@ -99,10 +99,8 @@ abstract class FetcherDataSource implements IDataSource {
 	 * @return mixed The fetched data.
 	 * @throws RobloxAPIException if there are any errors during the process
 	 */
-	public function getDataFromEndpoint( string $endpoint, array $requiredArgs, array $optionalArgs ) {
-		// TODO consider also passing optional args in here and below where registerCacheEntry is called
-		// this is not necessary right now and would degrade performance, but it might become necessary in the future.
-		$cached_result = $this->cache->getResultForEndpoint( $endpoint, $requiredArgs );
+	public function getDataFromEndpoint( string $endpoint, array $requiredArgs, array $optionalArgs ): mixed {
+		$cached_result = $this->cache->getResultForEndpoint( $endpoint, $requiredArgs, $optionalArgs );
 
 		if ( $cached_result !== null ) {
 			return $cached_result;
@@ -131,6 +129,8 @@ abstract class FetcherDataSource implements IDataSource {
 
 		if ( !$status->isOK() ) {
 			$logger = LoggerFactory::getInstance( 'RobloxAPI' );
+			// ToDo replace when 1.42 support is dropped
+			/** @noinspection PhpDeprecationInspection */
 			$errors = $status->getErrorsByType( 'error' );
 			$logger->warning( 'Failed to fetch data from Roblox API', [
 				'endpoint' => $endpoint,
@@ -143,7 +143,6 @@ abstract class FetcherDataSource implements IDataSource {
 		$json = $request->getContent();
 
 		if ( !$status->isOK() || $json === null ) {
-			// TODO try to fetch from cache
 			throw new RobloxAPIException( 'robloxapi-error-request-failed' );
 		}
 
@@ -153,7 +152,7 @@ abstract class FetcherDataSource implements IDataSource {
 			throw new RobloxAPIException( 'robloxapi-error-decode-failure' );
 		}
 
-		$this->cache->registerCacheEntry( $endpoint, $data, $requiredArgs );
+		$this->cache->registerCacheEntry( $endpoint, $data, $requiredArgs, $optionalArgs );
 
 		return $data;
 	}
@@ -174,7 +173,7 @@ abstract class FetcherDataSource implements IDataSource {
 	 * @return mixed The processed data.
 	 * @throws RobloxAPIException if there are any errors during the process
 	 */
-	public function processData( $data, array $requiredArgs, array $optionalArgs ) {
+	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
 		return $data;
 	}
 
@@ -230,7 +229,7 @@ abstract class FetcherDataSource implements IDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function shouldEscapeResult( $result ): bool {
+	public function shouldEscapeResult( mixed $result ): bool {
 		return true;
 	}
 
@@ -246,7 +245,7 @@ abstract class FetcherDataSource implements IDataSource {
 	 */
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	) {
+	): mixed {
 		return $this->fetch( $requiredArgs, $optionalArgs );
 	}
 

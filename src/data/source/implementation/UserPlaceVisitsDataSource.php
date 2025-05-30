@@ -25,13 +25,14 @@ use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\data\source\DependentDataSource;
 use Parser;
 
-class GroupMembersDataSource extends DependentDataSource {
+/**
+ * A data source for getting the total amount of visits a user's places have.
+ * For performance reasons, this is restricted to the first 50 games the API returns.
+ */
+class UserPlaceVisitsDataSource extends DependentDataSource {
 
-	/**
-	 * @inheritDoc
-	 */
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider, 'groupMembers', 'groupData' );
+		parent::__construct( $dataSourceProvider, 'userPlaceVisits', 'userGames' );
 	}
 
 	/**
@@ -40,31 +41,31 @@ class GroupMembersDataSource extends DependentDataSource {
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
 	): mixed {
-		$groupData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
+		$userGames = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
 
-		if ( !$groupData ) {
+		if ( $userGames === null ) {
 			return $this->failNoData();
 		}
 
-		if ( !property_exists( $groupData, 'memberCount' ) ) {
+		if ( !is_array( $userGames ) ) {
 			return $this->failUnexpectedDataStructure();
 		}
 
-		return $groupData->memberCount;
+		$totalVisits = 0;
+		foreach ( $userGames as $game ) {
+			if ( !property_exists( $game, 'placeVisits' ) ) {
+				return $this->failUnexpectedDataStructure();
+			}
+			$totalVisits += $game->placeVisits;
+		}
+
+		return $totalVisits;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [ 'GroupID' ] );
+		return $this->dataSource->getArgumentSpecification();
 	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function shouldRegisterLegacyParserFunction(): bool {
-		return true;
-	}
-
 }

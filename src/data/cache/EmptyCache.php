@@ -28,14 +28,14 @@ class EmptyCache extends DataSourceCache {
 	/**
 	 * @inheritDoc
 	 */
-	public function getResultForEndpoint( string $endpoint, array $args ) {
+	public function getResultForEndpoint( string $endpoint, array $args, array $optionalArgs ): mixed {
 		return null;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function registerCacheEntry( string $endpoint, $value, array $args ): void {
+	public function registerCacheEntry( string $endpoint, $value, array $args, array $optionalArgs ): void {
 	}
 
 }

@@ -21,6 +21,10 @@
         + [userInfo](#userinfo)
         + [assetDetails](#assetdetails)
         + [groupRolesList](#grouproleslist)
+        + [gameNameDescription](#gamenamedescription)
+        + [universeInfo](#universeinfo)
+        + [userGames](#usergames)
+        + [userPlaceVisits](#userplacevisits)
     * [Handling JSON data](#handling-json-data)
         + [JSON keys](#json-keys)
         + [Pretty-printing JSON data](#pretty-printing-json-data)
@@ -57,7 +61,7 @@ specified in the `key=value` format.
 
 ### gameData
 
-Provides information about a game/place in the [JSON format](#Handling-JSON-data).
+Provides information about a game/place in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -150,7 +154,7 @@ Get the user ID of a user:
 
 ### userAvatarThumbnail
 
-Provides data about a user's avatar thumbnail in the [JSON format](#Handling-JSON-data).
+Provides data about a user's avatar thumbnail in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -203,7 +207,11 @@ Get the URL of the user avatar thumbnail of builderman (ID 156):
 
 ### assetThumbnail
 
-Provides the data about an asset thumbnail in the [JSON format](#Handling-JSON-data).
+> [!WARNING]
+> Roblox enforces a stricter rate limit on the API used for this than on the other APIs.
+> It is in general recommended to use it at most once per page.
+
+Provides the data about an asset thumbnail in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -228,6 +236,10 @@ Get the data about the asset thumbnail of the asset with ID 102611803:
 | `format`      | The format of the thumbnail.              | String (`Png`, `Webp`) | `Png`   | `format=Webp`      |
 
 ### assetThumbnailUrl
+
+> [!WARNING]
+> Roblox enforces a stricter rate limit on the API used for this than on the other APIs.
+> It is in general recommended to use it at most once per page.
 
 Provides the URL of an asset thumbnail. Allows [embedding](#Embedding-images-from-the-Roblox-CDN) the asset image.
 Requires [assetThumbnail](#assetThumbnail) to be enabled.
@@ -256,7 +268,7 @@ Get the URL of the asset thumbnail of the asset with ID 102611803:
 
 ### gameIcon
 
-Provides the data about a game icon in the [JSON format](#Handling-JSON-data).
+Provides the data about a game icon in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -311,7 +323,7 @@ Get the URL of the game icon of the game with ID 132813250731469:
 
 ### groupRoles
 
-Provides all group roles a user has in all groups they have joined in the [JSON format](#Handling-JSON-data).
+Provides all group roles a user has in all groups they have joined in the [JSON format](#handling-json-data).
 
 [Official API documentation](https://groups.roblox.com//docs/index.html?urls.primaryName=Groups%20Api%20v1#operations-Membership-get_v1_users__userId__groups_roles)
 
@@ -351,7 +363,7 @@ Get the name of the rank of the user with ID `4182456156` in the group with ID `
 
 ### groupData
 
-Provides data about a group in the [JSON format](#Handling-JSON-data).
+Provides data about a group in the [JSON format](#handling-json-data).
 
 [Official API documentation](https://groups.roblox.com//docs/index.html?urls.primaryName=Groups%20Api%20v1#operations-Groups-get_v1_groups__groupId_)
 
@@ -396,7 +408,7 @@ Get the formatted number of members in a group:
 
 ### badgeInfo
 
-Provides information about a badge in the [JSON format](#Handling-JSON-data).
+Provides information about a badge in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -414,7 +426,7 @@ Get all JSON data of a badge:
 
 ### userInfo
 
-Provides information about a user in the [JSON format](#Handling-JSON-data).
+Provides information about a user in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -432,7 +444,7 @@ Get all JSON data of a user:
 
 ### assetDetails
 
-Provides information about an asset in the [JSON format](#Handling-JSON-data).
+Provides information about an asset in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -450,7 +462,7 @@ Get all JSON data of an asset:
 
 ### groupRolesList
 
-Provides a list of roles in a group in the [JSON format](#Handling-JSON-data).
+Provides a list of roles in a group in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -468,7 +480,7 @@ Get the roles of a group:
 
 ### gameNameDescription
 
-Provides the name and description of a game in all supported languages in the [JSON format](#Handling-JSON-data).
+Provides the name and description of a game in all supported languages in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -492,7 +504,7 @@ Get the description of a game in English:
 
 ### universeInfo
 
-Provides info about a universe in the [JSON format](#Handling-JSON-data).
+Provides info about a universe in the [JSON format](#handling-json-data).
 
 #### Example
 
@@ -513,6 +525,60 @@ Get the privacy type of a universe:
 | Name         | Description                                  | Type       |
 |--------------|----------------------------------------------|------------|
 | `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
+
+### userGames
+
+Provides a list of games a user has created in the [JSON format](#handling-json-data).
+
+Note that it is not possible to get more than 50 games.
+
+#### Example
+
+Get the list of games a user has created:
+
+```
+{{#robloxAPI: userGames | 1995870730 }}
+```
+
+#### Required Arguments
+
+| Name     | Description              | Type       |
+|----------|--------------------------|------------|
+| `UserId` | The user ID of the user. | Numeric ID |
+
+#### Optional Arguments
+
+| Name         | Description                            | Type                      | Default |
+|--------------|----------------------------------------|---------------------------|---------|
+| `limit`      | The maximum number of games to return. | Numeric ID (10, 25 or 50) | `50`    |
+| `sort_order` | The order to sort the games.           | String (`Asc`, `Desc`)    | `Asc`   |
+
+### userPlaceVisits
+
+Provides the number of visits of all places a user has created.
+
+Note that due to performance reasons, only the views of the first 50 places of the user are returned.
+
+#### Example
+
+Get the number of visits of all places a user has created:
+
+```
+{{#robloxAPI: userPlaceVisits | 1995870730 }}
+```
+
+#### Required Arguments
+
+| Name     | Description              | Type       |
+|----------|--------------------------|------------|
+| `UserId` | The user ID of the user. | Numeric ID |
+
+#### Optional Arguments
+
+| Name         | Description                                                                                                                       | Type                      | Default |
+|--------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------|---------|
+| `limit`      | The maximum number of games to consider in the calculation.                                                                       | Numeric ID (10, 25 or 50) | `50`    |
+| `sort_order` | The order to sort the games. This is used by the api and may change the results if the user has more games than the limit allows. | String (`Asc`, `Desc`)    | `Asc`   |
 
 ## Handling JSON data
 
@@ -633,9 +699,10 @@ Default caching expiries:
 | Data source           | Expiry            |
 |-----------------------|-------------------|
 | `*` (default)         | 600 (10 minutes)  |
-| `userAvatarThumbnail` | 3600 (1 hour)     |
-| `groupData`           | 3600 (1 hour)     |
+| `assetThumbnail`      | 7200 (2 hours)    |
 | `badgeInfo`           | 1800 (30 minutes) |
+| `groupData`           | 3600 (1 hour)     |
+| `userAvatarThumbnail` | 3600 (1 hour)     |
 | `userId`              | 86400 (24 hours)  |
 | `userInfo`            | 86400 (24 hours)  |
 
@@ -652,8 +719,6 @@ $wgRobloxAPICachingExpiries = [
     'groupRoles' => 180,
 ];
 ```
-
-In this example, all other data sources will have a cache expiry time of 60 seconds.
 
 ### `$wgRobloxAPIAllowedArguments`
 

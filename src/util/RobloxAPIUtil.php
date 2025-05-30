@@ -25,12 +25,24 @@ use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Utils\UrlUtils;
+use stdClass;
 use Wikimedia\Stats\Exceptions\IllegalOperationException;
 
 /**
  * Provides utilities for working with the Roblox API.
  */
 class RobloxAPIUtil {
+
+	/**
+	 * The optional arguments that affect caching.
+	 * Some optional arguments such as 'pretty' do not affect the API result.
+	 * Some arguments that change the API result, such as 'format', are not included since
+	 * it does not matter a lot which image format is served.
+	 * @var array
+	 */
+	private static array $CACHE_AFFECTING_OPTIONAL_ARGS = [
+		'is_circular',
+	];
 
 	/**
 	 * Checks whether a numeric ID is valid.
@@ -96,8 +108,8 @@ class RobloxAPIUtil {
 	 * @return void
 	 * @throws RobloxAPIException if the arg is invalid
 	 */
-	public static function assertValidArg( string $expectedType, string $arg ) {
-		if ( substr( strtolower( $expectedType ), -2 ) === 'id' ) {
+	public static function assertValidArg( string $expectedType, string $arg ): void {
+		if ( str_ends_with( strtolower( $expectedType ), 'id' ) ) {
 			self::assertValidIds( $arg );
 		} else {
 			switch ( $expectedType ) {
@@ -129,6 +141,16 @@ class RobloxAPIUtil {
 						throw new RobloxAPIException( 'robloxapi-error-invalid-return-policy', $arg );
 					}
 					break;
+				case 'UserGamesLimit':
+					if ( !in_array( $arg, [ '10', '25', '50' ] ) ) {
+						throw new RobloxAPIException( 'robloxapi-error-invalid-user-games-limit', $arg );
+					}
+					break;
+				case 'SortOrder':
+					if ( !in_array( $arg, [ 'Asc', 'Desc' ] ) ) {
+						throw new RobloxAPIException( 'robloxapi-error-invalid-sort-order', $arg );
+					}
+					break;
 				default:
 					throw new IllegalOperationException( "Unknown expected arg type: $expectedType" );
 			}
@@ -144,7 +166,7 @@ class RobloxAPIUtil {
 	 */
 	public static function assertArgsAllowed(
 		Config $config, array $expectedArgs, array $args
-	) {
+	): void {
 		foreach ( $args as $index => $arg ) {
 			$expectedType = $expectedArgs[$index];
 			self::assertArgAllowed( $config, $expectedType, $arg );
@@ -158,7 +180,7 @@ class RobloxAPIUtil {
 	 * @param string $arg The actual arg
 	 * @throws RobloxAPIException if the arg is invalid
 	 */
-	public static function assertArgAllowed( Config $config, string $expectedType, string $arg ) {
+	public static function assertArgAllowed( Config $config, string $expectedType, string $arg ): void {
 		$allowedArgs = $config->get( 'RobloxAPIAllowedArguments' ) ?? [];
 		if ( !array_key_exists( $expectedType, $allowedArgs ) ) {
 			return;
@@ -208,8 +230,8 @@ class RobloxAPIUtil {
 	 * @param mixed $value The value to check
 	 * @return bool
 	 */
-	public static function shouldReturnJson( $value ): bool {
-		return $value instanceof \stdClass || is_array( $value );
+	public static function shouldReturnJson( mixed $value ): bool {
+		return $value instanceof stdClass || is_array( $value );
 	}
 
 	/**
@@ -218,7 +240,7 @@ class RobloxAPIUtil {
 	 * @param array $optionalArgs The optional arguments
 	 * @return string
 	 */
-	public static function createJsonResult( $jsonObject, array $optionalArgs ): string {
+	public static function createJsonResult( mixed $jsonObject, array $optionalArgs ): string {
 		$pretty = isset( $optionalArgs['pretty'] ) && strtolower( $optionalArgs['pretty'] ) === 'true';
 		// only return the value of json_key in the JSON object
 		if ( is_object( $jsonObject ) && !empty( $optionalArgs['json_key'] ) ) {
@@ -234,9 +256,9 @@ class RobloxAPIUtil {
 
 	/**
 	 * Get a JSON key from a JSON object. This accepts recursively nested keys using '->' as a separator.
-	 * @param \stdClass|array|mixed|null $jsonObject The JSON object
+	 * @param stdClass|array|mixed|null $jsonObject The JSON object
 	 * @param string $jsonKey The JSON key
-	 * @return \stdClass|mixed|null
+	 * @return stdClass|mixed|null
 	 */
 	public static function getJsonKey( mixed $jsonObject, string $jsonKey ): mixed {
 		if ( !is_object( $jsonObject ) && !is_array( $jsonObject ) ) {
@@ -321,6 +343,22 @@ class RobloxAPIUtil {
 		}
 
 		return [ $requiredArgs, $optionalArgs ];
+	}
+
+	/**
+	 * Filters the optional arguments to only include those that affect caching.
+	 * @param array $optionalArgs
+	 * @return array
+	 */
+	public static function getCacheAffectingArgs( array $optionalArgs ): array {
+		$cacheAffectingArgs = [];
+		foreach ( self::$CACHE_AFFECTING_OPTIONAL_ARGS as $arg ) {
+			if ( array_key_exists( $arg, $optionalArgs ) ) {
+				$cacheAffectingArgs[$arg] = $optionalArgs[$arg];
+			}
+		}
+
+		return $cacheAffectingArgs;
 	}
 
 }

@@ -20,14 +20,16 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\cache;
 
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\MediaWikiServices;
+use WANObjectCache;
 
 /**
  * A simple cache that expires after a set amount of seconds.
  */
 class SimpleExpiringCache extends DataSourceCache {
-	// ToDo: replace this alias with the actual class once support for 1.42 is dropped
-	private \WANObjectCache $cache;
+	/** ToDo: replace this alias with the actual class once support for 1.42 is dropped */
+	private WANObjectCache $cache;
 
 	public function __construct() {
 		$this->cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
@@ -36,8 +38,8 @@ class SimpleExpiringCache extends DataSourceCache {
 	/**
 	 * @inheritDoc
 	 */
-	public function getResultForEndpoint( string $endpoint, array $args ) {
-		$value = $this->cache->get( $this->getCacheKey( $endpoint, $args ) );
+	public function getResultForEndpoint( string $endpoint, array $args, array $optionalArgs ): mixed {
+		$value = $this->cache->get( $this->getCacheKey( $endpoint, $args, $optionalArgs ) );
 		if ( $value === false ) {
 			return null;
 		}
@@ -48,18 +50,26 @@ class SimpleExpiringCache extends DataSourceCache {
 	/**
 	 * @inheritDoc
 	 */
-	public function registerCacheEntry( string $endpoint, $value, array $args ): void {
-		$this->cache->set( $this->getCacheKey( $endpoint, $args ), $value, $this->expiry );
+	public function registerCacheEntry( string $endpoint, $value, array $args, array $optionalArgs ): void {
+		$this->cache->set( $this->getCacheKey( $endpoint, $args, $optionalArgs ), $value, $this->expiry );
 	}
 
 	/**
 	 * Generates a cache key for the given endpoint and arguments.
 	 * @param string $endpoint
 	 * @param array $args
+	 * @param array $optionalArgs
 	 * @return string
 	 */
-	protected function getCacheKey( string $endpoint, array $args ): string {
-		return md5( json_encode( $args ) ) . '__roblox__' . $endpoint;
+	protected function getCacheKey( string $endpoint, array $args, array $optionalArgs ): string {
+		$cacheAffectingOptionalArgs = RobloxAPIUtil::getCacheAffectingArgs( $optionalArgs );
+
+		$argsJson = json_encode( $args );
+		$optionalArgsJson = json_encode( $cacheAffectingOptionalArgs );
+
+		// ToDo consider using cache->makeKey() here
+
+		return '__roblox__' . $endpoint . '__' . md5( $argsJson ) . '__' . md5( $optionalArgsJson );
 	}
 
 }

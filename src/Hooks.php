@@ -20,21 +20,22 @@
 namespace MediaWiki\Extension\RobloxAPI;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Config\ConfigFactory;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Hook\ParserFirstCallInitHook;
-use MediaWiki\MediaWikiServices;
-use Parser;
+use MediaWiki\Hook\ParserTestGlobalsHook;
+use MediaWiki\Parser\Parser;
 
-class Hooks implements ParserFirstCallInitHook {
+class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 	private Config $config;
 	private DataSourceProvider $dataSourceProvider;
 	private array $legacyParserFunctions;
 
-	public function __construct() {
-		$this->config = MediaWikiServices::getInstance()->getConfigFactory()->makeConfig( 'RobloxAPI' );
+	public function __construct( ConfigFactory $configFactory ) {
+		$this->config = $configFactory->makeConfig( 'RobloxAPI' );
 
 		$this->dataSourceProvider = new DataSourceProvider( $this->config );
 
@@ -47,7 +48,7 @@ class Hooks implements ParserFirstCallInitHook {
 	/**
 	 * @inheritDoc
 	 */
-	public function onParserFirstCallInit( $parser ) {
+	public function onParserFirstCallInit( $parser ): void {
 		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, ...$args ) {
 			try {
 				return $this->handleParserFunctionCall( $parser, $args );
@@ -97,7 +98,7 @@ class Hooks implements ParserFirstCallInitHook {
 	 * @return array|bool
 	 * @throws RobloxAPIException
 	 */
-	private function handleParserFunctionCall( Parser $parser, array $args ) {
+	private function handleParserFunctionCall( Parser $parser, array $args ): bool|array {
 		if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
 			!$parser->incrementExpensiveFunctionCount() ) {
 			return false;
@@ -132,6 +133,15 @@ class Hooks implements ParserFirstCallInitHook {
 		return [
 			$result,
 			'nowiki' => $shouldEscape,
+		];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function onParserTestGlobals( &$globals ): void {
+		$globals += [
+			'wgRobloxAPIAllowedArguments' => [ 'UserID' => [ 54321 ] ],
 		];
 	}
 }

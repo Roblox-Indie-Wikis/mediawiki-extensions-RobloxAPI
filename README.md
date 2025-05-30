@@ -24,6 +24,10 @@ Live Examples:
 > Miraheze users may use ManageWiki to install this extension. Search for 'RobloxAPI' in *Special:ManageWiki/extensions*
 > and install it with a click.
 
+Requirements:
+* MediaWiki 1.42 or higher
+* PHP 8.1.0 or higher
+
 1. Download the repository using the following
    link: [Download ZIP](https://github.com/Roblox-Indie-Wikis/mediawiki-extensions-RobloxAPI/archive/master.zip)
 2. Place the files in a directory called `RobloxAPI` in your `extensions/` folder.

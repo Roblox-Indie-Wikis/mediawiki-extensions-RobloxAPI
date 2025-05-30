@@ -22,7 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
-use Parser;
+use MediaWiki\Parser\Parser;
 
 abstract class ThumbnailUrlDataSource extends DependentDataSource {
 
@@ -38,7 +38,7 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 	 */
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	) {
+	): mixed {
 		$data = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
 
 		if ( !$data ) {
@@ -70,7 +70,7 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function shouldEscapeResult( $result ): bool {
+	public function shouldEscapeResult( mixed $result ): bool {
 		// The url should not be escaped here in order to be embedded correctly using $wgEnableImageWhitelist.
 		// If the URL was escaped here, it would be URL-encoded and not recognized by MediaWiki as an image URL.
 		return !RobloxAPIUtil::verifyIsRobloxCdnUrl( $result );
