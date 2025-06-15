@@ -54,6 +54,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 				return $this->handleParserFunctionCall( $parser, $args );
 			} catch ( RobloxAPIException $exception ) {
 				return wfMessage( $exception->getMessage() )
+					->inContentLanguage()
 					->plaintextParams( ...$exception->messageParams )
 					->escaped();
 			}
@@ -84,6 +85,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 					];
 				} catch ( RobloxAPIException $exception ) {
 					return wfMessage( $exception->getMessage() )
+						->inContentLanguage()
 						->plaintextParams( ...$exception->messageParams )
 						->escaped();
 				}
