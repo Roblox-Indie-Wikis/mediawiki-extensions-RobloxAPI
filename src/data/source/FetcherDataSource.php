@@ -115,8 +115,7 @@ abstract class FetcherDataSource implements IDataSource {
 
 		$this->processRequestOptions( $options, $requiredArgs, $optionalArgs );
 
-		$this->httpRequestFactory =
-			$this->httpRequestFactory ?? MediaWikiServices::getInstance()->getHttpRequestFactory();
+		$this->httpRequestFactory ??= MediaWikiServices::getInstance()->getHttpRequestFactory();
 		$request = $this->httpRequestFactory->create( $endpoint, $options );
 		$request->setHeader( 'Accept', 'application/json' );
 
