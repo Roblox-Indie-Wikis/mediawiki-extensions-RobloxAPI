@@ -32,6 +32,9 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 	private Config $config;
 	private DataSourceProvider $dataSourceProvider;
+	/**
+	 * @var array|data\source\IDataSource[]
+	 */
 	private array $legacyParserFunctions;
 
 	public function __construct( ConfigFactory $configFactory ) {
@@ -49,7 +52,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 * @inheritDoc
 	 */
 	public function onParserFirstCallInit( $parser ): void {
-		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, ...$args ) {
+		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, ...$args ): array|bool {
 			try {
 				return $this->handleParserFunctionCall( $parser, $args );
 			} catch ( RobloxAPIException $exception ) {
@@ -100,7 +103,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 * @return array|bool
 	 * @throws RobloxAPIException
 	 */
-	private function handleParserFunctionCall( Parser $parser, array $args ): bool|array {
+	private function handleParserFunctionCall( Parser $parser, array $args ): array|bool {
 		if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
 			!$parser->incrementExpensiveFunctionCount() ) {
 			return false;
