@@ -46,7 +46,6 @@ class ArgumentSpecification {
 
 	/**
 	 * Adds the default optional arguments for JSON data and returns the instance.
-	 * @return ArgumentSpecification
 	 */
 	public function withJsonArgs(): ArgumentSpecification {
 		$this->optionalArgs['pretty'] = 'Boolean';
@@ -58,7 +57,6 @@ class ArgumentSpecification {
 	/**
 	 * Adds a required argument to the specification and returns the instance.
 	 * @param string $arg The argument type.
-	 * @return ArgumentSpecification
 	 */
 	public function withRequiredArg( string $arg ): ArgumentSpecification {
 		$this->requiredArgs[] = $arg;
@@ -70,7 +68,6 @@ class ArgumentSpecification {
 	 * Adds an optional argument to the specification and returns the instance.
 	 * @param string $arg The argument name.
 	 * @param string $type The argument type.
-	 * @return ArgumentSpecification
 	 */
 	public function withOptionalArg( string $arg, string $type ): ArgumentSpecification {
 		$this->optionalArgs[$arg] = $type;
