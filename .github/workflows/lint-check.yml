@@ -1,7 +1,7 @@
 name: Lint Tests
 on:
   push:
-    branches: [ master, development, feat/**, test/** ]
+    branches: [ master, development, feat/**, refactor/**, test/** ]
   pull_request:
     branches: [ master, development ]
 jobs:
