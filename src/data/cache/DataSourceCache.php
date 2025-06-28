@@ -30,9 +30,8 @@ abstract class DataSourceCache {
 	/**
 	 * Tries to search for a value in the cache.
 	 * @param string $endpoint
-	 * @param array $args
-	 * @param array $optionalArgs
-	 * @return mixed|null
+	 * @param string[] $args
+	 * @param array<string, string> $optionalArgs
 	 */
 	abstract public function getResultForEndpoint( string $endpoint, array $args, array $optionalArgs ): mixed;
 
@@ -40,9 +39,8 @@ abstract class DataSourceCache {
 	 * Saves an entry to the cache.
 	 * @param string $endpoint
 	 * @param mixed $value
-	 * @param array $args
-	 * @param array $optionalArgs
-	 * @return void
+	 * @param string[] $args
+	 * @param array<string, string> $optionalArgs
 	 */
 	abstract public function registerCacheEntry(
 		string $endpoint, mixed $value, array $args, array $optionalArgs
