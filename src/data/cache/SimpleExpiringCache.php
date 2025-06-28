@@ -57,9 +57,8 @@ class SimpleExpiringCache extends DataSourceCache {
 	/**
 	 * Generates a cache key for the given endpoint and arguments.
 	 * @param string $endpoint
-	 * @param array $args
-	 * @param array $optionalArgs
-	 * @return string
+	 * @param string[] $args
+	 * @param array<string, string> $optionalArgs
 	 */
 	protected function getCacheKey( string $endpoint, array $args, array $optionalArgs ): string {
 		$cacheAffectingOptionalArgs = RobloxAPIUtil::getCacheAffectingArgs( $optionalArgs );
