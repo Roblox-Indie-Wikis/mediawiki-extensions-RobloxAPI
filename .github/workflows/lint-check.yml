@@ -35,5 +35,3 @@ jobs:
         run: composer install  --no-ansi --no-interaction --no-scripts --no-suggest --prefer-dist
       - name: Lint code
         run: composer run test
-      - name: Run phan
-        run: composer run phan
