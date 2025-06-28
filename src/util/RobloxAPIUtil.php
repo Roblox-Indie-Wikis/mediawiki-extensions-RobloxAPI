@@ -186,7 +186,7 @@ class RobloxAPIUtil {
 			return;
 		}
 		$allowedValues = $allowedArgs[$expectedType];
-		if ( empty( $allowedValues ) ) {
+		if ( !$allowedValues ) {
 			// all values are allowed
 			return;
 		}
