@@ -108,7 +108,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 			return false;
 		}
 
-		if ( count( $args ) == 0 ) {
+		if ( count( $args ) === 0 ) {
 			throw new RobloxAPIException( 'robloxapi-error-no-arguments' );
 		}
 		$dataSourceId = $args[0];
