@@ -44,7 +44,7 @@ class GroupRankDataSource extends DependentDataSource {
 		$groups = $this->dataSource->exec( $dataSourceProvider, $parser, [ $requiredArgs[1] ] );
 
 		if ( !$groups ) {
-			return $this->failNoData();
+			$this->failNoData();
 		}
 
 		if ( !is_array( $groups ) ) {

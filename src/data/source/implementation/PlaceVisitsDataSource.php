@@ -43,11 +43,11 @@ class PlaceVisitsDataSource extends DependentDataSource {
 		$gameData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
 
 		if ( !$gameData ) {
-			return $this->failNoData();
+			$this->failNoData();
 		}
 
 		if ( !property_exists( $gameData, 'visits' ) ) {
-			return $this->failUnexpectedDataStructure();
+			$this->failUnexpectedDataStructure();
 		}
 
 		return $gameData->visits;

@@ -43,7 +43,7 @@ class PlaceActivePlayersDataSource extends DependentDataSource {
 		$gameData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
 
 		if ( !$gameData ) {
-			return $this->failNoData();
+			$this->failNoData();
 		}
 
 		return $gameData->playing;
