@@ -52,7 +52,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 * @inheritDoc
 	 */
 	public function onParserFirstCallInit( $parser ): void {
-		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, ...$args ): array|bool {
+		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, ...$args ): array|bool|string {
 			try {
 				return $this->handleParserFunctionCall( $parser, $args );
 			} catch ( RobloxAPIException $exception ) {
@@ -66,13 +66,13 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		foreach ( $this->legacyParserFunctions as $id => $function ) {
 			// all data source parser functions are only enabled if the corresponding data source
 			// is enabled, so we don't need to check the config for that
-			$parser->setFunctionHook( $id, function ( Parser $parser, ...$args ) use ( $function ): array|bool {
+			$parser->setFunctionHook( $id, function ( Parser $parser, ...$args ) use ( $function ): array|bool|string {
 				if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
 					!$parser->incrementExpensiveFunctionCount() ) {
 					return false;
 				}
 				try {
-					$result = $function->exec( $parser, ...$args );
+					$result = $function->exec( $this->dataSourceProvider, $parser, ...$args );
 
 					$shouldEscape = $function->shouldEscapeResult( $result );
 
@@ -143,6 +143,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	/**
 	 * @inheritDoc
 	 */
+	// @phan-suppress-next-line PhanPluginUnknownArrayMethodParamType inherited doc part of upstream code
 	public function onParserTestGlobals( &$globals ): void {
 		$globals += [
 			'wgRobloxAPIAllowedArguments' => [ 'UserID' => [ 54321 ] ],
