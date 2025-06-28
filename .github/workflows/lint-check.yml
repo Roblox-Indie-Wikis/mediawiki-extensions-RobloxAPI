@@ -33,5 +33,7 @@ jobs:
       - name: Composer install
         if: steps.vendor-cache.outputs.cache-hit != 'true'
         run: composer install  --no-ansi --no-interaction --no-scripts --no-suggest --prefer-dist
-      - name: Run Test
+      - name: Lint code
         run: composer run test
+      - name: Run phan
+        run: composer run phan
