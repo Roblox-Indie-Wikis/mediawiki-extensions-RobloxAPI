@@ -63,7 +63,7 @@ abstract class DependentDataSource implements IDataSource {
 	 * Throws an exception stating that the data source returned no data.
 	 * @throws RobloxAPIException
 	 */
-	protected function failNoData() {
+	protected function failNoData(): never {
 		throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
 	}
 
@@ -71,7 +71,7 @@ abstract class DependentDataSource implements IDataSource {
 	 * Throws an exception stating that the data source returned an unexpected data structure.
 	 * @throws RobloxAPIException
 	 */
-	protected function failUnexpectedDataStructure() {
+	protected function failUnexpectedDataStructure(): never {
 		throw new RobloxAPIException( 'robloxapi-error-unexpected-data-structure' );
 	}
 
@@ -79,7 +79,7 @@ abstract class DependentDataSource implements IDataSource {
 	 * Throws an exception stating that the data source returned invalid data.
 	 * @throws RobloxAPIException
 	 */
-	protected function failInvalidData() {
+	protected function failInvalidData(): never {
 		throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
 	}
 

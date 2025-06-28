@@ -55,6 +55,7 @@ class DataSourceProvider {
 	 */
 	public array $cachingExpiries;
 
+	/** @noinspection PhpUnusedParameterInspection */
 	public function __construct( Config $config ) {
 		$this->config = $config;
 
@@ -67,41 +68,46 @@ class DataSourceProvider {
 		$this->registerDataSource( new GameIconDataSource( $config ) );
 
 		$this->registerDataSource( new SimpleFetcherDataSource( 'groupRoles', $config,
-			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(), static function ( $args ) {
+			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(),
+			static function ( array $args, array $optionalArgs ) {
 				return "https://groups.roblox.com/v1/users/$args[0]/groups/roles";
-			}, static function ( $data ) {
+			}, static function ( mixed $data, array $requiredArgs, array $optionalArgs ) {
 				return $data->data;
 			}, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'groupData', $config,
-			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(), static function ( $args ) {
+			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(),
+			static function ( array $args, array $optionalArgs ) {
 				return "https://groups.roblox.com/v1/groups/$args[0]";
 			}, null, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'groupRolesList', $config,
-			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(), static function ( $args ) {
+			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(),
+			static function ( array $args, array $optionalArgs ) {
 				return "https://groups.roblox.com/v1/groups/$args[0]/roles";
 			}, null, false ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'badgeInfo', $config,
-			( new ArgumentSpecification( [ 'BadgeID' ] ) )->withJsonArgs(), static function ( $args ) {
+			( new ArgumentSpecification( [ 'BadgeID' ] ) )->withJsonArgs(),
+			static function ( array $args, array $optionalArgs ) {
 				return "https://badges.roblox.com/v1/badges/$args[0]";
 			}, null, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'userInfo', $config,
-			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(), static function ( $args ) {
+			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(),
+			static function ( array $args, array $optionalArgs ) {
 				return "https://users.roblox.com/v1/users/$args[0]";
 			}, null, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'assetDetails', $config, ( new ArgumentSpecification( [
 			'AssetID',
-		] ) )->withJsonArgs(), static function ( $args ) {
+		] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ) {
 			return "https://economy.roblox.com/v2/assets/$args[0]/details";
 		}, null, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'gameNameDescription', $config,
 			( new ArgumentSpecification( [
 				'UniverseID',
-			] ) )->withJsonArgs(), static function ( $args ) {
+			] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ) {
 				return "https://gameinternationalization.roblox.com/v1/name-description/games/$args[0]";
 			} ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'universeInfo', $config, ( new ArgumentSpecification( [
 			'UniverseID',
-		] ) )->withJsonArgs(), static function ( $args ) {
+		] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ) {
 			return "https://develop.roblox.com/v1/universes/$args[0]";
 		} ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'userGames', $config, ( new ArgumentSpecification( [
@@ -113,7 +119,7 @@ class DataSourceProvider {
 			$sortOrder = $optionalArgs['sort_order'] ?? 'Asc';
 
 			return "https://games.roblox.com/v2/users/$args[0]/games?limit=$limit&sortOrder=$sortOrder";
-		}, static function ( $data ) {
+		}, static function ( mixed $data, array $requiredArgs, array $optionalArgs ) {
 			return $data->data;
 		} ) );
 

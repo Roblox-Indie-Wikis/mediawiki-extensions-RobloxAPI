@@ -79,3 +79,5 @@ jobs:
       - name: Run parser tests
         run: php tests/parser/parserTests.php --file=extensions/RobloxAPI/tests/parser/parserTests.txt
 
+      - name: Run phan
+        run: composer run phan
