@@ -116,6 +116,7 @@ abstract class FetcherDataSource implements IDataSource {
 		$this->processRequestOptions( $options, $requiredArgs, $optionalArgs );
 
 		$this->httpRequestFactory ??= MediaWikiServices::getInstance()->getHttpRequestFactory();
+		// @phan-suppress-next-line PhanParamTooFewInPHPDoc the $caller arg has a default so no need to supply it
 		$request = $this->httpRequestFactory->create( $endpoint, $options );
 		$request->setHeader( 'Accept', 'application/json' );
 
