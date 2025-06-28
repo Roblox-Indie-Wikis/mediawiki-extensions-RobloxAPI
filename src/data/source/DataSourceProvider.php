@@ -68,25 +68,30 @@ class DataSourceProvider {
 		$this->registerDataSource( new GameIconDataSource( $config ) );
 
 		$this->registerDataSource( new SimpleFetcherDataSource( 'groupRoles', $config,
-			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ) {
+			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(),
+			static function ( array $args, array $optionalArgs ) {
 				return "https://groups.roblox.com/v1/users/$args[0]/groups/roles";
 			}, static function ( mixed $data, array $requiredArgs, array $optionalArgs ) {
 				return $data->data;
 			}, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'groupData', $config,
-			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ) {
+			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(),
+			static function ( array $args, array $optionalArgs ) {
 				return "https://groups.roblox.com/v1/groups/$args[0]";
 			}, null, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'groupRolesList', $config,
-			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ) {
+			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(),
+			static function ( array $args, array $optionalArgs ) {
 				return "https://groups.roblox.com/v1/groups/$args[0]/roles";
 			}, null, false ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'badgeInfo', $config,
-			( new ArgumentSpecification( [ 'BadgeID' ] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ) {
+			( new ArgumentSpecification( [ 'BadgeID' ] ) )->withJsonArgs(),
+			static function ( array $args, array $optionalArgs ) {
 				return "https://badges.roblox.com/v1/badges/$args[0]";
 			}, null, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'userInfo', $config,
-			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ) {
+			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(),
+			static function ( array $args, array $optionalArgs ) {
 				return "https://users.roblox.com/v1/users/$args[0]";
 			}, null, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'assetDetails', $config, ( new ArgumentSpecification( [
