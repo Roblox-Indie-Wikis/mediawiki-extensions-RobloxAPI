@@ -36,9 +36,11 @@ $config['plugins'] = array_merge( $config['plugins'], [
 ] );
 
 $config['suppress_issue_types'] = array_merge( $config['suppress_issue_types'], [
-	'PhanPluginUnknownArrayClosureParamType', // annoying
-	'PhanParamTooFewUnpack', // annoying
-	'PhanPluginUnknownArrayMethodParamType', // phan not detecting ::exec inherited docs properly
+	// annoying
+	'PhanPluginUnknownArrayClosureParamType',
+	'PhanParamTooFewUnpack',
+	// phan not detecting ::exec inherited docs properly
+	'PhanPluginUnknownArrayMethodParamType',
 ] );
 
 return $config;
