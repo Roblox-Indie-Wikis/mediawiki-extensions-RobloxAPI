@@ -182,7 +182,7 @@ abstract class FetcherDataSource implements IDataSource {
 	 * @param array<string> $requiredArgs
 	 * @param array<string, string> $optionalArgs
 	 */
-	public function processRequestOptions( array &$options, array $requiredArgs, array $optionalArgs ) {
+	public function processRequestOptions( array &$options, array $requiredArgs, array $optionalArgs ): void {
 		// do nothing by default
 	}
 
