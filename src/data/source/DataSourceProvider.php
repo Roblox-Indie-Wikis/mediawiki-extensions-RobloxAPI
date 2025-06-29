@@ -137,7 +137,6 @@ class DataSourceProvider {
 	/**
 	 * Checks the config on whether a data source is enabled.
 	 * @param string $id
-	 * @return bool
 	 */
 	protected function isEnabled( string $id ): bool {
 		$enabledDataSources = $this->config->get( 'RobloxAPIEnabledDatasources' );
