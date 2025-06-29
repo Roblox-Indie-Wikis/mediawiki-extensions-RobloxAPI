@@ -195,9 +195,7 @@ class RobloxAPIUtil {
 	 * @param UrlUtils|null $urlUtils The URL utils object
 	 */
 	public static function verifyIsRobloxCdnUrl( string $url, ?UrlUtils $urlUtils = null ): bool {
-		if ( $urlUtils === null ) {
-			$urlUtils = MediaWikiServices::getInstance()->getUrlUtils();
-		}
+		$urlUtils ??= MediaWikiServices::getInstance()->getUrlUtils();
 		$urlParts = $urlUtils->parse( $url );
 		if ( $urlParts === null ) {
 			return false;
