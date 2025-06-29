@@ -193,23 +193,14 @@ class RobloxAPIUtil {
 	public static function verifyIsRobloxCdnUrl( string $url, ?UrlUtils $urlUtils = null ): bool {
 		$urlUtils ??= MediaWikiServices::getInstance()->getUrlUtils();
 		$urlParts = $urlUtils->parse( $url );
-		if ( $urlParts === null ) {
-			return false;
-		}
-		if ( isset( $urlParts['port'] ) || isset( $urlParts['query'] ) || isset( $urlParts['fragment'] ) ) {
-			return false;
-		}
-		if ( $urlParts['scheme'] !== 'https' ) {
-			return false;
-		}
-		if ( !preg_match( "/^[a-zA-Z0-9]{2}\.rbxcdn\.com$/", $urlParts['host'] ) ) {
-			return false;
-		}
-		if ( !preg_match( "/[0-9A-Za-z\-\/]*\.(png|webp)?$/", $urlParts['path'] ) ) {
-			return false;
-		}
 
-		return true;
+		return $urlParts !== null
+			&& !isset( $urlParts['port'] )
+			&& !isset( $urlParts['query'] )
+			&& !isset( $urlParts['fragment'] )
+			&& $urlParts['scheme'] === 'https'
+			&& preg_match( "/^[a-zA-Z0-9]{2}\.rbxcdn\.com$/", $urlParts['host'] )
+			&& preg_match( "/[0-9A-Za-z\-\/]*\.(png|webp)?$/", $urlParts['path'] );
 	}
 
 	/**
