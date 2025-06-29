@@ -142,7 +142,6 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	/**
 	 * @inheritDoc
 	 */
-	// @phan-suppress-next-line PhanPluginUnknownArrayMethodParamType inherited doc part of upstream code
 	public function onParserTestGlobals( &$globals ): void {
 		$globals += [
 			'wgRobloxAPIAllowedArguments' => [ 'UserID' => [ 54321 ] ],
