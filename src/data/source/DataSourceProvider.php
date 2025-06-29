@@ -124,30 +124,14 @@ class DataSourceProvider {
 		} ) );
 
 		// dependent data sources will throw an exception if the required data source is not enabled
-		$this->tryRegisterDataSource( function () {
-			return new GroupRankDataSource( $this );
-		} );
-		$this->tryRegisterDataSource( function () {
-			return new PlaceActivePlayersDataSource( $this );
-		} );
-		$this->tryRegisterDataSource( function () {
-			return new PlaceVisitsDataSource( $this );
-		} );
-		$this->tryRegisterDataSource( function () {
-			return new GroupMembersDataSource( $this );
-		} );
-		$this->tryRegisterDataSource( function () {
-			return new UserAvatarThumbnailUrlDataSource( $this );
-		} );
-		$this->tryRegisterDataSource( function () {
-			return new AssetThumbnailUrlDataSource( $this );
-		} );
-		$this->tryRegisterDataSource( function () {
-			return new GameIconUrlDataSource( $this );
-		} );
-		$this->tryRegisterDataSource( function () {
-			return new UserPlaceVisitsDataSource( $this );
-		} );
+		$this->tryRegisterDataSource( fn(): IDataSource => new GroupRankDataSource( $this ) );
+		$this->tryRegisterDataSource( fn(): IDataSource => new PlaceActivePlayersDataSource( $this ) );
+		$this->tryRegisterDataSource( fn(): IDataSource => new PlaceVisitsDataSource( $this ) );
+		$this->tryRegisterDataSource( fn(): IDataSource => new GroupMembersDataSource( $this ) );
+		$this->tryRegisterDataSource( fn(): IDataSource => new UserAvatarThumbnailUrlDataSource( $this ) );
+		$this->tryRegisterDataSource( fn(): IDataSource => new AssetThumbnailUrlDataSource( $this ) );
+		$this->tryRegisterDataSource( fn(): IDataSource => new GameIconUrlDataSource( $this ) );
+		$this->tryRegisterDataSource( fn(): IDataSource => new UserPlaceVisitsDataSource( $this ) );
 	}
 
 	/**
