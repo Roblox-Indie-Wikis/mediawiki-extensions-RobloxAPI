@@ -339,8 +339,7 @@ class RobloxAPIUtil {
 
 	/**
 	 * Filters the optional arguments to only include those that affect caching.
-	 * @param array $optionalArgs
-	 * @return array
+	 * @param array<string, string> $optionalArgs
 	 */
 	public static function getCacheAffectingArgs( array $optionalArgs ): array {
 		$cacheAffectingArgs = [];
