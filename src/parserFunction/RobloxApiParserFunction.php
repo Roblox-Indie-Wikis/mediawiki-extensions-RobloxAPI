@@ -44,7 +44,6 @@ abstract class RobloxApiParserFunction {
 	 * @param DataSourceProvider $dataSourceProvider
 	 * @param Parser $parser
 	 * @param mixed ...$args
-	 * @return mixed
 	 * @throws RobloxAPIException If any error regarding the API or data occurs during execution.
 	 */
 	abstract public function exec( DataSourceProvider $dataSourceProvider, Parser $parser, ...$args ): mixed;
