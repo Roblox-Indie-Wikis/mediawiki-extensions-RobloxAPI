@@ -136,7 +136,6 @@ class DataSourceProvider {
 
 	/**
 	 * Checks the config on whether a data source is enabled.
-	 * @param string $id
 	 */
 	protected function isEnabled( string $id ): bool {
 		$enabledDataSources = $this->config->get( 'RobloxAPIEnabledDatasources' );
@@ -161,7 +160,6 @@ class DataSourceProvider {
 	/**
 	 * Registers a data source if it is enabled.
 	 * @param IDataSource $dataSource
-	 * @return void
 	 */
 	public function registerDataSource( IDataSource $dataSource ): void {
 		$id = $dataSource->getId();
@@ -176,7 +174,6 @@ class DataSourceProvider {
 	/**
 	 * Tries to register a data source, but ignores any exceptions.
 	 * @param callable(): IDataSource $dataSourceFactory
-	 * @return void
 	 */
 	public function tryRegisterDataSource( callable $dataSourceFactory ): void {
 		try {
@@ -189,9 +186,6 @@ class DataSourceProvider {
 
 	/**
 	 * Gets a data source by its ID.
-	 * @param string $id
-	 * @param bool $ignoreCase
-	 * @return IDataSource|null
 	 */
 	public function getDataSource( string $id, bool $ignoreCase = false ): ?IDataSource {
 		if ( array_key_exists( $id, $this->dataSources ) ) {
@@ -211,8 +205,6 @@ class DataSourceProvider {
 	}
 
 	/**
-	 * @param string $id
-	 * @return IDataSource
 	 * @throws RobloxAPIException
 	 */
 	public function getDataSourceOrThrow( string $id ): IDataSource {
@@ -249,8 +241,6 @@ class DataSourceProvider {
 
 	/**
 	 * Creates a parser function for the given data source.
-	 * @param IDataSource $dataSource
-	 * @return RobloxApiParserFunction
 	 */
 	private function createParserFunction( IDataSource $dataSource ): RobloxApiParserFunction {
 		return new DataSourceParserFunction( $this, $dataSource );

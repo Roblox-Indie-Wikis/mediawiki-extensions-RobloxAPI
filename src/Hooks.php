@@ -98,7 +98,6 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 	/**
 	 * Handles a call to the #robloxAPI parser function.
-	 * @param Parser $parser
 	 * @param string[] $args
 	 * @throws RobloxAPIException
 	 */

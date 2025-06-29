@@ -56,7 +56,6 @@ class SimpleExpiringCache extends DataSourceCache {
 
 	/**
 	 * Generates a cache key for the given endpoint and arguments.
-	 * @param string $endpoint
 	 * @param string[] $args
 	 * @param array<string, string> $optionalArgs
 	 */
