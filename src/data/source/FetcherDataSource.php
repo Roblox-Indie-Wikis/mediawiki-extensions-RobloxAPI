@@ -75,7 +75,6 @@ abstract class FetcherDataSource implements IDataSource {
 	 * Fetches data
 	 * @param array<string> $requiredArgs
 	 * @param array<string, string> $optionalArgs
-	 * @return mixed
 	 * @throws RobloxAPIException if there are any errors during the process
 	 */
 	public function fetch( array $requiredArgs, array $optionalArgs = [] ): mixed {
@@ -179,7 +178,7 @@ abstract class FetcherDataSource implements IDataSource {
 
 	/**
 	 * Processes the request options before making the request. This allows modifying the request options.
-	 * @param array &$options The options to process.
+	 * @param array<string, mixed> &$options The options to process.
 	 * @param array<string> $requiredArgs
 	 * @param array<string, string> $optionalArgs
 	 */
