@@ -45,7 +45,7 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 			$this->failNoData();
 		}
 
-		if ( count( $data ) == 0 ) {
+		if ( count( $data ) === 0 ) {
 			$this->failInvalidData();
 		}
 
