@@ -48,11 +48,7 @@ class RobloxAPIUtil {
 	 * Checks whether a numeric ID is valid.
 	 */
 	public static function isValidId( ?string $string ): bool {
-		if ( $string === null ) {
-			return false;
-		}
-
-		return preg_match( '/^\d{1,16}$/', $string );
+		return $string !== null && preg_match( '/^\d{1,16}$/', $string );
 	}
 
 	/**
