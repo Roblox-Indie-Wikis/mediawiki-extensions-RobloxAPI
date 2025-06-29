@@ -113,7 +113,7 @@ class DataSourceProvider {
 		$this->registerDataSource( new SimpleFetcherDataSource( 'userGames', $config, ( new ArgumentSpecification( [
 			'UserID',
 		], [ 'limit' => 'UserGamesLimit', 'sort_order' => 'SortOrder' ] ) )->withJsonArgs(), static function (
-			$args, $optionalArgs
+			array $args, array $optionalArgs
 		): string {
 			$limit = $optionalArgs['limit'] ?? 50;
 			$sortOrder = $optionalArgs['sort_order'] ?? 'Asc';
