@@ -33,7 +33,7 @@ interface IDataSource {
 	 * Executes the data source. This is called when the #robloxAPI parser function is used.
 	 * @param DataSourceProvider $dataSourceProvider
 	 * @param Parser $parser
-	 * @param array<string> $requiredArgs
+	 * @param string[] $requiredArgs
 	 * @param array<string, string> $optionalArgs
 	 * @return mixed
 	 * @throws RobloxAPIException If the data source fails to execute

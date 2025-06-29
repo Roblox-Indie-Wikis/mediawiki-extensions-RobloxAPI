@@ -204,7 +204,7 @@ abstract class FetcherDataSource implements IDataSource {
 	 * Allows specifying additional headers for the request.
 	 * @param array<string> $requiredArgs
 	 * @param array<string, string> $optionalArgs
-	 * @return array The additional headers.
+	 * @return array<string, string> The additional headers.
 	 */
 	protected function getAdditionalHeaders( array $requiredArgs, array $optionalArgs ): array {
 		return [];
