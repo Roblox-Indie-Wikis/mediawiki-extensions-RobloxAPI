@@ -35,7 +35,6 @@ interface IDataSource {
 	 * @param Parser $parser
 	 * @param string[] $requiredArgs
 	 * @param array<string, string> $optionalArgs
-	 * @return mixed
 	 * @throws RobloxAPIException If the data source fails to execute
 	 */
 	public function exec(
@@ -44,13 +43,11 @@ interface IDataSource {
 
 	/**
 	 * Determines whether a legacy parser function should be registered.
-	 * @return bool
 	 */
 	public function shouldRegisterLegacyParserFunction(): bool;
 
 	/**
 	 * Gets the argument specification for this data source.
-	 * @return ArgumentSpecification
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification;
 
@@ -64,7 +61,6 @@ interface IDataSource {
 
 	/**
 	 * Gets the ID of the data source.
-	 * @return string
 	 */
 	public function getId(): string;
 
