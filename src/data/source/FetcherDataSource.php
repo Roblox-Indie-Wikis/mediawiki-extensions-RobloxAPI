@@ -179,7 +179,7 @@ abstract class FetcherDataSource implements IDataSource {
 	/**
 	 * Processes the request options before making the request. This allows modifying the request options.
 	 * @param array<string, mixed> &$options The options to process.
-	 * @param array<string> $requiredArgs
+	 * @param string[] $requiredArgs
 	 * @param array<string, string> $optionalArgs
 	 */
 	public function processRequestOptions( array &$options, array $requiredArgs, array $optionalArgs ): void {
