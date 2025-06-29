@@ -46,7 +46,7 @@ class DataSourceProvider {
 
 	public Config $config;
 	/**
-	 * @var array The currently enabled data sources.
+	 * @var array<string, IDataSource> The currently enabled data sources.
 	 */
 	public array $dataSources = [];
 	/**
@@ -69,96 +69,78 @@ class DataSourceProvider {
 
 		$this->registerDataSource( new SimpleFetcherDataSource( 'groupRoles', $config,
 			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(),
-			static function ( array $args, array $optionalArgs ) {
+			static function ( array $args, array $optionalArgs ): string {
 				return "https://groups.roblox.com/v1/users/$args[0]/groups/roles";
-			}, static function ( mixed $data, array $requiredArgs, array $optionalArgs ) {
+			}, static function ( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
 				return $data->data;
 			}, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'groupData', $config,
 			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(),
-			static function ( array $args, array $optionalArgs ) {
+			static function ( array $args, array $optionalArgs ): string {
 				return "https://groups.roblox.com/v1/groups/$args[0]";
 			}, null, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'groupRolesList', $config,
 			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(),
-			static function ( array $args, array $optionalArgs ) {
+			static function ( array $args, array $optionalArgs ): string {
 				return "https://groups.roblox.com/v1/groups/$args[0]/roles";
 			}, null, false ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'badgeInfo', $config,
 			( new ArgumentSpecification( [ 'BadgeID' ] ) )->withJsonArgs(),
-			static function ( array $args, array $optionalArgs ) {
+			static function ( array $args, array $optionalArgs ): string {
 				return "https://badges.roblox.com/v1/badges/$args[0]";
 			}, null, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'userInfo', $config,
 			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(),
-			static function ( array $args, array $optionalArgs ) {
+			static function ( array $args, array $optionalArgs ): string {
 				return "https://users.roblox.com/v1/users/$args[0]";
 			}, null, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'assetDetails', $config, ( new ArgumentSpecification( [
 			'AssetID',
-		] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ) {
+		] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ): string {
 			return "https://economy.roblox.com/v2/assets/$args[0]/details";
 		}, null, true ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'gameNameDescription', $config,
 			( new ArgumentSpecification( [
 				'UniverseID',
-			] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ) {
+			] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ): string {
 				return "https://gameinternationalization.roblox.com/v1/name-description/games/$args[0]";
 			} ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'universeInfo', $config, ( new ArgumentSpecification( [
 			'UniverseID',
-		] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ) {
+		] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ): string {
 			return "https://develop.roblox.com/v1/universes/$args[0]";
 		} ) );
 		$this->registerDataSource( new SimpleFetcherDataSource( 'userGames', $config, ( new ArgumentSpecification( [
 			'UserID',
 		], [ 'limit' => 'UserGamesLimit', 'sort_order' => 'SortOrder' ] ) )->withJsonArgs(), static function (
-			$args, $optionalArgs
-		) {
+			array $args, array $optionalArgs
+		): string {
 			$limit = $optionalArgs['limit'] ?? 50;
 			$sortOrder = $optionalArgs['sort_order'] ?? 'Asc';
 
 			return "https://games.roblox.com/v2/users/$args[0]/games?limit=$limit&sortOrder=$sortOrder";
-		}, static function ( mixed $data, array $requiredArgs, array $optionalArgs ) {
+		}, static function ( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
 			return $data->data;
 		} ) );
 
 		// dependent data sources will throw an exception if the required data source is not enabled
-		$this->tryRegisterDataSource( function () {
-			return new GroupRankDataSource( $this );
-		} );
-		$this->tryRegisterDataSource( function () {
-			return new PlaceActivePlayersDataSource( $this );
-		} );
-		$this->tryRegisterDataSource( function () {
-			return new PlaceVisitsDataSource( $this );
-		} );
-		$this->tryRegisterDataSource( function () {
-			return new GroupMembersDataSource( $this );
-		} );
-		$this->tryRegisterDataSource( function () {
-			return new UserAvatarThumbnailUrlDataSource( $this );
-		} );
-		$this->tryRegisterDataSource( function () {
-			return new AssetThumbnailUrlDataSource( $this );
-		} );
-		$this->tryRegisterDataSource( function () {
-			return new GameIconUrlDataSource( $this );
-		} );
-		$this->tryRegisterDataSource( function () {
-			return new UserPlaceVisitsDataSource( $this );
-		} );
+		$this->tryRegisterDataSource( fn (): IDataSource => new GroupRankDataSource( $this ) );
+		$this->tryRegisterDataSource( fn (): IDataSource => new PlaceActivePlayersDataSource( $this ) );
+		$this->tryRegisterDataSource( fn (): IDataSource => new PlaceVisitsDataSource( $this ) );
+		$this->tryRegisterDataSource( fn (): IDataSource => new GroupMembersDataSource( $this ) );
+		$this->tryRegisterDataSource( fn (): IDataSource => new UserAvatarThumbnailUrlDataSource( $this ) );
+		$this->tryRegisterDataSource( fn (): IDataSource => new AssetThumbnailUrlDataSource( $this ) );
+		$this->tryRegisterDataSource( fn (): IDataSource => new GameIconUrlDataSource( $this ) );
+		$this->tryRegisterDataSource( fn (): IDataSource => new UserPlaceVisitsDataSource( $this ) );
 	}
 
 	/**
 	 * Checks the config on whether a data source is enabled.
-	 * @param string $id
-	 * @return bool
 	 */
 	protected function isEnabled( string $id ): bool {
 		$enabledDataSources = $this->config->get( 'RobloxAPIEnabledDatasources' );
 
-		return in_array( $id, $enabledDataSources );
+		return in_array( $id, $enabledDataSources, true );
 	}
 
 	/**
@@ -178,7 +160,6 @@ class DataSourceProvider {
 	/**
 	 * Registers a data source if it is enabled.
 	 * @param IDataSource $dataSource
-	 * @return void
 	 */
 	public function registerDataSource( IDataSource $dataSource ): void {
 		$id = $dataSource->getId();
@@ -193,7 +174,6 @@ class DataSourceProvider {
 	/**
 	 * Tries to register a data source, but ignores any exceptions.
 	 * @param callable(): IDataSource $dataSourceFactory
-	 * @return void
 	 */
 	public function tryRegisterDataSource( callable $dataSourceFactory ): void {
 		try {
@@ -206,9 +186,6 @@ class DataSourceProvider {
 
 	/**
 	 * Gets a data source by its ID.
-	 * @param string $id
-	 * @param bool $ignoreCase
-	 * @return IDataSource|null
 	 */
 	public function getDataSource( string $id, bool $ignoreCase = false ): ?IDataSource {
 		if ( array_key_exists( $id, $this->dataSources ) ) {
@@ -228,8 +205,6 @@ class DataSourceProvider {
 	}
 
 	/**
-	 * @param string $id
-	 * @return IDataSource
 	 * @throws RobloxAPIException
 	 */
 	public function getDataSourceOrThrow( string $id ): IDataSource {
@@ -266,8 +241,6 @@ class DataSourceProvider {
 
 	/**
 	 * Creates a parser function for the given data source.
-	 * @param IDataSource $dataSource
-	 * @return RobloxApiParserFunction
 	 */
 	private function createParserFunction( IDataSource $dataSource ): RobloxApiParserFunction {
 		return new DataSourceParserFunction( $this, $dataSource );

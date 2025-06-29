@@ -32,6 +32,9 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 	private Config $config;
 	private DataSourceProvider $dataSourceProvider;
+	/**
+	 * @var data\source\IDataSource[]
+	 */
 	private array $legacyParserFunctions;
 
 	public function __construct( ConfigFactory $configFactory ) {
@@ -49,11 +52,11 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 * @inheritDoc
 	 */
 	public function onParserFirstCallInit( $parser ): void {
-		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, ...$args ) {
+		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, ...$args ): array|bool|string {
 			try {
 				return $this->handleParserFunctionCall( $parser, $args );
 			} catch ( RobloxAPIException $exception ) {
-				return wfMessage( $exception->getMessage() )
+				return $parser->msg( $exception->getMessage() )
 					->inContentLanguage()
 					->plaintextParams( ...$exception->messageParams )
 					->escaped();
@@ -63,13 +66,13 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		foreach ( $this->legacyParserFunctions as $id => $function ) {
 			// all data source parser functions are only enabled if the corresponding data source
 			// is enabled, so we don't need to check the config for that
-			$parser->setFunctionHook( $id, function ( Parser $parser, ...$args ) use ( $function ) {
+			$parser->setFunctionHook( $id, function ( Parser $parser, ...$args ) use ( $function ): array|bool|string {
 				if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
 					!$parser->incrementExpensiveFunctionCount() ) {
 					return false;
 				}
 				try {
-					$result = $function->exec( $parser, ...$args );
+					$result = $function->exec( $this->dataSourceProvider, $parser, ...$args );
 
 					$shouldEscape = $function->shouldEscapeResult( $result );
 
@@ -84,7 +87,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 						'nowiki' => $shouldEscape,
 					];
 				} catch ( RobloxAPIException $exception ) {
-					return wfMessage( $exception->getMessage() )
+					return $parser->msg( $exception->getMessage() )
 						->inContentLanguage()
 						->plaintextParams( ...$exception->messageParams )
 						->escaped();
@@ -96,17 +99,16 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	/**
 	 * Handles a call to the #robloxAPI parser function.
 	 * @param Parser $parser
-	 * @param array $args
-	 * @return array|bool
+	 * @param string[] $args
 	 * @throws RobloxAPIException
 	 */
-	private function handleParserFunctionCall( Parser $parser, array $args ): bool|array {
+	private function handleParserFunctionCall( Parser $parser, array $args ): array|bool {
 		if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
 			!$parser->incrementExpensiveFunctionCount() ) {
 			return false;
 		}
 
-		if ( count( $args ) == 0 ) {
+		if ( count( $args ) === 0 ) {
 			throw new RobloxAPIException( 'robloxapi-error-no-arguments' );
 		}
 		$dataSourceId = $args[0];

@@ -40,7 +40,7 @@ class DataSourceParserFunction extends RobloxApiParserFunction {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( $parser, ...$args ): mixed {
+	public function exec( DataSourceProvider $dataSourceProvider, $parser, ...$args ): mixed {
 		[ $requiredArgs, $optionalArgs ] =
 			RobloxAPIUtil::parseArguments( $this->dataSource->getArgumentSpecification(), $args,
 				$this->dataSourceProvider->config );
