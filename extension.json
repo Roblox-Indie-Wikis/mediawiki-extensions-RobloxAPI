@@ -18,6 +18,27 @@
 		"MediaWiki\\Extension\\RobloxAPI\\Tests\\": "tests/phpunit/unit/"
 	},
 	"config": {
+		"RobloxAPIAllowedArguments": {
+			"value": {},
+			"description": "The arguments per argument type that are allowed to be used in the extension. If empty, all arguments for the type are allowed.",
+			"merge_strategy": "array_plus_2d"
+		},
+		"RobloxAPICachingExpiries": {
+			"value": {
+				"*": 600,
+				"assetThumbnail": 7200,
+				"badgeInfo": 1800,
+				"groupData": 3600,
+				"userAvatarThumbnail": 3600,
+				"userId": 86400,
+				"userInfo": 86400
+			},
+			"description": "The amount of seconds after the cache for a data source expires. '*' is a wildcard for all data sources."
+		},
+		"RobloxAPIDisableCache": {
+			"value": false,
+			"description": "Whether or not to disable the cache for the extension."
+		},
 		"RobloxAPIEnabledDatasources": {
 			"value": [
 				"gameData",
@@ -46,31 +67,6 @@
 			"merge_strategy": "provide_default",
 			"description": "The data sources that should be enabled and available."
 		},
-		"RobloxAPICachingExpiries": {
-			"value": {
-				"*": 600,
-				"assetThumbnail": 7200,
-				"badgeInfo": 1800,
-				"groupData": 3600,
-				"userAvatarThumbnail": 3600,
-				"userId": 86400,
-				"userInfo": 86400
-			},
-			"description": "The amount of seconds after the cache for a data source expires. '*' is a wildcard for all data sources."
-		},
-		"RobloxAPIAllowedArguments": {
-			"value": {},
-			"description": "The arguments per argument type that are allowed to be used in the extension. If empty, all arguments for the type are allowed.",
-			"merge_strategy": "array_plus_2d"
-		},
-		"RobloxAPIRequestUserAgent": {
-			"value": null,
-			"description": "The user agent that should be used when making requests to the Roblox API."
-		},
-		"RobloxAPIDisableCache": {
-			"value": false,
-			"description": "Whether or not to disable the cache for the extension."
-		},
 		"RobloxAPIParserFunctionsExpensive": {
 			"value": true,
 			"description": "Whether or not to make the parser functions expensive."
@@ -78,6 +74,10 @@
 		"RobloxAPIRegisterLegacyParserFunctions": {
 			"value": true,
 			"description": "Whether or not to register the legacy parser functions that became deprecated in v1.2.0."
+		},
+		"RobloxAPIRequestUserAgent": {
+			"value": null,
+			"description": "The user agent that should be used when making requests to the Roblox API."
 		}
 	},
 	"ConfigRegistry": {
