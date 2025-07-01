@@ -811,3 +811,5 @@ $wgRobloxAPIDataSourceUsageLimits = [
 
 In this example, the `gameData` data source can only be used once per page, and the `userId` data source can be used
 twice per page. If a data source is used more than the allowed limit, an error message will be displayed.
+
+Setting a limit for a data source will also affect data sources that depend on it.
