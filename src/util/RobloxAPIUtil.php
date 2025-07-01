@@ -22,8 +22,10 @@ namespace MediaWiki\Extension\RobloxAPI\util;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Html\Html;
 use MediaWiki\Json\FormatJson;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Parser\Parser;
 use MediaWiki\Utils\UrlUtils;
 use stdClass;
 use Wikimedia\Stats\Exceptions\IllegalOperationException;
@@ -335,6 +337,18 @@ class RobloxAPIUtil {
 		}
 
 		return $cacheAffectingArgs;
+	}
+
+	/**
+	 * @return string HTML, to be interpreted as Wikitext
+	 */
+	public static function formatException( RobloxAPIException $exception, Parser $parser ): string {
+		$message = $parser->msg( $exception->getMessage() )
+			->inContentLanguage()
+			->plaintextParams( ...$exception->messageParams )
+			->escaped();
+
+		return Html::errorBox( $message );
 	}
 
 }

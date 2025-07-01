@@ -56,10 +56,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 			try {
 				return $this->handleParserFunctionCall( $parser, $args );
 			} catch ( RobloxAPIException $exception ) {
-				return $parser->msg( $exception->getMessage() )
-					->inContentLanguage()
-					->plaintextParams( ...$exception->messageParams )
-					->escaped();
+				return RobloxAPIUtil::formatException( $exception, $parser );
 			}
 		} );
 
@@ -87,10 +84,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 						'nowiki' => $shouldEscape,
 					];
 				} catch ( RobloxAPIException $exception ) {
-					return $parser->msg( $exception->getMessage() )
-						->inContentLanguage()
-						->plaintextParams( ...$exception->messageParams )
-						->escaped();
+					return RobloxAPIUtil::formatException( $exception, $parser );
 				}
 			} );
 		}
