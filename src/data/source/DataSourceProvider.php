@@ -37,6 +37,7 @@ use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserIdDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserPlaceVisitsDataSource;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\RobloxApiParserFunction;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
 /**
@@ -59,7 +60,7 @@ class DataSourceProvider {
 	public function __construct( Config $config ) {
 		$this->config = $config;
 
-		$this->cachingExpiries = $this->config->get( 'RobloxAPICachingExpiries' );
+		$this->cachingExpiries = $this->config->get( RobloxAPIConstants::ConfCachingExpiries );
 
 		$this->registerDataSource( new GameDataSource( $config ) );
 		$this->registerDataSource( new UserIdDataSource( $config ) );
@@ -138,7 +139,7 @@ class DataSourceProvider {
 	 * Checks the config on whether a data source is enabled.
 	 */
 	protected function isEnabled( string $id ): bool {
-		$enabledDataSources = $this->config->get( 'RobloxAPIEnabledDatasources' );
+		$enabledDataSources = $this->config->get( RobloxAPIConstants::ConfEnabledDataSources );
 
 		return in_array( $id, $enabledDataSources, true );
 	}

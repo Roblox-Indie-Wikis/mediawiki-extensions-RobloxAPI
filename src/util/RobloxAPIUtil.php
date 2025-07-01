@@ -173,7 +173,7 @@ class RobloxAPIUtil {
 	 * @throws RobloxAPIException if the arg is invalid
 	 */
 	public static function assertArgAllowed( Config $config, string $expectedType, string $arg ): void {
-		$allowedArgs = $config->get( 'RobloxAPIAllowedArguments' ) ?? [];
+		$allowedArgs = $config->get( RobloxAPIConstants::ConfAllowedArguments ) ?? [];
 		if ( !array_key_exists( $expectedType, $allowedArgs ) ) {
 			return;
 		}
@@ -348,7 +348,7 @@ class RobloxAPIUtil {
 			->plaintextParams( ...$exception->messageParams )
 			->escaped();
 
-		return $config->get( 'RobloxAPIShowPlainErrors' )
+		return $config->get( RobloxAPIConstants::ConfShowPlainErrors )
 			? $message
 			: Html::errorBox( $message );
 	}
