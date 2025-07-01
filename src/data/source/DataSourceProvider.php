@@ -194,7 +194,6 @@ class DataSourceProvider {
 
 		if ( $ignoreCase ) {
 			foreach ( $this->dataSources as $dataSource ) {
-				/* @var IDataSource $dataSource */
 				if ( strcasecmp( $dataSource->getId(), $id ) === 0 ) {
 					return $dataSource;
 				}
