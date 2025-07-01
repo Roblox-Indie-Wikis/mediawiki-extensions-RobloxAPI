@@ -24,6 +24,6 @@ namespace MediaWiki\Extension\RobloxAPI\util;
 
 class RobloxAPIConstants {
 
-	public const ExtensionDataKey = 'RobloxAPI';
+	public const ExtensionDataKey = 'RobloxAPIDataSourceUsage';
 
 }
