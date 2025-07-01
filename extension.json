@@ -83,6 +83,10 @@
 		"RobloxAPIRequestUserAgent": {
 			"value": null,
 			"description": "The user agent that should be used when making requests to the Roblox API."
+		},
+		"RobloxAPIShowPlainErrors": {
+			"value": false,
+			"description": "Whether errors should be shown as plain text instead of being rendered in an error box."
 		}
 	},
 	"ConfigRegistry": {

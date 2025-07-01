@@ -63,7 +63,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 			try {
 				return $this->handleParserFunctionCall( $parser, $args );
 			} catch ( RobloxAPIException $exception ) {
-				return RobloxAPIUtil::formatException( $exception, $parser );
+				return RobloxAPIUtil::formatException( $exception, $parser, $this->config );
 			}
 		} );
 
@@ -93,7 +93,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 						'nowiki' => $shouldEscape,
 					];
 				} catch ( RobloxAPIException $exception ) {
-					return RobloxAPIUtil::formatException( $exception, $parser );
+					return RobloxAPIUtil::formatException( $exception, $parser, $this->config );
 				}
 			} );
 		}
@@ -187,6 +187,8 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	public function onParserTestGlobals( &$globals ): void {
 		$globals += [
 			'wgRobloxAPIAllowedArguments' => [ 'UserID' => [ 54321 ] ],
+			// show errors as plain text to make parser tests not depend on changes in Html:errorBox
+			'wgRobloxAPIShowPlainErrors' => true,
 		];
 	}
 }

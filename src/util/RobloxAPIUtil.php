@@ -342,13 +342,15 @@ class RobloxAPIUtil {
 	/**
 	 * @return string HTML, to be interpreted as Wikitext
 	 */
-	public static function formatException( RobloxAPIException $exception, Parser $parser ): string {
+	public static function formatException( RobloxAPIException $exception, Parser $parser, Config $config ): string {
 		$message = $parser->msg( $exception->getMessage() )
 			->inContentLanguage()
 			->plaintextParams( ...$exception->messageParams )
 			->escaped();
 
-		return Html::errorBox( $message );
+		return $config->get( 'RobloxAPIShowPlainErrors' )
+			? $message
+			: Html::errorBox( $message );
 	}
 
 }
