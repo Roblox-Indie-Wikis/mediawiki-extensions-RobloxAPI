@@ -20,6 +20,8 @@
 
 namespace MediaWiki\Extension\RobloxAPI\util;
 
+// phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
+
 class RobloxAPIConstants {
 
 	public const ExtensionDataKey = 'RobloxAPI';
