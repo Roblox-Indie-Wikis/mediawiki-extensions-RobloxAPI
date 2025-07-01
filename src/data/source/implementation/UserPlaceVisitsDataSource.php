@@ -23,7 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\data\source\DependentDataSource;
-use Parser;
+use MediaWiki\Parser\Parser;
 
 /**
  * A data source for getting the total amount of visits a user's places have.

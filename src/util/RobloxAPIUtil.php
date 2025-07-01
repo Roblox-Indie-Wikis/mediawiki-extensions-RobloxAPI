@@ -20,9 +20,9 @@
 
 namespace MediaWiki\Extension\RobloxAPI\util;
 
-use FormatJson;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Json\FormatJson;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Utils\UrlUtils;
 use stdClass;

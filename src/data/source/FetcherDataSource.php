@@ -20,13 +20,13 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
-use FormatJson;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Http\HttpRequestFactory;
+use MediaWiki\Json\FormatJson;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Parser\Parser;
