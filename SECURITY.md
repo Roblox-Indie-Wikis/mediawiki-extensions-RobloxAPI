@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-* MediaWiki: >= 1.42.x (until 1.42 reaches EOL)
+* MediaWiki: >= 1.43.x
 
 | Version | Supported | Notes            |
 |---------|-----------|------------------|

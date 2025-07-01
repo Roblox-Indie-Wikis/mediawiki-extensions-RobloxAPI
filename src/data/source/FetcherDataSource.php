@@ -128,9 +128,7 @@ abstract class FetcherDataSource implements IDataSource {
 
 		if ( !$status->isOK() ) {
 			$logger = LoggerFactory::getInstance( 'RobloxAPI' );
-			// ToDo replace when 1.42 support is dropped
-			/** @noinspection PhpDeprecationInspection */
-			$errors = $status->getErrorsByType( 'error' );
+			$errors = $status->getMessages( 'error' );
 			$logger->warning( 'Failed to fetch data from Roblox API', [
 				'endpoint' => $endpoint,
 				'errors' => $errors,

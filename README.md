@@ -25,7 +25,7 @@ Live Examples:
 > and install it with a click.
 
 Requirements:
-* MediaWiki 1.42 or higher
+* MediaWiki 1.43 or higher
 * PHP 8.1.0 or higher
 
 1. Download the repository using the following
