@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI;
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ConfigFactory;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Hook\ParserFirstCallInitHook;
@@ -153,7 +154,30 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 * @throws RobloxAPIException if the usage limit of the data source is exceeded
 	 */
 	private function checkCanUseDataSource( Parser $parser, string $dataSourceId ): void {
+		if ( !in_array( $dataSourceId, $this->usageLimits, true ) ) {
+			// no limit
+			return;
+		}
 
+		$output = $parser->getOutput();
+		$extensionData = $output->getExtensionData( RobloxAPIConstants::ExtensionDataKey );
+
+		if ( $extensionData === null ) {
+			$extensionData = [ $dataSourceId => 0 ];
+		}
+		if ( !in_array( $dataSourceId, $extensionData, true ) ) {
+			$extensionData[$dataSourceId] = 0;
+		}
+
+		$used = $extensionData[$dataSourceId] + 1;
+		$limit = $this->usageLimits[ $dataSourceId ];
+
+		$extensionData[$dataSourceId] = $used;
+		$parser->getOutput()->setExtensionData( RobloxAPIConstants::ExtensionDataKey, $extensionData );
+
+		if ( $used > $limit ) {
+			throw new RobloxAPIException( 'robloxapi-error-usage-limit', $dataSourceId, $limit );
+		}
 	}
 
 	/**
