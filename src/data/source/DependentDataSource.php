@@ -90,4 +90,8 @@ abstract class DependentDataSource implements IDataSource {
 		return $this->id;
 	}
 
+	public function getFetcherSourceId(): string {
+		return $this->dataSource->getFetcherSourceId();
+	}
+
 }

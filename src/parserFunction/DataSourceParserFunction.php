@@ -58,8 +58,8 @@ class DataSourceParserFunction extends RobloxApiParserFunction {
 	/**
 	 * @inheritDoc
 	 */
-	public function getDataSourceId(): string {
-		return $this->dataSource->getId();
+	public function getDataSource(): IDataSource {
+		return $this->dataSource;
 	}
 
 }

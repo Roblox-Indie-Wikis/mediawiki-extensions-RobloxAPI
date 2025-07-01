@@ -64,4 +64,9 @@ interface IDataSource {
 	 */
 	public function getId(): string;
 
+	/**
+	 * @return string The ID of the data source that fetches the data for this one.
+	 */
+	public function getFetcherSourceId(): string;
+
 }

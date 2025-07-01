@@ -246,4 +246,8 @@ abstract class FetcherDataSource implements IDataSource {
 		return $this->fetch( $requiredArgs, $optionalArgs );
 	}
 
+	public function getFetcherSourceId(): string {
+		return $this->getId();
+	}
+
 }

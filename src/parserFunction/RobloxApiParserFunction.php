@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\data\source\IDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Parser\Parser;
 
@@ -57,8 +58,8 @@ abstract class RobloxApiParserFunction {
 	}
 
 	/**
-	 * @return string The ID of the data source associated with this parser function.
+	 * @return IDataSource The ID of the data source associated with this parser function.
 	 */
-	abstract public function getDataSourceId(): string;
+	abstract public function getDataSource(): IDataSource;
 
 }

@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI;
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ConfigFactory;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\data\source\IDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
@@ -77,7 +78,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 					!$parser->incrementExpensiveFunctionCount() ) {
 					return false;
 				}
-				$this->checkCanUseDataSource( $parser, $function->getDataSourceId() );
+				$this->checkCanUseDataSource( $parser, $function->getDataSource() );
 
 				try {
 					$result = $function->exec( $this->dataSourceProvider, $parser, ...$args );
@@ -127,7 +128,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		}
 
 		// use $dataSource->getId() so we don't have to worry about upper/lower case
-		$this->checkCanUseDataSource( $parser, $dataSource->getId() );
+		$this->checkCanUseDataSource( $parser, $dataSource );
 
 		$otherArgs = array_slice( $args, 1 );
 
@@ -154,7 +155,8 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	/**
 	 * @throws RobloxAPIException if the usage limit of the data source is exceeded
 	 */
-	private function checkCanUseDataSource( Parser $parser, string $dataSourceId ): void {
+	private function checkCanUseDataSource( Parser $parser, IDataSource $dataSource ): void {
+		$dataSourceId = $dataSource->getFetcherSourceId();
 		if ( !array_key_exists( $dataSourceId, $this->usageLimits ) ) {
 			// no limit
 			return;
@@ -177,7 +179,11 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		$parser->getOutput()->setExtensionData( RobloxAPIConstants::ExtensionDataKey, $extensionData );
 
 		if ( $used > $limit ) {
-			throw new RobloxAPIException( 'robloxapi-error-usage-limit', $dataSourceId, $limit );
+			if ( $dataSource->getFetcherSourceId() !== $dataSource->getId() ) {
+				// ToDo check whether we need ->escaped() here
+				$notice = $parser->msg( 'robloxapi-error-usage-limit-dependent', $dataSource->getId() )->escaped();
+			}
+			throw new RobloxAPIException( 'robloxapi-error-usage-limit', $dataSourceId, $limit, $notice ?? '' );
 		}
 	}
 
