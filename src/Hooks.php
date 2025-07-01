@@ -177,7 +177,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 				throw new RobloxAPIException( 'robloxapi-error-usage-limit-dependent', $dataSourceId, $limit,
 					$dataSource->getId() );
 			} else {
-				throw new RobloxAPIException( 'robloxapi-error-usage-limit', $dataSourceId, $limit);
+				throw new RobloxAPIException( 'robloxapi-error-usage-limit', $dataSourceId, $limit );
 			}
 		}
 	}

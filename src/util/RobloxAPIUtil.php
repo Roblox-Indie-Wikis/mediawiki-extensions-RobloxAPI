@@ -346,7 +346,7 @@ class RobloxAPIUtil {
 		$message = $parser->msg( $exception->getMessage() )
 			->inContentLanguage()
 			->plaintextParams( ...$exception->messageParams )
-			->escaped();
+			->plain();
 
 		return $config->get( RobloxAPIConstants::ConfShowPlainErrors )
 			? $message
