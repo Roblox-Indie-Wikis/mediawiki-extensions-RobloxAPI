@@ -791,3 +791,26 @@ If you do not need the legacy parser functions, you can set this variable to `fa
 ```php
 $wgRobloxAPIRegisterLegacyParserFunctions = false;
 ```
+
+### `$wgRobloxAPIDataSourceUsageLimits`
+
+The maximum number of times a data source can be used on a single page. By default, there are no limits:
+
+```php
+$wgRobloxAPIDataSourceUsageLimits = [];
+```
+
+If you want to limit the usage of a data source, you can do so like this:
+
+```php
+$wgRobloxAPIDataSourceUsageLimits = [
+    'gameData' => 1,
+    'userId' => 2,
+];
+```
+
+In this example, the `gameData` data source can only be used once per page, and the `userId` data source can be used
+twice per page. If a data source is used more than the allowed limit, an error message will be displayed.
+
+Setting a limit for a data source will also affect data sources that depend on it. Dependent data sources themselves
+currently cannot be limited.

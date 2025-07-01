@@ -35,6 +35,11 @@
 			},
 			"description": "The amount of seconds after the cache for a data source expires. '*' is a wildcard for all data sources."
 		},
+		"RobloxAPIDataSourceUsageLimits": {
+			"value": {},
+			"description": "The maximum amount of times a data source can be used per page. If empty, no limit is applied.",
+			"merge_strategy": "array_plus_2d"
+		},
 		"RobloxAPIDisableCache": {
 			"value": false,
 			"description": "Whether or not to disable the cache for the extension."

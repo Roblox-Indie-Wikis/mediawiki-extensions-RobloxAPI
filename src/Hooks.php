@@ -22,6 +22,8 @@ namespace MediaWiki\Extension\RobloxAPI;
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ConfigFactory;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\data\source\IDataSource;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Hook\ParserFirstCallInitHook;
@@ -36,6 +38,10 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 * @var data\source\IDataSource[]
 	 */
 	private array $legacyParserFunctions;
+	/**
+	 * @var array<string, int>
+	 */
+	private array $usageLimits;
 
 	public function __construct( ConfigFactory $configFactory ) {
 		$this->config = $configFactory->makeConfig( 'RobloxAPI' );
@@ -46,6 +52,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		if ( $this->config->get( 'RobloxAPIRegisterLegacyParserFunctions' ) ) {
 			$this->legacyParserFunctions += $this->dataSourceProvider->createLegacyParserFunctions();
 		}
+		$this->usageLimits = $this->config->get( 'RobloxAPIDataSourceUsageLimits' );
 	}
 
 	/**
@@ -68,6 +75,8 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 					!$parser->incrementExpensiveFunctionCount() ) {
 					return false;
 				}
+				$this->checkCanUseDataSource( $parser, $function->getDataSource() );
+
 				try {
 					$result = $function->exec( $this->dataSourceProvider, $parser, ...$args );
 
@@ -112,6 +121,9 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found', $dataSourceId );
 		}
 
+		// use $dataSource->getId() so we don't have to worry about upper/lower case
+		$this->checkCanUseDataSource( $parser, $dataSource );
+
 		$otherArgs = array_slice( $args, 1 );
 
 		$argumentSpecification = $dataSource->getArgumentSpecification();
@@ -132,6 +144,41 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 			$result,
 			'nowiki' => $shouldEscape,
 		];
+	}
+
+	/**
+	 * @throws RobloxAPIException if the usage limit of the data source is exceeded
+	 */
+	private function checkCanUseDataSource( Parser $parser, IDataSource $dataSource ): void {
+		$dataSourceId = $dataSource->getFetcherSourceId();
+		if ( !array_key_exists( $dataSourceId, $this->usageLimits ) ) {
+			// no limit
+			return;
+		}
+
+		$output = $parser->getOutput();
+		$extensionData = $output->getExtensionData( RobloxAPIConstants::ExtensionDataKey );
+
+		if ( $extensionData === null ) {
+			$extensionData = [];
+		}
+		if ( !array_key_exists( $dataSourceId, $extensionData ) ) {
+			$extensionData[$dataSourceId] = 0;
+		}
+
+		$used = $extensionData[$dataSourceId] + 1;
+		$limit = $this->usageLimits[ $dataSourceId ];
+
+		$extensionData[$dataSourceId] = $used;
+		$parser->getOutput()->setExtensionData( RobloxAPIConstants::ExtensionDataKey, $extensionData );
+
+		if ( $used > $limit ) {
+			if ( $dataSource->getFetcherSourceId() !== $dataSource->getId() ) {
+				// ToDo check whether we need ->escaped() here
+				$notice = $parser->msg( 'robloxapi-error-usage-limit-dependent', $dataSource->getId() )->escaped();
+			}
+			throw new RobloxAPIException( 'robloxapi-error-usage-limit', $dataSourceId, $limit, $notice ?? '' );
+		}
 	}
 
 	/**

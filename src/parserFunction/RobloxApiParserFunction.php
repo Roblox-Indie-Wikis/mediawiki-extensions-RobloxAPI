@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\data\source\IDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Parser\Parser;
 
@@ -55,5 +56,10 @@ abstract class RobloxApiParserFunction {
 	public function shouldEscapeResult( mixed $result ): bool {
 		return true;
 	}
+
+	/**
+	 * @return IDataSource The data source associated with this parser function.
+	 */
+	abstract public function getDataSource(): IDataSource;
 
 }
