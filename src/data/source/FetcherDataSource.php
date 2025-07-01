@@ -24,6 +24,7 @@ use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Json\FormatJson;
@@ -107,7 +108,7 @@ abstract class FetcherDataSource implements IDataSource {
 
 		$options = [];
 
-		$userAgent = $this->config->get( 'RobloxAPIRequestUserAgent' );
+		$userAgent = $this->config->get( RobloxAPIConstants::ConfRequestUserAgent );
 		if ( $userAgent !== null && $userAgent !== '' ) {
 			$options['userAgent'] = $userAgent;
 		}

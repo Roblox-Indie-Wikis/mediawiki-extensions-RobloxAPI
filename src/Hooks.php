@@ -49,10 +49,10 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		$this->dataSourceProvider = new DataSourceProvider( $this->config );
 
 		$this->legacyParserFunctions = [];
-		if ( $this->config->get( 'RobloxAPIRegisterLegacyParserFunctions' ) ) {
+		if ( $this->config->get( RobloxAPIConstants::ConfRegisterLegacyParserFunctions ) ) {
 			$this->legacyParserFunctions += $this->dataSourceProvider->createLegacyParserFunctions();
 		}
-		$this->usageLimits = $this->config->get( 'RobloxAPIDataSourceUsageLimits' );
+		$this->usageLimits = $this->config->get( RobloxAPIConstants::ConfDataSourceUsageLimits );
 	}
 
 	/**
@@ -71,7 +71,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 			// all data source parser functions are only enabled if the corresponding data source
 			// is enabled, so we don't need to check the config for that
 			$parser->setFunctionHook( $id, function ( Parser $parser, ...$args ) use ( $function ): array|bool|string {
-				if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
+				if ( $this->config->get( RobloxAPIConstants::ConfParserFunctionsExpensive ) &&
 					!$parser->incrementExpensiveFunctionCount() ) {
 					return false;
 				}
@@ -106,7 +106,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 * @throws RobloxAPIException
 	 */
 	private function handleParserFunctionCall( Parser $parser, array $args ): array|bool {
-		if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
+		if ( $this->config->get( RobloxAPIConstants::ConfParserFunctionsExpensive ) &&
 			!$parser->incrementExpensiveFunctionCount() ) {
 			return false;
 		}
