@@ -58,7 +58,7 @@ abstract class RobloxApiParserFunction {
 	}
 
 	/**
-	 * @return IDataSource The ID of the data source associated with this parser function.
+	 * @return IDataSource The data source associated with this parser function.
 	 */
 	abstract public function getDataSource(): IDataSource;
 
