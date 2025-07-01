@@ -126,7 +126,8 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found', $dataSourceId );
 		}
 
-		$this->checkCanUseDataSource( $parser, $dataSourceId );
+		// use $dataSource->getId() so we don't have to worry about upper/lower case
+		$this->checkCanUseDataSource( $parser, $dataSource->getId() );
 
 		$otherArgs = array_slice( $args, 1 );
 
@@ -154,7 +155,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 * @throws RobloxAPIException if the usage limit of the data source is exceeded
 	 */
 	private function checkCanUseDataSource( Parser $parser, string $dataSourceId ): void {
-		if ( !in_array( $dataSourceId, $this->usageLimits, true ) ) {
+		if ( !array_key_exists( $dataSourceId, $this->usageLimits ) ) {
 			// no limit
 			return;
 		}
@@ -163,9 +164,9 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		$extensionData = $output->getExtensionData( RobloxAPIConstants::ExtensionDataKey );
 
 		if ( $extensionData === null ) {
-			$extensionData = [ $dataSourceId => 0 ];
+			$extensionData = [];
 		}
-		if ( !in_array( $dataSourceId, $extensionData, true ) ) {
+		if ( !array_key_exists( $dataSourceId, $extensionData ) ) {
 			$extensionData[$dataSourceId] = 0;
 		}
 
