@@ -36,6 +36,10 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 * @var data\source\IDataSource[]
 	 */
 	private array $legacyParserFunctions;
+	/**
+	 * @var array<string, int>
+	 */
+	private array $usageLimits;
 
 	public function __construct( ConfigFactory $configFactory ) {
 		$this->config = $configFactory->makeConfig( 'RobloxAPI' );
@@ -46,6 +50,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		if ( $this->config->get( 'RobloxAPIRegisterLegacyParserFunctions' ) ) {
 			$this->legacyParserFunctions += $this->dataSourceProvider->createLegacyParserFunctions();
 		}
+		$this->usageLimits = $this->config->get( 'RobloxAPIDataSourceUsageLimits' );
 	}
 
 	/**
