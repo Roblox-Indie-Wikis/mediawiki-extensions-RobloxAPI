@@ -8,6 +8,7 @@
         + [Running tests](#running-tests)
             - [PHP unit tests](#php-unit-tests)
             - [Parser tests](#parser-tests)
+            - [Phan](#phan)
             - [JavaScript tests](#javascript-tests)
         + [Code Style](#code-style)
     * [Releasing a new version](#releasing-a-new-version)
