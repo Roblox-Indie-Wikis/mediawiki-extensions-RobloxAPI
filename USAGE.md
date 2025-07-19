@@ -40,6 +40,8 @@
         + [`$wgRobloxAPIDisableCache`](#wgrobloxapidisablecache)
         + [`$wgRobloxAPIParserFunctionsExpensive`](#wgrobloxapiparserfunctionsexpensive)
         + [`$wgRobloxAPIRegisterLegacyParserFunctions`](#wgrobloxapiregisterlegacyparserfunctions)
+        + [`$wgRobloxAPIDataSourceUsageLimits`](#wgrobloxapidatasourceusagelimits)
+        + [`$wgRobloxAPIShowPlainErrors`](#wgrobloxapishowplainerrors)
 
 ## Basic Usage
 
