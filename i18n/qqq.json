@@ -6,7 +6,6 @@
 	},
 	"robloxapi-desc": "{{desc|name=RobloxAPI|url=https://www.mediawiki.org/wiki/Extension:RobloxAPI}}",
 	"robloxapi-error-no-arguments": "Error message shown when no arguments are provided to the #robloxAPI parser function",
-	"robloxapi-error-invalid-args-count": "Error message shown when an invalid number of arguments is provided to a parser function",
 	"robloxapi-error-invalid-id": "Error message shown when an invalid ID is provided to a parser function. $1 is the invalid ID",
 	"robloxapi-error-invalid-data": "Error message shown when the API returns invalid data",
 	"robloxapi-error-decode-failure": "Error message shown when the API response cannot be decoded",
