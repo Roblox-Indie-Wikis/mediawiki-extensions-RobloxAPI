@@ -221,10 +221,20 @@ robloxAPI: return error message for arguments that are not allowed
 !! end
 
 !! test
-robloxAPI: assure error messages are properly escaped
+robloxAPI: assure error messages are properly escaped in plain mode
 !! wikitext
 {{#rblxUserId: someUsername | <test>}}
 !! html
 <p>The argument "&lt;test&gt;" exceeds the maximum number of required arguments for this data source! Please refer to the documentation.
 </p>
+!! end
+
+!! test
+robloxAPI: assure error messages are properly escaped in error boxes
+!! config
+wgRobloxAPIShowPlainErrors=false
+!! wikitext
+{{#rblxUserId: someUsername | <test>}}
+!! html
+<div class="cdx-message--error cdx-message cdx-message--block"><span class="cdx-message&#95;_icon"></span><div class="cdx-message&#95;_content">The argument "&lt;test&gt;" exceeds the maximum number of required arguments for this data source! Please refer to the documentation.</div></div>
 !! end
