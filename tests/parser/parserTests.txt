@@ -219,3 +219,12 @@ robloxAPI: return error message for arguments that are not allowed
 <p>Argument "12345" is not allowed for type "UserID"!
 </p>
 !! end
+
+!! test
+robloxAPI: assure error messages are properly escaped
+!! wikitext
+{{#rblxUserId: someUsername | <test>}}
+!! html
+<p>The argument "&lt;test&gt;" exceeds the maximum number of required arguments for this data source! Please refer to the documentation.
+</p>
+!! end
