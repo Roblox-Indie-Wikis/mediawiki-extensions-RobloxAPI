@@ -7,7 +7,7 @@ robloxAPI: handle invalid data source
 !! wikitext
 {{#robloxAPI: invalidDataSource | 12345}}
 !! html
-<p>Data source &#39;invalidDataSource&#39; not found!
+<p>Data source "invalidDataSource" not found!
 </p>
 !! end
 
@@ -34,7 +34,7 @@ robloxAPI: handle too many required args
 !! wikitext
 {{#robloxAPI: groupRank | 12345 | 54321 | 1}}
 !! html
-<p>The argument &#39;1&#39; exceeds the maximum number of required arguments for this data source! Please refer to the documentation.
+<p>The argument "1" exceeds the maximum number of required arguments for this data source! Please refer to the documentation.
 </p>
 !! end
 
@@ -43,7 +43,7 @@ robloxAPI: handle optional arg without a key
 !! wikitext
 {{#robloxAPI: groupRank | 12345 | 54321 | =test}}
 !! html
-<p>Unknown optional argument &#39;&#39;!
+<p>Unknown optional argument ""!
 </p>
 !! end
 
@@ -52,7 +52,7 @@ robloxAPI: handle invalid optional arg
 !! wikitext
 {{#robloxAPI: groupRank | 12345 | 54321 | invalidArg=test}}
 !! html
-<p>Unknown optional argument &#39;invalidarg&#39;!
+<p>Unknown optional argument "invalidarg"!
 </p>
 !! end
 
@@ -70,7 +70,7 @@ rblxGroupRank: handle too many args
 !! wikitext
 {{#rblxGroupRank: 12345 | 54321 | 2}}
 !! html
-<p>The argument &#39;2&#39; exceeds the maximum number of required arguments for this data source! Please refer to the documentation.
+<p>The argument "2" exceeds the maximum number of required arguments for this data source! Please refer to the documentation.
 </p>
 !! end
 
@@ -79,7 +79,7 @@ rblxGroupRank: handle invalid groupId
 !! wikitext
 {{#rblxGroupRank: abc | 12345 }}
 !! html
-<p>Invalid ID value &#39;abc&#39;!
+<p>Invalid ID value "abc"!
 </p>
 !! end
 
@@ -88,7 +88,7 @@ rblxGroupRank: handle invalid userId
 !! wikitext
 {{#rblxGroupRank: 12345 | def }}
 !! html
-<p>Invalid ID value &#39;def&#39;!
+<p>Invalid ID value "def"!
 </p>
 !! end
 
@@ -107,7 +107,7 @@ rblxPlaceActivePlayers: handle invalid universeId
 !! wikitext
 {{#rblxPlaceActivePlayers: abc | 12345}}
 !! html
-<p>Invalid ID value &#39;abc&#39;!
+<p>Invalid ID value "abc"!
 </p>
 !! end
 
@@ -116,7 +116,7 @@ rblxPlaceActivePlayers: handle invalid placeId
 !! wikitext
 {{#rblxPlaceActivePlayers: def | 54321}}
 !! html
-<p>Invalid ID value &#39;def&#39;!
+<p>Invalid ID value "def"!
 </p>
 !! end
 
@@ -135,7 +135,7 @@ rblxPlaceVisits: handle invalid universeId
 !! wikitext
 {{#rblxPlaceVisits: abc | 12345}}
 !! html
-<p>Invalid ID value &#39;abc&#39;!
+<p>Invalid ID value "abc"!
 </p>
 !! end
 
@@ -144,7 +144,7 @@ rblxPlaceVisits: handle invalid placeId
 !! wikitext
 {{#rblxPlaceVisits: def | 54321}}
 !! html
-<p>Invalid ID value &#39;def&#39;!
+<p>Invalid ID value "def"!
 </p>
 !! end
 
@@ -153,7 +153,7 @@ rblxGroupMembers: handle invalid number of args
 !! wikitext
 {{#rblxGroupMembers: 12345 | 54321}}
 !! html
-<p>The argument &#39;54321&#39; exceeds the maximum number of required arguments for this data source! Please refer to the documentation.
+<p>The argument "54321" exceeds the maximum number of required arguments for this data source! Please refer to the documentation.
 </p>
 !! end
 
@@ -162,7 +162,7 @@ rblxGroupMembers: handle invalid groupId
 !! wikitext
 {{#rblxGroupMembers: invalidGroupId}}
 !! html
-<p>Invalid ID value &#39;invalidGroupId&#39;!
+<p>Invalid ID value "invalidGroupId"!
 </p>
 !! end
 
@@ -180,7 +180,7 @@ rblxUserAvatarThumbnailUrl: handle invalid userId
 !! wikitext
 {{#rblxUserAvatarThumbnailUrl: invalidUserId | 54321}}
 !! html
-<p>Invalid ID value &#39;invalidUserId&#39;!
+<p>Invalid ID value "invalidUserId"!
 </p>
 !! end
 
@@ -198,7 +198,7 @@ rblxUserId: handle invalid number of args
 !! wikitext
 {{#rblxUserId: someUsername | someOtherUsername}}
 !! html
-<p>The argument &#39;someOtherUsername&#39; exceeds the maximum number of required arguments for this data source! Please refer to the documentation.
+<p>The argument "someOtherUsername" exceeds the maximum number of required arguments for this data source! Please refer to the documentation.
 </p>
 !! end
 
@@ -216,6 +216,6 @@ robloxAPI: return error message for arguments that are not allowed
 !! wikitext
 {{#robloxAPI: userInfo | 12345 }}
 !! html
-<p>Argument &#39;12345&#39; is not allowed for type &#39;UserID&#39;!
+<p>Argument "12345" is not allowed for type "UserID"!
 </p>
 !! end
