@@ -6,8 +6,9 @@
 
 | Version | Supported | Notes            |
 |---------|-----------|------------------|
-| 1.4.0   | ✅         | Latest release   |
-| 1.3.0   | ✅         | Upgrade to 1.4.0 |
+| 1.5.0   | ✅         | Latest release   |
+| 1.4.0   | ✅         | Upgrade to 1.5.0 |
+| 1.3.0   | ❌         | Upgrade to 1.5.0 |
 | 1.2.0   | ❌         |                  |
 | 1.1.0   | ❌         |                  |
 | 1.0.0   | ❌         |                  |
