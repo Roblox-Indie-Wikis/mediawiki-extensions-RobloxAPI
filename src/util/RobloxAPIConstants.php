@@ -20,28 +20,22 @@
 
 namespace MediaWiki\Extension\RobloxAPI\util;
 
-use Exception;
+// phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 
 /**
- * Exception thrown if there are any errors happening when calling the roblox API or parsing the
- * data it returns.
+ * Holds constants for certain keys and config names.
  */
-class RobloxAPIException extends Exception {
+class RobloxAPIConstants {
 
-	/**
-	 * @var string[] The parameters to be used in the message.
-	 */
-	public array $messageParams = [];
+	public const ExtensionDataKey = 'RobloxAPIDataSourceUsage';
 
-	/**
-	 * Creates a new RobloxAPIException.
-	 * @param string $message
-	 * @param string ...$messageParams
-	 */
-	public function __construct( string $message = '', ...$messageParams ) {
-		parent::__construct( $message );
-
-		$this->messageParams = $messageParams;
-	}
+	public const ConfAllowedArguments = 'RobloxAPIAllowedArguments';
+	public const ConfCachingExpiries = 'RobloxAPICachingExpiries';
+	public const ConfDataSourceUsageLimits = 'RobloxAPIDataSourceUsageLimits';
+	public const ConfEnabledDataSources = 'RobloxAPIEnabledDatasources';
+	public const ConfParserFunctionsExpensive = 'RobloxAPIParserFunctionsExpensive';
+	public const ConfRegisterLegacyParserFunctions = 'RobloxAPIRegisterLegacyParserFunctions';
+	public const ConfRequestUserAgent = 'RobloxAPIRequestUserAgent';
+	public const ConfShowPlainErrors = 'RobloxAPIShowPlainErrors';
 
 }

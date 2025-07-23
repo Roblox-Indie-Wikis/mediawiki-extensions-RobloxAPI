@@ -8,6 +8,7 @@
         + [Running tests](#running-tests)
             - [PHP unit tests](#php-unit-tests)
             - [Parser tests](#parser-tests)
+            - [Phan](#phan)
             - [JavaScript tests](#javascript-tests)
         + [Code Style](#code-style)
     * [Releasing a new version](#releasing-a-new-version)
@@ -54,9 +55,15 @@ A data source must fulfill the following requirements:
 1. Run `php tests/parser/parserTests.php --file=extensions/RobloxAPI/tests/parser/parserTests.txt` to run the parser
    tests.
 
+#### Phan
+
+0. If you are running a MediaWiki docker container, go to the container's directory and run
+   `docker compose exec mediawiki bash` to get a shell in the container.
+1. Run `MW_INSTALL_PATH=/var/www/html/w vendor/bin/phan -d . --long-progress-bar`
+
 #### JavaScript tests
 
-Running `npm test`will run automated code checks.
+Running `npm test` will run automated code checks.
 
 ### Code Style
 

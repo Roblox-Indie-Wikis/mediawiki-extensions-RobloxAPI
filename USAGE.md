@@ -40,6 +40,8 @@
         + [`$wgRobloxAPIDisableCache`](#wgrobloxapidisablecache)
         + [`$wgRobloxAPIParserFunctionsExpensive`](#wgrobloxapiparserfunctionsexpensive)
         + [`$wgRobloxAPIRegisterLegacyParserFunctions`](#wgrobloxapiregisterlegacyparserfunctions)
+        + [`$wgRobloxAPIDataSourceUsageLimits`](#wgrobloxapidatasourceusagelimits)
+        + [`$wgRobloxAPIShowPlainErrors`](#wgrobloxapishowplainerrors)
 
 ## Basic Usage
 
@@ -790,4 +792,46 @@ If you do not need the legacy parser functions, you can set this variable to `fa
 
 ```php
 $wgRobloxAPIRegisterLegacyParserFunctions = false;
+```
+
+### `$wgRobloxAPIDataSourceUsageLimits`
+
+The maximum number of times a data source can be used on a single page. By default, there are no limits:
+
+```php
+$wgRobloxAPIDataSourceUsageLimits = [];
+```
+
+If you want to limit the usage of a data source, you can do so like this:
+
+```php
+$wgRobloxAPIDataSourceUsageLimits = [
+    'gameData' => 1,
+    'userId' => 2,
+];
+```
+
+In this example, the `gameData` data source can only be used once per page, and the `userId` data source can be used
+twice per page. If a data source is used more than the allowed limit, an error message will be displayed.
+
+The usage counter is evaluated after transclusion expansion and before cache lookup.
+Therefore, calls satisfied from cache still count towards the per-page limit.
+
+Setting a limit for a data source will also affect data sources that depend on it. Dependent data sources themselves
+currently cannot be limited.
+
+### `$wgRobloxAPIShowPlainErrors`
+
+Whether to show errors in plain text format instead of rendering a codex error box.
+
+By default, this is set to `false`, which means that errors are rendered in a codex error box:
+
+```php
+$wgRobloxAPIShowPlainErrors = false;
+```
+
+If you want to show errors in plain text format instead, you can set this variable to `true`:
+
+```php
+$wgRobloxAPIShowPlainErrors = true;
 ```

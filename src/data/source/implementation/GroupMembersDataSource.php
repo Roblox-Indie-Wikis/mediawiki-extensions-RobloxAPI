@@ -23,7 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\data\source\DependentDataSource;
-use Parser;
+use MediaWiki\Parser\Parser;
 
 class GroupMembersDataSource extends DependentDataSource {
 
@@ -43,11 +43,11 @@ class GroupMembersDataSource extends DependentDataSource {
 		$groupData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
 
 		if ( !$groupData ) {
-			return $this->failNoData();
+			$this->failNoData();
 		}
 
 		if ( !property_exists( $groupData, 'memberCount' ) ) {
-			return $this->failUnexpectedDataStructure();
+			$this->failUnexpectedDataStructure();
 		}
 
 		return $groupData->memberCount;

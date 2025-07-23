@@ -24,7 +24,7 @@ use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\data\source\DependentDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
-use Parser;
+use MediaWiki\Parser\Parser;
 
 class GroupRankDataSource extends DependentDataSource {
 
@@ -44,7 +44,7 @@ class GroupRankDataSource extends DependentDataSource {
 		$groups = $this->dataSource->exec( $dataSourceProvider, $parser, [ $requiredArgs[1] ] );
 
 		if ( !$groups ) {
-			return $this->failNoData();
+			$this->failNoData();
 		}
 
 		if ( !is_array( $groups ) ) {

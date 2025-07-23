@@ -22,13 +22,12 @@ namespace MediaWiki\Extension\RobloxAPI\data\cache;
 
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\MediaWikiServices;
-use WANObjectCache;
+use Wikimedia\ObjectCache\WANObjectCache;
 
 /**
  * A simple cache that expires after a set amount of seconds.
  */
 class SimpleExpiringCache extends DataSourceCache {
-	/** ToDo: replace this alias with the actual class once support for 1.42 is dropped */
 	private WANObjectCache $cache;
 
 	public function __construct() {
@@ -57,9 +56,8 @@ class SimpleExpiringCache extends DataSourceCache {
 	/**
 	 * Generates a cache key for the given endpoint and arguments.
 	 * @param string $endpoint
-	 * @param array $args
-	 * @param array $optionalArgs
-	 * @return string
+	 * @param string[] $args
+	 * @param array<string, string> $optionalArgs
 	 */
 	protected function getCacheKey( string $endpoint, array $args, array $optionalArgs ): string {
 		$cacheAffectingOptionalArgs = RobloxAPIUtil::getCacheAffectingArgs( $optionalArgs );

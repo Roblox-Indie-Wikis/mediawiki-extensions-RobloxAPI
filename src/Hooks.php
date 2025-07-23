@@ -22,6 +22,8 @@ namespace MediaWiki\Extension\RobloxAPI;
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ConfigFactory;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\data\source\IDataSource;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Hook\ParserFirstCallInitHook;
@@ -32,7 +34,14 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 	private Config $config;
 	private DataSourceProvider $dataSourceProvider;
+	/**
+	 * @var data\source\IDataSource[]
+	 */
 	private array $legacyParserFunctions;
+	/**
+	 * @var array<string, int>
+	 */
+	private array $usageLimits;
 
 	public function __construct( ConfigFactory $configFactory ) {
 		$this->config = $configFactory->makeConfig( 'RobloxAPI' );
@@ -40,35 +49,36 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		$this->dataSourceProvider = new DataSourceProvider( $this->config );
 
 		$this->legacyParserFunctions = [];
-		if ( $this->config->get( 'RobloxAPIRegisterLegacyParserFunctions' ) ) {
+		if ( $this->config->get( RobloxAPIConstants::ConfRegisterLegacyParserFunctions ) ) {
 			$this->legacyParserFunctions += $this->dataSourceProvider->createLegacyParserFunctions();
 		}
+		$this->usageLimits = $this->config->get( RobloxAPIConstants::ConfDataSourceUsageLimits );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function onParserFirstCallInit( $parser ): void {
-		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, ...$args ) {
+		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, ...$args ): array|bool|string {
 			try {
 				return $this->handleParserFunctionCall( $parser, $args );
 			} catch ( RobloxAPIException $exception ) {
-				return wfMessage( $exception->getMessage() )
-					->plaintextParams( ...$exception->messageParams )
-					->escaped();
+				return RobloxAPIUtil::formatException( $exception, $parser, $this->config );
 			}
 		} );
 
 		foreach ( $this->legacyParserFunctions as $id => $function ) {
 			// all data source parser functions are only enabled if the corresponding data source
 			// is enabled, so we don't need to check the config for that
-			$parser->setFunctionHook( $id, function ( Parser $parser, ...$args ) use ( $function ) {
-				if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
+			$parser->setFunctionHook( $id, function ( Parser $parser, ...$args ) use ( $function ): array|bool|string {
+				if ( $this->config->get( RobloxAPIConstants::ConfParserFunctionsExpensive ) &&
 					!$parser->incrementExpensiveFunctionCount() ) {
 					return false;
 				}
+				$this->checkCanUseDataSource( $parser, $function->getDataSource() );
+
 				try {
-					$result = $function->exec( $parser, ...$args );
+					$result = $function->exec( $this->dataSourceProvider, $parser, ...$args );
 
 					$shouldEscape = $function->shouldEscapeResult( $result );
 
@@ -83,9 +93,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 						'nowiki' => $shouldEscape,
 					];
 				} catch ( RobloxAPIException $exception ) {
-					return wfMessage( $exception->getMessage() )
-						->plaintextParams( ...$exception->messageParams )
-						->escaped();
+					return RobloxAPIUtil::formatException( $exception, $parser, $this->config );
 				}
 			} );
 		}
@@ -94,17 +102,16 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	/**
 	 * Handles a call to the #robloxAPI parser function.
 	 * @param Parser $parser
-	 * @param array $args
-	 * @return array|bool
+	 * @param string[] $args
 	 * @throws RobloxAPIException
 	 */
-	private function handleParserFunctionCall( Parser $parser, array $args ): bool|array {
-		if ( $this->config->get( 'RobloxAPIParserFunctionsExpensive' ) &&
+	private function handleParserFunctionCall( Parser $parser, array $args ): array|bool {
+		if ( $this->config->get( RobloxAPIConstants::ConfParserFunctionsExpensive ) &&
 			!$parser->incrementExpensiveFunctionCount() ) {
 			return false;
 		}
 
-		if ( count( $args ) == 0 ) {
+		if ( count( $args ) === 0 ) {
 			throw new RobloxAPIException( 'robloxapi-error-no-arguments' );
 		}
 		$dataSourceId = $args[0];
@@ -113,6 +120,8 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		if ( !$dataSource ) {
 			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found', $dataSourceId );
 		}
+
+		$this->checkCanUseDataSource( $parser, $dataSource );
 
 		$otherArgs = array_slice( $args, 1 );
 
@@ -137,11 +146,49 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	}
 
 	/**
+	 * @throws RobloxAPIException if the usage limit of the data source is exceeded
+	 */
+	private function checkCanUseDataSource( Parser $parser, IDataSource $dataSource ): void {
+		$dataSourceId = $dataSource->getFetcherSourceId();
+		if ( !array_key_exists( $dataSourceId, $this->usageLimits ) ) {
+			// no limit
+			return;
+		}
+
+		$output = $parser->getOutput();
+		$extensionData = $output->getExtensionData( RobloxAPIConstants::ExtensionDataKey );
+
+		if ( $extensionData === null ) {
+			$extensionData = [];
+		}
+		if ( !array_key_exists( $dataSourceId, $extensionData ) ) {
+			$extensionData[$dataSourceId] = 0;
+		}
+
+		$used = $extensionData[$dataSourceId] + 1;
+		$limit = $this->usageLimits[ $dataSourceId ];
+
+		$extensionData[$dataSourceId] = $used;
+		$parser->getOutput()->setExtensionData( RobloxAPIConstants::ExtensionDataKey, $extensionData );
+
+		if ( $used > $limit ) {
+			if ( $dataSource->getFetcherSourceId() !== $dataSource->getId() ) {
+				throw new RobloxAPIException( 'robloxapi-error-usage-limit-dependent', $dataSourceId, $limit,
+					$dataSource->getId() );
+			} else {
+				throw new RobloxAPIException( 'robloxapi-error-usage-limit', $dataSourceId, $limit );
+			}
+		}
+	}
+
+	/**
 	 * @inheritDoc
 	 */
 	public function onParserTestGlobals( &$globals ): void {
 		$globals += [
 			'wgRobloxAPIAllowedArguments' => [ 'UserID' => [ 54321 ] ],
+			// show errors as plain text to make parser tests not depend on changes in Html:errorBox
+			'wgRobloxAPIShowPlainErrors' => true,
 		];
 	}
 }

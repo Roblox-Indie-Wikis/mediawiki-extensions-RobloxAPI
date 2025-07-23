@@ -14,9 +14,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - mw: 'REL1_42'
-            php: 8.1
-            experimental: false
           - mw: 'REL1_43'
             php: 8.1
             experimental: false
@@ -79,3 +76,5 @@ jobs:
       - name: Run parser tests
         run: php tests/parser/parserTests.php --file=extensions/RobloxAPI/tests/parser/parserTests.txt
 
+      - name: Run phan
+        run: composer run phan

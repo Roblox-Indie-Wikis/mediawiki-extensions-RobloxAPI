@@ -23,7 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\data\source\DependentDataSource;
-use Parser;
+use MediaWiki\Parser\Parser;
 
 class PlaceActivePlayersDataSource extends DependentDataSource {
 
@@ -43,7 +43,7 @@ class PlaceActivePlayersDataSource extends DependentDataSource {
 		$gameData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
 
 		if ( !$gameData ) {
-			return $this->failNoData();
+			$this->failNoData();
 		}
 
 		return $gameData->playing;

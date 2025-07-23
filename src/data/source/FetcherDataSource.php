@@ -20,13 +20,14 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
-use FormatJson;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Http\HttpRequestFactory;
+use MediaWiki\Json\FormatJson;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Parser\Parser;
@@ -75,7 +76,6 @@ abstract class FetcherDataSource implements IDataSource {
 	 * Fetches data
 	 * @param array<string> $requiredArgs
 	 * @param array<string, string> $optionalArgs
-	 * @return mixed
 	 * @throws RobloxAPIException if there are any errors during the process
 	 */
 	public function fetch( array $requiredArgs, array $optionalArgs = [] ): mixed {
@@ -108,15 +108,15 @@ abstract class FetcherDataSource implements IDataSource {
 
 		$options = [];
 
-		$userAgent = $this->config->get( 'RobloxAPIRequestUserAgent' );
+		$userAgent = $this->config->get( RobloxAPIConstants::ConfRequestUserAgent );
 		if ( $userAgent !== null && $userAgent !== '' ) {
 			$options['userAgent'] = $userAgent;
 		}
 
 		$this->processRequestOptions( $options, $requiredArgs, $optionalArgs );
 
-		$this->httpRequestFactory =
-			$this->httpRequestFactory ?? MediaWikiServices::getInstance()->getHttpRequestFactory();
+		$this->httpRequestFactory ??= MediaWikiServices::getInstance()->getHttpRequestFactory();
+		// @phan-suppress-next-line PhanParamTooFewInPHPDoc the $caller arg has a default so no need to supply it
 		$request = $this->httpRequestFactory->create( $endpoint, $options );
 		$request->setHeader( 'Accept', 'application/json' );
 
@@ -129,9 +129,7 @@ abstract class FetcherDataSource implements IDataSource {
 
 		if ( !$status->isOK() ) {
 			$logger = LoggerFactory::getInstance( 'RobloxAPI' );
-			// ToDo replace when 1.42 support is dropped
-			/** @noinspection PhpDeprecationInspection */
-			$errors = $status->getErrorsByType( 'error' );
+			$errors = $status->getMessages( 'error' );
 			$logger->warning( 'Failed to fetch data from Roblox API', [
 				'endpoint' => $endpoint,
 				'errors' => $errors,
@@ -179,11 +177,11 @@ abstract class FetcherDataSource implements IDataSource {
 
 	/**
 	 * Processes the request options before making the request. This allows modifying the request options.
-	 * @param array &$options The options to process.
-	 * @param array<string> $requiredArgs
+	 * @param array<string, mixed> &$options The options to process.
+	 * @param string[] $requiredArgs
 	 * @param array<string, string> $optionalArgs
 	 */
-	public function processRequestOptions( array &$options, array $requiredArgs, array $optionalArgs ) {
+	public function processRequestOptions( array &$options, array $requiredArgs, array $optionalArgs ): void {
 		// do nothing by default
 	}
 
@@ -205,7 +203,7 @@ abstract class FetcherDataSource implements IDataSource {
 	 * Allows specifying additional headers for the request.
 	 * @param array<string> $requiredArgs
 	 * @param array<string, string> $optionalArgs
-	 * @return array The additional headers.
+	 * @return array<string, string> The additional headers.
 	 */
 	protected function getAdditionalHeaders( array $requiredArgs, array $optionalArgs ): array {
 		return [];
@@ -247,6 +245,10 @@ abstract class FetcherDataSource implements IDataSource {
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
 	): mixed {
 		return $this->fetch( $requiredArgs, $optionalArgs );
+	}
+
+	public function getFetcherSourceId(): string {
+		return $this->getId();
 	}
 
 }

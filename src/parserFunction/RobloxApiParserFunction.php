@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\parserFunction;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\data\source\IDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Parser\Parser;
 
@@ -41,12 +42,12 @@ abstract class RobloxApiParserFunction {
 
 	/**
 	 * Executes the parser function
+	 * @param DataSourceProvider $dataSourceProvider
 	 * @param Parser $parser
 	 * @param mixed ...$args
-	 * @return mixed
 	 * @throws RobloxAPIException If any error regarding the API or data occurs during execution.
 	 */
-	abstract public function exec( Parser $parser, ...$args ): mixed;
+	abstract public function exec( DataSourceProvider $dataSourceProvider, Parser $parser, ...$args ): mixed;
 
 	/**
 	 * @param mixed $result The result of the parser function.
@@ -55,5 +56,10 @@ abstract class RobloxApiParserFunction {
 	public function shouldEscapeResult( mixed $result ): bool {
 		return true;
 	}
+
+	/**
+	 * @return IDataSource The data source associated with this parser function.
+	 */
+	abstract public function getDataSource(): IDataSource;
 
 }

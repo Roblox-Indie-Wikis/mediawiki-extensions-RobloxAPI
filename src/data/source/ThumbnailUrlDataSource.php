@@ -42,17 +42,17 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 		$data = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
 
 		if ( !$data ) {
-			return $this->failNoData();
+			$this->failNoData();
 		}
 
-		if ( count( $data ) == 0 ) {
-			return $this->failInvalidData();
+		if ( count( $data ) === 0 ) {
+			$this->failInvalidData();
 		}
 
 		$url = $data[0]->imageUrl;
 
 		if ( !$url ) {
-			return $this->failInvalidData();
+			$this->failInvalidData();
 		}
 
 		$format = $optionalArgs['format'] ?? 'Png';
@@ -61,7 +61,7 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 		$url = "$url.$lowerFormat";
 
 		if ( !RobloxAPIUtil::verifyIsRobloxCdnUrl( $url ) ) {
-			return $this->failInvalidData();
+			$this->failInvalidData();
 		}
 
 		return $url;

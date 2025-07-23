@@ -1,7 +1,7 @@
 name: Lint Tests
 on:
   push:
-    branches: [ master, development, feat/**, test/** ]
+    branches: [ master, development, feat/**, refactor/**, test/** ]
   pull_request:
     branches: [ master, development ]
 jobs:
@@ -33,5 +33,5 @@ jobs:
       - name: Composer install
         if: steps.vendor-cache.outputs.cache-hit != 'true'
         run: composer install  --no-ansi --no-interaction --no-scripts --no-suggest --prefer-dist
-      - name: Run Test
+      - name: Lint code
         run: composer run test

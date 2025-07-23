@@ -23,7 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\data\source\DependentDataSource;
-use Parser;
+use MediaWiki\Parser\Parser;
 
 /**
  * A data source for getting the total amount of visits a user's places have.
@@ -44,17 +44,17 @@ class UserPlaceVisitsDataSource extends DependentDataSource {
 		$userGames = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
 
 		if ( $userGames === null ) {
-			return $this->failNoData();
+			$this->failNoData();
 		}
 
 		if ( !is_array( $userGames ) ) {
-			return $this->failUnexpectedDataStructure();
+			$this->failUnexpectedDataStructure();
 		}
 
 		$totalVisits = 0;
 		foreach ( $userGames as $game ) {
 			if ( !property_exists( $game, 'placeVisits' ) ) {
-				return $this->failUnexpectedDataStructure();
+				$this->failUnexpectedDataStructure();
 			}
 			$totalVisits += $game->placeVisits;
 		}
