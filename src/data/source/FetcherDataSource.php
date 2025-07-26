@@ -50,8 +50,8 @@ abstract class FetcherDataSource implements IDataSource {
 	 */
 	public function __construct(
 		public string $id,
-		protected DataSourceCache $cache,
-		protected Config $config
+		private readonly DataSourceCache $cache,
+		private readonly Config $config
 	) {
 	}
 
