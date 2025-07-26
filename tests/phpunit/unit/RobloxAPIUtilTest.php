@@ -48,19 +48,6 @@ class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::areValidIds
-	 */
-	public function testAreValidIds(): void {
-		self::assertFalse( RobloxAPIUtil::areValidIds( [ null ] ) );
-		self::assertFalse( RobloxAPIUtil::areValidIds( [ "a" ] ) );
-		self::assertFalse( RobloxAPIUtil::areValidIds( [ "123", "b" ] ) );
-
-		self::assertTrue( RobloxAPIUtil::areValidIds( [] ) );
-		self::assertTrue( RobloxAPIUtil::areValidIds( [ "12345" ] ) );
-		self::assertTrue( RobloxAPIUtil::areValidIds( [ "23598", "12345" ] ) );
-	}
-
-	/**
 	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::assertValidIds
 	 */
 	public function testAssertValidIds(): void {

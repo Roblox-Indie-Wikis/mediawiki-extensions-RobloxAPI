@@ -54,20 +54,6 @@ class RobloxAPIUtil {
 	}
 
 	/**
-	 * Checks whether multiple numeric IDs are valid.
-	 * @param string[] $strings
-	 */
-	public static function areValidIds( array $strings ): bool {
-		foreach ( $strings as $string ) {
-			if ( !self::isValidId( $string ) ) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/**
 	 * @param string ...$strings
 	 * @throws RobloxAPIException if any of the IDs are invalid
 	 */
