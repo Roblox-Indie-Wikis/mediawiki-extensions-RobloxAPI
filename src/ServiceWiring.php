@@ -18,14 +18,31 @@
  * @file
  */
 
+use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
+use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
+use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\MediaWikiServices;
 
 /** @phpcs-require-sorted-array */
 return [
-	'RobloxAPI.DataSourceProvider' => function ( MediaWikiServices $services ): DataSourceProvider {
-		$config = $services->getConfigFactory()->makeConfig( 'RobloxAPI' );
+	'RobloxAPI.DataSourceCache' => static function ( MediaWikiServices $services ): DataSourceCache {
+		$disableCache = $services->getConfigFactory()
+			->makeConfig( 'RobloxAPI' )
+			->get( RobloxAPIConstants::ConfDisableCache );
 
-		return new DataSourceProvider( $config );
+		if ( defined( 'MW_PHPUNIT_TEST' ) || $disableCache ) {
+			// we're either in a unit test environment or the cache is disabled
+			return new EmptyCache();
+		}
+
+		return new SimpleExpiringCache( $services->getMainWANObjectCache() );
+	},
+	'RobloxAPI.DataSourceProvider' => static function ( MediaWikiServices $services ): DataSourceProvider {
+		$config = $services->getConfigFactory()->makeConfig( 'RobloxAPI' );
+		$cache = $services->get( 'RobloxAPI.DataSourceCache' );
+
+		return new DataSourceProvider( $config, $cache );
 	},
 ];

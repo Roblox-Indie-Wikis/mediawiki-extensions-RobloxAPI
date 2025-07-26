@@ -22,8 +22,6 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
-use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
-use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Http\HttpRequestFactory;
@@ -170,20 +168,6 @@ abstract class FetcherDataSource implements IDataSource {
 	 */
 	public function processRequestOptions( array &$options, array $requiredArgs, array $optionalArgs ): void {
 		// do nothing by default
-	}
-
-	/**
-	 * Creates a simple expiring cache. If we're in a unit test environment, an empty cache is created.
-	 * @return DataSourceCache The created cache.
-	 */
-	protected static function createSimpleCache(): DataSourceCache {
-		global $wgRobloxAPIDisableCache;
-		if ( defined( 'MW_PHPUNIT_TEST' ) || $wgRobloxAPIDisableCache ) {
-			// we're either in a unit test environment or the cache is disabled
-			return new EmptyCache();
-		}
-
-		return new SimpleExpiringCache( MediaWikiServices::getInstance()->getMainWANObjectCache() );
 	}
 
 	/**

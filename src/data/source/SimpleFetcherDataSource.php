@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 use Closure;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 
 /**
  * A simple data source that does not process the data.
@@ -38,12 +39,13 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 	public function __construct(
 		string $id,
 		Config $config,
+		DataSourceCache $cache,
 		protected ArgumentSpecification $argumentSpecification,
 		protected Closure $createEndpoint,
 		protected ?Closure $processData = null,
 		protected bool $registerParserFunction = false
 	) {
-		parent::__construct( $id, self::createSimpleCache(), $config );
+		parent::__construct( $id, $cache, $config );
 	}
 
 	/**

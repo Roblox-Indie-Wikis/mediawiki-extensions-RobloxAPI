@@ -32,6 +32,7 @@ class RobloxAPIConstants {
 	public const ConfAllowedArguments = 'RobloxAPIAllowedArguments';
 	public const ConfCachingExpiries = 'RobloxAPICachingExpiries';
 	public const ConfDataSourceUsageLimits = 'RobloxAPIDataSourceUsageLimits';
+	public const ConfDisableCache = 'RobloxAPIDisableCache';
 	public const ConfEnabledDataSources = 'RobloxAPIEnabledDatasources';
 	public const ConfParserFunctionsExpensive = 'RobloxAPIParserFunctionsExpensive';
 	public const ConfRegisterLegacyParserFunctions = 'RobloxAPIRegisterLegacyParserFunctions';

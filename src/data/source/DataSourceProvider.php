@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 use Closure;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailUrlDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameDataSource;
@@ -57,14 +58,14 @@ class DataSourceProvider {
 	public array $cachingExpiries;
 
 	/** @noinspection PhpUnusedParameterInspection */
-	public function __construct( public Config $config ) {
+	public function __construct( public Config $config, private readonly DataSourceCache $cache ) {
 		$this->cachingExpiries = $this->config->get( RobloxAPIConstants::ConfCachingExpiries );
 
-		$this->registerDataSource( new GameDataSource( $config ) );
-		$this->registerDataSource( new UserIdDataSource( $config ) );
-		$this->registerDataSource( new UserAvatarThumbnailDataSource( $config ) );
-		$this->registerDataSource( new AssetThumbnailDataSource( $config ) );
-		$this->registerDataSource( new GameIconDataSource( $config ) );
+		$this->registerDataSource( new GameDataSource( $cache, $config ) );
+		$this->registerDataSource( new UserIdDataSource( $cache, $config ) );
+		$this->registerDataSource( new UserAvatarThumbnailDataSource( $cache, $config ) );
+		$this->registerDataSource( new AssetThumbnailDataSource( $cache, $config ) );
+		$this->registerDataSource( new GameIconDataSource( $cache, $config ) );
 
 		$this->registerSimpleFetcherDataSource(
 			'groupRoles',
@@ -214,6 +215,7 @@ class DataSourceProvider {
 		$this->registerDataSource( new SimpleFetcherDataSource(
 			$id,
 			$this->config,
+			$this->cache,
 			$argumentSpecification,
 			$createEndpoint,
 			$processData,

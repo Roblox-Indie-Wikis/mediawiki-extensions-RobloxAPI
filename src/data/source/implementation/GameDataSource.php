@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
@@ -30,8 +31,8 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
  */
 class GameDataSource extends FetcherDataSource {
 
-	public function __construct( Config $config ) {
-		parent::__construct( 'gameData', self::createSimpleCache(), $config );
+	public function __construct( DataSourceCache $cache, Config $config ) {
+		parent::__construct( 'gameData', $cache, $config );
 	}
 
 	/**
