@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\fetcher;
 
 use Closure;
 use MediaWiki\Config\Config;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
@@ -35,18 +36,22 @@ use MediaWiki\Logger\LoggerFactory;
  */
 class RobloxAPIFetcher {
 
-	/**
-	 * @var int[] the amount of time for each data source after which the cache
-	 * expires
-	 */
-	public array $cachingExpiries;
+	public const CONSTRUCTOR_OPTIONS = [
+		RobloxAPIConstants::ConfCachingExpiries,
+		RobloxAPIConstants::ConfRequestUserAgent,
+	];
 
+	/**
+	 * @param ServiceOptions $options
+	 * @param DataSourceCache $cache
+	 * @param HttpRequestFactory $httpRequestFactory
+	 */
 	public function __construct(
-		private readonly Config $config,
+		private readonly ServiceOptions $options,
 		private readonly DataSourceCache $cache,
 		private readonly HttpRequestFactory $httpRequestFactory
 	) {
-		$this->cachingExpiries = $config->get( RobloxAPIConstants::ConfCachingExpiries );
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
 	/**
@@ -76,7 +81,7 @@ class RobloxAPIFetcher {
 
 		$options = [];
 
-		$userAgent = $this->config->get( RobloxAPIConstants::ConfRequestUserAgent );
+		$userAgent = $this->options->get( RobloxAPIConstants::ConfRequestUserAgent );
 		if ( $userAgent !== null && $userAgent !== '' ) {
 			$options['userAgent'] = $userAgent;
 		}
@@ -134,11 +139,12 @@ class RobloxAPIFetcher {
 	 * @return int The caching expiry in seconds.
 	 */
 	protected function getCachingExpiry( string $id ): int {
-		if ( !isset( $this->cachingExpiries[$id] ) ) {
-			return $this->cachingExpiries['*'];
+		$cachingExpiries = $this->options->get( RobloxAPIConstants::ConfCachingExpiries );
+		if ( !isset( $cachingExpiries[$id] ) ) {
+			return $cachingExpiries['*'];
 		}
 
-		return $this->cachingExpiries[$id];
+		return $cachingExpiries[$id];
 	}
 
 }

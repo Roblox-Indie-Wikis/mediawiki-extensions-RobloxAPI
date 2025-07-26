@@ -18,6 +18,7 @@
  * @file
  */
 
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
@@ -47,9 +48,13 @@ return [
 		return new DataSourceProvider( $config, $fetcher );
 	},
 	'RobloxAPI.RobloxAPIFetcher' => static function ( MediaWikiServices $services ): RobloxAPIFetcher {
-		$config = $services->getConfigFactory()->makeConfig( 'RobloxAPI' );
-		$cache = $services->get( 'RobloxAPI.DataSourceCache' );
-
-		return new RobloxAPIFetcher( $config, $cache, $services->getHttpRequestFactory() );
+		return new RobloxAPIFetcher(
+			new ServiceOptions(
+				RobloxAPIFetcher::CONSTRUCTOR_OPTIONS,
+				$services->getMainConfig()
+			),
+			$services->get( 'RobloxAPI.DataSourceCache' ),
+			$services->getHttpRequestFactory()
+		);
 	}
 ];
