@@ -34,8 +34,7 @@ return [
 			->makeConfig( 'RobloxAPI' )
 			->get( RobloxAPIConstants::ConfDisableCache );
 
-		if ( defined( 'MW_PHPUNIT_TEST' ) || $disableCache ) {
-			// we're either in a unit test environment or the cache is disabled
+		if ( $disableCache ) {
 			return new EmptyCache();
 		}
 
