@@ -54,20 +54,6 @@ class RobloxAPIUtil {
 	}
 
 	/**
-	 * Checks whether multiple numeric IDs are valid.
-	 * @param string[] $strings
-	 */
-	public static function areValidIds( array $strings ): bool {
-		foreach ( $strings as $string ) {
-			if ( !self::isValidId( $string ) ) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/**
 	 * @param string ...$strings
 	 * @throws RobloxAPIException if any of the IDs are invalid
 	 */
@@ -76,21 +62,6 @@ class RobloxAPIUtil {
 			if ( !self::isValidId( $string ) ) {
 				throw new RobloxAPIException( 'robloxapi-error-invalid-id', $string );
 			}
-		}
-	}
-
-	// TODO merge this with assertArgsAllowed
-
-	/**
-	 * Asserts that the given args are valid
-	 * @param string[] $expectedArgs The expected arg types
-	 * @param string[] $args The actual args
-	 * @throws RobloxAPIException if the args are invalid
-	 */
-	public static function assertValidArgs( array $expectedArgs, array $args ): void {
-		foreach ( $args as $index => $arg ) {
-			$expectedType = $expectedArgs[$index];
-			self::assertValidArg( $expectedType, $arg );
 		}
 	}
 
@@ -146,22 +117,6 @@ class RobloxAPIUtil {
 				default:
 					throw new IllegalOperationException( "Unknown expected arg type: $expectedType" );
 			}
-		}
-	}
-
-	/**
-	 * Asserts that the given args are allowed
-	 * @param Config $config The config object
-	 * @param array<string, string> $expectedArgs The expected arg types
-	 * @param array<string, string> $args The actual args
-	 * @throws RobloxAPIException if the args are invalid
-	 */
-	public static function assertArgsAllowed(
-		Config $config, array $expectedArgs, array $args
-	): void {
-		foreach ( $args as $index => $arg ) {
-			$expectedType = $expectedArgs[$index];
-			self::assertArgAllowed( $config, $expectedType, $arg );
 		}
 	}
 
@@ -340,7 +295,7 @@ class RobloxAPIUtil {
 	}
 
 	/**
-	 * @return string HTML, to be interpreted as Wikitext
+	 * @return string Wikitext
 	 */
 	public static function formatException( RobloxAPIException $exception, Parser $parser, Config $config ): string {
 		$message = $parser->msg( $exception->getMessage() )
