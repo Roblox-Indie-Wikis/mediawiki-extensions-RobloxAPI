@@ -21,7 +21,6 @@
 namespace MediaWiki\Extension\RobloxAPI\data\fetcher;
 
 use Closure;
-use MediaWiki\Config\Config;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
@@ -40,12 +39,7 @@ class RobloxAPIFetcher {
 		RobloxAPIConstants::ConfCachingExpiries,
 		RobloxAPIConstants::ConfRequestUserAgent,
 	];
-
-	/**
-	 * @param ServiceOptions $options
-	 * @param DataSourceCache $cache
-	 * @param HttpRequestFactory $httpRequestFactory
-	 */
+	
 	public function __construct(
 		private readonly ServiceOptions $options,
 		private readonly DataSourceCache $cache,

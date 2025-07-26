@@ -21,7 +21,6 @@
 namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use GuzzleHttpRequest;
-use MediaWiki\Config\Config;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
 use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
