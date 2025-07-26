@@ -38,7 +38,7 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 	 */
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	): mixed {
+	): string {
 		$data = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
 
 		if ( !$data ) {

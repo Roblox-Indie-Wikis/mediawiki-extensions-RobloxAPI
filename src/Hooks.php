@@ -35,7 +35,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	private Config $config;
 	private DataSourceProvider $dataSourceProvider;
 	/**
-	 * @var data\source\IDataSource[]
+	 * @var parserFunction\RobloxApiParserFunction[]
 	 */
 	private array $legacyParserFunctions;
 	/**
@@ -59,7 +59,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 * @inheritDoc
 	 */
 	public function onParserFirstCallInit( $parser ): void {
-		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, ...$args ): array|bool|string {
+		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, mixed ...$args ): array|bool|string {
 			try {
 				return $this->handleParserFunctionCall( $parser, $args );
 			} catch ( RobloxAPIException $exception ) {
@@ -70,7 +70,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		foreach ( $this->legacyParserFunctions as $id => $function ) {
 			// all data source parser functions are only enabled if the corresponding data source
 			// is enabled, so we don't need to check the config for that
-			$parser->setFunctionHook( $id, function ( Parser $parser, ...$args ) use ( $function ): array|bool|string {
+			$parser->setFunctionHook( $id, function ( Parser $parser, mixed ...$args ) use ( $function ): array|bool|string {
 				if ( $this->config->get( RobloxAPIConstants::ConfParserFunctionsExpensive ) &&
 					!$parser->incrementExpensiveFunctionCount() ) {
 					return false;

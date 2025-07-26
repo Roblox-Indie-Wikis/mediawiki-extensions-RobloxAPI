@@ -144,7 +144,7 @@ class DataSourceProvider {
 	/**
 	 * Gets the caching expiry for a data source.
 	 * If a specific value is not set, the default value (key '*') is used.
-	 * @param string $id
+	 * @param string $id The ID of the data source
 	 * @return int The caching expiry in seconds.
 	 */
 	protected function getCachingExpiry( string $id ): int {
@@ -157,7 +157,6 @@ class DataSourceProvider {
 
 	/**
 	 * Registers a data source if it is enabled.
-	 * @param IDataSource $dataSource
 	 */
 	public function registerDataSource( IDataSource $dataSource ): void {
 		$id = $dataSource->getId();
@@ -221,7 +220,6 @@ class DataSourceProvider {
 	public function createLegacyParserFunctions(): array {
 		$functions = [];
 
-		/** @var IDataSource $dataSource */
 		foreach ( $this->dataSources as $dataSource ) {
 			// register parser function only if needed for legacy reasons
 			if ( !$dataSource->shouldRegisterLegacyParserFunction() ) {

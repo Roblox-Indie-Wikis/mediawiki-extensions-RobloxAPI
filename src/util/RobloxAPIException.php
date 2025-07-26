@@ -36,9 +36,9 @@ class RobloxAPIException extends Exception {
 	/**
 	 * Creates a new RobloxAPIException.
 	 * @param string $message
-	 * @param string ...$messageParams
+	 * @param mixed ...$messageParams
 	 */
-	public function __construct( string $message = '', ...$messageParams ) {
+	public function __construct( string $message = '', mixed ...$messageParams ) {
 		parent::__construct( $message );
 
 		$this->messageParams = $messageParams;
