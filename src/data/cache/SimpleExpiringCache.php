@@ -28,10 +28,8 @@ use Wikimedia\ObjectCache\WANObjectCache;
  * A simple cache that expires after a set amount of seconds.
  */
 class SimpleExpiringCache extends DataSourceCache {
-	private WANObjectCache $cache;
 
-	public function __construct() {
-		$this->cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
+	public function __construct( private readonly WANObjectCache $cache ) {
 	}
 
 	/**

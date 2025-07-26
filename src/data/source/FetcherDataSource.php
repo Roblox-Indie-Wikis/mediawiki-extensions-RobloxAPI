@@ -183,7 +183,7 @@ abstract class FetcherDataSource implements IDataSource {
 			return new EmptyCache();
 		}
 
-		return new SimpleExpiringCache();
+		return new SimpleExpiringCache( MediaWikiServices::getInstance()->getMainWANObjectCache() );
 	}
 
 	/**
