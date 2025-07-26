@@ -20,25 +20,20 @@
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
-use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
-use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
 use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\MediaWikiServices;
 
 /** @phpcs-require-sorted-array */
 return [
 	'RobloxAPI.DataSourceCache' => static function ( MediaWikiServices $services ): DataSourceCache {
-		$disableCache = $services->getConfigFactory()
-			->makeConfig( 'RobloxAPI' )
-			->get( RobloxAPIConstants::ConfDisableCache );
-
-		if ( $disableCache ) {
-			return new EmptyCache();
-		}
-
-		return new SimpleExpiringCache( $services->getMainWANObjectCache() );
+		return new DataSourceCache(
+			new ServiceOptions(
+				DataSourceCache::CONSTRUCTOR_OPTIONS,
+				$services->getMainConfig()
+			),
+			$services->getMainWANObjectCache()
+		);
 	},
 	'RobloxAPI.DataSourceProvider' => static function ( MediaWikiServices $services ): DataSourceProvider {
 		return new DataSourceProvider(
