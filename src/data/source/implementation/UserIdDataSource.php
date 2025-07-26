@@ -36,7 +36,7 @@ class UserIdDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function __construct( RobloxAPIFetcher $fetcher, ) {
+	public function __construct( RobloxAPIFetcher $fetcher ) {
 		parent::__construct( 'userId', $fetcher );
 	}
 

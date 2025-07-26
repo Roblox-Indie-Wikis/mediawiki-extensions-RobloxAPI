@@ -29,7 +29,7 @@ class UserAvatarThumbnailDataSource extends ThumbnailDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function __construct( RobloxAPIFetcher $fetcher, ) {
+	public function __construct( RobloxAPIFetcher $fetcher ) {
 		parent::__construct( 'userAvatarThumbnail', $fetcher, 'users/avatar', 'userIds' );
 	}
 

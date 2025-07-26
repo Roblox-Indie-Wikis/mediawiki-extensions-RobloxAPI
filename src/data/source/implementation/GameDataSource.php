@@ -30,7 +30,7 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
  */
 class GameDataSource extends FetcherDataSource {
 
-	public function __construct( RobloxAPIFetcher $fetcher, ) {
+	public function __construct( RobloxAPIFetcher $fetcher ) {
 		parent::__construct( 'gameData', $fetcher );
 	}
 
