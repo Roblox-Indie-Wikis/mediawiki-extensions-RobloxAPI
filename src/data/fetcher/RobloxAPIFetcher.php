@@ -52,7 +52,7 @@ class RobloxAPIFetcher {
 	 * @param array<string> $requiredArgs
 	 * @param array<string, string> $optionalArgs
 	 * @param array<string> $headers Additional headers that should be added
-	 * @param Closure( array &$options, array $requiredArgs, array $optionalArgs ): void $processRequestOptions
+	 * @param Closure( array<string, mixed>&, array<string>, array<string, string> ): void $processRequestOptions
 	 * @return mixed The fetched data.
 	 * @throws RobloxAPIException if there are any errors during the process
 	 */
@@ -82,7 +82,6 @@ class RobloxAPIFetcher {
 		// @phan-suppress-next-line PhanParamTooFewInPHPDoc the $caller arg has a default so no need to supply it
 		$request = $this->httpRequestFactory->create( $endpoint, $options );
 		$request->setHeader( 'Accept', 'application/json' );
-
 
 		foreach ( $headers as $header => $value ) {
 			$request->setHeader( $header, $value );

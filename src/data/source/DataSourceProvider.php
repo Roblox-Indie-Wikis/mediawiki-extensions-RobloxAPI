@@ -54,7 +54,6 @@ class DataSourceProvider {
 
 	/** @noinspection PhpUnusedParameterInspection */
 	public function __construct( public Config $config, private readonly RobloxAPIFetcher $fetcher ) {
-
 		$this->registerDataSource( new GameDataSource( $fetcher ) );
 		$this->registerDataSource( new UserIdDataSource( $fetcher ) );
 		$this->registerDataSource( new UserAvatarThumbnailDataSource( $fetcher ) );

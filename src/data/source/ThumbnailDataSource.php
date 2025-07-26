@@ -20,8 +20,6 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
-use MediaWiki\Config\Config;
-use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 

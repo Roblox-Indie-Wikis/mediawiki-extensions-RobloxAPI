@@ -56,7 +56,7 @@ abstract class FetcherDataSource implements IDataSource {
 			$requiredArgs,
 			$optionalArgs,
 			$headers,
-			$this->processRequestOptions(...)
+			$this->processRequestOptions( ... )
 		);
 
 		$processedData = $this->processData( $data, $requiredArgs, $optionalArgs );

@@ -35,7 +35,13 @@ class EmptyCache extends DataSourceCache {
 	/**
 	 * @inheritDoc
 	 */
-	public function registerCacheEntry( string $endpoint, $value, array $args, array $optionalArgs, int $expiry ): void {
+	public function registerCacheEntry(
+		string $endpoint,
+		mixed $value,
+		array $args,
+		array $optionalArgs,
+		int $expiry
+	): void {
 	}
 
 }
