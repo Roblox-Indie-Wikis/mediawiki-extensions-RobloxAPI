@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
@@ -33,7 +34,7 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 	private GameDataSource $subject;
 
 	protected function setUp(): void {
-		$this->subject = new GameDataSource( $this->createMock( Config::class ) );
+		$this->subject = new GameDataSource( $this->createMock( RobloxAPIFetcher::class ) );
 	}
 
 	public function testGetEndpoint() {
@@ -104,8 +105,7 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 		}
 		EOD;
 
-		$dataSource = new GameDataSource( $this->createMock( Config::class ) );
-		$dataSource->setHttpRequestFactory( $this->createMockHttpRequestFactory( $result ) );
+		$dataSource = new GameDataSource( $this->createMockFetcher( $result ));
 
 		$data = $dataSource->fetch( [ '6483209208', '132813250731469' ] );
 
@@ -122,8 +122,7 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 		}
 		EOD;
 
-		$dataSource = new GameDataSource( $this->createMock( Config::class ) );
-		$dataSource->setHttpRequestFactory( $this->createMockHttpRequestFactory( $result ) );
+		$dataSource = new GameDataSource( $this->createMockFetcher( $result ));
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-data' );
@@ -131,8 +130,7 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 	}
 
 	public function testFailedRequest() {
-		$dataSource = new GameDataSource( $this->createMock( Config::class ) );
-		$dataSource->setHttpRequestFactory( $this->createMockHttpRequestFactory( null, 429 ) );
+		$dataSource = new GameDataSource( $this->createMockFetcher( null, 429 ));
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-request-failed' );

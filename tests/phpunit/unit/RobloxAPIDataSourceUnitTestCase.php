@@ -21,6 +21,11 @@
 namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use GuzzleHttpRequest;
+use MediaWiki\Config\Config;
+use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Status\Status;
 use MediaWikiUnitTestCase;
@@ -36,7 +41,7 @@ abstract class RobloxAPIDataSourceUnitTestCase extends MediaWikiUnitTestCase {
 	 * @param int $status HTTP status code to be returned by the request
 	 * @return HttpRequestFactory Mocked HTTP request factory
 	 */
-	protected function createMockHttpRequestFactory( ?string $returnedContent, int $status = 200 ): HttpRequestFactory {
+	private function createMockHttpRequestFactory( ?string $returnedContent, int $status = 200 ): HttpRequestFactory {
 		$request = $this->createPartialMock( GuzzleHttpRequest::class, [ 'execute', 'getContent' ] );
 
 		if ( $status > 0 && $status < 400 ) {
@@ -57,6 +62,23 @@ abstract class RobloxAPIDataSourceUnitTestCase extends MediaWikiUnitTestCase {
 		$httpRequestFactory->expects( $this->once() )->method( 'create' )->willReturn( $request );
 
 		return $httpRequestFactory;
+	}
+
+	protected function createMockFetcher( ?string $returnedContent, int $status = 200 ): RobloxAPIFetcher {
+		$serviceOptions = new ServiceOptions(
+			[
+				RobloxAPIConstants::ConfCachingExpiries,
+				RobloxAPIConstants::ConfRequestUserAgent
+			],
+			[
+				RobloxAPIConstants::ConfCachingExpiries => [ '*' => 600 ],
+				RobloxAPIConstants::ConfRequestUserAgent => null
+			]
+		);
+		$cache = new EmptyCache();
+		$httpRequestFactory = $this->createMockHttpRequestFactory( $returnedContent, $status );
+
+		return new RobloxAPIFetcher( $serviceOptions, $cache, $httpRequestFactory );
 	}
 
 }

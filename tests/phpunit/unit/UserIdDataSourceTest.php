@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserIdDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
@@ -33,7 +34,7 @@ class UserIdDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 	private UserIdDataSource $subject;
 
 	protected function setUp(): void {
-		$this->subject = new UserIdDataSource( $this->createMock( Config::class ) );
+		$this->subject = new UserIdDataSource( $this->createMock( RobloxAPIFetcher::class ) );
 	}
 
 	public function testProcessData() {
@@ -68,8 +69,7 @@ class UserIdDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 		}
 		EOD;
 
-		$dataSource = new UserIdDataSource( $this->createMock( Config::class ) );
-		$dataSource->setHttpRequestFactory( $this->createMockHttpRequestFactory( $result ) );
+		$dataSource = new UserIdDataSource( $this->createMockFetcher( $result ) );
 
 		$data = $dataSource->fetch( [ 'abaddriverlol' ] );
 
@@ -85,8 +85,7 @@ class UserIdDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 		}
 		EOD;
 
-		$dataSource = new UserIdDataSource( $this->createMock( Config::class ) );
-		$dataSource->setHttpRequestFactory( $this->createMockHttpRequestFactory( $result ) );
+		$dataSource = new UserIdDataSource( $this->createMockFetcher( $result ) );
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-data' );
@@ -94,8 +93,7 @@ class UserIdDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 	}
 
 	public function testFailedRequest() {
-		$dataSource = new UserIdDataSource( $this->createMock( Config::class ) );
-		$dataSource->setHttpRequestFactory( $this->createMockHttpRequestFactory( null, 429 ) );
+		$dataSource = new UserIdDataSource( $this->createMockFetcher( null, 429 ) );
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-request-failed' );
@@ -103,7 +101,7 @@ class UserIdDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 	}
 
 	public function testProcessRequestOptions() {
-		$dataSource = new UserIdDataSource( $this->createMock( Config::class ) );
+		$dataSource = new UserIdDataSource( $this->createMock( RobloxAPIFetcher::class ) );
 		$options = [];
 		$args = [ 'example_user' ];
 		$dataSource->processRequestOptions( $options, $args, [] );
