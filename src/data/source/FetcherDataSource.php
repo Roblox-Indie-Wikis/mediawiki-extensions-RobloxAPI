@@ -38,18 +38,6 @@ use MediaWiki\Parser\Parser;
 abstract class FetcherDataSource implements IDataSource {
 
 	/**
-	 * @var string The ID of this data source.
-	 */
-	public string $id;
-	/**
-	 * @var DataSourceCache The cache of this data source.
-	 */
-	protected DataSourceCache $cache;
-	/**
-	 * @var Config The extension configuration.
-	 */
-	protected Config $config;
-	/**
 	 * @var ?HttpRequestFactory The HTTP request factory. Can be overridden for testing.
 	 */
 	private ?HttpRequestFactory $httpRequestFactory;
@@ -61,11 +49,10 @@ abstract class FetcherDataSource implements IDataSource {
 	 * @param Config $config The extension configuration.
 	 */
 	public function __construct(
-		string $id, DataSourceCache $cache, Config $config
+		public string $id,
+		protected DataSourceCache $cache,
+		protected Config $config
 	) {
-		$this->id = $id;
-		$this->cache = $cache;
-		$this->config = $config;
 	}
 
 	public function setCacheExpiry( int $seconds ): void {

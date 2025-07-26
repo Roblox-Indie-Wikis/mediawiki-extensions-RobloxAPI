@@ -32,12 +32,9 @@ use MediaWiki\Parser\Parser;
 abstract class RobloxApiParserFunction {
 
 	/**
-	 * @var DataSourceProvider An instance of the data source provider.
+	 * @param DataSourceProvider $dataSourceProvider An instance of the data source provider.
 	 */
-	protected DataSourceProvider $dataSourceProvider;
-
-	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		$this->dataSourceProvider = $dataSourceProvider;
+	public function __construct( protected DataSourceProvider $dataSourceProvider ) {
 	}
 
 	/**

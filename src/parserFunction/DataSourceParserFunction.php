@@ -30,11 +30,8 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
  */
 class DataSourceParserFunction extends RobloxApiParserFunction {
 
-	private IDataSource $dataSource;
-
-	public function __construct( DataSourceProvider $dataSourceProvider, IDataSource $dataSource ) {
+	public function __construct( DataSourceProvider $dataSourceProvider, private readonly IDataSource $dataSource ) {
 		parent::__construct( $dataSourceProvider );
-		$this->dataSource = $dataSource;
 	}
 
 	/**

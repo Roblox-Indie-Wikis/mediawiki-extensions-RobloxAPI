@@ -27,26 +27,18 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 abstract class ThumbnailDataSource extends FetcherDataSource {
 
 	/**
-	 * @var string The path of the thumbnail API to use
-	 */
-	private string $apiPath;
-
-	/**
-	 * @var string The parameter name to use for submitting the thumbnail ID
-	 */
-	protected string $thumbnailIdParamName;
-
-	/**
 	 * @inheritDoc
 	 * @param string $apiPath The path of the thumbnail API to use
 	 * @param string $thumbnailIdParamName The parameter name to use for submitting the thumbnail ID
 	 */
 	public function __construct(
-		string $id, DataSourceCache $cache, Config $config, string $apiPath, string $thumbnailIdParamName
+		string $id,
+		DataSourceCache $cache,
+		Config $config,
+		private readonly string $apiPath,
+		protected string $thumbnailIdParamName
 	) {
 		parent::__construct( $id, $cache, $config );
-		$this->apiPath = $apiPath;
-		$this->thumbnailIdParamName = $thumbnailIdParamName;
 	}
 
 	/**

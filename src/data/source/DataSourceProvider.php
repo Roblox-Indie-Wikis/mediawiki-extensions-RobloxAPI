@@ -45,7 +45,6 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
  */
 class DataSourceProvider {
 
-	public Config $config;
 	/**
 	 * @var array<string, IDataSource> The currently enabled data sources.
 	 */
@@ -57,9 +56,7 @@ class DataSourceProvider {
 	public array $cachingExpiries;
 
 	/** @noinspection PhpUnusedParameterInspection */
-	public function __construct( Config $config ) {
-		$this->config = $config;
-
+	public function __construct( public Config $config ) {
 		$this->cachingExpiries = $this->config->get( RobloxAPIConstants::ConfCachingExpiries );
 
 		$this->registerDataSource( new GameDataSource( $config ) );
