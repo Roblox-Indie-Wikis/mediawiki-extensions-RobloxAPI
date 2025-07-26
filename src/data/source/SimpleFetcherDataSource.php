@@ -24,6 +24,7 @@ use Closure;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 
 /**
  * A simple data source that does not process the data.
@@ -38,14 +39,13 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 	 */
 	public function __construct(
 		string $id,
-		Config $config,
-		DataSourceCache $cache,
+		RobloxAPIFetcher $fetcher,
 		protected ArgumentSpecification $argumentSpecification,
 		protected Closure $createEndpoint,
 		protected ?Closure $processData = null,
 		protected bool $registerParserFunction = false
 	) {
-		parent::__construct( $id, $cache, $config );
+		parent::__construct( $id, $fetcher );
 	}
 
 	/**

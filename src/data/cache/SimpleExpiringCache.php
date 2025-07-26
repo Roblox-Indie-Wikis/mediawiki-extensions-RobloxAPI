@@ -46,8 +46,8 @@ class SimpleExpiringCache extends DataSourceCache {
 	/**
 	 * @inheritDoc
 	 */
-	public function registerCacheEntry( string $endpoint, $value, array $args, array $optionalArgs ): void {
-		$this->cache->set( $this->getCacheKey( $endpoint, $args, $optionalArgs ), $value, $this->expiry );
+	public function registerCacheEntry( string $endpoint, $value, array $args, array $optionalArgs, int $expiry ): void {
+		$this->cache->set( $this->getCacheKey( $endpoint, $args, $optionalArgs ), $value, $expiry );
 	}
 
 	/**

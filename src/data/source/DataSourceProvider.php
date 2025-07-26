@@ -23,7 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 use Closure;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailUrlDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameDataSource;
@@ -51,21 +51,15 @@ class DataSourceProvider {
 	 * @var array<string, IDataSource> The currently enabled data sources.
 	 */
 	public array $dataSources = [];
-	/**
-	 * @var int[] the amount of time for each data source after which the cache
-	 * expires
-	 */
-	public array $cachingExpiries;
 
 	/** @noinspection PhpUnusedParameterInspection */
-	public function __construct( public Config $config, private readonly DataSourceCache $cache ) {
-		$this->cachingExpiries = $this->config->get( RobloxAPIConstants::ConfCachingExpiries );
+	public function __construct( public Config $config, private readonly RobloxAPIFetcher $fetcher ) {
 
-		$this->registerDataSource( new GameDataSource( $cache, $config ) );
-		$this->registerDataSource( new UserIdDataSource( $cache, $config ) );
-		$this->registerDataSource( new UserAvatarThumbnailDataSource( $cache, $config ) );
-		$this->registerDataSource( new AssetThumbnailDataSource( $cache, $config ) );
-		$this->registerDataSource( new GameIconDataSource( $cache, $config ) );
+		$this->registerDataSource( new GameDataSource( $fetcher ) );
+		$this->registerDataSource( new UserIdDataSource( $fetcher ) );
+		$this->registerDataSource( new UserAvatarThumbnailDataSource( $fetcher ) );
+		$this->registerDataSource( new AssetThumbnailDataSource( $fetcher ) );
+		$this->registerDataSource( new GameIconDataSource( $fetcher ) );
 
 		$this->registerSimpleFetcherDataSource(
 			'groupRoles',
@@ -175,29 +169,12 @@ class DataSourceProvider {
 	}
 
 	/**
-	 * Gets the caching expiry for a data source.
-	 * If a specific value is not set, the default value (key '*') is used.
-	 * @param string $id The ID of the data source
-	 * @return int The caching expiry in seconds.
-	 */
-	protected function getCachingExpiry( string $id ): int {
-		if ( !isset( $this->cachingExpiries[$id] ) ) {
-			return $this->cachingExpiries['*'];
-		}
-
-		return $this->cachingExpiries[$id];
-	}
-
-	/**
 	 * Registers a data source if it is enabled.
 	 */
 	public function registerDataSource( IDataSource $dataSource ): void {
 		$id = $dataSource->getId();
 		if ( $this->isEnabled( $id ) ) {
 			$this->dataSources[$id] = $dataSource;
-			if ( $dataSource instanceof FetcherDataSource ) {
-				$dataSource->setCacheExpiry( $this->getCachingExpiry( $id ) );
-			}
 		}
 	}
 
@@ -214,8 +191,7 @@ class DataSourceProvider {
 	): void {
 		$this->registerDataSource( new SimpleFetcherDataSource(
 			$id,
-			$this->config,
-			$this->cache,
+			$this->fetcher,
 			$argumentSpecification,
 			$createEndpoint,
 			$processData,

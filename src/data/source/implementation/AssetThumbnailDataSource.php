@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\data\source\ThumbnailDataSource;
 
 class AssetThumbnailDataSource extends ThumbnailDataSource {
@@ -30,8 +31,8 @@ class AssetThumbnailDataSource extends ThumbnailDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function __construct( DataSourceCache $cache, Config $config ) {
-		parent::__construct( 'assetThumbnail', $cache, $config, 'assets', 'assetIds' );
+	public function __construct( RobloxAPIFetcher $fetcher ) {
+		parent::__construct( 'assetThumbnail', $fetcher, 'assets', 'assetIds' );
 	}
 
 	/**

@@ -25,8 +25,6 @@ namespace MediaWiki\Extension\RobloxAPI\data\cache;
  */
 abstract class DataSourceCache {
 
-	protected int $expiry;
-
 	/**
 	 * Tries to search for a value in the cache.
 	 * @param string $endpoint
@@ -41,13 +39,14 @@ abstract class DataSourceCache {
 	 * @param mixed $value
 	 * @param string[] $args
 	 * @param array<string, string> $optionalArgs
+	 * @param int $expiry The expiry in seconds
 	 */
 	abstract public function registerCacheEntry(
-		string $endpoint, mixed $value, array $args, array $optionalArgs
+		string $endpoint,
+		mixed $value,
+		array $args,
+		array $optionalArgs,
+		int $expiry
 	): void;
-
-	public function setExpiry( int $seconds ): void {
-		$this->expiry = $seconds;
-	}
 
 }

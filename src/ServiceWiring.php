@@ -21,6 +21,7 @@
 use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
 use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\MediaWikiServices;
@@ -41,8 +42,14 @@ return [
 	},
 	'RobloxAPI.DataSourceProvider' => static function ( MediaWikiServices $services ): DataSourceProvider {
 		$config = $services->getConfigFactory()->makeConfig( 'RobloxAPI' );
+		$fetcher = $services->get( 'RobloxAPI.RobloxAPIFetcher' );
+
+		return new DataSourceProvider( $config, $fetcher );
+	},
+	'RobloxAPI.RobloxAPIFetcher' => static function ( MediaWikiServices $services ): RobloxAPIFetcher {
+		$config = $services->getConfigFactory()->makeConfig( 'RobloxAPI' );
 		$cache = $services->get( 'RobloxAPI.DataSourceCache' );
 
-		return new DataSourceProvider( $config, $cache );
-	},
+		return new RobloxAPIFetcher( $config, $cache, $services->getHttpRequestFactory() );
+	}
 ];
