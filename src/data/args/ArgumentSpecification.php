@@ -28,8 +28,16 @@ class ArgumentSpecification {
 	/**
 	 * @param string[] $requiredArgs The required argument types.
 	 * @param array<string, string> $optionalArgs The optional argument's names and types.
+	 * @param bool $withJsonArgs Whether to add the default optional arguments for JSON data.
 	 */
-	public function __construct( public array $requiredArgs, public array $optionalArgs = [] ) {
+	public function __construct(
+		public array $requiredArgs,
+		public array $optionalArgs = [],
+		bool $withJsonArgs = false
+	) {
+		if ( $withJsonArgs ) {
+			$this->withJsonArgs();
+		}
 	}
 
 	/**
