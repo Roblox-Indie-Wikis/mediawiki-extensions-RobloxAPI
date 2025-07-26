@@ -161,7 +161,6 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		$output = $parser->getOutput();
 		$extensionData = $output->getExtensionData( RobloxAPIConstants::ExtensionDataKey ) ?? [];
 
-
 		if ( !array_key_exists( $dataSourceId, $extensionData ) ) {
 			$extensionData[$dataSourceId] = 0;
 		}

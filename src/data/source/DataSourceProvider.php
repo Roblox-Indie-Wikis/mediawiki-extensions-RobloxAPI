@@ -239,7 +239,7 @@ class DataSourceProvider {
 	 * @param class-string ...$classNames
 	 */
 	public function tryRegisterDataSources( string ...$classNames ): void {
-		foreach (  $classNames as $className ) {
+		foreach ( $classNames as $className ) {
 			$this->tryRegisterDataSource( $className );
 		}
 	}
