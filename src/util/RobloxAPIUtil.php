@@ -295,7 +295,7 @@ class RobloxAPIUtil {
 	}
 
 	/**
-	 * @return string HTML, to be interpreted as Wikitext
+	 * @return string Wikitext
 	 */
 	public static function formatException( RobloxAPIException $exception, Parser $parser, Config $config ): string {
 		$message = $parser->msg( $exception->getMessage() )
