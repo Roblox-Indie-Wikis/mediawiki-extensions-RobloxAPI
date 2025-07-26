@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\util;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Html\Html;
 use MediaWiki\Json\FormatJson;
@@ -122,12 +123,12 @@ class RobloxAPIUtil {
 
 	/**
 	 * Asserts that the given arg is allowed
-	 * @param Config $config The config object
+	 * @param Config|ServiceOptions $config The config or service options object
 	 * @param string $expectedType The expected arg type
 	 * @param string $arg The actual arg
 	 * @throws RobloxAPIException if the arg is invalid
 	 */
-	public static function assertArgAllowed( Config $config, string $expectedType, string $arg ): void {
+	public static function assertArgAllowed( Config|ServiceOptions $config, string $expectedType, string $arg ): void {
 		$allowedArgs = $config->get( RobloxAPIConstants::ConfAllowedArguments ) ?? [];
 		if ( !array_key_exists( $expectedType, $allowedArgs ) ) {
 			return;
@@ -224,11 +225,14 @@ class RobloxAPIUtil {
 	 * Verifies that the given arguments are valid
 	 * @param ArgumentSpecification $argumentSpecification The argument specification
 	 * @param string[] $args The arguments
-	 * @param Config $config The config object
+	 * @param Config|ServiceOptions $config The config or service options object
 	 * @return array[]
 	 * @throws RobloxAPIException if the arguments are invalid
 	 */
-	public static function parseArguments( ArgumentSpecification $argumentSpecification, array $args, Config $config
+	public static function parseArguments(
+		ArgumentSpecification $argumentSpecification,
+		array $args,
+		Config|ServiceOptions $config
 	): array {
 		// TODO extract some parts of this method into separate methods
 		$requiredArgs = [];

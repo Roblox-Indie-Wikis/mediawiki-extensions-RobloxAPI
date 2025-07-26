@@ -41,10 +41,13 @@ return [
 		return new SimpleExpiringCache( $services->getMainWANObjectCache() );
 	},
 	'RobloxAPI.DataSourceProvider' => static function ( MediaWikiServices $services ): DataSourceProvider {
-		$config = $services->getConfigFactory()->makeConfig( 'RobloxAPI' );
-		$fetcher = $services->get( 'RobloxAPI.RobloxAPIFetcher' );
-
-		return new DataSourceProvider( $config, $fetcher );
+		return new DataSourceProvider(
+			new ServiceOptions(
+				DataSourceProvider::CONSTRUCTOR_OPTIONS,
+				$services->getMainConfig()
+			),
+			$services->get( 'RobloxAPI.RobloxAPIFetcher' )
+		);
 	},
 	'RobloxAPI.RobloxAPIFetcher' => static function ( MediaWikiServices $services ): RobloxAPIFetcher {
 		return new RobloxAPIFetcher(

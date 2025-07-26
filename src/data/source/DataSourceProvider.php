@@ -21,7 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use Closure;
-use MediaWiki\Config\Config;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailDataSource;
@@ -47,13 +47,20 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
  */
 class DataSourceProvider {
 
+	public const CONSTRUCTOR_OPTIONS = [
+		RobloxAPIConstants::ConfAllowedArguments,
+		RobloxAPIConstants::ConfEnabledDataSources,
+	];
+
 	/**
 	 * @var array<string, IDataSource> The currently enabled data sources.
 	 */
 	public array $dataSources = [];
 
 	/** @noinspection PhpUnusedParameterInspection */
-	public function __construct( public Config $config, private readonly RobloxAPIFetcher $fetcher ) {
+	public function __construct( public ServiceOptions $options, private readonly RobloxAPIFetcher $fetcher ) {
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
+
 		$this->registerDataSource( new GameDataSource( $fetcher ) );
 		$this->registerDataSource( new UserIdDataSource( $fetcher ) );
 		$this->registerDataSource( new UserAvatarThumbnailDataSource( $fetcher ) );
@@ -162,7 +169,7 @@ class DataSourceProvider {
 	 * Checks the config on whether a data source is enabled.
 	 */
 	protected function isEnabled( string $id ): bool {
-		$enabledDataSources = $this->config->get( RobloxAPIConstants::ConfEnabledDataSources );
+		$enabledDataSources = $this->options->get( RobloxAPIConstants::ConfEnabledDataSources );
 
 		return in_array( $id, $enabledDataSources, true );
 	}

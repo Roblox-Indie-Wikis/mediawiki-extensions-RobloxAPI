@@ -39,7 +39,7 @@ class RobloxAPIFetcher {
 		RobloxAPIConstants::ConfCachingExpiries,
 		RobloxAPIConstants::ConfRequestUserAgent,
 	];
-	
+
 	public function __construct(
 		private readonly ServiceOptions $options,
 		private readonly DataSourceCache $cache,
