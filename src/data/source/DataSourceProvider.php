@@ -20,6 +20,7 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
+use Closure;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailDataSource;
@@ -170,9 +171,9 @@ class DataSourceProvider {
 
 	/**
 	 * Tries to register a data source, but ignores any exceptions.
-	 * @param callable(): IDataSource $dataSourceFactory
+	 * @param Closure(): IDataSource $dataSourceFactory
 	 */
-	public function tryRegisterDataSource( callable $dataSourceFactory ): void {
+	public function tryRegisterDataSource( Closure $dataSourceFactory ): void {
 		try {
 			$dataSource = $dataSourceFactory();
 			$this->registerDataSource( $dataSource );

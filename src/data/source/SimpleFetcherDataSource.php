@@ -20,6 +20,7 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
+use Closure;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 
@@ -29,40 +30,20 @@ use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 class SimpleFetcherDataSource extends FetcherDataSource {
 
 	/**
-	 * @var callable The function to create the endpoint.
-	 */
-	protected $createEndpoint;
-
-	/**
-	 * @var callable|null The function to process the data.
-	 */
-	protected $processData;
-
-	/**
-	 * @var bool Whether to register a parser function.
-	 */
-	protected bool $registerParserFunction;
-
-	/**
-	 * @var ArgumentSpecification The argument specification.
-	 */
-	protected ArgumentSpecification $argumentSpecification;
-
-	/**
 	 * @inheritDoc
-	 * @param callable( array, array ): string $createEndpoint The function to create the endpoint.
-	 * @param callable( mixed, array, array ): mixed|null $processData The function to process the data.
+	 * @param Closure( array, array ): string $createEndpoint The function to create the endpoint.
+	 * @param Closure( mixed, array, array ): mixed|null $processData The function to process the data.
 	 * @param bool $registerParserFunction Whether to register a legacy parser function.
 	 */
 	public function __construct(
-		string $id, Config $config, ArgumentSpecification $argumentSpecification, callable $createEndpoint,
-		?callable $processData = null, bool $registerParserFunction = false
+		string $id,
+		Config $config,
+		protected ArgumentSpecification $argumentSpecification,
+		protected Closure $createEndpoint,
+		protected ?Closure $processData = null,
+		protected bool $registerParserFunction = false
 	) {
 		parent::__construct( $id, self::createSimpleCache(), $config );
-		$this->createEndpoint = $createEndpoint;
-		$this->processData = $processData;
-		$this->registerParserFunction = $registerParserFunction;
-		$this->argumentSpecification = $argumentSpecification;
 	}
 
 	/**
