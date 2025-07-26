@@ -29,6 +29,10 @@ use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Json\FormatJson;
 use MediaWiki\Logger\LoggerFactory;
 
+/**
+ * This class holds all logic for fetching data from Roblox API endpoints.
+ * @since 1.6.0
+ */
 class RobloxAPIFetcher {
 
 	/**
