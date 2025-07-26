@@ -79,21 +79,6 @@ class RobloxAPIUtil {
 		}
 	}
 
-	// TODO merge this with assertArgsAllowed
-
-	/**
-	 * Asserts that the given args are valid
-	 * @param string[] $expectedArgs The expected arg types
-	 * @param string[] $args The actual args
-	 * @throws RobloxAPIException if the args are invalid
-	 */
-	public static function assertValidArgs( array $expectedArgs, array $args ): void {
-		foreach ( $args as $index => $arg ) {
-			$expectedType = $expectedArgs[$index];
-			self::assertValidArg( $expectedType, $arg );
-		}
-	}
-
 	/**
 	 * Asserts that the given arg is valid
 	 * @param string $expectedType The expected arg type
@@ -146,22 +131,6 @@ class RobloxAPIUtil {
 				default:
 					throw new IllegalOperationException( "Unknown expected arg type: $expectedType" );
 			}
-		}
-	}
-
-	/**
-	 * Asserts that the given args are allowed
-	 * @param Config $config The config object
-	 * @param array<string, string> $expectedArgs The expected arg types
-	 * @param array<string, string> $args The actual args
-	 * @throws RobloxAPIException if the args are invalid
-	 */
-	public static function assertArgsAllowed(
-		Config $config, array $expectedArgs, array $args
-	): void {
-		foreach ( $args as $index => $arg ) {
-			$expectedType = $expectedArgs[$index];
-			self::assertArgAllowed( $config, $expectedType, $arg );
 		}
 	}
 

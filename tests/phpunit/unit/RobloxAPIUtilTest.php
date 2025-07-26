@@ -20,6 +20,7 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Tests;
 
+use HashConfig;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Utils\UrlUtils;
@@ -68,41 +69,43 @@ class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::assertArgsAllowed
+	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::assertArgAllowed
 	 */
 	public function testAssertArgsAllowed(): void {
-		$config = new \HashConfig( [
+		$config = new HashConfig( [
 			'RobloxAPIAllowedArguments' => [
 				'UserID' => [ '123454321' ],
 				'GroupID' => [],
 			],
 		] );
 
-		RobloxAPIUtil::assertArgsAllowed( $config, [ 'UserID' ], [ '123454321' ] );
-		RobloxAPIUtil::assertArgsAllowed( $config, [ 'UserID', 'GroupID' ], [ '123454321', '14981124' ] );
-		RobloxAPIUtil::assertArgsAllowed( $config, [ 'GroupID', 'GroupID' ], [ '512512312', '901480124' ] );
+		RobloxAPIUtil::assertArgAllowed( $config, 'UserID', '123454321' );
+		RobloxAPIUtil::assertArgAllowed( $config, 'GroupID', '14981124' );
+		RobloxAPIUtil::assertArgAllowed( $config, 'GroupID', '512512312' );
+		RobloxAPIUtil::assertArgAllowed( $config, 'GroupID', '901480124' );
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-arg-not-allowed' );
-		RobloxAPIUtil::assertArgsAllowed( $config, [ 'UserID' ], [ '54321' ] );
-		RobloxAPIUtil::assertArgsAllowed( $config, [ 'UserID', 'GroupID' ], [ '12345', '54321' ] );
+		RobloxAPIUtil::assertArgAllowed( $config, 'UserID', '54321' );
+		RobloxAPIUtil::assertArgAllowed( $config, 'UserID', '12345' );
+		RobloxAPIUtil::assertArgAllowed( $config, 'GroupID', '54321' );
 	}
 
 	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::assertValidArgs
+	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::assertValidArg
 	 */
 	public function testAssertValidArgs(): void {
-		RobloxAPIUtil::assertValidArgs( [ 'UserID' ], [ '123454321' ] );
-		RobloxAPIUtil::assertValidArgs( [ 'ThumbnailSize' ], [ '140x140' ] );
-		RobloxAPIUtil::assertValidArgs( [ 'Username' ], [ 'builderman_123' ] );
+		RobloxAPIUtil::assertValidArg( 'UserID', '123454321' );
+		RobloxAPIUtil::assertValidArg( 'ThumbnailSize', '140x140' );
+		RobloxAPIUtil::assertValidArg( 'Username', 'builderman_123' );
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-thumbnail-size' );
-		RobloxAPIUtil::assertValidArgs( [ 'ThumbnailSize' ], [ '12345' ] );
+		RobloxAPIUtil::assertValidArg( 'ThumbnailSize', '12345' );
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-username' );
-		RobloxAPIUtil::assertValidArgs( [ 'Username' ], [ '__invalidusername' ] );
+		RobloxAPIUtil::assertValidArg( 'Username', '__invalidusername' );
 	}
 
 	/**
