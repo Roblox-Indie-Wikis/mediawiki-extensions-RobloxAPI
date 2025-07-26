@@ -152,14 +152,16 @@ class DataSourceProvider {
 		);
 
 		// dependent data sources will throw an exception if the required data source is not enabled
-		$this->tryRegisterDataSource( fn (): IDataSource => new GroupRankDataSource( $this ) );
-		$this->tryRegisterDataSource( fn (): IDataSource => new PlaceActivePlayersDataSource( $this ) );
-		$this->tryRegisterDataSource( fn (): IDataSource => new PlaceVisitsDataSource( $this ) );
-		$this->tryRegisterDataSource( fn (): IDataSource => new GroupMembersDataSource( $this ) );
-		$this->tryRegisterDataSource( fn (): IDataSource => new UserAvatarThumbnailUrlDataSource( $this ) );
-		$this->tryRegisterDataSource( fn (): IDataSource => new AssetThumbnailUrlDataSource( $this ) );
-		$this->tryRegisterDataSource( fn (): IDataSource => new GameIconUrlDataSource( $this ) );
-		$this->tryRegisterDataSource( fn (): IDataSource => new UserPlaceVisitsDataSource( $this ) );
+		$this->tryRegisterDataSources(
+			GroupRankDataSource::class,
+			PlaceActivePlayersDataSource::class,
+			PlaceVisitsDataSource::class,
+			GroupMembersDataSource::class,
+			UserAvatarThumbnailUrlDataSource::class,
+			AssetThumbnailUrlDataSource::class,
+			GameIconUrlDataSource::class,
+			UserPlaceVisitsDataSource::class,
+		);
 	}
 
 	/**
@@ -221,14 +223,24 @@ class DataSourceProvider {
 
 	/**
 	 * Tries to register a data source, but ignores any exceptions.
-	 * @param Closure(): IDataSource $dataSourceFactory
+	 * @param class-string $className
 	 */
-	public function tryRegisterDataSource( Closure $dataSourceFactory ): void {
+	public function tryRegisterDataSource( string $className ): void {
 		try {
-			$dataSource = $dataSourceFactory();
+			$dataSource = new $className( $this );
 			$this->registerDataSource( $dataSource );
 		} catch ( RobloxAPIException $e ) {
 			wfDebugLog( 'RobloxAPI', "Failed to register data source: {$e->getMessage()}" );
+		}
+	}
+
+	/**
+	 * Tries to register multiple data sources, but ignores any exceptions.
+	 * @param class-string ...$classNames
+	 */
+	public function tryRegisterDataSources( string ...$classNames ): void {
+		foreach (  $classNames as $className ) {
+			$this->tryRegisterDataSource( $className );
 		}
 	}
 
