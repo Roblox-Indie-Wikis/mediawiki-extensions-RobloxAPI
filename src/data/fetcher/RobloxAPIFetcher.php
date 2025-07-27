@@ -67,10 +67,10 @@ class RobloxAPIFetcher {
 		array $headers,
 		Closure $processRequestOptions
 	): mixed {
-		$cached_result = $this->cache->getResultForEndpoint( $endpoint, $requiredArgs, $optionalArgs );
+		$cachedResult = $this->cache->getResultForEndpoint( $endpoint, $requiredArgs, $optionalArgs );
 
-		if ( $cached_result !== null ) {
-			return $cached_result;
+		if ( $cachedResult !== null ) {
+			return $cachedResult;
 		}
 
 		$options = [];
