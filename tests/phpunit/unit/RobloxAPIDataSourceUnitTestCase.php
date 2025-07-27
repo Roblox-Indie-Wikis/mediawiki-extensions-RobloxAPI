@@ -22,13 +22,14 @@ namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use GuzzleHttpRequest;
 use MediaWiki\Config\ServiceOptions;
-use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
+use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Status\Status;
 use MediaWikiUnitTestCase;
 use StatusValue;
+use WANObjectCache;
 
 /**
  * Base class for Roblox API unit tests.
@@ -63,21 +64,25 @@ abstract class RobloxAPIDataSourceUnitTestCase extends MediaWikiUnitTestCase {
 		return $httpRequestFactory;
 	}
 
-	protected function createMockFetcher( ?string $returnedContent, int $status = 200 ): RobloxAPIFetcher {
-		$serviceOptions = new ServiceOptions(
-			[
-				RobloxAPIConstants::ConfCachingExpiries,
-				RobloxAPIConstants::ConfRequestUserAgent
-			],
-			[
-				RobloxAPIConstants::ConfCachingExpiries => [ '*' => 600 ],
-				RobloxAPIConstants::ConfRequestUserAgent => null
-			]
+	private function createMockCache(): DataSourceCache {
+		return new DataSourceCache(
+			self::createServiceOptions( [ RobloxAPIConstants::ConfDisableCache => true ] ),
+			$this->createMock( WANObjectCache::class )
 		);
-		$cache = new EmptyCache();
+	}
+
+	protected function createMockFetcher( ?string $returnedContent, int $status = 200 ): RobloxAPIFetcher {
+		$serviceOptions = self::createServiceOptions( [
+			RobloxAPIConstants::ConfCachingExpiries => [ '*' => 600 ],
+			RobloxAPIConstants::ConfRequestUserAgent => null
+		] );
 		$httpRequestFactory = $this->createMockHttpRequestFactory( $returnedContent, $status );
 
-		return new RobloxAPIFetcher( $serviceOptions, $cache, $httpRequestFactory );
+		return new RobloxAPIFetcher( $serviceOptions, $this->createMockCache(), $httpRequestFactory );
+	}
+
+	private static function createServiceOptions( array $options ): ServiceOptions {
+		return new ServiceOptions( array_keys( $options ), $options );
 	}
 
 }
