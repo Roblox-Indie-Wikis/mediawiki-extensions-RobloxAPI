@@ -24,12 +24,13 @@ use HashConfig;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Utils\UrlUtils;
+use MediaWikiUnitTestCase;
 
 /**
  * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil
  * @group RobloxAPI
  */
-class RobloxAPIUtilTest extends \MediaWikiUnitTestCase {
+class RobloxAPIUtilTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::isValidId

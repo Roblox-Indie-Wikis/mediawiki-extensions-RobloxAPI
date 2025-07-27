@@ -99,7 +99,8 @@
 		"RobloxAPIHooks": {
 			"class": "MediaWiki\\Extension\\RobloxAPI\\Hooks",
 			"services": [
-				"ConfigFactory"
+				"ConfigFactory",
+				"RobloxAPI.DataSourceProvider"
 			]
 		}
 	},
@@ -112,5 +113,8 @@
 			"i18n"
 		]
 	},
+	"ServiceWiringFiles": [
+		"src/ServiceWiring.php"
+	],
 	"manifest_version": 2
 }

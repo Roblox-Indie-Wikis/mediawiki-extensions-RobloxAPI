@@ -33,7 +33,6 @@ use MediaWiki\Parser\Parser;
 class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 	private Config $config;
-	private DataSourceProvider $dataSourceProvider;
 	/**
 	 * @var parserFunction\RobloxApiParserFunction[]
 	 */
@@ -43,10 +42,11 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 */
 	private array $usageLimits;
 
-	public function __construct( ConfigFactory $configFactory ) {
+	public function __construct(
+		ConfigFactory $configFactory,
+		private readonly DataSourceProvider $dataSourceProvider
+	) {
 		$this->config = $configFactory->makeConfig( 'RobloxAPI' );
-
-		$this->dataSourceProvider = new DataSourceProvider( $this->config );
 
 		$this->legacyParserFunctions = [];
 		if ( $this->config->get( RobloxAPIConstants::ConfRegisterLegacyParserFunctions ) ) {

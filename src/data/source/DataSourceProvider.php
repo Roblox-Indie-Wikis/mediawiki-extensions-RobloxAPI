@@ -21,8 +21,9 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use Closure;
-use MediaWiki\Config\Config;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailUrlDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameDataSource;
@@ -46,25 +47,25 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
  */
 class DataSourceProvider {
 
+	public const CONSTRUCTOR_OPTIONS = [
+		RobloxAPIConstants::ConfAllowedArguments,
+		RobloxAPIConstants::ConfEnabledDataSources,
+	];
+
 	/**
 	 * @var array<string, IDataSource> The currently enabled data sources.
 	 */
 	public array $dataSources = [];
-	/**
-	 * @var int[] the amount of time for each data source after which the cache
-	 * expires
-	 */
-	public array $cachingExpiries;
 
 	/** @noinspection PhpUnusedParameterInspection */
-	public function __construct( public Config $config ) {
-		$this->cachingExpiries = $this->config->get( RobloxAPIConstants::ConfCachingExpiries );
+	public function __construct( public ServiceOptions $options, private readonly RobloxAPIFetcher $fetcher ) {
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 
-		$this->registerDataSource( new GameDataSource( $config ) );
-		$this->registerDataSource( new UserIdDataSource( $config ) );
-		$this->registerDataSource( new UserAvatarThumbnailDataSource( $config ) );
-		$this->registerDataSource( new AssetThumbnailDataSource( $config ) );
-		$this->registerDataSource( new GameIconDataSource( $config ) );
+		$this->registerDataSource( new GameDataSource( $fetcher ) );
+		$this->registerDataSource( new UserIdDataSource( $fetcher ) );
+		$this->registerDataSource( new UserAvatarThumbnailDataSource( $fetcher ) );
+		$this->registerDataSource( new AssetThumbnailDataSource( $fetcher ) );
+		$this->registerDataSource( new GameIconDataSource( $fetcher ) );
 
 		$this->registerSimpleFetcherDataSource(
 			'groupRoles',
@@ -168,23 +169,9 @@ class DataSourceProvider {
 	 * Checks the config on whether a data source is enabled.
 	 */
 	protected function isEnabled( string $id ): bool {
-		$enabledDataSources = $this->config->get( RobloxAPIConstants::ConfEnabledDataSources );
+		$enabledDataSources = $this->options->get( RobloxAPIConstants::ConfEnabledDataSources );
 
 		return in_array( $id, $enabledDataSources, true );
-	}
-
-	/**
-	 * Gets the caching expiry for a data source.
-	 * If a specific value is not set, the default value (key '*') is used.
-	 * @param string $id The ID of the data source
-	 * @return int The caching expiry in seconds.
-	 */
-	protected function getCachingExpiry( string $id ): int {
-		if ( !isset( $this->cachingExpiries[$id] ) ) {
-			return $this->cachingExpiries['*'];
-		}
-
-		return $this->cachingExpiries[$id];
 	}
 
 	/**
@@ -194,9 +181,6 @@ class DataSourceProvider {
 		$id = $dataSource->getId();
 		if ( $this->isEnabled( $id ) ) {
 			$this->dataSources[$id] = $dataSource;
-			if ( $dataSource instanceof FetcherDataSource ) {
-				$dataSource->setCacheExpiry( $this->getCachingExpiry( $id ) );
-			}
 		}
 	}
 
@@ -213,7 +197,7 @@ class DataSourceProvider {
 	): void {
 		$this->registerDataSource( new SimpleFetcherDataSource(
 			$id,
-			$this->config,
+			$this->fetcher,
 			$argumentSpecification,
 			$createEndpoint,
 			$processData,

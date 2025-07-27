@@ -20,8 +20,8 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\data\source\ThumbnailDataSource;
 
 class UserAvatarThumbnailDataSource extends ThumbnailDataSource {
@@ -29,8 +29,8 @@ class UserAvatarThumbnailDataSource extends ThumbnailDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function __construct( Config $config ) {
-		parent::__construct( 'userAvatarThumbnail', self::createSimpleCache(), $config, 'users/avatar', 'userIds' );
+	public function __construct( RobloxAPIFetcher $fetcher ) {
+		parent::__construct( 'userAvatarThumbnail', $fetcher, 'users/avatar', 'userIds' );
 	}
 
 	/**

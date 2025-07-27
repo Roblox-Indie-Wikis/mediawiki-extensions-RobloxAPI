@@ -20,16 +20,8 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
-use MediaWiki\Config\Config;
-use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
-use MediaWiki\Extension\RobloxAPI\data\cache\EmptyCache;
-use MediaWiki\Extension\RobloxAPI\data\cache\SimpleExpiringCache;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
-use MediaWiki\Http\HttpRequestFactory;
-use MediaWiki\Json\FormatJson;
-use MediaWiki\Logger\LoggerFactory;
-use MediaWiki\MediaWikiServices;
 use MediaWiki\Parser\Parser;
 
 /**
@@ -38,25 +30,14 @@ use MediaWiki\Parser\Parser;
 abstract class FetcherDataSource implements IDataSource {
 
 	/**
-	 * @var ?HttpRequestFactory The HTTP request factory. Can be overridden for testing.
-	 */
-	private ?HttpRequestFactory $httpRequestFactory;
-
-	/**
 	 * Constructs a new data source.
 	 * @param string $id The ID of this data source.
-	 * @param DataSourceCache $cache The cache of this data source.
-	 * @param Config $config The extension configuration.
+	 * @param RobloxAPIFetcher $fetcher An instance of the fetcher service.
 	 */
 	public function __construct(
 		public string $id,
-		protected DataSourceCache $cache,
-		protected Config $config
+		private readonly RobloxAPIFetcher $fetcher
 	) {
-	}
-
-	public function setCacheExpiry( int $seconds ): void {
-		$this->cache->setExpiry( $seconds );
 	}
 
 	/**
@@ -67,7 +48,16 @@ abstract class FetcherDataSource implements IDataSource {
 	 */
 	public function fetch( array $requiredArgs, array $optionalArgs = [] ): mixed {
 		$endpoint = $this->getEndpoint( $requiredArgs, $optionalArgs );
-		$data = $this->getDataFromEndpoint( $endpoint, $requiredArgs, $optionalArgs );
+		$headers = $this->getAdditionalHeaders( $requiredArgs, $optionalArgs );
+
+		$data = $this->fetcher->getDataFromEndpoint(
+			$this->id,
+			$endpoint,
+			$requiredArgs,
+			$optionalArgs,
+			$headers,
+			$this->processRequestOptions( ... )
+		);
 
 		$processedData = $this->processData( $data, $requiredArgs, $optionalArgs );
 
@@ -76,70 +66,6 @@ abstract class FetcherDataSource implements IDataSource {
 		}
 
 		return $processedData;
-	}
-
-	/**
-	 * Fetches data from the given endpoint.
-	 * @param string $endpoint The endpoint to fetch data from.
-	 * @param array<string> $requiredArgs
-	 * @param array<string, string> $optionalArgs
-	 * @return mixed The fetched data.
-	 * @throws RobloxAPIException if there are any errors during the process
-	 */
-	public function getDataFromEndpoint( string $endpoint, array $requiredArgs, array $optionalArgs ): mixed {
-		$cached_result = $this->cache->getResultForEndpoint( $endpoint, $requiredArgs, $optionalArgs );
-
-		if ( $cached_result !== null ) {
-			return $cached_result;
-		}
-
-		$options = [];
-
-		$userAgent = $this->config->get( RobloxAPIConstants::ConfRequestUserAgent );
-		if ( $userAgent !== null && $userAgent !== '' ) {
-			$options['userAgent'] = $userAgent;
-		}
-
-		$this->processRequestOptions( $options, $requiredArgs, $optionalArgs );
-
-		$this->httpRequestFactory ??= MediaWikiServices::getInstance()->getHttpRequestFactory();
-		// @phan-suppress-next-line PhanParamTooFewInPHPDoc the $caller arg has a default so no need to supply it
-		$request = $this->httpRequestFactory->create( $endpoint, $options );
-		$request->setHeader( 'Accept', 'application/json' );
-
-		$headers = $this->getAdditionalHeaders( $requiredArgs, $optionalArgs );
-		foreach ( $headers as $header => $value ) {
-			$request->setHeader( $header, $value );
-		}
-
-		$status = $request->execute();
-
-		if ( !$status->isOK() ) {
-			$logger = LoggerFactory::getInstance( 'RobloxAPI' );
-			$errors = $status->getMessages( 'error' );
-			$logger->warning( 'Failed to fetch data from Roblox API', [
-				'endpoint' => $endpoint,
-				'errors' => $errors,
-				'status' => $status->getStatusValue(),
-				'content' => $request->getContent(),
-			] );
-		}
-
-		$json = $request->getContent();
-
-		if ( !$status->isOK() || $json === null ) {
-			throw new RobloxAPIException( 'robloxapi-error-request-failed' );
-		}
-
-		$data = FormatJson::decode( $json );
-
-		if ( $data === null ) {
-			throw new RobloxAPIException( 'robloxapi-error-decode-failure' );
-		}
-
-		$this->cache->registerCacheEntry( $endpoint, $data, $requiredArgs, $optionalArgs );
-
-		return $data;
 	}
 
 	/**
@@ -173,20 +99,6 @@ abstract class FetcherDataSource implements IDataSource {
 	}
 
 	/**
-	 * Creates a simple expiring cache. If we're in a unit test environment, an empty cache is created.
-	 * @return DataSourceCache The created cache.
-	 */
-	protected static function createSimpleCache(): DataSourceCache {
-		global $wgRobloxAPIDisableCache;
-		if ( defined( 'MW_PHPUNIT_TEST' ) || $wgRobloxAPIDisableCache ) {
-			// we're either in a unit test environment or the cache is disabled
-			return new EmptyCache();
-		}
-
-		return new SimpleExpiringCache();
-	}
-
-	/**
 	 * Allows specifying additional headers for the request.
 	 * @param array<string> $requiredArgs
 	 * @param array<string, string> $optionalArgs
@@ -201,14 +113,6 @@ abstract class FetcherDataSource implements IDataSource {
 	 */
 	public function shouldRegisterLegacyParserFunction(): bool {
 		return false;
-	}
-
-	/**
-	 * Sets the HTTP request factory.
-	 * @param HttpRequestFactory $httpRequestFactory The HTTP request factory.
-	 */
-	public function setHttpRequestFactory( HttpRequestFactory $httpRequestFactory ): void {
-		$this->httpRequestFactory = $httpRequestFactory;
 	}
 
 	/**

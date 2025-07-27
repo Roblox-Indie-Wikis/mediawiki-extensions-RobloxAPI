@@ -20,8 +20,7 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
-use MediaWiki\Config\Config;
-use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
 abstract class ThumbnailDataSource extends FetcherDataSource {
@@ -33,12 +32,11 @@ abstract class ThumbnailDataSource extends FetcherDataSource {
 	 */
 	public function __construct(
 		string $id,
-		DataSourceCache $cache,
-		Config $config,
+		RobloxAPIFetcher $fetcher,
 		private readonly string $apiPath,
 		protected string $thumbnailIdParamName
 	) {
-		parent::__construct( $id, $cache, $config );
+		parent::__construct( $id, $fetcher );
 	}
 
 	/**

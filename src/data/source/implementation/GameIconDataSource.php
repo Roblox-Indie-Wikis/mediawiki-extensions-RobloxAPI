@@ -20,8 +20,8 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\data\source\ThumbnailDataSource;
 
 class GameIconDataSource extends ThumbnailDataSource {
@@ -29,8 +29,8 @@ class GameIconDataSource extends ThumbnailDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function __construct( Config $config ) {
-		parent::__construct( 'gameIcon', self::createSimpleCache(), $config, 'places/gameicons', 'placeIds' );
+	public function __construct( RobloxAPIFetcher $fetcher ) {
+		parent::__construct( 'gameIcon', $fetcher, 'places/gameicons', 'placeIds' );
 	}
 
 	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
