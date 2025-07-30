@@ -63,6 +63,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 			try {
 				return $this->handleParserFunctionCall( $parser, $args );
 			} catch ( RobloxAPIException $exception ) {
+				$parser->addTrackingCategory( 'robloxapi-category-error' );
 				return RobloxAPIUtil::formatException( $exception, $parser, $this->config );
 			}
 		} );
