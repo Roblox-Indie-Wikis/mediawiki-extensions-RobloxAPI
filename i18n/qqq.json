@@ -27,5 +27,7 @@
 	"robloxapi-error-invalid-user-games-limit": "Error message shown when an invalid limit is provided for the user games data source. $1 is the invalid limit. Must be 10, 25 or 50",
 	"robloxapi-error-invalid-sort-order": "Error message shown when an invalid sort order is provided. $1 is the invalid sort order. Must be 'Asc' or 'Desc'",
 	"robloxapi-error-usage-limit": "Error message shown when trying to exceed a data source usage limit. $1 is the data source id, $2 the amount of times it can be used per page.",
-	"robloxapi-error-usage-limit-dependent": "Error message shown when trying to exceed a data source usage limit through a dependent data source. $1 is the id of the fetcher data source, $2 the amount of times it can be used per page, $3 is the id of the dependent data source."
+	"robloxapi-error-usage-limit-dependent": "Error message shown when trying to exceed a data source usage limit through a dependent data source. $1 is the id of the fetcher data source, $2 the amount of times it can be used per page, $3 is the id of the dependent data source.",
+	"robloxapi-category-deprecated-parser-function": "{{Tracking category name}}\nName of tracking category that pages are placted into when a deprecated parser function of the RobloxAPI extension is used on them.",
+	"robloxapi-category-deprecated-parser-function-desc": "Description of the deprecated parser function tracking category."
 }

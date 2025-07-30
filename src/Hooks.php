@@ -73,6 +73,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 			$parser->setFunctionHook(
 				$id,
 				function ( Parser $parser, mixed ...$args ) use ( $function ): array|bool|string {
+					$parser->addTrackingCategory( 'robloxapi-category-deprecated-parser-function' );
 					if ( $this->config->get( RobloxAPIConstants::ConfParserFunctionsExpensive ) &&
 						!$parser->incrementExpensiveFunctionCount() ) {
 						return false;
