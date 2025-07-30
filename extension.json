@@ -114,7 +114,8 @@
 		]
 	},
 	"TrackingCategories": [
-		"robloxapi-category-deprecated-parser-function"
+		"robloxapi-category-deprecated-parser-function",
+		"robloxapi-category-error"
 	],
 	"ServiceWiringFiles": [
 		"src/ServiceWiring.php"
