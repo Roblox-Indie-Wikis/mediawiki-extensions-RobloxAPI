@@ -113,6 +113,9 @@
 			"i18n"
 		]
 	},
+	"TrackingCategories": [
+		"robloxapi-category-deprecated-parser-function"
+	],
 	"ServiceWiringFiles": [
 		"src/ServiceWiring.php"
 	],
