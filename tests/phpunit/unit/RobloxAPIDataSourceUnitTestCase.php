@@ -29,7 +29,7 @@ use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Status\Status;
 use MediaWikiUnitTestCase;
 use StatusValue;
-use WANObjectCache;
+use Wikimedia\ObjectCache\WANObjectCache;
 
 /**
  * Base class for Roblox API unit tests.

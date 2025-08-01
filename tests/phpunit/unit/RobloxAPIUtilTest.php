@@ -20,7 +20,7 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Tests;
 
-use HashConfig;
+use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use MediaWiki\Utils\UrlUtils;
