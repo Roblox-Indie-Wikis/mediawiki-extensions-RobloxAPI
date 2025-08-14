@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Умар"
+		]
+	},
+	"robloxapi-error-decode-failure": "Декодировка дан аьтто ца баьлла жоп!",
+	"robloxapi-error-datasource-not-found": "Хаамийн хьост \"$1\" ца карийна!",
+	"robloxapi-error-unexpected-data-structure": "Дагахь боцу структурин хаамаш!",
+	"robloxapi-error-datasource-returned-no-data": "Хаамийн хьосто ха ца белира хаамаш!",
+	"robloxapi-error-request-failed": "Дехар кхочуш ца хилла!",
+	"robloxapi-error-arg-not-allowed": "Аргумент \"$1\" мегаш йац \"$2\" тайпанна!",
+	"robloxapi-error-invalid-thumbnail-size": "Миниатюрин нийса боцу барам!",
+	"robloxapi-error-invalid-username": "Нийса йоцу декъашхочун цӀе!",
+	"robloxapi-error-missing-argument": "$1 тайпанан оьшуш йолу аргумент йац!",
+	"robloxapi-error-unknown-optional-argument": "Ца йевза лаамехь аргумент \"$1\"!",
+	"robloxapi-error-invalid-user-games-limit": "Нийса йоцу лимит \"$1\"! 10, 25 йа 50 хила йеза.",
+	"robloxapi-error-invalid-sort-order": "Нийса йоцу дӀасакъастаран рогӀалла \"$1\"! «Asc» йа «Desc» хила йеза."
+}
