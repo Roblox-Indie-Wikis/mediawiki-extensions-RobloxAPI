@@ -90,7 +90,7 @@
 		}
 	},
 	"ConfigRegistry": {
-		"RobloxAPI": "GlobalVarConfig::newInstance"
+		"RobloxAPI": "MediaWiki\\Config\\GlobalVarConfig::newInstance"
 	},
 	"ExtensionMessagesFiles": {
 		"RobloxAPIMagic": "RobloxAPI.i18n.magic.php"
