@@ -8,7 +8,7 @@
 	"robloxapi-error-no-arguments": "Please provide a valid data source!",
 	"robloxapi-error-invalid-id": "Invalid ID value \"$1\"!",
 	"robloxapi-error-invalid-data": "Endpoint returned invalid data!",
-	"robloxapi-error-decode-failure":  "Failed to decode response!",
+	"robloxapi-error-decode-failure": "Failed to decode response!",
 	"robloxapi-error-datasource-not-found": "Data source \"$1\" not found!",
 	"robloxapi-error-unexpected-data-structure": "Unexpected data structure!",
 	"robloxapi-error-datasource-returned-no-data": "Data source returned no data!",
@@ -27,5 +27,9 @@
 	"robloxapi-error-invalid-user-games-limit": "Invalid limit \"$1\"! Must be 10, 25 or 50.",
 	"robloxapi-error-invalid-sort-order": "Invalid sort order \"$1\"! Must be \"Asc\" or \"Desc\".",
 	"robloxapi-error-usage-limit": "The \"$1\" data source can only be used $2 times per page!",
-	"robloxapi-error-usage-limit-dependent": "The \"$1\" data source (called through dependent data source $3) can only be used $2 times per page!"
+	"robloxapi-error-usage-limit-dependent": "The \"$1\" data source (called through dependent data source \"$3\") can only be used $2 times per page!",
+	"robloxapi-category-deprecated-parser-function": "Pages using deprecated RobloxAPI parser functions",
+	"robloxapi-category-deprecated-parser-function-desc": "The page uses a deprecated parser function provided by the RobloxAPI extension.",
+	"robloxapi-category-error": "Pages with RobloxAPI errors",
+	"robloxapi-category-error-desc": "The page uses the <code>{{#robloxAPI}}</code> parser function incorrectly, resulting in an error."
 }

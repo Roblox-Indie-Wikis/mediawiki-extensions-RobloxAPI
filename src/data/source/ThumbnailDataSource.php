@@ -20,21 +20,10 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
-use MediaWiki\Config\Config;
-use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
 abstract class ThumbnailDataSource extends FetcherDataSource {
-
-	/**
-	 * @var string The path of the thumbnail API to use
-	 */
-	private string $apiPath;
-
-	/**
-	 * @var string The parameter name to use for submitting the thumbnail ID
-	 */
-	protected string $thumbnailIdParamName;
 
 	/**
 	 * @inheritDoc
@@ -42,11 +31,12 @@ abstract class ThumbnailDataSource extends FetcherDataSource {
 	 * @param string $thumbnailIdParamName The parameter name to use for submitting the thumbnail ID
 	 */
 	public function __construct(
-		string $id, DataSourceCache $cache, Config $config, string $apiPath, string $thumbnailIdParamName
+		string $id,
+		RobloxAPIFetcher $fetcher,
+		private readonly string $apiPath,
+		protected readonly string $thumbnailIdParamName
 	) {
-		parent::__construct( $id, $cache, $config );
-		$this->apiPath = $apiPath;
-		$this->thumbnailIdParamName = $thumbnailIdParamName;
+		parent::__construct( $id, $fetcher );
 	}
 
 	/**
@@ -66,7 +56,7 @@ abstract class ThumbnailDataSource extends FetcherDataSource {
 	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
 		$thumbnailId = $requiredArgs[0];
 		$size = $requiredArgs[1];
-		$isCircular = $optionalArgs['is_circular'] ?? false;
+		$isCircular = strtolower( (string)( $optionalArgs['is_circular'] ?? '' ) ) === 'true';
 		$format = $optionalArgs['format'] ?? 'Png';
 
 		$query = http_build_query( [

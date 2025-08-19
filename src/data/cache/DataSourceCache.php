@@ -20,12 +20,30 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\cache;
 
-/**
- * Defines a caching strategy for a data source.
- */
-abstract class DataSourceCache {
+use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
+use Wikimedia\ObjectCache\WANObjectCache;
 
-	protected int $expiry;
+/**
+ * Caches data returned by the Roblox API.
+ */
+class DataSourceCache {
+
+	public const CONSTRUCTOR_OPTIONS = [
+		RobloxAPIConstants::ConfDisableCache,
+	];
+
+	/** @var bool Whether the cache is disabled */
+	private bool $disabled;
+
+	public function __construct(
+		ServiceOptions $options,
+		private readonly WANObjectCache $cache
+	) {
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
+		$this->disabled = $options->get( RobloxAPIConstants::ConfDisableCache );
+	}
 
 	/**
 	 * Tries to search for a value in the cache.
@@ -33,7 +51,18 @@ abstract class DataSourceCache {
 	 * @param string[] $args
 	 * @param array<string, string> $optionalArgs
 	 */
-	abstract public function getResultForEndpoint( string $endpoint, array $args, array $optionalArgs ): mixed;
+	public function getResultForEndpoint( string $endpoint, array $args, array $optionalArgs ): mixed {
+		if ( $this->disabled ) {
+			return null;
+		}
+
+		$value = $this->cache->get( $this->getCacheKey( $endpoint, $args, $optionalArgs ) );
+		if ( $value === false ) {
+			return null;
+		}
+
+		return $value;
+	}
 
 	/**
 	 * Saves an entry to the cache.
@@ -41,13 +70,37 @@ abstract class DataSourceCache {
 	 * @param mixed $value
 	 * @param string[] $args
 	 * @param array<string, string> $optionalArgs
+	 * @param int $expiry The expiry in seconds
 	 */
-	abstract public function registerCacheEntry(
-		string $endpoint, mixed $value, array $args, array $optionalArgs
-	): void;
+	public function registerCacheEntry(
+		string $endpoint,
+		mixed $value,
+		array $args,
+		array $optionalArgs,
+		int $expiry
+	): void {
+		if ( $this->disabled ) {
+			return;
+		}
 
-	public function setExpiry( int $seconds ): void {
-		$this->expiry = $seconds;
+		$this->cache->set( $this->getCacheKey( $endpoint, $args, $optionalArgs ), $value, $expiry );
+	}
+
+	/**
+	 * Generates a cache key for the given endpoint and arguments.
+	 * @param string $endpoint
+	 * @param string[] $args
+	 * @param array<string, string> $optionalArgs
+	 */
+	protected function getCacheKey( string $endpoint, array $args, array $optionalArgs ): string {
+		$cacheAffectingOptionalArgs = RobloxAPIUtil::getCacheAffectingArgs( $optionalArgs );
+
+		$argsJson = json_encode( $args );
+		$optionalArgsJson = json_encode( $cacheAffectingOptionalArgs );
+
+		// ToDo consider using cache->makeKey() here
+
+		return '__roblox__' . $endpoint . '__' . md5( $argsJson ) . '__' . md5( $optionalArgsJson );
 	}
 
 }

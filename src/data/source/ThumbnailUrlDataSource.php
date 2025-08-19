@@ -35,11 +35,12 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 
 	/**
 	 * @inheritDoc
+	 * @return string URL of the thumbnail
 	 */
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	): mixed {
-		$data = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
+	): string {
+		$data = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
 
 		if ( !$data ) {
 			$this->failNoData();

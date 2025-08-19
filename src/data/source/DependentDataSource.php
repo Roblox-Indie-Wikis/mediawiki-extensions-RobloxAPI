@@ -25,23 +25,21 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 abstract class DependentDataSource implements IDataSource {
 
 	/**
-	 * @var string The id of this data source.
-	 */
-	protected string $id;
-
-	/**
 	 * @var IDataSource The data source that this data source depends on.
 	 */
 	protected IDataSource $dataSource;
 
 	/**
 	 * @param DataSourceProvider $dataSourceProvider
-	 * @param string $id
+	 * @param string $id The id of this data source.
 	 * @param string $dependencyId
 	 * @throws RobloxAPIException If the data source could not be registered.
 	 */
-	public function __construct( DataSourceProvider $dataSourceProvider, string $id, string $dependencyId ) {
-		$this->id = $id;
+	public function __construct(
+		DataSourceProvider $dataSourceProvider,
+		protected readonly string $id,
+		string $dependencyId
+	) {
 		$this->dataSource = $dataSourceProvider->getDataSourceOrThrow( $dependencyId );
 	}
 

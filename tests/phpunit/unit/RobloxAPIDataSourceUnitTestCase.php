@@ -21,10 +21,15 @@
 namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use GuzzleHttpRequest;
+use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
+use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Status\Status;
 use MediaWikiUnitTestCase;
 use StatusValue;
+use Wikimedia\ObjectCache\WANObjectCache;
 
 /**
  * Base class for Roblox API unit tests.
@@ -36,7 +41,7 @@ abstract class RobloxAPIDataSourceUnitTestCase extends MediaWikiUnitTestCase {
 	 * @param int $status HTTP status code to be returned by the request
 	 * @return HttpRequestFactory Mocked HTTP request factory
 	 */
-	protected function createMockHttpRequestFactory( ?string $returnedContent, int $status = 200 ): HttpRequestFactory {
+	private function createMockHttpRequestFactory( ?string $returnedContent, int $status = 200 ): HttpRequestFactory {
 		$request = $this->createPartialMock( GuzzleHttpRequest::class, [ 'execute', 'getContent' ] );
 
 		if ( $status > 0 && $status < 400 ) {
@@ -57,6 +62,27 @@ abstract class RobloxAPIDataSourceUnitTestCase extends MediaWikiUnitTestCase {
 		$httpRequestFactory->expects( $this->once() )->method( 'create' )->willReturn( $request );
 
 		return $httpRequestFactory;
+	}
+
+	private function createMockCache(): DataSourceCache {
+		return new DataSourceCache(
+			self::createServiceOptions( [ RobloxAPIConstants::ConfDisableCache => true ] ),
+			$this->createMock( WANObjectCache::class )
+		);
+	}
+
+	protected function createMockFetcher( ?string $returnedContent, int $status = 200 ): RobloxAPIFetcher {
+		$serviceOptions = self::createServiceOptions( [
+			RobloxAPIConstants::ConfCachingExpiries => [ '*' => 600 ],
+			RobloxAPIConstants::ConfRequestUserAgent => null
+		] );
+		$httpRequestFactory = $this->createMockHttpRequestFactory( $returnedContent, $status );
+
+		return new RobloxAPIFetcher( $serviceOptions, $this->createMockCache(), $httpRequestFactory );
+	}
+
+	private static function createServiceOptions( array $options ): ServiceOptions {
+		return new ServiceOptions( array_keys( $options ), $options );
 	}
 
 }

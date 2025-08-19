@@ -20,8 +20,10 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
-use MediaWiki\Config\Config;
+use Closure;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailUrlDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameDataSource;
@@ -45,143 +47,184 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
  */
 class DataSourceProvider {
 
-	public Config $config;
+	public const CONSTRUCTOR_OPTIONS = [
+		RobloxAPIConstants::ConfAllowedArguments,
+		RobloxAPIConstants::ConfEnabledDataSources,
+	];
+
 	/**
 	 * @var array<string, IDataSource> The currently enabled data sources.
 	 */
 	public array $dataSources = [];
-	/**
-	 * @var int[] the amount of time for each data source after which the cache
-	 * expires
-	 */
-	public array $cachingExpiries;
 
 	/** @noinspection PhpUnusedParameterInspection */
-	public function __construct( Config $config ) {
-		$this->config = $config;
+	public function __construct( public ServiceOptions $options, private readonly RobloxAPIFetcher $fetcher ) {
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 
-		$this->cachingExpiries = $this->config->get( RobloxAPIConstants::ConfCachingExpiries );
+		$this->registerDataSource( new GameDataSource( $fetcher ) );
+		$this->registerDataSource( new UserIdDataSource( $fetcher ) );
+		$this->registerDataSource( new UserAvatarThumbnailDataSource( $fetcher ) );
+		$this->registerDataSource( new AssetThumbnailDataSource( $fetcher ) );
+		$this->registerDataSource( new GameIconDataSource( $fetcher ) );
 
-		$this->registerDataSource( new GameDataSource( $config ) );
-		$this->registerDataSource( new UserIdDataSource( $config ) );
-		$this->registerDataSource( new UserAvatarThumbnailDataSource( $config ) );
-		$this->registerDataSource( new AssetThumbnailDataSource( $config ) );
-		$this->registerDataSource( new GameIconDataSource( $config ) );
-
-		$this->registerDataSource( new SimpleFetcherDataSource( 'groupRoles', $config,
-			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(),
+		$this->registerSimpleFetcherDataSource(
+			'groupRoles',
+			new ArgumentSpecification( [ 'UserID' ], [], true ),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://groups.roblox.com/v1/users/$args[0]/groups/roles";
 			}, static function ( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
 				return $data->data;
-			}, true ) );
-		$this->registerDataSource( new SimpleFetcherDataSource( 'groupData', $config,
-			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(),
+			},
+			true
+		);
+		$this->registerSimpleFetcherDataSource(
+			'groupData',
+			new ArgumentSpecification( [ 'GroupID' ], [], true ),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://groups.roblox.com/v1/groups/$args[0]";
-			}, null, true ) );
-		$this->registerDataSource( new SimpleFetcherDataSource( 'groupRolesList', $config,
-			( new ArgumentSpecification( [ 'GroupID' ] ) )->withJsonArgs(),
+			},
+			null,
+			true
+		);
+		$this->registerSimpleFetcherDataSource(
+			'groupRolesList',
+			new ArgumentSpecification( [ 'GroupID' ], [], true ),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://groups.roblox.com/v1/groups/$args[0]/roles";
-			}, null, false ) );
-		$this->registerDataSource( new SimpleFetcherDataSource( 'badgeInfo', $config,
-			( new ArgumentSpecification( [ 'BadgeID' ] ) )->withJsonArgs(),
+			}
+		);
+		$this->registerSimpleFetcherDataSource(
+			'badgeInfo',
+			new ArgumentSpecification( [ 'BadgeID' ], [], true ),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://badges.roblox.com/v1/badges/$args[0]";
-			}, null, true ) );
-		$this->registerDataSource( new SimpleFetcherDataSource( 'userInfo', $config,
-			( new ArgumentSpecification( [ 'UserID' ] ) )->withJsonArgs(),
+			},
+			null,
+			true
+		);
+		$this->registerSimpleFetcherDataSource(
+			'userInfo',
+			new ArgumentSpecification( [ 'UserID' ], [], true ),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://users.roblox.com/v1/users/$args[0]";
-			}, null, true ) );
-		$this->registerDataSource( new SimpleFetcherDataSource( 'assetDetails', $config, ( new ArgumentSpecification( [
-			'AssetID',
-		] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ): string {
-			return "https://economy.roblox.com/v2/assets/$args[0]/details";
-		}, null, true ) );
-		$this->registerDataSource( new SimpleFetcherDataSource( 'gameNameDescription', $config,
-			( new ArgumentSpecification( [
-				'UniverseID',
-			] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ): string {
+			},
+			null,
+			true
+		);
+		$this->registerSimpleFetcherDataSource(
+			'assetDetails',
+			new ArgumentSpecification( [ 'AssetID' ], [], true ),
+			static function ( array $args, array $optionalArgs ): string {
+				return "https://economy.roblox.com/v2/assets/$args[0]/details";
+			},
+			null,
+			true
+		);
+		$this->registerSimpleFetcherDataSource(
+			'gameNameDescription',
+			new ArgumentSpecification( [ 'UniverseID' ], [], true ),
+			static function ( array $args, array $optionalArgs ): string {
 				return "https://gameinternationalization.roblox.com/v1/name-description/games/$args[0]";
-			} ) );
-		$this->registerDataSource( new SimpleFetcherDataSource( 'universeInfo', $config, ( new ArgumentSpecification( [
-			'UniverseID',
-		] ) )->withJsonArgs(), static function ( array $args, array $optionalArgs ): string {
-			return "https://develop.roblox.com/v1/universes/$args[0]";
-		} ) );
-		$this->registerDataSource( new SimpleFetcherDataSource( 'userGames', $config, ( new ArgumentSpecification( [
-			'UserID',
-		], [ 'limit' => 'UserGamesLimit', 'sort_order' => 'SortOrder' ] ) )->withJsonArgs(), static function (
-			array $args, array $optionalArgs
-		): string {
-			$limit = $optionalArgs['limit'] ?? 50;
-			$sortOrder = $optionalArgs['sort_order'] ?? 'Asc';
+			}
+		);
+		$this->registerSimpleFetcherDataSource(
+			'universeInfo',
+			new ArgumentSpecification( [ 'UniverseID' ], [], true ),
+			static function ( array $args, array $optionalArgs ): string {
+				return "https://develop.roblox.com/v1/universes/$args[0]";
+			}
+		);
+		$this->registerSimpleFetcherDataSource(
+			'userGames',
+			new ArgumentSpecification(
+				[ 'UserID' ],
+				[ 'limit' => 'UserGamesLimit', 'sort_order' => 'SortOrder' ],
+				true
+			),
+			static function ( array $args, array $optionalArgs ): string {
+				$limit = $optionalArgs['limit'] ?? 50;
+				$sortOrder = $optionalArgs['sort_order'] ?? 'Asc';
 
-			return "https://games.roblox.com/v2/users/$args[0]/games?limit=$limit&sortOrder=$sortOrder";
-		}, static function ( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
-			return $data->data;
-		} ) );
+				return "https://games.roblox.com/v2/users/$args[0]/games?limit=$limit&sortOrder=$sortOrder";
+			},
+			static function ( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
+				return $data->data;
+			}
+		);
 
 		// dependent data sources will throw an exception if the required data source is not enabled
-		$this->tryRegisterDataSource( fn (): IDataSource => new GroupRankDataSource( $this ) );
-		$this->tryRegisterDataSource( fn (): IDataSource => new PlaceActivePlayersDataSource( $this ) );
-		$this->tryRegisterDataSource( fn (): IDataSource => new PlaceVisitsDataSource( $this ) );
-		$this->tryRegisterDataSource( fn (): IDataSource => new GroupMembersDataSource( $this ) );
-		$this->tryRegisterDataSource( fn (): IDataSource => new UserAvatarThumbnailUrlDataSource( $this ) );
-		$this->tryRegisterDataSource( fn (): IDataSource => new AssetThumbnailUrlDataSource( $this ) );
-		$this->tryRegisterDataSource( fn (): IDataSource => new GameIconUrlDataSource( $this ) );
-		$this->tryRegisterDataSource( fn (): IDataSource => new UserPlaceVisitsDataSource( $this ) );
+		$this->tryRegisterDataSources(
+			GroupRankDataSource::class,
+			PlaceActivePlayersDataSource::class,
+			PlaceVisitsDataSource::class,
+			GroupMembersDataSource::class,
+			UserAvatarThumbnailUrlDataSource::class,
+			AssetThumbnailUrlDataSource::class,
+			GameIconUrlDataSource::class,
+			UserPlaceVisitsDataSource::class,
+		);
 	}
 
 	/**
 	 * Checks the config on whether a data source is enabled.
 	 */
 	protected function isEnabled( string $id ): bool {
-		$enabledDataSources = $this->config->get( RobloxAPIConstants::ConfEnabledDataSources );
+		$enabledDataSources = $this->options->get( RobloxAPIConstants::ConfEnabledDataSources );
 
 		return in_array( $id, $enabledDataSources, true );
 	}
 
 	/**
-	 * Gets the caching expiry for a data source.
-	 * If a specific value is not set, the default value (key '*') is used.
-	 * @param string $id
-	 * @return int The caching expiry in seconds.
-	 */
-	protected function getCachingExpiry( string $id ): int {
-		if ( !isset( $this->cachingExpiries[$id] ) ) {
-			return $this->cachingExpiries['*'];
-		}
-
-		return $this->cachingExpiries[$id];
-	}
-
-	/**
 	 * Registers a data source if it is enabled.
-	 * @param IDataSource $dataSource
 	 */
 	public function registerDataSource( IDataSource $dataSource ): void {
 		$id = $dataSource->getId();
 		if ( $this->isEnabled( $id ) ) {
 			$this->dataSources[$id] = $dataSource;
-			if ( $dataSource instanceof FetcherDataSource ) {
-				$dataSource->setCacheExpiry( $this->getCachingExpiry( $id ) );
-			}
 		}
 	}
 
 	/**
-	 * Tries to register a data source, but ignores any exceptions.
-	 * @param callable(): IDataSource $dataSourceFactory
+	 * Registers a new simple fetcher data source if it's enabled.
+	 * @see SimpleFetcherDataSource::__construct
 	 */
-	public function tryRegisterDataSource( callable $dataSourceFactory ): void {
+	public function registerSimpleFetcherDataSource(
+		string $id,
+		ArgumentSpecification $argumentSpecification,
+		Closure $createEndpoint,
+		?Closure $processData = null,
+		bool $registerParserFunction = false
+	): void {
+		$this->registerDataSource( new SimpleFetcherDataSource(
+			$id,
+			$this->fetcher,
+			$argumentSpecification,
+			$createEndpoint,
+			$processData,
+			$registerParserFunction
+		) );
+	}
+
+	/**
+	 * Tries to register a data source, but ignores any exceptions.
+	 * @param class-string $className
+	 */
+	public function tryRegisterDataSource( string $className ): void {
 		try {
-			$dataSource = $dataSourceFactory();
+			$dataSource = new $className( $this );
 			$this->registerDataSource( $dataSource );
 		} catch ( RobloxAPIException $e ) {
 			wfDebugLog( 'RobloxAPI', "Failed to register data source: {$e->getMessage()}" );
+		}
+	}
+
+	/**
+	 * Tries to register multiple data sources, but ignores any exceptions.
+	 * @param class-string ...$classNames
+	 */
+	public function tryRegisterDataSources( string ...$classNames ): void {
+		foreach ( $classNames as $className ) {
+			$this->tryRegisterDataSource( $className );
 		}
 	}
 
@@ -224,7 +267,6 @@ class DataSourceProvider {
 	public function createLegacyParserFunctions(): array {
 		$functions = [];
 
-		/** @var IDataSource $dataSource */
 		foreach ( $this->dataSources as $dataSource ) {
 			// register parser function only if needed for legacy reasons
 			if ( !$dataSource->shouldRegisterLegacyParserFunction() ) {

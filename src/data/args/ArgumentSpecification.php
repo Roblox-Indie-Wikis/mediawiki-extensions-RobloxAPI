@@ -26,22 +26,18 @@ namespace MediaWiki\Extension\RobloxAPI\data\args;
 class ArgumentSpecification {
 
 	/**
-	 * @var string[] The required argument types.
-	 */
-	public array $requiredArgs;
-
-	/**
-	 * @var array<string, string> The optional argument's names and types.
-	 */
-	public array $optionalArgs;
-
-	/**
 	 * @param string[] $requiredArgs The required argument types.
 	 * @param array<string, string> $optionalArgs The optional argument's names and types.
+	 * @param bool $withJsonArgs Whether to add the default optional arguments for JSON data.
 	 */
-	public function __construct( array $requiredArgs, array $optionalArgs = [] ) {
-		$this->requiredArgs = $requiredArgs;
-		$this->optionalArgs = $optionalArgs;
+	public function __construct(
+		public array $requiredArgs,
+		public array $optionalArgs = [],
+		bool $withJsonArgs = false
+	) {
+		if ( $withJsonArgs ) {
+			$this->withJsonArgs();
+		}
 	}
 
 	/**

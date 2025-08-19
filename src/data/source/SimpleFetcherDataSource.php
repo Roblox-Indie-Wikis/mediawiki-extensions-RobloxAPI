@@ -20,8 +20,9 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
-use MediaWiki\Config\Config;
+use Closure;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 
 /**
  * A simple data source that does not process the data.
@@ -29,40 +30,22 @@ use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 class SimpleFetcherDataSource extends FetcherDataSource {
 
 	/**
-	 * @var callable The function to create the endpoint.
-	 */
-	protected $createEndpoint;
-
-	/**
-	 * @var callable|null The function to process the data.
-	 */
-	protected $processData;
-
-	/**
-	 * @var bool Whether to register a parser function.
-	 */
-	protected bool $registerParserFunction;
-
-	/**
-	 * @var ArgumentSpecification The argument specification.
-	 */
-	protected ArgumentSpecification $argumentSpecification;
-
-	/**
 	 * @inheritDoc
-	 * @param callable( array, array ): string $createEndpoint The function to create the endpoint.
-	 * @param callable( mixed, array, array ): mixed|null $processData The function to process the data.
+	 * @param Closure( array<string>, array<string, string> ): string $createEndpoint The function to create the
+	 * endpoint.
+	 * @param Closure( mixed, array<string>, array<string, string> ): mixed|null $processData The function to process
+	 * the data.
 	 * @param bool $registerParserFunction Whether to register a legacy parser function.
 	 */
 	public function __construct(
-		string $id, Config $config, ArgumentSpecification $argumentSpecification, callable $createEndpoint,
-		?callable $processData = null, bool $registerParserFunction = false
+		string $id,
+		RobloxAPIFetcher $fetcher,
+		protected ArgumentSpecification $argumentSpecification,
+		protected Closure $createEndpoint,
+		protected ?Closure $processDataFn = null,
+		protected bool $registerParserFunction = false
 	) {
-		parent::__construct( $id, self::createSimpleCache(), $config );
-		$this->createEndpoint = $createEndpoint;
-		$this->processData = $processData;
-		$this->registerParserFunction = $registerParserFunction;
-		$this->argumentSpecification = $argumentSpecification;
+		parent::__construct( $id, $fetcher );
 	}
 
 	/**
@@ -76,8 +59,8 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 	 * @inheritDoc
 	 */
 	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
-		if ( $this->processData ) {
-			return call_user_func( $this->processData, $data, $requiredArgs, $optionalArgs );
+		if ( $this->processDataFn ) {
+			return call_user_func( $this->processDataFn, $data, $requiredArgs, $optionalArgs );
 		}
 
 		return $data;
