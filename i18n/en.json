@@ -31,5 +31,5 @@
 	"robloxapi-category-deprecated-parser-function": "Pages using deprecated RobloxAPI parser functions",
 	"robloxapi-category-deprecated-parser-function-desc": "The page uses a deprecated parser function provided by the RobloxAPI extension.",
 	"robloxapi-category-error": "Pages with RobloxAPI errors",
-	"robloxapi-category-error-desc": "Pages where usage of the <code>{{#robloxAPI}}</code> parser function causes an error."
+	"robloxapi-category-error-desc": "The page uses the <code>{{#robloxAPI}}</code> parser function incorrectly, resulting in an error."
 }
