@@ -97,6 +97,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 							'nowiki' => $shouldEscape,
 						];
 					} catch ( RobloxAPIException $exception ) {
+						$parser->addTrackingCategory( 'robloxapi-category-error' );
 						return RobloxAPIUtil::formatException( $exception, $parser, $this->config );
 					}
 				}
