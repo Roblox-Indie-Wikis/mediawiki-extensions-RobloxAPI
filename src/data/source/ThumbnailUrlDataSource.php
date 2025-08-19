@@ -35,6 +35,7 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 
 	/**
 	 * @inheritDoc
+	 * @return string URL of the thumbnail
 	 */
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []

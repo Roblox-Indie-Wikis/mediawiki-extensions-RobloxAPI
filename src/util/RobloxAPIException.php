@@ -29,7 +29,7 @@ use Exception;
 class RobloxAPIException extends Exception {
 
 	/**
-	 * @var string[] The parameters to be used in the message.
+	 * @var array The parameters to be used in the message.
 	 */
 	public array $messageParams = [];
 

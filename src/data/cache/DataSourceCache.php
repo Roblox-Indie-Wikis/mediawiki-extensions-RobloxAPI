@@ -26,7 +26,7 @@ use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
 use Wikimedia\ObjectCache\WANObjectCache;
 
 /**
- * Caches data returned by the roblox API.
+ * Caches data returned by the Roblox API.
  */
 class DataSourceCache {
 

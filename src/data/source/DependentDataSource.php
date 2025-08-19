@@ -35,7 +35,11 @@ abstract class DependentDataSource implements IDataSource {
 	 * @param string $dependencyId
 	 * @throws RobloxAPIException If the data source could not be registered.
 	 */
-	public function __construct( DataSourceProvider $dataSourceProvider, protected string $id, string $dependencyId ) {
+	public function __construct(
+		DataSourceProvider $dataSourceProvider,
+		protected readonly string $id,
+		string $dependencyId
+	) {
 		$this->dataSource = $dataSourceProvider->getDataSourceOrThrow( $dependencyId );
 	}
 

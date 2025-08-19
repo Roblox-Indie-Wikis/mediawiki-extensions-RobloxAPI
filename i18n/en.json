@@ -27,7 +27,7 @@
 	"robloxapi-error-invalid-user-games-limit": "Invalid limit \"$1\"! Must be 10, 25 or 50.",
 	"robloxapi-error-invalid-sort-order": "Invalid sort order \"$1\"! Must be \"Asc\" or \"Desc\".",
 	"robloxapi-error-usage-limit": "The \"$1\" data source can only be used $2 times per page!",
-	"robloxapi-error-usage-limit-dependent": "The \"$1\" data source (called through dependent data source $3) can only be used $2 times per page!",
+	"robloxapi-error-usage-limit-dependent": "The \"$1\" data source (called through dependent data source \"$3\") can only be used $2 times per page!",
 	"robloxapi-category-deprecated-parser-function": "Pages using deprecated RobloxAPI parser functions",
 	"robloxapi-category-deprecated-parser-function-desc": "The page uses a deprecated parser function provided by the RobloxAPI extension.",
 	"robloxapi-category-error": "Pages with RobloxAPI errors",

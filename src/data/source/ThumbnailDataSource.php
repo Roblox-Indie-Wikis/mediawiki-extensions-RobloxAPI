@@ -34,7 +34,7 @@ abstract class ThumbnailDataSource extends FetcherDataSource {
 		string $id,
 		RobloxAPIFetcher $fetcher,
 		private readonly string $apiPath,
-		protected string $thumbnailIdParamName
+		protected readonly string $thumbnailIdParamName
 	) {
 		parent::__construct( $id, $fetcher );
 	}
