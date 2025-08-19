@@ -56,7 +56,7 @@ abstract class ThumbnailDataSource extends FetcherDataSource {
 	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
 		$thumbnailId = $requiredArgs[0];
 		$size = $requiredArgs[1];
-		$isCircular = $optionalArgs['is_circular'] ?? false;
+		$isCircular = strtolower( (string)( $optionalArgs['is_circular'] ?? '' ) ) === 'true';
 		$format = $optionalArgs['format'] ?? 'Png';
 
 		$query = http_build_query( [
