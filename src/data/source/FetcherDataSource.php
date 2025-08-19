@@ -35,7 +35,7 @@ abstract class FetcherDataSource implements IDataSource {
 	 * @param RobloxAPIFetcher $fetcher An instance of the fetcher service.
 	 */
 	public function __construct(
-		public string $id,
+		public readonly string $id,
 		private readonly RobloxAPIFetcher $fetcher
 	) {
 	}
