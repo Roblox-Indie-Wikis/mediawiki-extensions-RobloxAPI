@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"GuoPC",
 			"Lakejason0"
 		]
 	},
@@ -27,5 +28,5 @@
 	"robloxapi-error-invalid-user-games-limit": "上限“$1”无效！必须是10、25或50。",
 	"robloxapi-error-invalid-sort-order": "排序顺序“$1”无效！必须是“Asc”或“Desc”。",
 	"robloxapi-error-usage-limit": "“$1”数据源每个页面只能使用$2次！",
-	"robloxapi-error-usage-limit-dependent": "“$1”数据源（通过依赖数据源$3调用）每个页面只能使用$2次！"
+	"robloxapi-error-usage-limit-dependent": "“$1”数据源（通过依赖数据源“$3”调用）每个页面只能使用$2次！"
 }

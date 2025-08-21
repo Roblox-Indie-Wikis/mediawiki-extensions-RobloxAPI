@@ -27,5 +27,9 @@
 	"robloxapi-error-invalid-user-games-limit": "Onjuiste limiet “$1”! Moet 10, 25 of 50 zijn.",
 	"robloxapi-error-invalid-sort-order": "Onjuiste sorteervolgorde “$1”! Moet “Asc” of “Desc” zijn.",
 	"robloxapi-error-usage-limit": "De gegevensbron “$1” kan slechts $2 keer per pagina worden gebruikt!",
-	"robloxapi-error-usage-limit-dependent": "De gegevensbron “$1” (aangeroepen via de afhankelijke gegevensbron $3) kan slechts $2 keer per pagina worden gebruikt!"
+	"robloxapi-error-usage-limit-dependent": "De gegevensbron “$1” (aangeroepen via de afhankelijke gegevensbron “$3”) kan slechts $2 keer per pagina worden gebruikt!",
+	"robloxapi-category-deprecated-parser-function": "Pagina's die verouderde RobloxAPI-parserfuncties gebruiken",
+	"robloxapi-category-deprecated-parser-function-desc": "De pagina maakt gebruik van een verouderde parserfunctie die wordt geleverd door de uitbreiding RobloxAPI.",
+	"robloxapi-category-error": "Pagina's met RobloxAPI-fouten",
+	"robloxapi-category-error-desc": "De pagina gebruikt de parserfunctie <code>{{#robloxAPI}}</code> op een onjuiste manier, waardoor er een fout ontstaat."
 }

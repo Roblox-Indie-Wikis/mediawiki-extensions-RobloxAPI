@@ -27,5 +27,9 @@
 	"robloxapi-error-invalid-user-games-limit": "Limite “$1” non valide! Debe esser 10, 25 o 50.",
 	"robloxapi-error-invalid-sort-order": "Direction de ordinamento “$1” non valide! Debe esser “Asc” o “Desc”.",
 	"robloxapi-error-usage-limit": "Le fonte de datos “$1” pote solmente esser usate $2 vices per pagina!",
-	"robloxapi-error-usage-limit-dependent": "Le fonte de datos “$1” (invocate a transverso le fonte de datos dependente $3) pote solmente esser usate $2 vices per pagina!"
+	"robloxapi-error-usage-limit-dependent": "Le fonte de datos “$1” (invocate a transverso le fonte de datos dependente “$3”) pote solmente esser usate $2 vices per pagina!",
+	"robloxapi-category-deprecated-parser-function": "Paginas que usa functiones RobloxAPI obsolescente",
+	"robloxapi-category-deprecated-parser-function-desc": "Le pagina usa un function del analysator syntactic fornite per le extension RobloxAPI que es obsolescente.",
+	"robloxapi-category-error": "Paginas con errores de RobloxAPI",
+	"robloxapi-category-error-desc": "Le pagina usa le function del analysator syntactic <code>{{#robloxAPI}}</code> de maniera incorrecte, resultante in un error."
 }
