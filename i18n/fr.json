@@ -27,5 +27,9 @@
 	"robloxapi-error-invalid-user-games-limit": "Limite « $1 » non valide ! Elle doit être 10, 25 ou 50.",
 	"robloxapi-error-invalid-sort-order": "Ordre de tri « $1 » non valide ! Il doit être « Asc » ou « Desc ».",
 	"robloxapi-error-usage-limit": "La source de données « $1 » ne peut être utilisée que $2 fois par page !",
-	"robloxapi-error-usage-limit-dependent": "La source de données « $1 » (appelée via la source de données liée $3) ne peut être utilisée que $2 fois par page !"
+	"robloxapi-error-usage-limit-dependent": "La source de données « $1 » (appelée via la source de données liée « $3 ») ne peut être utilisée que $2 fois par page !",
+	"robloxapi-category-deprecated-parser-function": "Pages utilisant des fonctions d’analyseur RobloxAPI obsolètes",
+	"robloxapi-category-deprecated-parser-function-desc": "La page utilise une fonction d’analyseur obsolète fournie par l’extension RobloxAPI.",
+	"robloxapi-category-error": "Pages avec des erreurs de RobloxAPI",
+	"robloxapi-category-error-desc": "La page utilise la fonction d’analyseur <code>{{#robloxAPI}}</code> fournie par l’extension RobloxAPI.de manière incorrecte, entraînant une erreur."
 }
