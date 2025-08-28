@@ -27,5 +27,9 @@
 	"robloxapi-error-invalid-user-games-limit": "Неважечка граница „$1“! Мора да биде 10, 25 или 50.",
 	"robloxapi-error-invalid-sort-order": "Неважечки ред на подредување „$1“! Мора да биде „Asc“ или „Desc“.",
 	"robloxapi-error-usage-limit": "Податочниот извор „$1“ може да се користи само $2 пати во една страница!",
-	"robloxapi-error-usage-limit-dependent": "Податочниот извор „$1“ (повикан преку независен податочен извор $3) може да се користи само $2 пати на една страница!"
+	"robloxapi-error-usage-limit-dependent": "Податочниот извор „$1“ (повикан преку независен податочен извор „$3“) може да се користи само $2 пати на една страница!",
+	"robloxapi-category-deprecated-parser-function": "Страници што користат застарени расчленувачки функции на RobloxAPI",
+	"robloxapi-category-deprecated-parser-function-desc": "Оваа страница користи застарена расчленувачка функција на додатокот RobloxAPI.",
+	"robloxapi-category-error": "Страници со грешки во RobloxAPI",
+	"robloxapi-category-error-desc": "Страницата неправилно ја користи расчленувачката функција <code>{{#robloxAPI}}</code>, поради што дојде до грешка."
 }
