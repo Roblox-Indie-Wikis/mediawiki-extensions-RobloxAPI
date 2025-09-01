@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Derugon"
+			"Derugon",
+			"Pyschobbens"
 		]
 	},
 	"robloxapi-desc": "Fournit un accès simple à l’API de Roblox via des fonctions d’analyse syntaxique.",
@@ -31,5 +32,5 @@
 	"robloxapi-category-deprecated-parser-function": "Pages utilisant des fonctions d’analyseur RobloxAPI obsolètes",
 	"robloxapi-category-deprecated-parser-function-desc": "La page utilise une fonction d’analyseur obsolète fournie par l’extension RobloxAPI.",
 	"robloxapi-category-error": "Pages avec des erreurs de RobloxAPI",
-	"robloxapi-category-error-desc": "La page utilise la fonction d’analyseur <code>{{#robloxAPI}}</code> fournie par l’extension RobloxAPI.de manière incorrecte, entraînant une erreur."
+	"robloxapi-category-error-desc": "La page utilise la fonction d’analyseur <code>{{#robloxAPI}}</code> de manière incorrecte, entraînant une erreur."
 }
