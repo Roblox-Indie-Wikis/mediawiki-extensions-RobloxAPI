@@ -16,7 +16,7 @@ for [Dovedale Wiki](https://github.com/dovedalewiki).
 Live Examples:
 
 * [Hybrid Cafe Wiki](https://hybridcafe.wiki/)
-* [Untitled Tag Game Wiki](https://utg.miraheze.org/)
+* [Untitled Tag Game Wiki](https://tagging.wiki/)
 
 ## Installation
 
