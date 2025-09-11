@@ -33,7 +33,7 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 	 * @inheritDoc
 	 * @param Closure( array<string>, array<string, string> ): string $createEndpoint The function to create the
 	 * endpoint.
-	 * @param Closure( mixed, array<string>, array<string, string> ): mixed|null $processData The function to process
+	 * @param Closure( mixed, array<string>, array<string, string> ): mixed|null $processDataFn The function to process
 	 * the data.
 	 * @param bool $registerParserFunction Whether to register a legacy parser function.
 	 */
