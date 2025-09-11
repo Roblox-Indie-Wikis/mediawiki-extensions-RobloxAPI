@@ -4,15 +4,16 @@
 
 * MediaWiki: >= 1.43.x
 
-| Version | Supported | Notes            |
-|---------|-----------|------------------|
-| 1.6.0   | ✅         | Latest release   |
-| 1.5.0   | ✅         | Upgrade to 1.6.0 |
-| 1.4.0   | ✅         | Upgrade to 1.6.0 |
-| 1.3.0   | ❌         |                  |
-| 1.2.0   | ❌         |                  |
-| 1.1.0   | ❌         |                  |
-| 1.0.0   | ❌         |                  |
+| Version | Supported | Notes                |
+|---------|-----------|----------------------|
+| 1.6.1   | ✅         | Latest release       |
+| 1.6.0   | ✅         | Latest minor release |
+| 1.5.0   | ✅         |                      |
+| 1.4.0   | ✅         |                      |
+| 1.3.0   | ❌         |                      |
+| 1.2.0   | ❌         |                      |
+| 1.1.0   | ❌         |                      |
+| 1.0.0   | ❌         |                      |
 
 ## Reporting a Vulnerability
 
