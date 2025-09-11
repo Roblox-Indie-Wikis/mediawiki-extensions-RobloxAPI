@@ -40,6 +40,11 @@ class RobloxAPIFetcher {
 		RobloxAPIConstants::ConfRequestUserAgent,
 	];
 
+	/**
+	 * @var string[]
+	 */
+	private array $rateLimitedDataSources = [];
+
 	public function __construct(
 		private readonly ServiceOptions $options,
 		private readonly DataSourceCache $cache,
@@ -73,6 +78,10 @@ class RobloxAPIFetcher {
 			return $cachedResult;
 		}
 
+		if ( in_array( $dataSourceId, $this->rateLimitedDataSources, true ) ) {
+			throw new RobloxAPIException( 'robloxapi-error-request-cancelled-rate-limits', $dataSourceId );
+		}
+
 		$options = [];
 
 		$userAgent = $this->options->get( RobloxAPIConstants::ConfRequestUserAgent );
@@ -101,6 +110,12 @@ class RobloxAPIFetcher {
 				'status' => $status->getStatusValue(),
 				'content' => $request->getContent(),
 			] );
+		}
+
+		if ( $status->value === 429 ) {
+			// we're getting rate limited; avoid sending further requests to the same endpoint
+			$this->rateLimitedDataSources[] = $dataSourceId;
+			throw new RobloxAPIException( 'robloxapi-error-request-rate-limited', $dataSourceId );
 		}
 
 		$json = $request->getContent();
