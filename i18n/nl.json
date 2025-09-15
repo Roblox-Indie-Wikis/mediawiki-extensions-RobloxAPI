@@ -14,6 +14,8 @@
 	"robloxapi-error-datasource-returned-no-data": "Gegevensbron heeft geen gegevens geretourneerd!",
 	"robloxapi-error-user-group-not-found": "De groepsgegevens voor de opgegeven gebruiker zijn niet gevonden! De gebruiker maakt mogelijk geen deel uit van de groep.",
 	"robloxapi-error-request-failed": "Verzoek mislukt!",
+	"robloxapi-error-request-rate-limited": "Het verzoek is mislukt vanwege de door Roblox opgelegde tempobeperkingen. Probeer het later opnieuw of vermijd het, de gegevensbron <code>$1</code> te vaak te gebruiken.",
+	"robloxapi-error-request-cancelled-rate-limits": "De aanvraag is geannuleerd omdat eerdere naar de gegevensbron <code>$1</code> verzonden aanvragen tegen een tempobeperking opliepen.",
 	"robloxapi-error-arg-not-allowed": "Argument “$1” is niet toegestaan voor type “$2”!",
 	"robloxapi-error-invalid-thumbnail-size": "Onjuiste miniatuurgrootte!",
 	"robloxapi-error-invalid-username": "Onjuiste gebruikersnaam!",

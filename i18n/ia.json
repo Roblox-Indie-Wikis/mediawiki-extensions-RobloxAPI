@@ -14,6 +14,8 @@
 	"robloxapi-error-datasource-returned-no-data": "Le fonte de datos non ha retornate datos!",
 	"robloxapi-error-user-group-not-found": "Le datos de gruppo pro le usator date non poteva esser trovate! Pote esser que le usator non es membro del gruppo.",
 	"robloxapi-error-request-failed": "Requesta fallite!",
+	"robloxapi-error-request-rate-limited": "Le requesta ha fallite a causa de limites de frequentia imponite per Roblox. Per favor tenta lo de novo plus tarde o evita de usar le fonte de datos <code>$1</code> troppo de vices.",
+	"robloxapi-error-request-cancelled-rate-limits": "Le requesta ha essite cancellate perque le requestas anterior inviate al fonte de datos <code>$1</code> ha excedite le limite de frequentia.",
 	"robloxapi-error-arg-not-allowed": "Le argumento “$1” non es permittite pro le typo “$2”!",
 	"robloxapi-error-invalid-thumbnail-size": "Dimension de miniatura non valide!",
 	"robloxapi-error-invalid-username": "Nomine de usator invalide!",

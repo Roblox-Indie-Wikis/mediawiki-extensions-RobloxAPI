@@ -14,6 +14,8 @@
 	"robloxapi-error-datasource-returned-no-data": "Хаамийн хьосто ха ца белира хаамаш!",
 	"robloxapi-error-user-group-not-found": "Оцу декъашхочун тобанан хаамаш каро аьтто ца баьлла! Декъашхо тобанехь ца хила а тарло.",
 	"robloxapi-error-request-failed": "Дехар кхочуш ца хилла!",
+	"robloxapi-error-request-rate-limited": "Дехар кхочуш ца хилла Roblox-но хӀоттина дехкарш бахьана долуш. Дехар до, тӀаьхьа йуха а хьажа йа <code>$1</code> хаамийн хьост лелайе.",
+	"robloxapi-error-request-cancelled-rate-limits": "Дехар йукъахдаьккхина, хӀунда аьлча хьалха хаамийн хьостане <code>$1</code> дӀахьажийна, сиххалин дехарш нисделира.",
 	"robloxapi-error-arg-not-allowed": "Аргумент \"$1\" мегаш йац \"$2\" тайпанна!",
 	"robloxapi-error-invalid-thumbnail-size": "Миниатюрин нийса боцу барам!",
 	"robloxapi-error-invalid-username": "Нийса йоцу декъашхочун цӀе!",

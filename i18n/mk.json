@@ -14,6 +14,8 @@
 	"robloxapi-error-datasource-returned-no-data": "Изворот не даде податоци!",
 	"robloxapi-error-user-group-not-found": "Не успеав да ги најдам групните податоци за дадениот корисник! Корисникот може да не членува во групата.",
 	"robloxapi-error-request-failed": "Барањето не успеа!",
+	"robloxapi-error-request-rate-limited": "Барањето не успеа поради ограничувањата што ги става Roblox. Обидете се подоцна или избегнете ја употребата на податочниот извор <code>$1</code> премногу пати.",
+	"robloxapi-error-request-cancelled-rate-limits": "Барањето е откажано бидејќи претходните барања испратени до податочниот извор <code>$1</code> доведоа до ограничување.",
 	"robloxapi-error-arg-not-allowed": "Аргументот „$1“ не е допуштен за видот „$2“!",
 	"robloxapi-error-invalid-thumbnail-size": "Неважечка големина на минијатура!",
 	"robloxapi-error-invalid-username": "Неважечко корисничко име!",
