@@ -82,7 +82,10 @@ class RobloxAPIFetcher {
 			throw new RobloxAPIException( 'robloxapi-error-request-cancelled-rate-limits', $dataSourceId );
 		}
 
-		$options = [];
+		$options = [
+			'connectTimeout' => 5,
+			'timeout' => 5,
+		];
 
 		$userAgent = $this->options->get( RobloxAPIConstants::ConfRequestUserAgent );
 		if ( $userAgent !== null && $userAgent !== '' ) {
