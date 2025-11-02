@@ -34,10 +34,6 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 	private Config $config;
 	/**
-	 * @var parserFunction\RobloxApiParserFunction[]
-	 */
-	private array $legacyParserFunctions;
-	/**
 	 * @var array<string, int>
 	 */
 	private array $usageLimits;
@@ -48,10 +44,6 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	) {
 		$this->config = $configFactory->makeConfig( 'RobloxAPI' );
 
-		$this->legacyParserFunctions = [];
-		if ( $this->config->get( RobloxAPIConstants::ConfRegisterLegacyParserFunctions ) ) {
-			$this->legacyParserFunctions += $this->dataSourceProvider->createLegacyParserFunctions();
-		}
 		$this->usageLimits = $this->config->get( RobloxAPIConstants::ConfDataSourceUsageLimits );
 	}
 
@@ -68,40 +60,44 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 			}
 		} );
 
-		foreach ( $this->legacyParserFunctions as $id => $function ) {
-			// all data source parser functions are only enabled if the corresponding data source
-			// is enabled, so we don't need to check the config for that
-			$parser->setFunctionHook(
-				$id,
-				function ( Parser $parser, mixed ...$args ) use ( $function ): array|bool|string {
-					$parser->addTrackingCategory( 'robloxapi-category-deprecated-parser-function' );
-					if ( $this->config->get( RobloxAPIConstants::ConfParserFunctionsExpensive ) &&
-						!$parser->incrementExpensiveFunctionCount() ) {
-						return false;
-					}
-					$this->checkCanUseDataSource( $parser, $function->getDataSource() );
+		if ( $this->config->get( RobloxAPIConstants::ConfRegisterLegacyParserFunctions ) ) {
+			$legacyParserFunctions = $this->dataSourceProvider->createLegacyParserFunctions();
 
-					try {
-						$result = $function->exec( $this->dataSourceProvider, $parser, ...$args );
-
-						$shouldEscape = $function->shouldEscapeResult( $result );
-
-						if ( RobloxAPIUtil::shouldReturnJson( $result ) ) {
-							$result = RobloxAPIUtil::createJsonResult( $result, [] );
-							// always escape json, there is no need for it to be parsed
-							$shouldEscape = true;
+			foreach ( $legacyParserFunctions as $id => $function ) {
+				// all data source parser functions are only enabled if the corresponding data source
+				// is enabled, so we don't need to check the config for that
+				$parser->setFunctionHook(
+					$id,
+					function ( Parser $parser, mixed ...$args ) use ( $function ): array|bool|string {
+						$parser->addTrackingCategory( 'robloxapi-category-deprecated-parser-function' );
+						if ( $this->config->get( RobloxAPIConstants::ConfParserFunctionsExpensive ) &&
+							!$parser->incrementExpensiveFunctionCount() ) {
+							return false;
 						}
+						$this->checkCanUseDataSource( $parser, $function->getDataSource() );
 
-						return [
-							$result,
-							'nowiki' => $shouldEscape,
-						];
-					} catch ( RobloxAPIException $exception ) {
-						$parser->addTrackingCategory( 'robloxapi-category-error' );
-						return RobloxAPIUtil::formatException( $exception, $parser, $this->config );
+						try {
+							$result = $function->exec( $this->dataSourceProvider, $parser, ...$args );
+
+							$shouldEscape = $function->shouldEscapeResult( $result );
+
+							if ( RobloxAPIUtil::shouldReturnJson( $result ) ) {
+								$result = RobloxAPIUtil::createJsonResult( $result, [] );
+								// always escape json, there is no need for it to be parsed
+								$shouldEscape = true;
+							}
+
+							return [
+								$result,
+								'nowiki' => $shouldEscape,
+							];
+						} catch ( RobloxAPIException $exception ) {
+							$parser->addTrackingCategory( 'robloxapi-category-error' );
+							return RobloxAPIUtil::formatException( $exception, $parser, $this->config );
+						}
 					}
-				}
-			);
+				);
+			}
 		}
 	}
 
