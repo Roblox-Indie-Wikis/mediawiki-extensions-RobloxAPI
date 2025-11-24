@@ -168,10 +168,10 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 		if ( $used > $limit ) {
 			if ( $dataSource->getFetcherSourceId() !== $dataSource->getId() ) {
-				throw new RobloxAPIException( 'robloxapi-error-usage-limit-dependent', $dataSourceId, $limit,
+				throw new RobloxAPIException( 'robloxapi-error-usage-limit-dependent', $dataSourceId, (string)$limit,
 					$dataSource->getId() );
 			} else {
-				throw new RobloxAPIException( 'robloxapi-error-usage-limit', $dataSourceId, $limit );
+				throw new RobloxAPIException( 'robloxapi-error-usage-limit', $dataSourceId, (string)$limit );
 			}
 		}
 	}
