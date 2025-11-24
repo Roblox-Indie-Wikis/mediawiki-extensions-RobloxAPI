@@ -18,7 +18,7 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\fetcher;
+namespace MediaWiki\Extension\RobloxAPI\data\Fetcher;
 
 use Closure;
 use MediaWiki\Config\ServiceOptions;

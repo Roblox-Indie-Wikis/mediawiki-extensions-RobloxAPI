@@ -23,7 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\Tests;
 use GuzzleHttpRequest;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\data\Cache\DataSourceCache;
-use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
+use MediaWiki\Extension\RobloxAPI\data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Status\Status;

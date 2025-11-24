@@ -20,7 +20,7 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Tests;
 
-use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
+use MediaWiki\Extension\RobloxAPI\data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameDataSource;
 use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
 
