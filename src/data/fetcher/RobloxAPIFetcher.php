@@ -22,7 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\fetcher;
 
 use Closure;
 use MediaWiki\Config\ServiceOptions;
-use MediaWiki\Extension\RobloxAPI\data\cache\DataSourceCache;
+use MediaWiki\Extension\RobloxAPI\data\Cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Http\HttpRequestFactory;
