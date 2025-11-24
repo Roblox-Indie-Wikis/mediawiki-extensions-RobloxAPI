@@ -18,11 +18,11 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\Fetcher;
+namespace MediaWiki\Extension\RobloxAPI\Data\Fetcher;
 
 use Closure;
 use MediaWiki\Config\ServiceOptions;
-use MediaWiki\Extension\RobloxAPI\data\Cache\DataSourceCache;
+use MediaWiki\Extension\RobloxAPI\Data\Cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Http\HttpRequestFactory;

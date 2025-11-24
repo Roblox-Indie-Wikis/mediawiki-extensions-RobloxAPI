@@ -18,46 +18,32 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\Source\Implementation;
+namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
-use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\data\Source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\data\Source\DependentDataSource;
-use MediaWiki\Parser\Parser;
+use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
+use MediaWiki\Extension\RobloxAPI\Data\Source\ThumbnailDataSource;
 
-class GroupMembersDataSource extends DependentDataSource {
-
-	/**
-	 * @inheritDoc
-	 */
-	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider, 'groupMembers', 'groupData' );
-	}
+class UserAvatarThumbnailDataSource extends ThumbnailDataSource {
 
 	/**
 	 * @inheritDoc
 	 */
-	public function exec(
-		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	): mixed {
-		$groupData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
-
-		if ( !$groupData ) {
-			$this->failNoData();
-		}
-
-		if ( !property_exists( $groupData, 'memberCount' ) ) {
-			$this->failUnexpectedDataStructure();
-		}
-
-		return $groupData->memberCount;
+	public function __construct( RobloxAPIFetcher $fetcher ) {
+		parent::__construct( 'userAvatarThumbnail', $fetcher, 'users/avatar', 'userIds' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [ 'GroupID' ] );
+		return ( new ArgumentSpecification( [
+			'UserID',
+			'ThumbnailSize',
+		], [
+			'is_circular' => 'Boolean',
+			'format' => 'ThumbnailFormat',
+		], ) )->withJsonArgs();
 	}
 
 	/**
