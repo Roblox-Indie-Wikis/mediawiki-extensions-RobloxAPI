@@ -29,16 +29,16 @@ use Exception;
 class RobloxAPIException extends Exception {
 
 	/**
-	 * @var array The parameters to be used in the message.
+	 * @var string[] The parameters to be used in the message.
 	 */
 	public array $messageParams = [];
 
 	/**
 	 * Creates a new RobloxAPIException.
 	 * @param string $message
-	 * @param mixed ...$messageParams
+	 * @param string ...$messageParams
 	 */
-	public function __construct( string $message = '', mixed ...$messageParams ) {
+	public function __construct( string $message = '', string ...$messageParams ) {
 		parent::__construct( $message );
 
 		$this->messageParams = $messageParams;
