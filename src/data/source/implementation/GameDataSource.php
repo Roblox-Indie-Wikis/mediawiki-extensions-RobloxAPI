@@ -23,7 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
 use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 
 /**
  * A data source for the roblox games API.

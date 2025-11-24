@@ -18,7 +18,7 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\util;
+namespace MediaWiki\Extension\RobloxAPI\Util;
 
 use Exception;
 

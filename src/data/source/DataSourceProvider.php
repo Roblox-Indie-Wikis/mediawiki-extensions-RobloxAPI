@@ -39,8 +39,8 @@ use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserIdDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserPlaceVisitsDataSource;
 use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\parserFunction\RobloxApiParserFunction;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 
 /**
  * Handles the registration of data sources and stores them.
