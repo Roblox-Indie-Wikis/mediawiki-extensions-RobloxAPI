@@ -151,6 +151,20 @@ class DataSourceProvider {
 				return $data->data;
 			}
 		);
+		$this->registerSimpleFetcherDataSource(
+			'gameEvents',
+			new ArgumentSpecification(
+				[ 'UniverseID' ],
+				[],
+				true
+			),
+			static function ( array $args, array $optionalArgs ): string {
+				return "https://apis.roblox.com/virtual-events/v1/universes/$args[0]/virtual-events";
+			},
+			static function ( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
+				return $data->data;
+			}
+		);
 
 		// dependent data sources will throw an exception if the required data source is not enabled
 		$this->tryRegisterDataSources(
