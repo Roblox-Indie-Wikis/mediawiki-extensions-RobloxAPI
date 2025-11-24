@@ -25,6 +25,7 @@
         + [universeInfo](#universeinfo)
         + [userGames](#usergames)
         + [userPlaceVisits](#userplacevisits)
+        + [gameEvents](#gameevents)
     * [Handling JSON data](#handling-json-data)
         + [JSON keys](#json-keys)
         + [Pretty-printing JSON data](#pretty-printing-json-data)
@@ -581,6 +582,30 @@ Get the number of visits of all places a user has created:
 |--------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------------|---------|
 | `limit`      | The maximum number of games to consider in the calculation.                                                                       | Numeric ID (10, 25 or 50) | `50`    |
 | `sort_order` | The order to sort the games. This is used by the api and may change the results if the user has more games than the limit allows. | String (`Asc`, `Desc`)    | `Asc`   |
+
+### gameEvents
+
+Provides a list of events happening in a universe.
+
+#### Example
+
+Get the events in a universe:
+
+```
+{{#robloxAPI: gameEvents | 6597877862 }}
+```
+
+Get the title of the first event in a universe:
+
+```
+{{#robloxAPI: gameEvents | 6597877862 | json_key=0->title }}
+```
+
+#### Required Arguments
+
+| Name         | Description                                  | Type       |
+|--------------|----------------------------------------------|------------|
+| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
 
 ## Handling JSON data
 
