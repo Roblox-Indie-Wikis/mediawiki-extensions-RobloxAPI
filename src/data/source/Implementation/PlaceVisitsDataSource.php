@@ -18,18 +18,46 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
+namespace MediaWiki\Extension\RobloxAPI\data\source\Implementation;
 
+use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\data\source\ThumbnailUrlDataSource;
+use MediaWiki\Extension\RobloxAPI\data\source\DependentDataSource;
+use MediaWiki\Parser\Parser;
 
-class UserAvatarThumbnailUrlDataSource extends ThumbnailUrlDataSource {
+class PlaceVisitsDataSource extends DependentDataSource {
 
 	/**
 	 * @inheritDoc
 	 */
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider, 'userAvatarThumbnailUrl', 'userAvatarThumbnail' );
+		parent::__construct( $dataSourceProvider, 'visits', 'gameData' );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function exec(
+		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
+	): mixed {
+		$gameData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
+
+		if ( !$gameData ) {
+			$this->failNoData();
+		}
+
+		if ( !property_exists( $gameData, 'visits' ) ) {
+			$this->failUnexpectedDataStructure();
+		}
+
+		return $gameData->visits;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getArgumentSpecification(): ArgumentSpecification {
+		return new ArgumentSpecification( [ 'UniverseID', 'GameID' ] );
 	}
 
 	/**

@@ -18,7 +18,7 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
+namespace MediaWiki\Extension\RobloxAPI\data\source\Implementation;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\data\source\ThumbnailUrlDataSource;

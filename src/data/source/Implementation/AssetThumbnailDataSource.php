@@ -18,49 +18,32 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
+namespace MediaWiki\Extension\RobloxAPI\data\source\Implementation;
 
 use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\data\source\DependentDataSource;
-use MediaWiki\Parser\Parser;
+use MediaWiki\Extension\RobloxAPI\data\Fetcher\RobloxAPIFetcher;
+use MediaWiki\Extension\RobloxAPI\data\source\ThumbnailDataSource;
 
-class PlaceActivePlayersDataSource extends DependentDataSource {
-
-	/**
-	 * @inheritDoc
-	 */
-	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider, 'activePlayers', 'gameData' );
-	}
+class AssetThumbnailDataSource extends ThumbnailDataSource {
 
 	/**
 	 * @inheritDoc
 	 */
-	public function exec(
-		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	): mixed {
-		$gameData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
-
-		if ( !$gameData ) {
-			$this->failNoData();
-		}
-
-		return $gameData->playing;
+	public function __construct( RobloxAPIFetcher $fetcher ) {
+		parent::__construct( 'assetThumbnail', $fetcher, 'assets', 'assetIds' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [ 'UniverseID', 'GameID' ] );
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function shouldRegisterLegacyParserFunction(): bool {
-		return true;
+		return ( new ArgumentSpecification( [
+			'AssetID',
+			'ThumbnailSize',
+		], [
+			'is_circular' => 'Boolean',
+			'format' => 'ThumbnailFormat',
+		], ) )->withJsonArgs();
 	}
 
 }
