@@ -117,11 +117,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 			throw new RobloxAPIException( 'robloxapi-error-no-arguments' );
 		}
 		$dataSourceId = $args[0];
-		$dataSource = $this->dataSourceProvider->getDataSource( $dataSourceId, true );
-
-		if ( !$dataSource ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found', $dataSourceId );
-		}
+		$dataSource = $this->dataSourceProvider->getDataSourceOrThrow( $dataSourceId, true );
 
 		$this->checkCanUseDataSource( $parser, $dataSource );
 
