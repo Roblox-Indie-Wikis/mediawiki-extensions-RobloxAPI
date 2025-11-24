@@ -177,7 +177,8 @@ class RobloxAPIUtil {
 	public static function createJsonResult( mixed $jsonObject, array $optionalArgs ): string {
 		$pretty = strtolower( $optionalArgs['pretty'] ?? '' ) === 'true';
 		// only return the value of json_key in the JSON object
-		if ( is_object( $jsonObject ) && !empty( $optionalArgs['json_key'] ) ) {
+		if ( ( is_object( $jsonObject ) || is_array( $jsonObject ) ) &&
+			isset( $optionalArgs['json_key'] ) && trim( $optionalArgs['json_key'] ) !== '' ) {
 			$jsonObject = self::getJsonKey( $jsonObject, $optionalArgs['json_key'] );
 
 			if ( !is_object( $jsonObject ) && !is_array( $jsonObject ) ) {
