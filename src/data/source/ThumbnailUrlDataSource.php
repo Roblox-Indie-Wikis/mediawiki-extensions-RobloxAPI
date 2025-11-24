@@ -20,7 +20,7 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
-use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil;
 use MediaWiki\Parser\Parser;
 

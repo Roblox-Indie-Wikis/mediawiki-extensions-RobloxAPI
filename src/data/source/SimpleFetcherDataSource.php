@@ -21,7 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
 use Closure;
-use MediaWiki\Extension\RobloxAPI\data\args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
 
 /**
