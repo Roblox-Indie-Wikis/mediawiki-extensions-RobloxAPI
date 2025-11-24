@@ -37,8 +37,8 @@ use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserAvatarThumbnail
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserAvatarThumbnailUrlDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserIdDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\UserPlaceVisitsDataSource;
-use MediaWiki\Extension\RobloxAPI\parserFunction\DataSourceParserFunction;
-use MediaWiki\Extension\RobloxAPI\parserFunction\RobloxApiParserFunction;
+use MediaWiki\Extension\RobloxAPI\ParserFunction\DataSourceParserFunction;
+use MediaWiki\Extension\RobloxAPI\ParserFunction\RobloxApiParserFunction;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 

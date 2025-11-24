@@ -18,45 +18,46 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\parserFunction;
+namespace MediaWiki\Extension\RobloxAPI\ParserFunction;
 
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\data\source\IDataSource;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil;
 use MediaWiki\Parser\Parser;
 
 /**
- * Defines a parser function that can be used to access the Roblox API.
+ * A parser function that provides the data of a data source.
  * @deprecated Replaced by data sources in v1.2.0.
  */
-abstract class RobloxApiParserFunction {
+class DataSourceParserFunction extends RobloxApiParserFunction {
 
-	/**
-	 * @param DataSourceProvider $dataSourceProvider An instance of the data source provider.
-	 */
-	public function __construct( protected DataSourceProvider $dataSourceProvider ) {
+	public function __construct( DataSourceProvider $dataSourceProvider, private readonly IDataSource $dataSource ) {
+		parent::__construct( $dataSourceProvider );
 	}
 
 	/**
-	 * Executes the parser function
-	 * @param DataSourceProvider $dataSourceProvider
-	 * @param Parser $parser
-	 * @param mixed ...$args
-	 * @throws RobloxAPIException If any error regarding the API or data occurs during execution.
+	 * @inheritDoc
 	 */
-	abstract public function exec( DataSourceProvider $dataSourceProvider, Parser $parser, ...$args ): mixed;
+	public function exec( DataSourceProvider $dataSourceProvider, Parser $parser, ...$args ): mixed {
+		[ $requiredArgs, $optionalArgs ] =
+			RobloxAPIUtil::parseArguments( $this->dataSource->getArgumentSpecification(), $args,
+				$this->dataSourceProvider->options );
+
+		return $this->dataSource->exec( $this->dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
+	}
 
 	/**
-	 * @param mixed $result The result of the parser function.
-	 * @return bool Whether the result should be escaped and url-encoded.
+	 * @inheritDoc
 	 */
 	public function shouldEscapeResult( mixed $result ): bool {
-		return true;
+		return $this->dataSource->shouldEscapeResult( $result );
 	}
 
 	/**
-	 * @return IDataSource The data source associated with this parser function.
+	 * @inheritDoc
 	 */
-	abstract public function getDataSource(): IDataSource;
+	public function getDataSource(): IDataSource {
+		return $this->dataSource;
+	}
 
 }
