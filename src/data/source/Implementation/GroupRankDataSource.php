@@ -18,20 +18,21 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source\implementation;
+namespace MediaWiki\Extension\RobloxAPI\data\source\Implementation;
 
 use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\data\source\DependentDataSource;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Parser\Parser;
 
-class PlaceVisitsDataSource extends DependentDataSource {
+class GroupRankDataSource extends DependentDataSource {
 
 	/**
 	 * @inheritDoc
 	 */
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider, 'visits', 'gameData' );
+		parent::__construct( $dataSourceProvider, 'groupRank', 'groupRoles' );
 	}
 
 	/**
@@ -40,24 +41,30 @@ class PlaceVisitsDataSource extends DependentDataSource {
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
 	): mixed {
-		$gameData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
+		$groups = $this->dataSource->exec( $dataSourceProvider, $parser, [ $requiredArgs[1] ] );
 
-		if ( !$gameData ) {
+		if ( !$groups ) {
 			$this->failNoData();
 		}
 
-		if ( !property_exists( $gameData, 'visits' ) ) {
+		if ( !is_array( $groups ) ) {
 			$this->failUnexpectedDataStructure();
 		}
 
-		return $gameData->visits;
+		foreach ( $groups as $group ) {
+			if ( $group->group->id === (int)$requiredArgs[0] ) {
+				return $group->role->name;
+			}
+		}
+
+		throw new RobloxAPIException( 'robloxapi-error-user-group-not-found' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [ 'UniverseID', 'GameID' ] );
+		return new ArgumentSpecification( [ 'GroupID', 'UserID' ] );
 	}
 
 	/**
