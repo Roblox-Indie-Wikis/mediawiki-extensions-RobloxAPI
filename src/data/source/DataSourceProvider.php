@@ -250,8 +250,8 @@ class DataSourceProvider {
 	/**
 	 * @throws RobloxAPIException
 	 */
-	public function getDataSourceOrThrow( string $id ): IDataSource {
-		$source = $this->getDataSource( $id );
+	public function getDataSourceOrThrow( string $id, bool $ignoreCase = false ): IDataSource {
+		$source = $this->getDataSource( $id, $ignoreCase );
 
 		if ( !$source ) {
 			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found', $id );
