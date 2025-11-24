@@ -18,9 +18,9 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\Source;
+namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 
-use MediaWiki\Extension\RobloxAPI\data\Fetcher\RobloxAPIFetcher;
+use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Parser\Parser;
 

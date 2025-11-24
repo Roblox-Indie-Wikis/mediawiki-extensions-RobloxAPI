@@ -18,32 +18,18 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\Source\Implementation;
+namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
-use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\data\Fetcher\RobloxAPIFetcher;
-use MediaWiki\Extension\RobloxAPI\data\Source\ThumbnailDataSource;
+use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\Data\Source\ThumbnailUrlDataSource;
 
-class AssetThumbnailDataSource extends ThumbnailDataSource {
-
-	/**
-	 * @inheritDoc
-	 */
-	public function __construct( RobloxAPIFetcher $fetcher ) {
-		parent::__construct( 'assetThumbnail', $fetcher, 'assets', 'assetIds' );
-	}
+class AssetThumbnailUrlDataSource extends ThumbnailUrlDataSource {
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getArgumentSpecification(): ArgumentSpecification {
-		return ( new ArgumentSpecification( [
-			'AssetID',
-			'ThumbnailSize',
-		], [
-			'is_circular' => 'Boolean',
-			'format' => 'ThumbnailFormat',
-		], ) )->withJsonArgs();
+	public function __construct( DataSourceProvider $dataSourceProvider ) {
+		parent::__construct( $dataSourceProvider, 'assetThumbnailUrl', 'assetThumbnail' );
 	}
 
 }

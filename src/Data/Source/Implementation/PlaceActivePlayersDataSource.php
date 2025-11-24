@@ -18,32 +18,42 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\Source\Implementation;
+namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
-use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\data\Fetcher\RobloxAPIFetcher;
-use MediaWiki\Extension\RobloxAPI\data\Source\ThumbnailDataSource;
+use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\Data\Source\DependentDataSource;
+use MediaWiki\Parser\Parser;
 
-class UserAvatarThumbnailDataSource extends ThumbnailDataSource {
+class PlaceActivePlayersDataSource extends DependentDataSource {
 
 	/**
 	 * @inheritDoc
 	 */
-	public function __construct( RobloxAPIFetcher $fetcher ) {
-		parent::__construct( 'userAvatarThumbnail', $fetcher, 'users/avatar', 'userIds' );
+	public function __construct( DataSourceProvider $dataSourceProvider ) {
+		parent::__construct( $dataSourceProvider, 'activePlayers', 'gameData' );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function exec(
+		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
+	): mixed {
+		$gameData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
+
+		if ( !$gameData ) {
+			$this->failNoData();
+		}
+
+		return $gameData->playing;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return ( new ArgumentSpecification( [
-			'UserID',
-			'ThumbnailSize',
-		], [
-			'is_circular' => 'Boolean',
-			'format' => 'ThumbnailFormat',
-		], ) )->withJsonArgs();
+		return new ArgumentSpecification( [ 'UniverseID', 'GameID' ] );
 	}
 
 	/**

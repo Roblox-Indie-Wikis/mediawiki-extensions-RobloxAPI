@@ -18,20 +18,21 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\Source\Implementation;
+namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
-use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\data\Source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\data\Source\DependentDataSource;
+use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\Data\Source\DependentDataSource;
 use MediaWiki\Parser\Parser;
 
-class PlaceVisitsDataSource extends DependentDataSource {
+/**
+ * A data source for getting the total amount of visits a user's places have.
+ * For performance reasons, this is restricted to the first 50 games the API returns.
+ */
+class UserPlaceVisitsDataSource extends DependentDataSource {
 
-	/**
-	 * @inheritDoc
-	 */
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider, 'visits', 'gameData' );
+		parent::__construct( $dataSourceProvider, 'userPlaceVisits', 'userGames' );
 	}
 
 	/**
@@ -40,31 +41,31 @@ class PlaceVisitsDataSource extends DependentDataSource {
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
 	): mixed {
-		$gameData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
+		$userGames = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
 
-		if ( !$gameData ) {
+		if ( $userGames === null ) {
 			$this->failNoData();
 		}
 
-		if ( !property_exists( $gameData, 'visits' ) ) {
+		if ( !is_array( $userGames ) ) {
 			$this->failUnexpectedDataStructure();
 		}
 
-		return $gameData->visits;
+		$totalVisits = 0;
+		foreach ( $userGames as $game ) {
+			if ( !property_exists( $game, 'placeVisits' ) ) {
+				$this->failUnexpectedDataStructure();
+			}
+			$totalVisits += $game->placeVisits;
+		}
+
+		return $totalVisits;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [ 'UniverseID', 'GameID' ] );
+		return $this->dataSource->getArgumentSpecification();
 	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function shouldRegisterLegacyParserFunction(): bool {
-		return true;
-	}
-
 }

@@ -21,8 +21,8 @@ namespace MediaWiki\Extension\RobloxAPI;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ConfigFactory;
-use MediaWiki\Extension\RobloxAPI\data\Source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\data\Source\IDataSource;
+use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\Data\Source\IDataSource;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil;

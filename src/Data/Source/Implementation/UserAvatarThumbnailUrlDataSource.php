@@ -18,10 +18,10 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\Source\Implementation;
+namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
-use MediaWiki\Extension\RobloxAPI\data\Source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\data\Source\ThumbnailUrlDataSource;
+use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\Data\Source\ThumbnailUrlDataSource;
 
 class UserAvatarThumbnailUrlDataSource extends ThumbnailUrlDataSource {
 

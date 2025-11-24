@@ -20,8 +20,8 @@
 
 namespace MediaWiki\Extension\RobloxAPI\ParserFunction;
 
-use MediaWiki\Extension\RobloxAPI\data\Source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\data\Source\IDataSource;
+use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\Data\Source\IDataSource;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Parser\Parser;
 
