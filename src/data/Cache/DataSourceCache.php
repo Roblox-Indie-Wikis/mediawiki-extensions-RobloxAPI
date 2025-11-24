@@ -18,7 +18,7 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\cache;
+namespace MediaWiki\Extension\RobloxAPI\data\Cache;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
