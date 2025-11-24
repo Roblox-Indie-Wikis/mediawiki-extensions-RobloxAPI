@@ -23,7 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\data\source;
 use Closure;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\data\fetcher\RobloxAPIFetcher;
+use MediaWiki\Extension\RobloxAPI\data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\AssetThumbnailUrlDataSource;
 use MediaWiki\Extension\RobloxAPI\data\source\implementation\GameDataSource;
