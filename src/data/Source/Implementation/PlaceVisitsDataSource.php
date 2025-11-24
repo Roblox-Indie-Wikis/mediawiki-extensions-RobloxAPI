@@ -18,20 +18,20 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source\Implementation;
+namespace MediaWiki\Extension\RobloxAPI\data\Source\Implementation;
 
 use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\data\source\DependentDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\data\Source\DependentDataSource;
 use MediaWiki\Parser\Parser;
 
-class GroupMembersDataSource extends DependentDataSource {
+class PlaceVisitsDataSource extends DependentDataSource {
 
 	/**
 	 * @inheritDoc
 	 */
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider, 'groupMembers', 'groupData' );
+		parent::__construct( $dataSourceProvider, 'visits', 'gameData' );
 	}
 
 	/**
@@ -40,24 +40,24 @@ class GroupMembersDataSource extends DependentDataSource {
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
 	): mixed {
-		$groupData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
+		$gameData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
 
-		if ( !$groupData ) {
+		if ( !$gameData ) {
 			$this->failNoData();
 		}
 
-		if ( !property_exists( $groupData, 'memberCount' ) ) {
+		if ( !property_exists( $gameData, 'visits' ) ) {
 			$this->failUnexpectedDataStructure();
 		}
 
-		return $groupData->memberCount;
+		return $gameData->visits;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [ 'GroupID' ] );
+		return new ArgumentSpecification( [ 'UniverseID', 'GameID' ] );
 	}
 
 	/**

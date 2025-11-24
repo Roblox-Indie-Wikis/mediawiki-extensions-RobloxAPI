@@ -18,10 +18,10 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source\Implementation;
+namespace MediaWiki\Extension\RobloxAPI\data\Source\Implementation;
 
-use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\data\source\ThumbnailUrlDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\data\Source\ThumbnailUrlDataSource;
 
 class AssetThumbnailUrlDataSource extends ThumbnailUrlDataSource {
 

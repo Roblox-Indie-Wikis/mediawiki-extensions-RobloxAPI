@@ -18,11 +18,11 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source\Implementation;
+namespace MediaWiki\Extension\RobloxAPI\data\Source\Implementation;
 
 use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\Fetcher\RobloxAPIFetcher;
-use MediaWiki\Extension\RobloxAPI\data\source\ThumbnailDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\ThumbnailDataSource;
 
 class GameIconDataSource extends ThumbnailDataSource {
 

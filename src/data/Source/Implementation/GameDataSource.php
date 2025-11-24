@@ -18,63 +18,69 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source;
+namespace MediaWiki\Extension\RobloxAPI\data\Source\Implementation;
 
-use Closure;
 use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\Fetcher\RobloxAPIFetcher;
+use MediaWiki\Extension\RobloxAPI\data\Source\FetcherDataSource;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 
 /**
- * A simple data source that does not process the data.
+ * A data source for the roblox games API.
  */
-class SimpleFetcherDataSource extends FetcherDataSource {
+class GameDataSource extends FetcherDataSource {
 
-	/**
-	 * @inheritDoc
-	 * @param Closure( array<string>, array<string, string> ): string $createEndpoint The function to create the
-	 * endpoint.
-	 * @param Closure( mixed, array<string>, array<string, string> ): mixed|null $processDataFn The function to process
-	 * the data.
-	 * @param bool $registerParserFunction Whether to register a legacy parser function.
-	 */
-	public function __construct(
-		string $id,
-		RobloxAPIFetcher $fetcher,
-		protected ArgumentSpecification $argumentSpecification,
-		protected Closure $createEndpoint,
-		protected ?Closure $processDataFn = null,
-		protected bool $registerParserFunction = false
-	) {
-		parent::__construct( $id, $fetcher );
+	public function __construct( RobloxAPIFetcher $fetcher ) {
+		parent::__construct( 'gameData', $fetcher );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
-		return call_user_func( $this->createEndpoint, $requiredArgs, $optionalArgs );
+		return "https://games.roblox.com/v1/games?universeIds=$requiredArgs[0]";
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
-		if ( $this->processDataFn ) {
-			return call_user_func( $this->processDataFn, $data, $requiredArgs, $optionalArgs );
+		$entries = $data->data;
+
+		if ( !$entries ) {
+			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
 		}
 
-		return $data;
+		foreach ( $entries as $entry ) {
+			if ( !property_exists( $entry, 'rootPlaceId' ) ) {
+				continue;
+			}
+
+			if ( $entry->rootPlaceId !== (int)$requiredArgs[1] ) {
+				continue;
+			}
+
+			return $entry;
+		}
+
+		return null;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function shouldRegisterLegacyParserFunction(): bool {
-		return $this->registerParserFunction;
+		return true;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return $this->argumentSpecification;
+		return ( new ArgumentSpecification( [
+			'UniverseID',
+			'PlaceID',
+		] ) )->withJsonArgs();
 	}
 
 }

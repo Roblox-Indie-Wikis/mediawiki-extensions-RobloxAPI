@@ -18,25 +18,25 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source;
+namespace MediaWiki\Extension\RobloxAPI\data\Source;
 
 use Closure;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\Fetcher\RobloxAPIFetcher;
-use MediaWiki\Extension\RobloxAPI\data\source\Implementation\AssetThumbnailDataSource;
-use MediaWiki\Extension\RobloxAPI\data\source\Implementation\AssetThumbnailUrlDataSource;
-use MediaWiki\Extension\RobloxAPI\data\source\Implementation\GameDataSource;
-use MediaWiki\Extension\RobloxAPI\data\source\Implementation\GameIconDataSource;
-use MediaWiki\Extension\RobloxAPI\data\source\Implementation\GameIconUrlDataSource;
-use MediaWiki\Extension\RobloxAPI\data\source\Implementation\GroupMembersDataSource;
-use MediaWiki\Extension\RobloxAPI\data\source\Implementation\GroupRankDataSource;
-use MediaWiki\Extension\RobloxAPI\data\source\Implementation\PlaceActivePlayersDataSource;
-use MediaWiki\Extension\RobloxAPI\data\source\Implementation\PlaceVisitsDataSource;
-use MediaWiki\Extension\RobloxAPI\data\source\Implementation\UserAvatarThumbnailDataSource;
-use MediaWiki\Extension\RobloxAPI\data\source\Implementation\UserAvatarThumbnailUrlDataSource;
-use MediaWiki\Extension\RobloxAPI\data\source\Implementation\UserIdDataSource;
-use MediaWiki\Extension\RobloxAPI\data\source\Implementation\UserPlaceVisitsDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\Implementation\AssetThumbnailDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\Implementation\AssetThumbnailUrlDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\Implementation\GameDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\Implementation\GameIconDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\Implementation\GameIconUrlDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\Implementation\GroupMembersDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\Implementation\GroupRankDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\Implementation\PlaceActivePlayersDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\Implementation\PlaceVisitsDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\Implementation\UserAvatarThumbnailDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\Implementation\UserAvatarThumbnailUrlDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\Implementation\UserIdDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\Implementation\UserPlaceVisitsDataSource;
 use MediaWiki\Extension\RobloxAPI\ParserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\ParserFunction\RobloxApiParserFunction;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
