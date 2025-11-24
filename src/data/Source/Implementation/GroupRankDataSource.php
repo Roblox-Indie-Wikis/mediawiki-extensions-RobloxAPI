@@ -18,20 +18,21 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source\Implementation;
+namespace MediaWiki\Extension\RobloxAPI\data\Source\Implementation;
 
 use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\data\source\DependentDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\data\Source\DependentDataSource;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Parser\Parser;
 
-class PlaceActivePlayersDataSource extends DependentDataSource {
+class GroupRankDataSource extends DependentDataSource {
 
 	/**
 	 * @inheritDoc
 	 */
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider, 'activePlayers', 'gameData' );
+		parent::__construct( $dataSourceProvider, 'groupRank', 'groupRoles' );
 	}
 
 	/**
@@ -40,20 +41,30 @@ class PlaceActivePlayersDataSource extends DependentDataSource {
 	public function exec(
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
 	): mixed {
-		$gameData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
+		$groups = $this->dataSource->exec( $dataSourceProvider, $parser, [ $requiredArgs[1] ] );
 
-		if ( !$gameData ) {
+		if ( !$groups ) {
 			$this->failNoData();
 		}
 
-		return $gameData->playing;
+		if ( !is_array( $groups ) ) {
+			$this->failUnexpectedDataStructure();
+		}
+
+		foreach ( $groups as $group ) {
+			if ( $group->group->id === (int)$requiredArgs[0] ) {
+				return $group->role->name;
+			}
+		}
+
+		throw new RobloxAPIException( 'robloxapi-error-user-group-not-found' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [ 'UniverseID', 'GameID' ] );
+		return new ArgumentSpecification( [ 'GroupID', 'UserID' ] );
 	}
 
 	/**

@@ -18,18 +18,32 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source\Implementation;
+namespace MediaWiki\Extension\RobloxAPI\data\Source\Implementation;
 
-use MediaWiki\Extension\RobloxAPI\data\source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\data\source\ThumbnailUrlDataSource;
+use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\data\Fetcher\RobloxAPIFetcher;
+use MediaWiki\Extension\RobloxAPI\data\Source\ThumbnailDataSource;
 
-class UserAvatarThumbnailUrlDataSource extends ThumbnailUrlDataSource {
+class UserAvatarThumbnailDataSource extends ThumbnailDataSource {
 
 	/**
 	 * @inheritDoc
 	 */
-	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider, 'userAvatarThumbnailUrl', 'userAvatarThumbnail' );
+	public function __construct( RobloxAPIFetcher $fetcher ) {
+		parent::__construct( 'userAvatarThumbnail', $fetcher, 'users/avatar', 'userIds' );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getArgumentSpecification(): ArgumentSpecification {
+		return ( new ArgumentSpecification( [
+			'UserID',
+			'ThumbnailSize',
+		], [
+			'is_circular' => 'Boolean',
+			'format' => 'ThumbnailFormat',
+		], ) )->withJsonArgs();
 	}
 
 	/**

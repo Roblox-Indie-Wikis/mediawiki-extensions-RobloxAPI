@@ -18,69 +18,63 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\data\source\Implementation;
+namespace MediaWiki\Extension\RobloxAPI\data\Source;
 
+use Closure;
 use MediaWiki\Extension\RobloxAPI\data\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\data\Fetcher\RobloxAPIFetcher;
-use MediaWiki\Extension\RobloxAPI\data\source\FetcherDataSource;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 
 /**
- * A data source for the roblox games API.
+ * A simple data source that does not process the data.
  */
-class GameDataSource extends FetcherDataSource {
+class SimpleFetcherDataSource extends FetcherDataSource {
 
-	public function __construct( RobloxAPIFetcher $fetcher ) {
-		parent::__construct( 'gameData', $fetcher );
+	/**
+	 * @inheritDoc
+	 * @param Closure( array<string>, array<string, string> ): string $createEndpoint The function to create the
+	 * endpoint.
+	 * @param Closure( mixed, array<string>, array<string, string> ): mixed|null $processDataFn The function to process
+	 * the data.
+	 * @param bool $registerParserFunction Whether to register a legacy parser function.
+	 */
+	public function __construct(
+		string $id,
+		RobloxAPIFetcher $fetcher,
+		protected ArgumentSpecification $argumentSpecification,
+		protected Closure $createEndpoint,
+		protected ?Closure $processDataFn = null,
+		protected bool $registerParserFunction = false
+	) {
+		parent::__construct( $id, $fetcher );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
-		return "https://games.roblox.com/v1/games?universeIds=$requiredArgs[0]";
+		return call_user_func( $this->createEndpoint, $requiredArgs, $optionalArgs );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
-		$entries = $data->data;
-
-		if ( !$entries ) {
-			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
+		if ( $this->processDataFn ) {
+			return call_user_func( $this->processDataFn, $data, $requiredArgs, $optionalArgs );
 		}
 
-		foreach ( $entries as $entry ) {
-			if ( !property_exists( $entry, 'rootPlaceId' ) ) {
-				continue;
-			}
-
-			if ( $entry->rootPlaceId !== (int)$requiredArgs[1] ) {
-				continue;
-			}
-
-			return $entry;
-		}
-
-		return null;
+		return $data;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function shouldRegisterLegacyParserFunction(): bool {
-		return true;
+		return $this->registerParserFunction;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return ( new ArgumentSpecification( [
-			'UniverseID',
-			'PlaceID',
-		] ) )->withJsonArgs();
+		return $this->argumentSpecification;
 	}
 
 }
