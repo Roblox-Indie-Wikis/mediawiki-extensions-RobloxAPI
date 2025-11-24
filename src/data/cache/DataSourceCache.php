@@ -21,8 +21,8 @@
 namespace MediaWiki\Extension\RobloxAPI\data\cache;
 
 use MediaWiki\Config\ServiceOptions;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIConstants;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil;
 use Wikimedia\ObjectCache\WANObjectCache;
 
 /**

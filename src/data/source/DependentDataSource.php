@@ -20,7 +20,7 @@
 
 namespace MediaWiki\Extension\RobloxAPI\data\source;
 
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 
 abstract class DependentDataSource implements IDataSource {
 
