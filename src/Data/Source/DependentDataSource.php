@@ -20,6 +20,7 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 
+use LogicException;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 
 abstract class DependentDataSource extends AbstractDataSource {
@@ -33,7 +34,6 @@ abstract class DependentDataSource extends AbstractDataSource {
 	 * @param DataSourceProvider $dataSourceProvider
 	 * @param string $id The id of this data source.
 	 * @param string $dependencyId
-	 * @throws RobloxAPIException If the data source could not be registered.
 	 */
 	public function __construct(
 		DataSourceProvider $dataSourceProvider,
@@ -41,7 +41,11 @@ abstract class DependentDataSource extends AbstractDataSource {
 		string $dependencyId
 	) {
 		parent::__construct( $id );
-		$this->dataSource = $dataSourceProvider->getDataSourceOrThrow( $dependencyId );
+		$nullableDataSource = $dataSourceProvider->getDataSource( $dependencyId );
+		if ( $nullableDataSource === null ) {
+			throw new LogicException( "Tried constructing dependent data source $this->id, but dependency $dependencyId was not found!" );
+		}
+		$this->dataSource = $nullableDataSource;
 	}
 
 	/**

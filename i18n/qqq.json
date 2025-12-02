@@ -10,6 +10,7 @@
 	"robloxapi-error-invalid-data": "Error message shown when the API returns invalid data",
 	"robloxapi-error-decode-failure": "Error message shown when the API response cannot be decoded",
 	"robloxapi-error-datasource-not-found": "Error message shown when a data source is not found. $1 is the ID of the missing data source",
+	"robloxapi-error-datasource-disabled": "Error message shown when a data source is found but disabled. $1 is the ID of the data source",
 	"robloxapi-error-unexpected-data-structure": "Error message shown when the API returns an unexpected data structure",
 	"robloxapi-error-datasource-returned-no-data": "Error message shown when a data source returns no data",
 	"robloxapi-error-user-group-not-found": "Error message shown when the group data for a user cannot be found",

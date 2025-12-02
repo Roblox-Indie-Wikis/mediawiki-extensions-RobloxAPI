@@ -10,6 +10,7 @@
 	"robloxapi-error-invalid-data": "Endpoint returned invalid data!",
 	"robloxapi-error-decode-failure": "Failed to decode response!",
 	"robloxapi-error-datasource-not-found": "Data source \"$1\" not found!",
+	"robloxapi-error-datasource-disabled": "Data source \"$1\" is disabled!",
 	"robloxapi-error-unexpected-data-structure": "Unexpected data structure!",
 	"robloxapi-error-datasource-returned-no-data": "Data source returned no data!",
 	"robloxapi-error-user-group-not-found": "Failed to find the group data for the given user! The user may not be in the group.",
