@@ -41,6 +41,7 @@ use MediaWiki\Extension\RobloxAPI\ParserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\ParserFunction\RobloxApiParserFunction;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 
 /**
  * Handles the registration of data sources and stores them.
@@ -58,7 +59,11 @@ class DataSourceProvider {
 	public array $dataSources = [];
 
 	/** @noinspection PhpUnusedParameterInspection */
-	public function __construct( public ServiceOptions $options, private readonly RobloxAPIFetcher $fetcher ) {
+	public function __construct(
+		public ServiceOptions $options,
+		private readonly RobloxAPIFetcher $fetcher,
+		private readonly RobloxAPIUtils $utils,
+	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 
 		$this->registerDataSource( new GameDataSource( $fetcher ) );

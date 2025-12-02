@@ -22,7 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 
-abstract class DependentDataSource implements IDataSource {
+abstract class DependentDataSource extends AbstractDataSource {
 
 	/**
 	 * @var IDataSource The data source that this data source depends on.
@@ -37,9 +37,10 @@ abstract class DependentDataSource implements IDataSource {
 	 */
 	public function __construct(
 		DataSourceProvider $dataSourceProvider,
-		protected readonly string $id,
+		string $id,
 		string $dependencyId
 	) {
+		parent::__construct( $id );
 		$this->dataSource = $dataSourceProvider->getDataSourceOrThrow( $dependencyId );
 	}
 
@@ -81,15 +82,15 @@ abstract class DependentDataSource implements IDataSource {
 		throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
 	}
 
+	public function getFetcherSourceId(): string {
+		return $this->dataSource->getFetcherSourceId();
+	}
+
 	/**
 	 * @inheritDoc
 	 */
-	public function getId(): string {
-		return $this->id;
-	}
-
-	public function getFetcherSourceId(): string {
-		return $this->dataSource->getFetcherSourceId();
+	public function isEnabled(): bool {
+		return $this->dataSource->isEnabled() && parent::isEnabled();
 	}
 
 }

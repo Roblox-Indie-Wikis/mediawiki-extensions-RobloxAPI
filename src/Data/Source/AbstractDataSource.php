@@ -18,19 +18,44 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
+namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 
-use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
-use MediaWiki\Extension\RobloxAPI\Data\Source\ThumbnailUrlDataSource;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
+abstract class AbstractDataSource implements IDataSource {
 
-class GameIconUrlDataSource extends ThumbnailUrlDataSource {
+	/**
+	 * @var bool Whether this data source is enabled.
+	 */
+	private bool $enabled;
+
+	/**
+	 * @param string $id The ID of this data source.
+	 */
+	public function __construct(
+		public readonly string $id,
+	) {
+		$this->enabled = true;
+	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function __construct( DataSourceProvider $dataSourceProvider, RobloxAPIUtils $utils ) {
-		parent::__construct( $dataSourceProvider, $utils, 'gameIconUrl', 'gameIcon' );
+	public function isEnabled(): bool {
+		return $this->enabled;
+	}
+
+	/**
+	 * Disables this data source.
+	 * @return void
+	 */
+	protected function disable(): void {
+		$this->enabled = false;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getId(): string {
+		return $this->id;
 	}
 
 }

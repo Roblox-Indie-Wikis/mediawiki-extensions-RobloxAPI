@@ -21,15 +21,19 @@
 namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 
 use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use MediaWiki\Parser\Parser;
 
 abstract class ThumbnailUrlDataSource extends DependentDataSource {
-
 	/**
 	 * @inheritDoc
 	 */
-	public function __construct( DataSourceProvider $dataSourceProvider, string $id, string $dependencyId ) {
+	public function __construct(
+		DataSourceProvider $dataSourceProvider,
+		private readonly RobloxAPIUtils $utils,
+		string $id,
+		string $dependencyId,
+	) {
 		parent::__construct( $dataSourceProvider, $id, $dependencyId );
 	}
 
@@ -61,7 +65,7 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 
 		$url = "$url.$lowerFormat";
 
-		if ( !RobloxAPIUtil::verifyIsRobloxCdnUrl( $url ) ) {
+		if ( !$this->utils->verifyIsRobloxCdnUrl( $url ) ) {
 			$this->failInvalidData();
 		}
 
@@ -74,7 +78,7 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 	public function shouldEscapeResult( mixed $result ): bool {
 		// The url should not be escaped here in order to be embedded correctly using $wgEnableImageWhitelist.
 		// If the URL was escaped here, it would be URL-encoded and not recognized by MediaWiki as an image URL.
-		return !RobloxAPIUtil::verifyIsRobloxCdnUrl( $result );
+		return !$this->utils->verifyIsRobloxCdnUrl( $result );
 	}
 
 	/**

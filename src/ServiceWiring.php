@@ -22,6 +22,7 @@ use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\Data\Cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use MediaWiki\MediaWikiServices;
 
 /** @phpcs-require-sorted-array */
@@ -32,7 +33,8 @@ return [
 				DataSourceCache::CONSTRUCTOR_OPTIONS,
 				$services->getMainConfig()
 			),
-			$services->getMainWANObjectCache()
+			$services->get( 'RobloxAPI.Utils' ),
+			$services->getMainWANObjectCache(),
 		);
 	},
 	'RobloxAPI.DataSourceProvider' => static function ( MediaWikiServices $services ): DataSourceProvider {
@@ -41,7 +43,8 @@ return [
 				DataSourceProvider::CONSTRUCTOR_OPTIONS,
 				$services->getMainConfig()
 			),
-			$services->get( 'RobloxAPI.RobloxAPIFetcher' )
+			$services->get( 'RobloxAPI.RobloxAPIFetcher' ),
+			$services->get( 'RobloxAPI.Utils' ),
 		);
 	},
 	'RobloxAPI.RobloxAPIFetcher' => static function ( MediaWikiServices $services ): RobloxAPIFetcher {
@@ -51,7 +54,10 @@ return [
 				$services->getMainConfig()
 			),
 			$services->get( 'RobloxAPI.DataSourceCache' ),
-			$services->getHttpRequestFactory()
+			$services->getHttpRequestFactory(),
 		);
-	}
+	},
+	'RobloxAPI.Utils' => static function ( MediaWikiServices $services ) {
+		return new RobloxAPIUtils();
+	},
 ];

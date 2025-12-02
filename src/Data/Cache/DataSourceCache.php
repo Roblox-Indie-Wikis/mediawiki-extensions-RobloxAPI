@@ -22,7 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\Data\Cache;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use Wikimedia\ObjectCache\WANObjectCache;
 
 /**
@@ -39,7 +39,8 @@ class DataSourceCache {
 
 	public function __construct(
 		ServiceOptions $options,
-		private readonly WANObjectCache $cache
+		private readonly RobloxAPIUtils $utils,
+		private readonly WANObjectCache $cache,
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 		$this->disabled = $options->get( RobloxAPIConstants::ConfDisableCache );
@@ -93,7 +94,7 @@ class DataSourceCache {
 	 * @param array<string, string> $optionalArgs
 	 */
 	protected function getCacheKey( string $endpoint, array $args, array $optionalArgs ): string {
-		$cacheAffectingOptionalArgs = RobloxAPIUtil::getCacheAffectingArgs( $optionalArgs );
+		$cacheAffectingOptionalArgs = $this->utils->getCacheAffectingArgs( $optionalArgs );
 
 		$argsJson = json_encode( $args );
 		$optionalArgsJson = json_encode( $cacheAffectingOptionalArgs );
