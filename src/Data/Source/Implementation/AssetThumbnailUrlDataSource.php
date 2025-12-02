@@ -22,14 +22,15 @@ namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\ThumbnailUrlDataSource;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 
 class AssetThumbnailUrlDataSource extends ThumbnailUrlDataSource {
 
 	/**
 	 * @inheritDoc
 	 */
-	public function __construct( DataSourceProvider $dataSourceProvider ) {
-		parent::__construct( $dataSourceProvider, 'assetThumbnailUrl', 'assetThumbnail' );
+	public function __construct( DataSourceProvider $dataSourceProvider, RobloxAPIUtils $utils ) {
+		parent::__construct( $dataSourceProvider, $utils, 'assetThumbnailUrl', 'assetThumbnail' );
 	}
 
 }

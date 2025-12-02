@@ -22,7 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\ParserFunction;
 
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\IDataSource;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use MediaWiki\Parser\Parser;
 
 /**
@@ -40,7 +40,7 @@ class DataSourceParserFunction extends RobloxApiParserFunction {
 	 */
 	public function exec( DataSourceProvider $dataSourceProvider, Parser $parser, ...$args ): mixed {
 		[ $requiredArgs, $optionalArgs ] =
-			RobloxAPIUtil::parseArguments( $this->dataSource->getArgumentSpecification(), $args,
+			RobloxAPIUtils::parseArguments( $this->dataSource->getArgumentSpecification(), $args,
 				$this->dataSourceProvider->options );
 
 		return $this->dataSource->exec( $this->dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
