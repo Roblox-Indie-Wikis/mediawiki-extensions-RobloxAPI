@@ -58,6 +58,12 @@ return [
 		);
 	},
 	'RobloxAPI.Utils' => static function ( MediaWikiServices $services ) {
-		return new RobloxAPIUtils();
+		return new RobloxAPIUtils(
+			new ServiceOptions(
+				RobloxAPIUtils::CONSTRUCTOR_OPTIONS,
+				$services->getMainConfig()
+			),
+			$services->getUrlUtils(),
+		);
 	},
 ];

@@ -32,28 +32,34 @@ use MediaWikiUnitTestCase;
  */
 class RobloxAPIUtilsTest extends MediaWikiUnitTestCase {
 
+	protected function createUtils(): RobloxAPIUtils {
+		return new RobloxAPIUtils();
+	}
+
 	/**
 	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::isValidId
 	 */
 	public function testIsValidId(): void {
-		self::assertFalse( RobloxAPIUtils::isValidId( null ) );
-		self::assertFalse( RobloxAPIUtils::isValidId( "" ) );
-		self::assertFalse( RobloxAPIUtils::isValidId( "a" ) );
-		self::assertFalse( RobloxAPIUtils::isValidId( "2412a4214" ) );
-		self::assertFalse( RobloxAPIUtils::isValidId( "309713598a" ) );
-		self::assertFalse( RobloxAPIUtils::isValidId( "4848492840912840912840921842019481" ) );
-		self::assertFalse( RobloxAPIUtils::isValidId( "-1234" ) );
+		$utils = $this->createUtils();
+		self::assertFalse( $utils->isValidId( null ) );
+		self::assertFalse( $utils->isValidId( "" ) );
+		self::assertFalse( $utils->isValidId( "a" ) );
+		self::assertFalse( $utils->isValidId( "2412a4214" ) );
+		self::assertFalse( $utils->isValidId( "309713598a" ) );
+		self::assertFalse( $utils->isValidId( "4848492840912840912840921842019481" ) );
+		self::assertFalse( $utils->isValidId( "-1234" ) );
 
-		self::assertTrue( RobloxAPIUtils::isValidId( "1" ) );
-		self::assertTrue( RobloxAPIUtils::isValidId( "4182456156" ) );
+		self::assertTrue( $utils->isValidId( "1" ) );
+		self::assertTrue( $utils->isValidId( "4182456156" ) );
 	}
 
 	/**
 	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::assertValidIds
 	 */
 	public function testAssertValidIds(): void {
+		$utils = $this->createUtils();
 		$this->expectException( RobloxAPIException::class );
-		RobloxAPIUtils::assertValidIds( "abc" );
+		$utils->assertValidIds( "abc" );
 	}
 
 	/**
@@ -66,40 +72,43 @@ class RobloxAPIUtilsTest extends MediaWikiUnitTestCase {
 				'GroupID' => [],
 			],
 		] );
+		$utils = $this->createUtils();
 
-		RobloxAPIUtils::assertArgAllowed( $config, 'UserID', '123454321' );
-		RobloxAPIUtils::assertArgAllowed( $config, 'GroupID', '14981124' );
-		RobloxAPIUtils::assertArgAllowed( $config, 'GroupID', '512512312' );
-		RobloxAPIUtils::assertArgAllowed( $config, 'GroupID', '901480124' );
+		$utils->assertArgAllowed( $config, 'UserID', '123454321' );
+		$utils->assertArgAllowed( $config, 'GroupID', '14981124' );
+		$utils->assertArgAllowed( $config, 'GroupID', '512512312' );
+		$utils->assertArgAllowed( $config, 'GroupID', '901480124' );
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-arg-not-allowed' );
-		RobloxAPIUtils::assertArgAllowed( $config, 'UserID', '54321' );
-		RobloxAPIUtils::assertArgAllowed( $config, 'UserID', '12345' );
-		RobloxAPIUtils::assertArgAllowed( $config, 'GroupID', '54321' );
+		$utils->assertArgAllowed( $config, 'UserID', '54321' );
+		$utils->assertArgAllowed( $config, 'UserID', '12345' );
+		$utils->assertArgAllowed( $config, 'GroupID', '54321' );
 	}
 
 	/**
 	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::assertValidArg
 	 */
 	public function testAssertValidArgs(): void {
-		RobloxAPIUtils::assertValidArg( 'UserID', '123454321' );
-		RobloxAPIUtils::assertValidArg( 'ThumbnailSize', '140x140' );
-		RobloxAPIUtils::assertValidArg( 'Username', 'builderman_123' );
+		$utils = $this->createUtils();
+		$utils->assertValidArg( 'UserID', '123454321' );
+		$utils->assertValidArg( 'ThumbnailSize', '140x140' );
+		$utils->assertValidArg( 'Username', 'builderman_123' );
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-thumbnail-size' );
-		RobloxAPIUtils::assertValidArg( 'ThumbnailSize', '12345' );
+		$utils->assertValidArg( 'ThumbnailSize', '12345' );
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-username' );
-		RobloxAPIUtils::assertValidArg( 'Username', '__invalidusername' );
+		$utils->assertValidArg( 'Username', '__invalidusername' );
 	}
 
 	/**
 	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::createJsonResult
 	 */
 	public function testCreateJsonResult(): void {
+		$utils = $this->createUtils();
 		$jsonString = /** @lang JSON */
 			<<<EOD
 				{
@@ -112,21 +121,21 @@ class RobloxAPIUtilsTest extends MediaWikiUnitTestCase {
 		EOD;
 		$jsonObject = \FormatJson::decode( $jsonString );
 		self::assertEquals( 'abaddriverlol',
-			RobloxAPIUtils::createJsonResult( $jsonObject, [ 'json_key' => 'requestedUsername' ] ) );
+			$utils->createJsonResult( $jsonObject, [ 'json_key' => 'requestedUsername' ] ) );
 		self::assertEquals( '{"requestedUsername":"abaddriverlol","hasVerifiedBadge":false,"id":4182456156,' .
 			'"name":"abaddriverlol","displayName":"abaddriverlol"}',
-			RobloxAPIUtils::createJsonResult( $jsonObject, [] ) );
+			$utils->createJsonResult( $jsonObject, [] ) );
 
 		// test non-existent key
-		self::assertEquals( 'null', RobloxAPIUtils::createJsonResult( $jsonObject, [ 'json_key' => 'doesnotexist' ] ) );
+		self::assertEquals( 'null', $utils->createJsonResult( $jsonObject, [ 'json_key' => 'doesnotexist' ] ) );
 
 		// test invalid key path
 		self::assertEquals( 'null',
-			RobloxAPIUtils::createJsonResult( $jsonObject, [ 'json_key' => 'doesnotexist->->' ] ) );
+			$utils->createJsonResult( $jsonObject, [ 'json_key' => 'doesnotexist->->' ] ) );
 
 		// test keys pointing to non-objects
 		self::assertEquals( 'null',
-			RobloxAPIUtils::createJsonResult( $jsonObject, [ 'json_key' => 'requestedUsername->id' ] ) );
+			$utils->createJsonResult( $jsonObject, [ 'json_key' => 'requestedUsername->id' ] ) );
 
 		// test array index
 		$jsonString = /** @lang JSON */
@@ -139,13 +148,14 @@ class RobloxAPIUtilsTest extends MediaWikiUnitTestCase {
 		EOD;
 		$jsonObject = \FormatJson::decode( $jsonString );
 		self::assertEquals( 'someValue',
-			RobloxAPIUtils::createJsonResult( $jsonObject, [ 'json_key' => 'someData->0' ] ) );
+			$utils->createJsonResult( $jsonObject, [ 'json_key' => 'someData->0' ] ) );
 	}
 
 	/**
 	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::getJsonKey
 	 */
 	public function testGetJsonKey(): void {
+		$utils = $this->createUtils();
 		$jsonString = /** @lang JSON */
 			<<<EOD
 				{
@@ -155,23 +165,22 @@ class RobloxAPIUtilsTest extends MediaWikiUnitTestCase {
 				}
 		EOD;
 		$jsonObject = \FormatJson::decode( $jsonString );
-		self::assertEquals( 'someValue', RobloxAPIUtils::getJsonKey( $jsonObject, 'someData->someNestedData' ) );
+		self::assertEquals( 'someValue', $utils->getJsonKey( $jsonObject, 'someData->someNestedData' ) );
 	}
 
 	/**
 	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::verifyIsRobloxCdnUrl
 	 */
 	public function testVerifyIsRobloxCdnUrl(): void {
-		$urlUtils = new UrlUtils();
+		$utils = $this->createUtils();
 
-		self::assertTrue( RobloxAPIUtils::verifyIsRobloxCdnUrl( 'https://tr.rbxcd' .
-			'n.com/30DAY-Avatar-7B1E1A9240F5DE0598D6FD97DBC8859F-Png/140/140/Avatar/Png/noFilter.png', $urlUtils ) );
-		self::assertTrue( RobloxAPIUtils::verifyIsRobloxCdnUrl( 'https://tr.rbxcdn.co' .
-			'm/30DAY-Avatar-7B1E1A9240F5DE0598D6FD97DBC8859F-Png/140/140/Avatar/Png/noFilter.webp', $urlUtils ) );
+		self::assertTrue( $utils->verifyIsRobloxCdnUrl( 'https://tr.rbxcd' .
+			'n.com/30DAY-Avatar-7B1E1A9240F5DE0598D6FD97DBC8859F-Png/140/140/Avatar/Png/noFilter.png' ) );
+		self::assertTrue( $utils->verifyIsRobloxCdnUrl( 'https://tr.rbxcdn.co' .
+			'm/30DAY-Avatar-7B1E1A9240F5DE0598D6FD97DBC8859F-Png/140/140/Avatar/Png/noFilter.webp' ) );
 
-		self::assertFalse( RobloxAPIUtils::verifyIsRobloxCdnUrl( 'https://roblox.com/1234/', $urlUtils ) );
-		self::assertFalse( RobloxAPIUtils::verifyIsRobloxCdnUrl( 'https://t0.rbxcdn.com///https://google.com/',
-			$urlUtils ) );
+		self::assertFalse( $utils->verifyIsRobloxCdnUrl( 'https://roblox.com/1234/' ) );
+		self::assertFalse( $utils->verifyIsRobloxCdnUrl( 'https://t0.rbxcdn.com///https://google.com/') );
 	}
 
 }
