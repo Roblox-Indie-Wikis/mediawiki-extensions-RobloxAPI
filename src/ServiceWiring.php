@@ -57,7 +57,7 @@ return [
 			$services->getHttpRequestFactory(),
 		);
 	},
-	'RobloxAPI.Utils' => static function ( MediaWikiServices $services ) {
+	'RobloxAPI.Utils' => static function ( MediaWikiServices $services ): RobloxAPIUtils {
 		return new RobloxAPIUtils(
 			new ServiceOptions(
 				RobloxAPIUtils::CONSTRUCTOR_OPTIONS,

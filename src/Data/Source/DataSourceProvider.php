@@ -201,8 +201,6 @@ class DataSourceProvider {
 
 	/**
 	 * Registers data sources if they're enabled.
-	 * @param IDataSource ...$dataSources
-	 * @return void
 	 */
 	public function registerDataSources( IDataSource ...$dataSources ): void {
 		foreach ( $dataSources as $dataSource ) {
