@@ -44,10 +44,9 @@ abstract class AbstractDataSource implements IDataSource {
 	}
 
 	/**
-	 * Disables this data source.
-	 * @return void
+	 * @inheritDoc
 	 */
-	protected function disable(): void {
+	public function disable(): void {
 		$this->enabled = false;
 	}
 

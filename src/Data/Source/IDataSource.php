@@ -75,4 +75,10 @@ interface IDataSource {
 	 */
 	public function isEnabled(): bool;
 
+	/**
+	 * Disables this data source.
+	 * @return void
+	 */
+	public function disable(): void;
+
 }

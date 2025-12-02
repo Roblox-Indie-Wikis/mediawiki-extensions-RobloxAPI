@@ -147,6 +147,10 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 * @throws RobloxAPIException if the usage limit of the data source is exceeded
 	 */
 	private function checkCanUseDataSource( Parser $parser, IDataSource $dataSource ): void {
+		if ( !$dataSource->isEnabled() ) {
+			throw new RobloxAPIException( 'robloxapi-error-datasource-disabled', $dataSource->getId() );
+		}
+
 		$dataSourceId = $dataSource->getFetcherSourceId();
 		if ( !array_key_exists( $dataSourceId, $this->usageLimits ) ) {
 			// no limit
