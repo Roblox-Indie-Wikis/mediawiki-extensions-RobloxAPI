@@ -31,16 +31,12 @@ interface IDataSource {
 
 	/**
 	 * Executes the data source. This is called when the #robloxAPI parser function is used.
-	 * @param DataSourceProvider $dataSourceProvider
 	 * @param Parser $parser
 	 * @param string[] $requiredArgs
 	 * @param array<string, string> $optionalArgs
 	 * @throws RobloxAPIException If the data source fails to execute
 	 */
-	public function exec(
-		// TODO remove dataSourceProvidder - use constructor instead
-		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	): mixed;
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): mixed;
 
 	/**
 	 * Determines whether a legacy parser function should be registered.

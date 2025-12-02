@@ -37,10 +37,8 @@ class PlaceVisitsDataSource extends DependentDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec(
-		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	): mixed {
-		$gameData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): mixed {
+		$gameData = $this->dataSource->exec( $parser, $requiredArgs );
 
 		if ( !$gameData ) {
 			$this->failNoData();

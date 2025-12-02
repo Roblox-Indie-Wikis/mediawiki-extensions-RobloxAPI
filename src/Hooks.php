@@ -78,7 +78,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 						$this->checkCanUseDataSource( $parser, $function->getDataSource() );
 
 						try {
-							$result = $function->exec( $this->dataSourceProvider, $parser, ...$args );
+							$result = $function->exec( $parser, ...$args );
 
 							$shouldEscape = $function->shouldEscapeResult( $result );
 
@@ -128,7 +128,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 		[ $requiredArgs, $optionalArgs ] = $this->utils->parseArguments( $argumentSpecification, $otherArgs );
 
-		$result = $dataSource->exec( $this->dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
+		$result = $dataSource->exec( $parser, $requiredArgs, $optionalArgs );
 		$shouldEscape = $dataSource->shouldEscapeResult( $result );
 
 		if ( $this->utils->shouldReturnJson( $result ) ) {
