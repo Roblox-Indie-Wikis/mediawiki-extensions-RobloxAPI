@@ -23,7 +23,6 @@ namespace MediaWiki\Extension\RobloxAPI\Tests;
 use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
-use MediaWiki\Utils\UrlUtils;
 use MediaWikiUnitTestCase;
 
 /**
@@ -180,7 +179,7 @@ class RobloxAPIUtilsTest extends MediaWikiUnitTestCase {
 			'm/30DAY-Avatar-7B1E1A9240F5DE0598D6FD97DBC8859F-Png/140/140/Avatar/Png/noFilter.webp' ) );
 
 		self::assertFalse( $utils->verifyIsRobloxCdnUrl( 'https://roblox.com/1234/' ) );
-		self::assertFalse( $utils->verifyIsRobloxCdnUrl( 'https://t0.rbxcdn.com///https://google.com/') );
+		self::assertFalse( $utils->verifyIsRobloxCdnUrl( 'https://t0.rbxcdn.com///https://google.com/' ) );
 	}
 
 }

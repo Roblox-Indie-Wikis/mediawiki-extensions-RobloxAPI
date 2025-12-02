@@ -22,7 +22,6 @@ namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
 use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
-use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\FetcherDataSource;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Json\FormatJson;
@@ -79,9 +78,7 @@ class UserIdDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec(
-		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	): mixed {
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): mixed {
 		$data = $this->fetch( $requiredArgs, $optionalArgs );
 
 		if ( !$data ) {

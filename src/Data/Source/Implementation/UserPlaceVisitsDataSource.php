@@ -38,10 +38,8 @@ class UserPlaceVisitsDataSource extends DependentDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec(
-		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	): mixed {
-		$userGames = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): mixed {
+		$userGames = $this->dataSource->exec( $parser, $requiredArgs, $optionalArgs );
 
 		if ( $userGames === null ) {
 			$this->failNoData();
