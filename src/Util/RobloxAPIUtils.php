@@ -51,7 +51,7 @@ class RobloxAPIUtils {
 	];
 
 	public function __construct(
-		private readonly ServiceOptions $options,
+		private ServiceOptions $options,
 		private readonly UrlUtils $urlUtils,
 	) {
 		$this->options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
@@ -318,6 +318,13 @@ class RobloxAPIUtils {
 		return $this->options->get( RobloxAPIConstants::ConfShowPlainErrors )
 			? $message
 			: Html::errorBox( $message );
+	}
+
+	/**
+	 * @internal
+	 */
+	public function initForParserTests( array $defaults ): void {
+		$this->options = new ServiceOptions( self::CONSTRUCTOR_OPTIONS, $defaults );
 	}
 
 }
