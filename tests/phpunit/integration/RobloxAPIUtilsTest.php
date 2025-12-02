@@ -20,26 +20,25 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Tests;
 
-use MediaWiki\Config\HashConfig;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
-use MediaWikiUnitTestCase;
+use MediaWikiIntegrationTestCase;
 
 /**
  * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils
  * @group RobloxAPI
  */
-class RobloxAPIUtilsTest extends MediaWikiUnitTestCase {
+class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 
-	protected function createUtils(): RobloxAPIUtils {
-		return new RobloxAPIUtils();
+	protected function getUtils(): RobloxAPIUtils {
+		return $this->getServiceContainer()->getService( 'RobloxAPI.Utils' );
 	}
 
 	/**
 	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::isValidId
 	 */
 	public function testIsValidId(): void {
-		$utils = $this->createUtils();
+		$utils = $this->getUtils();
 		self::assertFalse( $utils->isValidId( null ) );
 		self::assertFalse( $utils->isValidId( "" ) );
 		self::assertFalse( $utils->isValidId( "a" ) );
@@ -56,7 +55,7 @@ class RobloxAPIUtilsTest extends MediaWikiUnitTestCase {
 	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::assertValidIds
 	 */
 	public function testAssertValidIds(): void {
-		$utils = $this->createUtils();
+		$utils = $this->getUtils();
 		$this->expectException( RobloxAPIException::class );
 		$utils->assertValidIds( "abc" );
 	}
@@ -65,31 +64,29 @@ class RobloxAPIUtilsTest extends MediaWikiUnitTestCase {
 	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::assertArgAllowed
 	 */
 	public function testAssertArgsAllowed(): void {
-		$config = new HashConfig( [
-			'RobloxAPIAllowedArguments' => [
-				'UserID' => [ '123454321' ],
-				'GroupID' => [],
-			],
+		$this->overrideConfigValue( 'RobloxAPIAllowedArguments', [
+			'UserID' => [ '123454321' ],
+			'GroupID' => [],
 		] );
-		$utils = $this->createUtils();
+		$utils = $this->getUtils();
 
-		$utils->assertArgAllowed( $config, 'UserID', '123454321' );
-		$utils->assertArgAllowed( $config, 'GroupID', '14981124' );
-		$utils->assertArgAllowed( $config, 'GroupID', '512512312' );
-		$utils->assertArgAllowed( $config, 'GroupID', '901480124' );
+		$utils->assertArgAllowed( 'UserID', '123454321' );
+		$utils->assertArgAllowed( 'GroupID', '14981124' );
+		$utils->assertArgAllowed( 'GroupID', '512512312' );
+		$utils->assertArgAllowed( 'GroupID', '901480124' );
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-arg-not-allowed' );
-		$utils->assertArgAllowed( $config, 'UserID', '54321' );
-		$utils->assertArgAllowed( $config, 'UserID', '12345' );
-		$utils->assertArgAllowed( $config, 'GroupID', '54321' );
+		$utils->assertArgAllowed( 'UserID', '54321' );
+		$utils->assertArgAllowed( 'UserID', '12345' );
+		$utils->assertArgAllowed( 'GroupID', '54321' );
 	}
 
 	/**
 	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::assertValidArg
 	 */
 	public function testAssertValidArgs(): void {
-		$utils = $this->createUtils();
+		$utils = $this->getUtils();
 		$utils->assertValidArg( 'UserID', '123454321' );
 		$utils->assertValidArg( 'ThumbnailSize', '140x140' );
 		$utils->assertValidArg( 'Username', 'builderman_123' );
@@ -107,7 +104,7 @@ class RobloxAPIUtilsTest extends MediaWikiUnitTestCase {
 	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::createJsonResult
 	 */
 	public function testCreateJsonResult(): void {
-		$utils = $this->createUtils();
+		$utils = $this->getUtils();
 		$jsonString = /** @lang JSON */
 			<<<EOD
 				{
@@ -154,7 +151,7 @@ class RobloxAPIUtilsTest extends MediaWikiUnitTestCase {
 	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::getJsonKey
 	 */
 	public function testGetJsonKey(): void {
-		$utils = $this->createUtils();
+		$utils = $this->getUtils();
 		$jsonString = /** @lang JSON */
 			<<<EOD
 				{
@@ -171,7 +168,7 @@ class RobloxAPIUtilsTest extends MediaWikiUnitTestCase {
 	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::verifyIsRobloxCdnUrl
 	 */
 	public function testVerifyIsRobloxCdnUrl(): void {
-		$utils = $this->createUtils();
+		$utils = $this->getUtils();
 
 		self::assertTrue( $utils->verifyIsRobloxCdnUrl( 'https://tr.rbxcd' .
 			'n.com/30DAY-Avatar-7B1E1A9240F5DE0598D6FD97DBC8859F-Png/140/140/Avatar/Png/noFilter.png' ) );

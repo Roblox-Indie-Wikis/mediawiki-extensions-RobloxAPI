@@ -25,6 +25,7 @@ use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\Data\Cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Status\Status;
 use MediaWikiUnitTestCase;
@@ -67,6 +68,7 @@ abstract class RobloxAPIDataSourceUnitTestCase extends MediaWikiUnitTestCase {
 	private function createMockCache(): DataSourceCache {
 		return new DataSourceCache(
 			self::createServiceOptions( [ RobloxAPIConstants::ConfDisableCache => true ] ),
+			$this->createMock( RobloxAPIUtils::class ),
 			$this->createMock( WANObjectCache::class )
 		);
 	}
