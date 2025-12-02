@@ -27,7 +27,7 @@ use MediaWiki\Parser\Parser;
 /**
  * Represents an endpoint of the roblox api.
  */
-abstract class FetcherDataSource implements IDataSource {
+abstract class FetcherDataSource extends AbstractDataSource {
 
 	/**
 	 * Constructs a new data source.
@@ -35,9 +35,10 @@ abstract class FetcherDataSource implements IDataSource {
 	 * @param RobloxAPIFetcher $fetcher An instance of the fetcher service.
 	 */
 	public function __construct(
-		public readonly string $id,
+		string $id,
 		private readonly RobloxAPIFetcher $fetcher
 	) {
+		parent::__construct( $id );
 	}
 
 	/**

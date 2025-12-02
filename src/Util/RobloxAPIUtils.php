@@ -34,7 +34,7 @@ use Wikimedia\Stats\Exceptions\IllegalOperationException;
 /**
  * Provides utilities for working with the Roblox API.
  */
-class RobloxAPIUtil {
+class RobloxAPIUtils {
 
 	/**
 	 * The optional arguments that affect caching.

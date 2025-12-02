@@ -38,6 +38,7 @@ interface IDataSource {
 	 * @throws RobloxAPIException If the data source fails to execute
 	 */
 	public function exec(
+		// TODO remove dataSourceProvidder - use constructor instead
 		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
 	): mixed;
 
@@ -68,5 +69,10 @@ interface IDataSource {
 	 * @return string The ID of the data source that fetches the data for this one.
 	 */
 	public function getFetcherSourceId(): string;
+
+	/**
+	 * @return bool Whether the data source is enabled.
+	 */
+	public function isEnabled(): bool;
 
 }
