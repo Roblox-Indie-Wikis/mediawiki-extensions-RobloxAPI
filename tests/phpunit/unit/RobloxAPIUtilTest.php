@@ -27,13 +27,13 @@ use MediaWiki\Utils\UrlUtils;
 use MediaWikiUnitTestCase;
 
 /**
- * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil
+ * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil
  * @group RobloxAPI
  */
 class RobloxAPIUtilTest extends MediaWikiUnitTestCase {
 
 	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::isValidId
+	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil::isValidId
 	 */
 	public function testIsValidId(): void {
 		self::assertFalse( RobloxAPIUtil::isValidId( null ) );
@@ -49,7 +49,7 @@ class RobloxAPIUtilTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::assertValidIds
+	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil::assertValidIds
 	 */
 	public function testAssertValidIds(): void {
 		$this->expectException( RobloxAPIException::class );
@@ -57,7 +57,7 @@ class RobloxAPIUtilTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::assertArgAllowed
+	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil::assertArgAllowed
 	 */
 	public function testAssertArgsAllowed(): void {
 		$config = new HashConfig( [
@@ -80,7 +80,7 @@ class RobloxAPIUtilTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::assertValidArg
+	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil::assertValidArg
 	 */
 	public function testAssertValidArgs(): void {
 		RobloxAPIUtil::assertValidArg( 'UserID', '123454321' );
@@ -97,7 +97,7 @@ class RobloxAPIUtilTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::createJsonResult
+	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil::createJsonResult
 	 */
 	public function testCreateJsonResult(): void {
 		$jsonString = /** @lang JSON */
@@ -143,7 +143,7 @@ class RobloxAPIUtilTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::getJsonKey
+	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil::getJsonKey
 	 */
 	public function testGetJsonKey(): void {
 		$jsonString = /** @lang JSON */
@@ -159,7 +159,7 @@ class RobloxAPIUtilTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil::verifyIsRobloxCdnUrl
+	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil::verifyIsRobloxCdnUrl
 	 */
 	public function testVerifyIsRobloxCdnUrl(): void {
 		$urlUtils = new UrlUtils();
