@@ -21,8 +21,8 @@
 namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use MediaWiki\Config\HashConfig;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIException;
-use MediaWiki\Extension\RobloxAPI\util\RobloxAPIUtil;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtil;
 use MediaWiki\Utils\UrlUtils;
 use MediaWikiUnitTestCase;
 
