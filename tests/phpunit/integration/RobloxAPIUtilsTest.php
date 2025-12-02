@@ -78,8 +78,6 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-arg-not-allowed' );
 		$utils->assertArgAllowed( 'UserID', '54321' );
-		$utils->assertArgAllowed( 'UserID', '12345' );
-		$utils->assertArgAllowed( 'GroupID', '54321' );
 	}
 
 	/**
@@ -94,6 +92,13 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-thumbnail-size' );
 		$utils->assertValidArg( 'ThumbnailSize', '12345' );
+	}
+
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::assertValidArg
+	 */
+	public function testAssertValidArgsInvalidUsername(): void {
+		$utils = $this->getUtils();
 
 		$this->expectException( RobloxAPIException::class );
 		$this->expectExceptionMessage( 'robloxapi-error-invalid-username' );
