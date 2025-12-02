@@ -204,7 +204,7 @@ class DataSourceProvider {
 	 * @param IDataSource ...$dataSources
 	 * @return void
 	 */
-	public function registerDataSources( IDataSource... $dataSources ): void {
+	public function registerDataSources( IDataSource ...$dataSources ): void {
 		foreach ( $dataSources as $dataSource ) {
 			$this->registerDataSource( $dataSource );
 		}
@@ -288,7 +288,7 @@ class DataSourceProvider {
 	 * Creates a parser function for the given data source.
 	 */
 	private function createParserFunction( IDataSource $dataSource ): RobloxApiParserFunction {
-		return new DataSourceParserFunction( $this, $dataSource );
+		return new DataSourceParserFunction( $this, $this->utils, $dataSource );
 	}
 
 }

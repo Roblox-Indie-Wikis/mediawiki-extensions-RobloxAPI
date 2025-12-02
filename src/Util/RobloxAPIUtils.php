@@ -36,6 +36,11 @@ use Wikimedia\Stats\Exceptions\IllegalOperationException;
  */
 class RobloxAPIUtils {
 
+	public const CONSTRUCTOR_OPTIONS = [
+		RobloxAPIConstants::ConfAllowedArguments,
+		RobloxAPIConstants::ConfShowPlainErrors,
+	];
+
 	/**
 	 * The optional arguments that affect caching.
 	 * Some optional arguments such as 'pretty' do not affect the API result.
@@ -48,15 +53,16 @@ class RobloxAPIUtils {
 	];
 
 	public function __construct(
-
+		private readonly ServiceOptions $options,
+		private readonly UrlUtils $urlUtils,
 	) {
-
+		$this->options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
 	/**
 	 * Checks whether a numeric ID is valid.
 	 */
-	public static function isValidId( ?string $string ): bool {
+	public function isValidId( ?string $string ): bool {
 		return $string !== null && preg_match( '/^\d{1,16}$/', $string );
 	}
 
@@ -64,9 +70,9 @@ class RobloxAPIUtils {
 	 * @param string ...$strings
 	 * @throws RobloxAPIException if any of the IDs are invalid
 	 */
-	public static function assertValidIds( ...$strings ): void {
+	public function assertValidIds( ...$strings ): void {
 		foreach ( $strings as $string ) {
-			if ( !self::isValidId( $string ) ) {
+			if ( !$this->isValidId( $string ) ) {
 				throw new RobloxAPIException( 'robloxapi-error-invalid-id', $string );
 			}
 		}
@@ -78,9 +84,9 @@ class RobloxAPIUtils {
 	 * @param string $arg The actual arg
 	 * @throws RobloxAPIException if the arg is invalid
 	 */
-	public static function assertValidArg( string $expectedType, string $arg ): void {
+	public function assertValidArg( string $expectedType, string $arg ): void {
 		if ( str_ends_with( strtolower( $expectedType ), 'id' ) ) {
-			self::assertValidIds( $arg );
+			$this->assertValidIds( $arg );
 		} else {
 			switch ( $expectedType ) {
 				case 'ThumbnailSize':
@@ -129,13 +135,12 @@ class RobloxAPIUtils {
 
 	/**
 	 * Asserts that the given arg is allowed
-	 * @param Config|ServiceOptions $config The config or service options object
 	 * @param string $expectedType The expected arg type
 	 * @param string $arg The actual arg
 	 * @throws RobloxAPIException if the arg is invalid
 	 */
-	public static function assertArgAllowed( Config|ServiceOptions $config, string $expectedType, string $arg ): void {
-		$allowedArgs = $config->get( RobloxAPIConstants::ConfAllowedArguments ) ?? [];
+	public function assertArgAllowed( string $expectedType, string $arg ): void {
+		$allowedArgs = $this->options->get( RobloxAPIConstants::ConfAllowedArguments ) ?? [];
 		if ( !array_key_exists( $expectedType, $allowedArgs ) ) {
 			return;
 		}
@@ -152,11 +157,9 @@ class RobloxAPIUtils {
 	/**
 	 * Verifies that a URL is a Roblox CDN URL
 	 * @param string $url The URL to verify
-	 * @param UrlUtils|null $urlUtils The URL utils object
 	 */
-	public static function verifyIsRobloxCdnUrl( string $url, ?UrlUtils $urlUtils = null ): bool {
-		$urlUtils ??= MediaWikiServices::getInstance()->getUrlUtils();
-		$urlParts = $urlUtils->parse( $url );
+	public function verifyIsRobloxCdnUrl( string $url ): bool {
+		$urlParts = $this->urlUtils->parse( $url );
 
 		return $urlParts !== null
 			&& !isset( $urlParts['port'] )
@@ -171,7 +174,7 @@ class RobloxAPIUtils {
 	 * Decides whether a result should be returned as JSON
 	 * @param mixed $value The value to check
 	 */
-	public static function shouldReturnJson( mixed $value ): bool {
+	public function shouldReturnJson( mixed $value ): bool {
 		return $value instanceof stdClass || is_array( $value );
 	}
 
@@ -180,12 +183,13 @@ class RobloxAPIUtils {
 	 * @param mixed $jsonObject The JSON object
 	 * @param array<string, string> $optionalArgs The optional arguments
 	 */
-	public static function createJsonResult( mixed $jsonObject, array $optionalArgs ): string {
+	public function createJsonResult( mixed $jsonObject, array $optionalArgs ): string {
 		$pretty = strtolower( $optionalArgs['pretty'] ?? '' ) === 'true';
+
 		// only return the value of json_key in the JSON object
 		if ( ( is_object( $jsonObject ) || is_array( $jsonObject ) ) &&
 			isset( $optionalArgs['json_key'] ) && trim( $optionalArgs['json_key'] ) !== '' ) {
-			$jsonObject = self::getJsonKey( $jsonObject, $optionalArgs['json_key'] );
+			$jsonObject = $this->getJsonKey( $jsonObject, $optionalArgs['json_key'] );
 
 			if ( !is_object( $jsonObject ) && !is_array( $jsonObject ) ) {
 				return $jsonObject ?? 'null';
@@ -201,7 +205,7 @@ class RobloxAPIUtils {
 	 * @param string $jsonKey The JSON key
 	 * @return stdClass|mixed|null
 	 */
-	public static function getJsonKey( mixed $jsonObject, string $jsonKey ): mixed {
+	public function getJsonKey( mixed $jsonObject, string $jsonKey ): mixed {
 		if ( !is_object( $jsonObject ) && !is_array( $jsonObject ) ) {
 			return null;
 		}
@@ -213,7 +217,7 @@ class RobloxAPIUtils {
 			$firstPart = $parts[0];
 			$secondPart = $parts[1];
 
-			return self::getJsonKey( self::getJsonKey( $jsonObject, $firstPart ), $secondPart );
+			return $this->getJsonKey( $this->getJsonKey( $jsonObject, $firstPart ), $secondPart );
 		}
 
 		// allow array access
@@ -232,14 +236,12 @@ class RobloxAPIUtils {
 	 * Verifies that the given arguments are valid
 	 * @param ArgumentSpecification $argumentSpecification The argument specification
 	 * @param string[] $args The arguments
-	 * @param Config|ServiceOptions $config The config or service options object
 	 * @return array[]
 	 * @throws RobloxAPIException if the arguments are invalid
 	 */
-	public static function parseArguments(
+	public function parseArguments(
 		ArgumentSpecification $argumentSpecification,
 		array $args,
-		Config|ServiceOptions $config
 	): array {
 		// TODO extract some parts of this method into separate methods
 		$requiredArgs = [];
@@ -250,8 +252,8 @@ class RobloxAPIUtils {
 				throw new RobloxAPIException( 'robloxapi-error-missing-argument', $type );
 			}
 			$value = array_shift( $args );
-			self::assertValidArg( $type, $value );
-			self::assertArgAllowed( $config, $type, $value );
+			$this->assertValidArg( $type, $value );
+			$this->assertArgAllowed( $type, $value );
 			$requiredArgs[] = $value;
 		}
 
@@ -278,8 +280,8 @@ class RobloxAPIUtils {
 			}
 
 			$type = $argumentSpecification->optionalArgs[$key];
-			self::assertValidArg( $type, $value );
-			self::assertArgAllowed( $config, $type, $value );
+			$this->assertValidArg( $type, $value );
+			$this->assertArgAllowed( $type, $value );
 
 			$optionalArgs[$key] = $value;
 
@@ -294,8 +296,9 @@ class RobloxAPIUtils {
 	 * @param array<string, string> $optionalArgs
 	 * @return array<string, string>
 	 */
-	public static function getCacheAffectingArgs( array $optionalArgs ): array {
+	public function getCacheAffectingArgs( array $optionalArgs ): array {
 		$cacheAffectingArgs = [];
+
 		foreach ( self::$CACHE_AFFECTING_OPTIONAL_ARGS as $arg ) {
 			if ( array_key_exists( $arg, $optionalArgs ) ) {
 				$cacheAffectingArgs[$arg] = $optionalArgs[$arg];
@@ -308,13 +311,13 @@ class RobloxAPIUtils {
 	/**
 	 * @return string Wikitext
 	 */
-	public static function formatException( RobloxAPIException $exception, Parser $parser, Config $config ): string {
+	public function formatException( RobloxAPIException $exception, Parser $parser ): string {
 		$message = $parser->msg( $exception->getMessage() )
 			->inContentLanguage()
 			->plaintextParams( ...$exception->messageParams )
 			->plain();
 
-		return $config->get( RobloxAPIConstants::ConfShowPlainErrors )
+		return $this->options->get( RobloxAPIConstants::ConfShowPlainErrors )
 			? $message
 			: Html::errorBox( $message );
 	}
