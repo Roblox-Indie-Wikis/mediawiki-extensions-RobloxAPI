@@ -43,7 +43,8 @@ abstract class DependentDataSource extends AbstractDataSource {
 		parent::__construct( $id );
 		$nullableDataSource = $dataSourceProvider->getDataSource( $dependencyId );
 		if ( $nullableDataSource === null ) {
-			throw new LogicException( "Tried constructing dependent data source $this->id, but dependency $dependencyId was not found!" );
+			throw new LogicException( "Tried constructing dependent data source $this->id" .
+				", but dependency $dependencyId was not found!" );
 		}
 		$this->dataSource = $nullableDataSource;
 	}

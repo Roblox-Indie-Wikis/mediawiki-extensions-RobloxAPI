@@ -40,7 +40,8 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 	public function __construct(
 		ConfigFactory $configFactory,
-		private readonly DataSourceProvider $dataSourceProvider
+		private readonly DataSourceProvider $dataSourceProvider,
+		private readonly RobloxAPIUtils $utils,
 	) {
 		$this->config = $configFactory->makeConfig( 'RobloxAPI' );
 
@@ -56,7 +57,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 				return $this->handleParserFunctionCall( $parser, $args );
 			} catch ( RobloxAPIException $exception ) {
 				$parser->addTrackingCategory( 'robloxapi-category-error' );
-				return RobloxAPIUtils::formatException( $exception, $parser, $this->config );
+				return $this->utils->formatException( $exception, $parser, $this->config );
 			}
 		} );
 
@@ -81,8 +82,8 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 							$shouldEscape = $function->shouldEscapeResult( $result );
 
-							if ( RobloxAPIUtils::shouldReturnJson( $result ) ) {
-								$result = RobloxAPIUtils::createJsonResult( $result, [] );
+							if ( $this->utils->shouldReturnJson( $result ) ) {
+								$result = $this->utils->createJsonResult( $result, [] );
 								// always escape json, there is no need for it to be parsed
 								$shouldEscape = true;
 							}
@@ -93,7 +94,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 							];
 						} catch ( RobloxAPIException $exception ) {
 							$parser->addTrackingCategory( 'robloxapi-category-error' );
-							return RobloxAPIUtils::formatException( $exception, $parser, $this->config );
+							return $this->utils->formatException( $exception, $parser, $this->config );
 						}
 					}
 				);
@@ -125,14 +126,13 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 		$argumentSpecification = $dataSource->getArgumentSpecification();
 
-		[ $requiredArgs, $optionalArgs ] =
-			RobloxAPIUtils::parseArguments( $argumentSpecification, $otherArgs, $this->config );
+		[ $requiredArgs, $optionalArgs ] = $this->utils->parseArguments( $argumentSpecification, $otherArgs );
 
 		$result = $dataSource->exec( $this->dataSourceProvider, $parser, $requiredArgs, $optionalArgs );
 		$shouldEscape = $dataSource->shouldEscapeResult( $result );
 
-		if ( RobloxAPIUtils::shouldReturnJson( $result ) ) {
-			$result = RobloxAPIUtils::createJsonResult( $result, $optionalArgs );
+		if ( $this->utils->shouldReturnJson( $result ) ) {
+			$result = $this->utils->createJsonResult( $result, $optionalArgs );
 			// always escape json, there is no need for it to be parsed
 			$shouldEscape = true;
 		}
