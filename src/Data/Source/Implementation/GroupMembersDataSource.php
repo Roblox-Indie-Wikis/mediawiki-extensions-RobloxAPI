@@ -37,10 +37,8 @@ class GroupMembersDataSource extends DependentDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec(
-		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	): mixed {
-		$groupData = $this->dataSource->exec( $dataSourceProvider, $parser, $requiredArgs );
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = []	): mixed {
+		$groupData = $this->dataSource->exec( $parser, $requiredArgs );
 
 		if ( !$groupData ) {
 			$this->failNoData();

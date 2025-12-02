@@ -286,7 +286,7 @@ class DataSourceProvider {
 	 * Creates a parser function for the given data source.
 	 */
 	private function createParserFunction( IDataSource $dataSource ): RobloxApiParserFunction {
-		return new DataSourceParserFunction( $this, $this->utils, $dataSource );
+		return new DataSourceParserFunction( $this->utils, $dataSource );
 	}
 
 }

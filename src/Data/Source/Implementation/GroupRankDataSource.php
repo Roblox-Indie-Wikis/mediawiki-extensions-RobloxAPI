@@ -38,10 +38,8 @@ class GroupRankDataSource extends DependentDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec(
-		DataSourceProvider $dataSourceProvider, Parser $parser, array $requiredArgs, array $optionalArgs = []
-	): mixed {
-		$groups = $this->dataSource->exec( $dataSourceProvider, $parser, [ $requiredArgs[1] ] );
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): mixed {
+		$groups = $this->dataSource->exec( $parser, [ $requiredArgs[1] ] );
 
 		if ( !$groups ) {
 			$this->failNoData();
