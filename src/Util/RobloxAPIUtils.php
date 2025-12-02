@@ -47,6 +47,12 @@ class RobloxAPIUtils {
 		'is_circular',
 	];
 
+	public function __construct(
+
+	) {
+
+	}
+
 	/**
 	 * Checks whether a numeric ID is valid.
 	 */

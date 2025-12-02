@@ -66,11 +66,13 @@ class DataSourceProvider {
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 
-		$this->registerDataSource( new GameDataSource( $fetcher ) );
-		$this->registerDataSource( new UserIdDataSource( $fetcher ) );
-		$this->registerDataSource( new UserAvatarThumbnailDataSource( $fetcher ) );
-		$this->registerDataSource( new AssetThumbnailDataSource( $fetcher ) );
-		$this->registerDataSource( new GameIconDataSource( $fetcher ) );
+		$this->registerDataSources(
+			new GameDataSource( $fetcher ),
+			new UserIdDataSource( $fetcher ),
+			new UserAvatarThumbnailDataSource( $fetcher ),
+			new AssetThumbnailDataSource( $fetcher ),
+			new GameIconDataSource( $fetcher ),
+		);
 
 		$this->registerSimpleFetcherDataSource(
 			'groupRoles',
@@ -171,35 +173,40 @@ class DataSourceProvider {
 			}
 		);
 
-		// dependent data sources will throw an exception if the required data source is not enabled
-		$this->tryRegisterDataSources(
-			GroupRankDataSource::class,
-			PlaceActivePlayersDataSource::class,
-			PlaceVisitsDataSource::class,
-			GroupMembersDataSource::class,
-			UserAvatarThumbnailUrlDataSource::class,
-			AssetThumbnailUrlDataSource::class,
-			GameIconUrlDataSource::class,
-			UserPlaceVisitsDataSource::class,
+		// dependent data sources
+		$this->registerDataSources(
+			new GroupRankDataSource( $this ),
+			new PlaceActivePlayersDataSource( $this ),
+			new PlaceVisitsDataSource( $this ),
+			new GroupMembersDataSource( $this ),
+			new UserAvatarThumbnailUrlDataSource( $this, $this->utils ),
+			new AssetThumbnailUrlDataSource( $this, $this->utils ),
+			new GameIconUrlDataSource( $this, $this->utils ),
+			new UserPlaceVisitsDataSource( $this ),
 		);
-	}
-
-	/**
-	 * Checks the config on whether a data source is enabled.
-	 */
-	protected function isEnabled( string $id ): bool {
-		$enabledDataSources = $this->options->get( RobloxAPIConstants::ConfEnabledDataSources );
-
-		return in_array( $id, $enabledDataSources, true );
 	}
 
 	/**
 	 * Registers a data source if it is enabled.
 	 */
 	public function registerDataSource( IDataSource $dataSource ): void {
+		$enabledDataSources = $this->options->get( RobloxAPIConstants::ConfEnabledDataSources );
+
 		$id = $dataSource->getId();
-		if ( $this->isEnabled( $id ) ) {
-			$this->dataSources[$id] = $dataSource;
+		if ( !in_array( $id, $enabledDataSources, true ) ) {
+			$dataSource->disable();
+		}
+		$this->dataSources[$id] = $dataSource;
+	}
+
+	/**
+	 * Registers data sources if they're enabled.
+	 * @param IDataSource ...$dataSources
+	 * @return void
+	 */
+	public function registerDataSources( IDataSource... $dataSources ): void {
+		foreach ( $dataSources as $dataSource ) {
+			$this->registerDataSource( $dataSource );
 		}
 	}
 
@@ -222,29 +229,6 @@ class DataSourceProvider {
 			$processData,
 			$registerParserFunction
 		) );
-	}
-
-	/**
-	 * Tries to register a data source, but ignores any exceptions.
-	 * @param class-string $className
-	 */
-	public function tryRegisterDataSource( string $className ): void {
-		try {
-			$dataSource = new $className( $this );
-			$this->registerDataSource( $dataSource );
-		} catch ( RobloxAPIException $e ) {
-			wfDebugLog( 'RobloxAPI', "Failed to register data source: {$e->getMessage()}" );
-		}
-	}
-
-	/**
-	 * Tries to register multiple data sources, but ignores any exceptions.
-	 * @param class-string ...$classNames
-	 */
-	public function tryRegisterDataSources( string ...$classNames ): void {
-		foreach ( $classNames as $className ) {
-			$this->tryRegisterDataSource( $className );
-		}
 	}
 
 	/**
