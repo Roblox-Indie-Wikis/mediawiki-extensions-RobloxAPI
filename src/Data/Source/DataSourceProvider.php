@@ -182,7 +182,8 @@ class DataSourceProvider {
 				$limit = $optionalArgs['limit'] ?? 50;
 				$sortOrder = $optionalArgs['sort_order'] ?? 'Asc';
 
-				return "https://groups.roblox.com/v1/groups/$args[0]/roles/$args[1]/users?limit=$limit&sortOrder=$sortOrder";
+				return "https://groups.roblox.com/v1/groups/$args[0]/roles/$args[1]/users" .
+					"?limit=$limit&sortOrder=$sortOrder";
 			},
 			static function ( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
 				// TODO this discards cursor data, which should be implemented at some point (maybe via lua)
