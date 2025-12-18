@@ -110,6 +110,9 @@ class RobloxAPIUtils {
 				case 'UserGamesLimit':
 					$this->assertLimitArg( $arg, [ '10', '25', '50' ] );
 					break;
+				case 'GroupRoleMembersLimit':
+					$this->assertLimitArg( $arg, [ '10', '25', '50', '100' ] );
+					break;
 				case 'SortOrder':
 					if ( !in_array( $arg, [ 'Asc', 'Desc' ], false ) ) {
 						throw new RobloxAPIException( 'robloxapi-error-invalid-sort-order', $arg );

@@ -64,6 +64,7 @@
 				"gameIcon",
 				"gameIconUrl",
 				"groupRoles",
+				"groupRoleMembers",
 				"groupData",
 				"groupRank",
 				"groupMembers",

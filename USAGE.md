@@ -26,6 +26,7 @@
         + [userGames](#usergames)
         + [userPlaceVisits](#userplacevisits)
         + [gameEvents](#gameevents)
+        + [groupRoleMembers](#grouprolemembers)
     * [Handling JSON data](#handling-json-data)
         + [JSON keys](#json-keys)
         + [Pretty-printing JSON data](#pretty-printing-json-data)
@@ -36,6 +37,7 @@
     * [Configuration](#configuration)
         + [`$wgRobloxAPIEnabledDatasources`](#wgrobloxapienableddatasources)
         + [`$wgRobloxAPICachingExpiries`](#wgrobloxapicachingexpiries)
+        + [`$wgRobloxAPICacheSplittingOptionalArguments`](#wgrobloxapicachesplittingoptionalarguments)
         + [`$wgRobloxAPIAllowedArguments`](#wgrobloxapiallowedarguments)
         + [`$wgRobloxAPIRequestUserAgent`](#wgrobloxapirequestuseragent)
         + [`$wgRobloxAPIDisableCache`](#wgrobloxapidisablecache)
@@ -606,6 +608,33 @@ Get the title of the first event in a universe:
 | Name         | Description                                  | Type       |
 |--------------|----------------------------------------------|------------|
 | `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
+
+### groupRoleMembers
+
+Provides a list of users who have a certain role in a group.
+
+#### Example
+
+List of product developers in the SRC group:
+
+```
+{{#robloxAPI: groupRoleMembers | 3620943 | 31072726 | limit=100 }}
+```
+
+#### Required Arguments
+
+| Name      | Description                | Type       |
+|-----------|----------------------------|------------|
+| `GroupId` | The group ID of the group. | Numeric ID |
+| `RoleId`  | The role ID of the role.   | Numeric ID |
+
+#### Optional Arguments
+
+| Name         | Description                            | Type                         | Default |
+|--------------|----------------------------------------|------------------------------|---------|
+| `limit`      | The maximum number of users to return. | Numeric ID (10, 25, 50, 100) | `50`    |
+| `sort_order` | The order to sort the users.           | String (`Asc`, `Desc`)       | `Asc`   |
+
 
 ## Handling JSON data
 
