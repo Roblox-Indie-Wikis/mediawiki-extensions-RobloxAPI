@@ -30,6 +30,7 @@ class RobloxAPIConstants {
 	public const ExtensionDataKey = 'RobloxAPIDataSourceUsage';
 
 	public const ConfAllowedArguments = 'RobloxAPIAllowedArguments';
+	public const ConfCacheSplittingOptionalArguments = 'RobloxAPICacheSplittingOptionalArguments';
 	public const ConfCachingExpiries = 'RobloxAPICachingExpiries';
 	public const ConfDataSourceUsageLimits = 'RobloxAPIDataSourceUsageLimits';
 	public const ConfDisableCache = 'RobloxAPIDisableCache';

@@ -94,10 +94,10 @@ class DataSourceCache {
 	 * @param array<string, string> $optionalArgs
 	 */
 	protected function getCacheKey( string $endpoint, array $args, array $optionalArgs ): string {
-		$cacheAffectingOptionalArgs = $this->utils->getCacheAffectingArgs( $optionalArgs );
+		$cacheSplittingOptionalArgs = $this->utils->getCacheSplittingArgs( $optionalArgs );
 
 		$argsJson = json_encode( $args );
-		$optionalArgsJson = json_encode( $cacheAffectingOptionalArgs );
+		$optionalArgsJson = json_encode( $cacheSplittingOptionalArgs );
 
 		// ToDo consider using cache->makeKey() here
 

@@ -23,6 +23,13 @@
 			"description": "The arguments per argument type that are allowed to be used in the extension. If empty, all arguments for the type are allowed.",
 			"merge_strategy": "array_plus_2d"
 		},
+		"RobloxAPICacheSplittingOptionalArguments": {
+			"value": [
+				"is_circular"
+			],
+			"description": "A list of optional arguments that affect caching.",
+			"merge_strategy": "provide_default"
+		},
 		"RobloxAPICachingExpiries": {
 			"value": {
 				"*": 600,
