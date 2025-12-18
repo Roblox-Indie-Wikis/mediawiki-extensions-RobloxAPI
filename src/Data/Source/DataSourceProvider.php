@@ -172,6 +172,23 @@ class DataSourceProvider {
 				return $data->data;
 			}
 		);
+		$this->registerSimpleFetcherDataSource(
+			'groupRoleMembers',
+			new ArgumentSpecification(
+				[ 'GroupID', 'RoleID' ],
+				[ 'limit' => 'GroupRoleMembersLimit', 'sort_order' => 'SortOrder' ],
+			),
+			static function ( array $args, array $optionalArgs ): string {
+				$limit = $optionalArgs['limit'] ?? 50;
+				$sortOrder = $optionalArgs['sort_order'] ?? 'Asc';
+
+				return "https://groups.roblox.com/v1/groups/$args[0]/roles/$args[1]/users?limit=$limit&sortOrder=$sortOrder";
+			},
+			static function ( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
+				// TODO this discards cursor data, which should be implemented at some point (maybe via lua)
+				return $data->data;
+			}
+		);
 
 		// dependent data sources
 		$this->registerDataSources(
