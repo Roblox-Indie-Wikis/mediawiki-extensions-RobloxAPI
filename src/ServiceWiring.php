@@ -63,6 +63,7 @@ return [
 				RobloxAPIUtils::CONSTRUCTOR_OPTIONS,
 				$services->getMainConfig()
 			),
+			$services->getContentLanguage(),
 			$services->getUrlUtils(),
 		);
 	},
