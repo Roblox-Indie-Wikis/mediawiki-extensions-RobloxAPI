@@ -747,6 +747,21 @@ $wgRobloxAPICachingExpiries = [
 ];
 ```
 
+### `$wgRobloxAPICacheSplittingOptionalArguments`
+
+An array of optional arguments that should affect caching.
+
+Some optional arguments, such as `pretty`, do not affect the API result.
+Some do, such as `format`, but are not included in the default value since it does not matter a lot which image format
+is served.
+
+Default:
+```php
+$wgRobloxAPICacheSplittingOptionalArguments = [
+    'is_circular',
+];
+```
+
 ### `$wgRobloxAPIAllowedArguments`
 
 An array of allowed arguments per argument type. If empty, all arguments for the type are allowed. Any argument types

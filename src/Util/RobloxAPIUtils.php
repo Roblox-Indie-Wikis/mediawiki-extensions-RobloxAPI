@@ -36,18 +36,8 @@ class RobloxAPIUtils {
 
 	public const CONSTRUCTOR_OPTIONS = [
 		RobloxAPIConstants::ConfAllowedArguments,
+		RobloxAPIConstants::ConfCacheSplittingOptionalArguments,
 		RobloxAPIConstants::ConfShowPlainErrors,
-	];
-
-	/**
-	 * The optional arguments that affect caching.
-	 * Some optional arguments such as 'pretty' do not affect the API result.
-	 * Some arguments that change the API result, such as 'format', are not included since
-	 * it does not matter a lot which image format is served.
-	 * @var array
-	 */
-	private static array $CACHE_AFFECTING_OPTIONAL_ARGS = [
-		'is_circular',
 	];
 
 	public function __construct(
@@ -290,20 +280,17 @@ class RobloxAPIUtils {
 	}
 
 	/**
-	 * Filters the optional arguments to only include those that affect caching.
+	 * Filters the optional arguments to only include those that split caching.
 	 * @param array<string, string> $optionalArgs
 	 * @return array<string, string>
 	 */
-	public function getCacheAffectingArgs( array $optionalArgs ): array {
-		$cacheAffectingArgs = [];
+	public function getCacheSplittingArgs( array $optionalArgs ): array {
+		$cacheSplittingArgs = $this->options->get( RobloxAPIConstants::ConfCacheSplittingOptionalArguments );
 
-		foreach ( self::$CACHE_AFFECTING_OPTIONAL_ARGS as $arg ) {
-			if ( array_key_exists( $arg, $optionalArgs ) ) {
-				$cacheAffectingArgs[$arg] = $optionalArgs[$arg];
-			}
-		}
-
-		return $cacheAffectingArgs;
+		return array_intersect_key(
+			$optionalArgs,
+			array_flip( $cacheSplittingArgs )
+		);
 	}
 
 	/**
