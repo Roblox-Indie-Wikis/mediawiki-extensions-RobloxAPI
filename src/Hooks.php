@@ -188,6 +188,8 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 			RobloxAPIConstants::ConfAllowedArguments => [ 'UserID' => [ 54321 ] ],
 			// show errors as plain text to make parser tests not depend on changes in Html:errorBox
 			RobloxAPIConstants::ConfShowPlainErrors => true,
+			RobloxAPIConstants::ConfCacheSplittingOptionalArguments =>
+				$this->config->get( RobloxAPIConstants::ConfCacheSplittingOptionalArguments )
 		];
 
 		foreach ( $defaults as $key => $value ) {
