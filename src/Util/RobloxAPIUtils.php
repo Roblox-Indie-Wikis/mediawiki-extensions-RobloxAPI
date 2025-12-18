@@ -21,7 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\Util;
 
 use MediaWiki\Config\ServiceOptions;
-use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
 use MediaWiki\Html\Html;
 use MediaWiki\Json\FormatJson;
 use MediaWiki\Language\Language;

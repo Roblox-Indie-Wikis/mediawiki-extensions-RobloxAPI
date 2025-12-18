@@ -18,7 +18,7 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\Data\Args;
+namespace MediaWiki\Extension\RobloxAPI\Args;
 
 /**
  * Represents the specification for the arguments that a data source requires.
