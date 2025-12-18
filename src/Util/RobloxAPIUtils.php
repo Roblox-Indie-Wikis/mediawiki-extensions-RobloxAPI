@@ -24,6 +24,7 @@ use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
 use MediaWiki\Html\Html;
 use MediaWiki\Json\FormatJson;
+use MediaWiki\Language\Language;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Utils\UrlUtils;
 use stdClass;
@@ -42,6 +43,7 @@ class RobloxAPIUtils {
 
 	public function __construct(
 		private ServiceOptions $options,
+		private readonly Language $contentLanguage,
 		private readonly UrlUtils $urlUtils,
 	) {
 		$this->options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
@@ -106,9 +108,7 @@ class RobloxAPIUtils {
 					}
 					break;
 				case 'UserGamesLimit':
-					if ( !in_array( $arg, [ '10', '25', '50' ], false ) ) {
-						throw new RobloxAPIException( 'robloxapi-error-invalid-user-games-limit', $arg );
-					}
+					$this->assertLimitArg( $arg, [ '10', '25', '50' ] );
 					break;
 				case 'SortOrder':
 					if ( !in_array( $arg, [ 'Asc', 'Desc' ], false ) ) {
@@ -118,6 +118,22 @@ class RobloxAPIUtils {
 				default:
 					throw new IllegalOperationException( "Unknown expected arg type: $expectedType" );
 			}
+		}
+	}
+
+	/**
+	 * @param string $arg The provided argument value
+	 * @param array $allowedValues A list of allowed values
+	 * @throws RobloxAPIException If the provided argument value is invalid
+	 * @return void
+	 */
+	private function assertLimitArg( string $arg, array $allowedValues ) {
+		if ( !in_array( $arg, $allowedValues, false ) ) {
+			throw new RobloxAPIException(
+				'robloxapi-error-invalid-limit',
+				$arg,
+				$this->contentLanguage->commaList( $allowedValues )
+			);
 		}
 	}
 
