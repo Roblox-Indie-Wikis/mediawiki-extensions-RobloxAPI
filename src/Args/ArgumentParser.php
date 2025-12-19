@@ -134,7 +134,7 @@ class ArgumentParser {
 				return $status;
 			}
 
-			$result[] = $status->value;
+			$result[$key] = $status->value;
 			$first = false;
 		}
 
