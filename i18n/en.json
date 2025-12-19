@@ -40,5 +40,11 @@
 	"robloxapi-arg-type-sort-order": "Sort Order",
 	"robloxapi-arg-type-thumbnail-format": "Thumbnail Format",
 	"robloxapi-arg-type-thumbnail-size": "Thumbnail Size",
-	"robloxapi-arg-type-username": "Username"
+	"robloxapi-arg-type-username": "Username",
+	"robloxapi-arg-type-asset-id": "Asset ID",
+	"robloxapi-arg-type-badge-id": "Badge ID",
+	"robloxapi-arg-type-group-id": "Group ID",
+	"robloxapi-arg-type-role-id": "Role ID",
+	"robloxapi-arg-type-universe-id": "Universe ID",
+	"robloxapi-arg-type-user-id": "User ID"
 }

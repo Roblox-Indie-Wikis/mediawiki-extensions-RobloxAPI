@@ -18,7 +18,7 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\Args;
+namespace MediaWiki\Extension\RobloxAPI\Args\Types;
 
 /**
  * Represents an argument that is a Roblox ID.
@@ -26,12 +26,36 @@ namespace MediaWiki\Extension\RobloxAPI\Args;
 class IdArgument extends RegexArgument {
 
 	/** @inheritDoc */
-	public function __construct( string $translationKey, string $errorMessage ) {
+	public function __construct( string $translationKey, string $errorMessage = 'robloxapi-error-invalid-id' ) {
 		parent::__construct(
 			$translationKey,
 			/** @lang RegExp */ '/^\d{1,16}$/',
 			$errorMessage
 		);
+	}
+
+	public static function asset(): self {
+		return new self( 'robloxapi-arg-type-asset-id' );
+	}
+
+	public static function badge(): self {
+		return new self( 'robloxapi-arg-type-badge-id' );
+	}
+
+	public static function group(): self {
+		return new self( 'robloxapi-arg-type-group-id' );
+	}
+
+	public static function role(): self {
+		return new self( 'robloxapi-arg-type-role-id' );
+	}
+
+	public static function universe(): self {
+		return new self( 'robloxapi-arg-type-universe-id' );
+	}
+
+	public static function user(): self {
+		return new self( 'robloxapi-arg-type-user-id' );
 	}
 
 }

@@ -18,8 +18,9 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\Args;
+namespace MediaWiki\Extension\RobloxAPI\Args\Types;
 
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentParserContext;
 use StatusValue;
 
 /**

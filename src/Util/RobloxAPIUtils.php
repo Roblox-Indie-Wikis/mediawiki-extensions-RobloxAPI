@@ -340,9 +340,10 @@ class RobloxAPIUtils {
 		$result = '';
 
 		foreach ( $status->getMessages() as $msg ) {
-			$message = $parser->msg( $msg->getKey() )
-				->inContentLanguage()
-				->plaintextParams( ...$msg->getParams() )
+			// Parser::msg doesn't allow a MessageSpecifier as the first arg...
+			$message = wfMessage( $msg )
+				->inLanguage( $parser->getTargetLanguage() )
+				->page( $parser->getPage() )
 				->plain();
 
 			$result .= $this->options->get( RobloxAPIConstants::ConfShowPlainErrors )

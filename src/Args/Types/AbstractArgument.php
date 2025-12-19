@@ -18,7 +18,7 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\Args;
+namespace MediaWiki\Extension\RobloxAPI\Args\Types;
 
 /**
  * Abstract base class for arguments.

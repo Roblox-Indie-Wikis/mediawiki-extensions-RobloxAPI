@@ -18,7 +18,7 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\Args;
+namespace MediaWiki\Extension\RobloxAPI\Args\Types;
 
 /**
  * Represents a thumbnail size (width x height).

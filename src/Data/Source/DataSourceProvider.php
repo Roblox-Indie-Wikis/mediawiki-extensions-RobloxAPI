@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 use Closure;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\AssetThumbnailDataSource;
 use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\AssetThumbnailUrlDataSource;
@@ -40,7 +41,6 @@ use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\UserPlaceVisitsData
 use MediaWiki\Extension\RobloxAPI\ParserFunction\DataSourceParserFunction;
 use MediaWiki\Extension\RobloxAPI\ParserFunction\RobloxApiParserFunction;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use StatusValue;
 
@@ -77,7 +77,7 @@ class DataSourceProvider {
 
 		$this->registerSimpleFetcherDataSource(
 			'groupRoles',
-			new ArgumentSpecification( [ 'UserID' ], [], true ),
+			new ArgumentSpecification( [ IdArgument::user() ], [], true ),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://groups.roblox.com/v1/users/$args[0]/groups/roles";
 			}, static function ( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
@@ -87,7 +87,7 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'groupData',
-			new ArgumentSpecification( [ 'GroupID' ], [], true ),
+			new ArgumentSpecification( [ IdArgument::group() ], [], true ),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://groups.roblox.com/v1/groups/$args[0]";
 			},
@@ -96,14 +96,14 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'groupRolesList',
-			new ArgumentSpecification( [ 'GroupID' ], [], true ),
+			new ArgumentSpecification( [ IdArgument::group() ], [], true ),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://groups.roblox.com/v1/groups/$args[0]/roles";
 			}
 		);
 		$this->registerSimpleFetcherDataSource(
 			'badgeInfo',
-			new ArgumentSpecification( [ 'BadgeID' ], [], true ),
+			new ArgumentSpecification( [ IdArgument::badge() ], [], true ),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://badges.roblox.com/v1/badges/$args[0]";
 			},
@@ -112,7 +112,7 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'userInfo',
-			new ArgumentSpecification( [ 'UserID' ], [], true ),
+			new ArgumentSpecification( [ IdArgument::user() ], [], true ),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://users.roblox.com/v1/users/$args[0]";
 			},
@@ -121,7 +121,7 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'assetDetails',
-			new ArgumentSpecification( [ 'AssetID' ], [], true ),
+			new ArgumentSpecification( [ IdArgument::asset() ], [], true ),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://economy.roblox.com/v2/assets/$args[0]/details";
 			},
@@ -130,14 +130,14 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'gameNameDescription',
-			new ArgumentSpecification( [ 'UniverseID' ], [], true ),
+			new ArgumentSpecification( [ IdArgument::universe() ], [], true ),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://gameinternationalization.roblox.com/v1/name-description/games/$args[0]";
 			}
 		);
 		$this->registerSimpleFetcherDataSource(
 			'universeInfo',
-			new ArgumentSpecification( [ 'UniverseID' ], [], true ),
+			new ArgumentSpecification( [ IdArgument::universe() ], [], true ),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://develop.roblox.com/v1/universes/$args[0]";
 			}
@@ -145,7 +145,7 @@ class DataSourceProvider {
 		$this->registerSimpleFetcherDataSource(
 			'userGames',
 			new ArgumentSpecification(
-				[ 'UserID' ],
+				[ IdArgument::user() ],
 				[ 'limit' => 'UserGamesLimit', 'sort_order' => 'SortOrder' ],
 				true
 			),
@@ -162,7 +162,7 @@ class DataSourceProvider {
 		$this->registerSimpleFetcherDataSource(
 			'gameEvents',
 			new ArgumentSpecification(
-				[ 'UniverseID' ],
+				[ IdArgument::universe() ],
 				[],
 				true
 			),
@@ -176,7 +176,7 @@ class DataSourceProvider {
 		$this->registerSimpleFetcherDataSource(
 			'groupRoleMembers',
 			new ArgumentSpecification(
-				[ 'GroupID', 'RoleID' ],
+				[ IdArgument::group(), IdArgument::role() ],
 				[ 'limit' => 'GroupRoleMembersLimit', 'sort_order' => 'SortOrder' ],
 			),
 			static function ( array $args, array $optionalArgs ): string {

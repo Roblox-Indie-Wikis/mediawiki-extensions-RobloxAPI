@@ -20,6 +20,10 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Args;
 
+use MediaWiki\Extension\RobloxAPI\Args\Types\BooleanArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\StringArgument;
+
 /**
  * Represents the specification for the arguments that a data source requires.
  */
@@ -44,18 +48,16 @@ class ArgumentSpecification {
 	 * Adds the default optional arguments for JSON data and returns the instance.
 	 */
 	public function withJsonArgs(): ArgumentSpecification {
-		// TODO
-		$this->optionalArgs['pretty'] = 'Boolean';
-		$this->optionalArgs['json_key'] = 'String'; // TODO custom type
-
-		return $this;
+		return $this
+			->withOptionalArg( 'pretty', new BooleanArgument() )
+			->withOptionalArg( 'json_key', new StringArgument() ); // TODO custom type
 	}
 
 	/**
 	 * Adds a required argument to the specification and returns the instance.
-	 * @param string $arg The argument type.
+	 * @param IArgument $arg The argument type.
 	 */
-	public function withRequiredArg( string $arg ): ArgumentSpecification {
+	public function withRequiredArg( IArgument $arg ): ArgumentSpecification {
 		$this->requiredArgs[] = $arg;
 
 		return $this;
@@ -64,9 +66,9 @@ class ArgumentSpecification {
 	/**
 	 * Adds an optional argument to the specification and returns the instance.
 	 * @param string $arg The argument name.
-	 * @param string $type The argument type.
+	 * @param IArgument $type The argument type.
 	 */
-	public function withOptionalArg( string $arg, string $type ): ArgumentSpecification {
+	public function withOptionalArg( string $arg, IArgument $type ): ArgumentSpecification {
 		$this->optionalArgs[$arg] = $type;
 
 		return $this;
