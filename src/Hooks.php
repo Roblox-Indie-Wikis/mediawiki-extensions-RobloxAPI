@@ -91,12 +91,16 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 						}
 
 						try {
-							$status = $this->argumentParser->parse(  $dataSource->getArgumentSpecification(), $args );
+							$status = $this->argumentParser->parse( $dataSource->getArgumentSpecification(), $args );
 							if ( !$status->isGood() ) {
 								return $this->utils->formatStatusValue( $status, $parser );
 							}
 							$parseResult = $status->value;
-							$result = $dataSource->exec( $parser, $parseResult->requiredArgs, $parseResult->optionalArgs );
+							$result = $dataSource->exec(
+								$parser,
+								$parseResult->requiredArgs,
+								$parseResult->optionalArgs
+							);
 
 							$shouldEscape = $dataSource->shouldEscapeResult( $result );
 
