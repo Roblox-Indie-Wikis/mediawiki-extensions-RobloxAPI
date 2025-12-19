@@ -30,10 +30,11 @@ abstract class AbstractArgument implements IArgument {
 	 */
 	public function __construct(
 		private readonly string $translationKey,
-	) { }
+	) {
+	}
 
 	/** @inheritDoc */
-	function getTranslationKey(): string {
+	public function getTranslationKey(): string {
 		return $this->translationKey;
 	}
 

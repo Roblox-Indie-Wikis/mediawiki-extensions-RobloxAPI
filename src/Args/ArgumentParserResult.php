@@ -29,6 +29,7 @@ class ArgumentParserResult {
 	public function __construct(
 		public readonly array $requiredArgs,
 		public readonly array $optionalArgs,
-	) { }
+	) {
+	}
 
 }

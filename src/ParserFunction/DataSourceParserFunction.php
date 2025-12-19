@@ -41,6 +41,7 @@ class DataSourceParserFunction extends RobloxApiParserFunction {
 	 * @inheritDoc
 	 */
 	public function exec( Parser $parser, ...$args ): mixed {
+		// TODO convert - or drop legacy parser functions entirely
 		[ $requiredArgs, $optionalArgs ] =
 			$this->utils->parseArguments( $this->dataSource->getArgumentSpecification(), $args );
 

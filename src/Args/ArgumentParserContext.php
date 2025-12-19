@@ -26,6 +26,7 @@ class ArgumentParserContext {
 
 	public function __construct(
 		public Language $contentLanguage,
-	) { }
+	) {
+	}
 
 }

@@ -37,7 +37,8 @@ use Wikimedia\Stats\Exceptions\IllegalOperationException;
  */
 class RobloxAPIUtils {
 
-	public const CONSTRUCTOR_OPTIONS = [ // TODO remove ConfAllowedArguments
+	// TODO remove ConfAllowedArguments
+	public const CONSTRUCTOR_OPTIONS = [
 		RobloxAPIConstants::ConfAllowedArguments,
 		RobloxAPIConstants::ConfCacheSplittingOptionalArguments,
 		RobloxAPIConstants::ConfShowPlainErrors,

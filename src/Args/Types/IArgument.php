@@ -29,15 +29,16 @@ use StatusValue;
 interface IArgument {
 
 	/**
+	 * @param ArgumentParserContext $ctx The context for argument parsing.
 	 * @param string $value The value to validate.
 	 * @return StatusValue<string> The status of the validation: A good status with the argument value if valid,
 	 * else an error status.
 	 */
-	function validate( ArgumentParserContext $ctx, string $value ): StatusValue;
+	public function validate( ArgumentParserContext $ctx, string $value ): StatusValue;
 
 	/**
 	 * @return string The translation key for the argument type.
 	 */
-	function getTranslationKey(): string;
+	public function getTranslationKey(): string;
 
 }

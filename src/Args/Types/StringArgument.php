@@ -35,7 +35,7 @@ class StringArgument extends AbstractArgument {
 	}
 
 	/** @inheritDoc */
-	function validate( ArgumentParserContext $ctx, string $value ): StatusValue {
+	public function validate( ArgumentParserContext $ctx, string $value ): StatusValue {
 		return StatusValue::newGood( $value );
 	}
 

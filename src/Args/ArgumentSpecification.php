@@ -44,7 +44,7 @@ class ArgumentSpecification {
 		}
 	}
 
-	public static function for( IArgument... $requiredArgs ): self {
+	public static function for( IArgument ...$requiredArgs ): self {
 		return new self( $requiredArgs );
 	}
 
@@ -54,7 +54,8 @@ class ArgumentSpecification {
 	public function withJsonArgs(): ArgumentSpecification {
 		return $this
 			->withOptionalArg( 'pretty', new BooleanArgument() )
-			->withOptionalArg( 'json_key', new StringArgument() ); // TODO custom type
+			// TODO custom type
+			->withOptionalArg( 'json_key', new StringArgument() );
 	}
 
 	/**
