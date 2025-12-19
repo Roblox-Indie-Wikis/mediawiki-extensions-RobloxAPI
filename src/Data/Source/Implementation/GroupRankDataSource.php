@@ -24,8 +24,8 @@ use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DependentDataSource;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Parser\Parser;
+use StatusValue;
 
 class GroupRankDataSource extends DependentDataSource {
 
@@ -39,15 +39,15 @@ class GroupRankDataSource extends DependentDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): mixed {
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
 		$groups = $this->dataSource->exec( $parser, [ $requiredArgs[1] ] );
 
 		if ( !$groups ) {
-			$this->failNoData();
+			return $this->failNoData();
 		}
 
 		if ( !is_array( $groups ) ) {
-			$this->failUnexpectedDataStructure();
+			return $this->failUnexpectedDataStructure();
 		}
 
 		foreach ( $groups as $group ) {
@@ -56,7 +56,7 @@ class GroupRankDataSource extends DependentDataSource {
 			}
 		}
 
-		throw new RobloxAPIException( 'robloxapi-error-user-group-not-found' );
+		return StatusValue::newFatal( 'robloxapi-error-user-group-not-found' );
 	}
 
 	/**

@@ -20,6 +20,8 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 
+use StatusValue;
+
 abstract class AbstractDataSource implements IDataSource {
 
 	/**
@@ -55,6 +57,27 @@ abstract class AbstractDataSource implements IDataSource {
 	 */
 	public function getId(): string {
 		return $this->id;
+	}
+
+	/**
+	 * Throws an exception stating that the data source returned no data.
+	 */
+	protected function failNoData(): StatusValue {
+		return StatusValue::newFatal( 'robloxapi-error-datasource-returned-no-data' );
+	}
+
+	/**
+	 * Throws an exception stating that the data source returned an unexpected data structure.
+	 */
+	protected function failUnexpectedDataStructure(): StatusValue {
+		return StatusValue::newFatal( 'robloxapi-error-unexpected-data-structure' );
+	}
+
+	/**
+	 * Throws an exception stating that the data source returned invalid data.
+	 */
+	protected function failInvalidData(): StatusValue {
+		return StatusValue::newFatal( 'robloxapi-error-invalid-data' );
 	}
 
 }

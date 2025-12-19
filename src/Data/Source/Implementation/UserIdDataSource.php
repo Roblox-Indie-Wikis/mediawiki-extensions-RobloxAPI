@@ -24,9 +24,9 @@ use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\Args\Types\UsernameArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Data\Source\FetcherDataSource;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Json\FormatJson;
 use MediaWiki\Parser\Parser;
+use StatusValue;
 
 /**
  * A data source for getting a user's ID from their username.
@@ -50,13 +50,13 @@ class UserIdDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
+	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): StatusValue {
 		$entries = $data->data;
 		if ( $entries === null || count( $entries ) === 0 ) {
-			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
+			return $this->failInvalidData();
 		}
 
-		return $entries[0];
+		return StatusValue::newGood( $entries[0] );
 	}
 
 	/**
@@ -79,18 +79,23 @@ class UserIdDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): mixed {
-		$data = $this->fetch( $requiredArgs, $optionalArgs );
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
+		$dataStatus = $this->fetch( $requiredArgs, $optionalArgs );
 
+		if ( !$dataStatus->isGood() ) {
+			return $dataStatus;
+		}
+		$data = $dataStatus->getValue();
+		// TODO do we really need to handle this?
 		if ( !$data ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
+			return $this->failNoData();
 		}
 
 		if ( !property_exists( $data, 'id' ) ) {
-			throw new RobloxAPIException( 'robloxapi-error-unexpected-data-structure' );
+			return $this->failUnexpectedDataStructure();
 		}
 
-		return $data->id;
+		return StatusValue::newGood( $data->id );
 	}
 
 	/**

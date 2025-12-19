@@ -223,6 +223,13 @@ class DataSourceProvider {
 
 	/**
 	 * Registers a new simple fetcher data source if it's enabled.
+	 * @param string $id The ID of the data source.
+	 * @param ArgumentSpecification $argumentSpecification The argument specification.
+	 * @param Closure( array<string>, array<string, string> ): string $createEndpoint The function to create the
+	 *  endpoint.
+	 * @param ?Closure( mixed, array<string>, array<string, string> ): StatusValue<mixed>|mixed|null $processData The
+	 *  function to process the data.
+	 * @param bool $registerParserFunction Whether to register a legacy parser function.
 	 * @see SimpleFetcherDataSource::__construct
 	 */
 	public function registerSimpleFetcherDataSource(

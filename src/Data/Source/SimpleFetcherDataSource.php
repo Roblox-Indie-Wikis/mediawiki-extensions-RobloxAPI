@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 use Closure;
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
+use StatusValue;
 
 /**
  * A simple data source that does not process the data.
@@ -33,8 +34,8 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 	 * @inheritDoc
 	 * @param Closure( array<string>, array<string, string> ): string $createEndpoint The function to create the
 	 * endpoint.
-	 * @param Closure( mixed, array<string>, array<string, string> ): mixed|null $processDataFn The function to process
-	 * the data.
+	 * @param Closure( mixed, array<string>, array<string, string> ): StatusValue<mixed>|mixed|null $processDataFn The
+	 * function to process the data.
 	 * @param bool $registerParserFunction Whether to register a legacy parser function.
 	 */
 	public function __construct(
@@ -58,12 +59,16 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
+	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): StatusValue {
 		if ( $this->processDataFn ) {
-			return call_user_func( $this->processDataFn, $data, $requiredArgs, $optionalArgs );
+			$processedData = call_user_func( $this->processDataFn, $data, $requiredArgs, $optionalArgs );
+			if ( !$processedData instanceof StatusValue ) {
+				$processedData = StatusValue::newGood( $processedData );
+			}
+			return $processedData;
 		}
 
-		return $data;
+		return StatusValue::newGood( $data );
 	}
 
 	/**

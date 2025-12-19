@@ -27,6 +27,7 @@ use MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailFormatArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailSizeArgument;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use MediaWiki\Parser\Parser;
+use StatusValue;
 
 abstract class ThumbnailUrlDataSource extends DependentDataSource {
 	/**
@@ -43,23 +44,28 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 
 	/**
 	 * @inheritDoc
-	 * @return string URL of the thumbnail
+	 * @return StatusValue<string> URL of the thumbnail
 	 */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): string {
-		$data = $this->dataSource->exec( $parser, $requiredArgs, $optionalArgs );
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
+		$dataStatus = $this->dataSource->exec( $parser, $requiredArgs, $optionalArgs );
+
+		if ( !$dataStatus->isOK() ) {
+			return $dataStatus;
+		}
+		$data = $dataStatus->getValue();
 
 		if ( !$data ) {
-			$this->failNoData();
+			return $this->failNoData();
 		}
 
 		if ( count( $data ) === 0 ) {
-			$this->failInvalidData();
+			return $this->failInvalidData();
 		}
 
 		$url = $data[0]->imageUrl;
 
 		if ( !$url ) {
-			$this->failInvalidData();
+			return $this->failInvalidData();
 		}
 
 		$format = $optionalArgs['format'] ?? 'Png';
@@ -68,10 +74,10 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 		$url = "$url.$lowerFormat";
 
 		if ( !$this->utils->verifyIsRobloxCdnUrl( $url ) ) {
-			$this->failInvalidData();
+			return $this->failInvalidData();
 		}
 
-		return $url;
+		return StatusValue::newGood( $url );
 	}
 
 	/**

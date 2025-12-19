@@ -25,6 +25,7 @@ use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DependentDataSource;
 use MediaWiki\Parser\Parser;
+use StatusValue;
 
 class GroupMembersDataSource extends DependentDataSource {
 
@@ -38,18 +39,23 @@ class GroupMembersDataSource extends DependentDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = []	): mixed {
-		$groupData = $this->dataSource->exec( $parser, $requiredArgs );
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = []	): StatusValue {
+		$groupDataStatus = $this->dataSource->exec( $parser, $requiredArgs );
+
+		if ( !$groupDataStatus->isOK() ) {
+			return $groupDataStatus;
+		}
+		$groupData = $groupDataStatus->getValue();
 
 		if ( !$groupData ) {
-			$this->failNoData();
+			return $this->failNoData();
 		}
 
 		if ( !property_exists( $groupData, 'memberCount' ) ) {
-			$this->failUnexpectedDataStructure();
+			return $this->failUnexpectedDataStructure();
 		}
 
-		return $groupData->memberCount;
+		return StatusValue::newGood( $groupData->memberCount );
 	}
 
 	/**

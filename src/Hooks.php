@@ -25,7 +25,6 @@ use MediaWiki\Extension\RobloxAPI\Args\ArgumentParser;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\IDataSource;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Hook\ParserTestGlobalsHook;
@@ -58,7 +57,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, mixed ...$args ): array|bool|string {
 			$status = $this->handleParserFunctionCall( $parser, $args );
 			if ( $status->isGood() ) {
-				return $status->value;
+				return $status->getValue();
 			} else {
 				$parser->addTrackingCategory( 'robloxapi-category-error' );
 				return $this->utils->formatStatusValue( $status, $parser );
@@ -89,34 +88,35 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 							return $this->utils->formatStatusValue( $canUse, $parser );
 						}
 
-						try {
-							$status = $this->argumentParser->parse( $dataSource->getArgumentSpecification(), $args );
-							if ( !$status->isGood() ) {
-								return $this->utils->formatStatusValue( $status, $parser );
-							}
-							$parseResult = $status->value;
-							$result = $dataSource->exec(
-								$parser,
-								$parseResult->requiredArgs,
-								$parseResult->optionalArgs
-							);
-
-							$shouldEscape = $dataSource->shouldEscapeResult( $result );
-
-							if ( $this->utils->shouldReturnJson( $result ) ) {
-								$result = $this->utils->createJsonResult( $result, [] );
-								// always escape json, there is no need for it to be parsed
-								$shouldEscape = true;
-							}
-
-							return [
-								$result,
-								'nowiki' => $shouldEscape,
-							];
-						} catch ( RobloxAPIException $exception ) {
+						$status = $this->argumentParser->parse( $dataSource->getArgumentSpecification(), $args );
+						if ( !$status->isGood() ) {
 							$parser->addTrackingCategory( 'robloxapi-category-error' );
-							return $this->utils->formatStatusValue( $exception->toStatusValue(), $parser );
+							return $this->utils->formatStatusValue( $status, $parser );
 						}
+						$parseResult = $status->getValue();
+						$execStatus = $dataSource->exec(
+							$parser,
+							$parseResult->requiredArgs,
+							$parseResult->optionalArgs
+						);
+						if ( !$execStatus->isGood() ) {
+							$parser->addTrackingCategory( 'robloxapi-category-error' );
+							return $this->utils->formatStatusValue( $execStatus, $parser );
+						}
+						$result = $execStatus->getValue();
+
+						$shouldEscape = $dataSource->shouldEscapeResult( $result );
+
+						if ( $this->utils->shouldReturnJson( $result ) ) {
+							$result = $this->utils->createJsonResult( $result, [] );
+							// always escape json, there is no need for it to be parsed
+							$shouldEscape = true;
+						}
+
+						return [
+							$result,
+							'nowiki' => $shouldEscape,
+						];
 					}
 				);
 			}
@@ -144,7 +144,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		if ( !$status->isGood() ) {
 			return $status;
 		}
-		$dataSource = $status->value;
+		$dataSource = $status->getValue();
 
 		$canUse = $this->canUseDataSource( $parser, $dataSource );
 		if ( !$canUse->isGood() ) {
@@ -159,14 +159,13 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		if ( !$status->isGood() ) {
 			return $status;
 		}
-		$parseResult = $status->value;
+		$parseResult = $status->getValue();
 
-		// TODO use status
-		try {
-			$result = $dataSource->exec( $parser, $parseResult->requiredArgs, $parseResult->optionalArgs );
-		} catch ( RobloxAPIException $exception ) {
-			return $exception->toStatusValue();
+		$execStatus = $dataSource->exec( $parser, $parseResult->requiredArgs, $parseResult->optionalArgs );
+		if ( !$execStatus->isGood() ) {
+			return $execStatus;
 		}
+		$result = $execStatus->getValue();
 		$shouldEscape = $dataSource->shouldEscapeResult( $result );
 
 		if ( $this->utils->shouldReturnJson( $result ) ) {
@@ -221,6 +220,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 * @inheritDoc
 	 */
 	public function onParserTestGlobals( &$globals ): void {
+		// TODO apart from plain errors, those were moved to ArgumentParser
 		$defaults = [
 			RobloxAPIConstants::ConfAllowedArguments => [ 'UserID' => [ 54321 ] ],
 			// show errors as plain text to make parser tests not depend on changes in Html:errorBox

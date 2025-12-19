@@ -21,8 +21,8 @@
 namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Parser\Parser;
+use StatusValue;
 
 /**
  * Represents an endpoint of the roblox api.
@@ -45,13 +45,13 @@ abstract class FetcherDataSource extends AbstractDataSource {
 	 * Fetches data
 	 * @param array<string> $requiredArgs
 	 * @param array<string, string> $optionalArgs
-	 * @throws RobloxAPIException if there are any errors during the process
+	 * @return StatusValue<mixed> The fetched data.
 	 */
-	public function fetch( array $requiredArgs, array $optionalArgs = [] ): mixed {
+	public function fetch( array $requiredArgs, array $optionalArgs = [] ): StatusValue {
 		$endpoint = $this->getEndpoint( $requiredArgs, $optionalArgs );
 		$headers = $this->getAdditionalHeaders( $requiredArgs, $optionalArgs );
 
-		$data = $this->fetcher->getDataFromEndpoint(
+		$dataStatus = $this->fetcher->getDataFromEndpoint(
 			$this->id,
 			$endpoint,
 			$requiredArgs,
@@ -59,14 +59,22 @@ abstract class FetcherDataSource extends AbstractDataSource {
 			$headers,
 			$this->processRequestOptions( ... )
 		);
+		if ( !$dataStatus->isOK() ) {
+			return $dataStatus;
+		}
+		$data = $dataStatus->getValue();
 
-		$processedData = $this->processData( $data, $requiredArgs, $optionalArgs );
+		$processedDataStatus = $this->processData( $data, $requiredArgs, $optionalArgs );
+		if ( !$processedDataStatus->isOK() ) {
+			return $processedDataStatus;
+		}
+		$processedData = $processedDataStatus->getValue();
 
 		if ( $processedData === null ) {
-			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
+			return StatusValue::newFatal( 'robloxapi-error-invalid-data' );
 		}
 
-		return $processedData;
+		return StatusValue::newGood( $processedData );
 	}
 
 	/**
@@ -82,11 +90,10 @@ abstract class FetcherDataSource extends AbstractDataSource {
 	 * @param mixed $data The data to process.
 	 * @param array<string> $requiredArgs
 	 * @param array<string, string> $optionalArgs
-	 * @return mixed The processed data.
-	 * @throws RobloxAPIException if there are any errors during the process
+	 * @return StatusValue<mixed> The processed data.
 	 */
-	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
-		return $data;
+	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): StatusValue {
+		return StatusValue::newGood( $data );
 	}
 
 	/**
@@ -133,7 +140,7 @@ abstract class FetcherDataSource extends AbstractDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): mixed {
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
 		return $this->fetch( $requiredArgs, $optionalArgs );
 	}
 
