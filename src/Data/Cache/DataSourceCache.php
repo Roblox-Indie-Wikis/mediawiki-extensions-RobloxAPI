@@ -31,6 +31,7 @@ use Wikimedia\ObjectCache\WANObjectCache;
 class DataSourceCache {
 
 	public const CONSTRUCTOR_OPTIONS = [
+		RobloxAPIConstants::ConfCacheSplittingOptionalArguments,
 		RobloxAPIConstants::ConfDisableCache,
 	];
 
@@ -38,7 +39,7 @@ class DataSourceCache {
 	private bool $disabled;
 
 	public function __construct(
-		ServiceOptions $options,
+		private readonly ServiceOptions $options,
 		private readonly RobloxAPIUtils $utils,
 		private readonly WANObjectCache $cache,
 	) {
@@ -94,7 +95,10 @@ class DataSourceCache {
 	 * @param array<string, string> $optionalArgs
 	 */
 	protected function getCacheKey( string $endpoint, array $args, array $optionalArgs ): string {
-		$cacheSplittingOptionalArgs = $this->utils->getCacheSplittingArgs( $optionalArgs );
+		$cacheSplittingOptionalArgs = array_intersect_key(
+			$optionalArgs,
+			array_flip( $this->options->get( RobloxAPIConstants::ConfCacheSplittingOptionalArguments ) )
+		);
 
 		$argsJson = json_encode( $args );
 		$optionalArgsJson = json_encode( $cacheSplittingOptionalArgs );

@@ -35,7 +35,6 @@ use stdClass;
 class RobloxAPIUtils {
 
 	public const CONSTRUCTOR_OPTIONS = [
-		RobloxAPIConstants::ConfCacheSplittingOptionalArguments,
 		RobloxAPIConstants::ConfShowPlainErrors,
 	];
 
@@ -122,21 +121,6 @@ class RobloxAPIUtils {
 		}
 
 		return $jsonObject->{$jsonKey};
-	}
-
-	/**
-	 * Filters the optional arguments to only include those that split caching.
-	 * @param array<string, string> $optionalArgs
-	 * @return array<string, string>
-	 */
-	public function getCacheSplittingArgs( array $optionalArgs ): array {
-		// TODO move this to DataSourceCache
-		$cacheSplittingArgs = $this->options->get( RobloxAPIConstants::ConfCacheSplittingOptionalArguments );
-
-		return array_intersect_key(
-			$optionalArgs,
-			array_flip( $cacheSplittingArgs )
-		);
 	}
 
 	/**

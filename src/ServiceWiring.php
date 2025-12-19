@@ -28,7 +28,7 @@ use MediaWiki\MediaWikiServices;
 
 /** @phpcs-require-sorted-array */
 return [
-	'RobloxAPI.ArgumentParser' => static function ( MediaWikiServices $services ) {
+	'RobloxAPI.ArgumentParser' => static function ( MediaWikiServices $services ): ArgumentParser {
 		return new ArgumentParser(
 			new ServiceOptions(
 				ArgumentParser::CONSTRUCTOR_OPTIONS,

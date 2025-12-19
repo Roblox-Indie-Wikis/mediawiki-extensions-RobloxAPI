@@ -66,7 +66,6 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		} );
 
 		if ( $this->config->get( RobloxAPIConstants::ConfRegisterLegacyParserFunctions ) ) {
-			$legacyParserFunctions = [];
 			foreach ( $this->dataSourceProvider->dataSources as $dataSource ) {
 				// register parser function only if needed for legacy reasons
 				if ( !$dataSource->shouldRegisterLegacyParserFunction() ) {
