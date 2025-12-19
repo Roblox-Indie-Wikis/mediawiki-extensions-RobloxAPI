@@ -46,5 +46,6 @@
 	"robloxapi-arg-type-group-id": "Label for the group ID argument type",
 	"robloxapi-arg-type-role-id": "Label for the role ID argument type",
 	"robloxapi-arg-type-universe-id": "Label for the universe ID argument type",
-	"robloxapi-arg-type-user-id": "Label for the user ID argument type"
+	"robloxapi-arg-type-user-id": "Label for the user ID argument type",
+	"robloxapi-arg-type-limit": "Label for the limit argument type"
 }
