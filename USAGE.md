@@ -678,7 +678,7 @@ To pretty-print JSON data, you can use the `pretty` optional argument:
 To get the universe ID of a place, input the place ID to this API:
 
 ```
-https://apis.roblox.com/universes/v1/places/<GAMEID>/universe
+https://apis.roblox.com/universes/v1/places/<PLACEID>/universe
 ```
 
 ### Embedding images from the Roblox CDN
@@ -805,11 +805,11 @@ If you want to restrict the allowed arguments for a specific type, you can do so
 
 ```php
 $wgRobloxAPIAllowedArguments = [
-    'GameID' => [123456, 789012],
+    'PlaceID' => [123456, 789012],
 ];
 ```
 
-In this example, only the Game IDs 123456 and 789012 are allowed.
+In this example, only the Place IDs 123456 and 789012 are allowed.
 
 ### `$wgRobloxAPIRequestUserAgent`
 
