@@ -34,5 +34,11 @@
 	"robloxapi-category-deprecated-parser-function": "{{Tracking category name}}\nName of the tracking category for pages that use a deprecated parser function from the RobloxAPI extension.",
 	"robloxapi-category-deprecated-parser-function-desc": "Description of the tracking category for deprecated parser function usage.",
 	"robloxapi-category-error": "{{Tracking category name}}\nName of the tracking category for pages where using the {{#robloxAPI}} parser function results in an error.",
-	"robloxapi-category-error-desc": "Description of the RobloxAPI error tracking category."
+	"robloxapi-category-error-desc": "Description of the RobloxAPI error tracking category.",
+	"robloxapi-arg-type-boolean": "Label for the boolean argument type",
+	"robloxapi-arg-type-string": "Label for the string argument type",
+	"robloxapi-arg-type-sort-order": "Label for the sort order argument type",
+	"robloxapi-arg-type-thumbnail-format": "Label for the thumbnail format argument type",
+	"robloxapi-arg-type-thumbnail-size": "Label for the thumbnail size argument type",
+	"robloxapi-arg-type-username": "Label for the username argument type"
 }
