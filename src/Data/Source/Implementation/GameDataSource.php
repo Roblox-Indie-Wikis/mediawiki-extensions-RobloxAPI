@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Data\Source\FetcherDataSource;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
@@ -77,10 +78,8 @@ class GameDataSource extends FetcherDataSource {
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return ( new ArgumentSpecification( [
-			'UniverseID',
-			'PlaceID',
-		] ) )->withJsonArgs();
+		return ArgumentSpecification::for( IdArgument::universe(), IdArgument::place() )
+			->withJsonArgs();
 	}
 
 }

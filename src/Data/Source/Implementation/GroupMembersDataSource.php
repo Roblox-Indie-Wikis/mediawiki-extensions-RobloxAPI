@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DependentDataSource;
 use MediaWiki\Parser\Parser;
@@ -55,7 +56,7 @@ class GroupMembersDataSource extends DependentDataSource {
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [ 'GroupID' ] );
+		return ArgumentSpecification::for( IdArgument::group() );
 	}
 
 	/**

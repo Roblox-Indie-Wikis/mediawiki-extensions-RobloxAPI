@@ -21,6 +21,10 @@
 namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\Types\BooleanArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailFormatArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailSizeArgument;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use MediaWiki\Parser\Parser;
 
@@ -83,13 +87,9 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [
-			'UserID',
-			'ThumbnailSize',
-		], [
-			'is_circular' => 'Boolean',
-			'format' => 'ThumbnailFormat',
-		], );
+		return ArgumentSpecification::for( IdArgument::user(), new ThumbnailSizeArgument() )
+			->withOptionalArg( 'is_circular', new BooleanArgument() )
+			->withOptionalArg( 'format', new ThumbnailFormatArgument() );
 	}
 
 }

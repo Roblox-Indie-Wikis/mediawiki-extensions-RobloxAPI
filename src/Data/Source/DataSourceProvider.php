@@ -79,7 +79,7 @@ class DataSourceProvider {
 
 		$this->registerSimpleFetcherDataSource(
 			'groupRoles',
-			new ArgumentSpecification( [ IdArgument::user() ] )->withJsonArgs(),
+			ArgumentSpecification::for( IdArgument::user() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://groups.roblox.com/v1/users/$args[0]/groups/roles";
 			}, static function ( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
@@ -89,7 +89,7 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'groupData',
-			new ArgumentSpecification( [ IdArgument::group() ] )->withJsonArgs(),
+			ArgumentSpecification::for( IdArgument::group() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://groups.roblox.com/v1/groups/$args[0]";
 			},
@@ -98,14 +98,14 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'groupRolesList',
-			new ArgumentSpecification( [ IdArgument::group() ] )->withJsonArgs(),
+			ArgumentSpecification::for( IdArgument::group() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://groups.roblox.com/v1/groups/$args[0]/roles";
 			}
 		);
 		$this->registerSimpleFetcherDataSource(
 			'badgeInfo',
-			new ArgumentSpecification( [ IdArgument::badge() ] )->withJsonArgs(),
+			ArgumentSpecification::for( IdArgument::badge() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://badges.roblox.com/v1/badges/$args[0]";
 			},
@@ -114,7 +114,7 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'userInfo',
-			new ArgumentSpecification( [ IdArgument::user() ] )->withJsonArgs(),
+			ArgumentSpecification::for( IdArgument::user() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://users.roblox.com/v1/users/$args[0]";
 			},
@@ -123,7 +123,7 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'assetDetails',
-			new ArgumentSpecification( [ IdArgument::asset() ] )->withJsonArgs(),
+			ArgumentSpecification::for( IdArgument::asset() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://economy.roblox.com/v2/assets/$args[0]/details";
 			},
@@ -132,28 +132,24 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'gameNameDescription',
-			new ArgumentSpecification( [ IdArgument::universe() ] )->withJsonArgs(),
+			ArgumentSpecification::for( IdArgument::universe() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://gameinternationalization.roblox.com/v1/name-description/games/$args[0]";
 			}
 		);
 		$this->registerSimpleFetcherDataSource(
 			'universeInfo',
-			new ArgumentSpecification( [ IdArgument::universe() ] )->withJsonArgs(),
+			ArgumentSpecification::for( IdArgument::universe() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://develop.roblox.com/v1/universes/$args[0]";
 			}
 		);
 		$this->registerSimpleFetcherDataSource(
 			'userGames',
-			new ArgumentSpecification(
-				[ IdArgument::user() ],
-				[
-					'limit' => new LimitArgument( [ '10', '25', '50' ] ),
-					'sort_order' => new SortOrderArgument(),
-				],
-				true
-			),
+			ArgumentSpecification::for( IdArgument::user() )
+				->withOptionalArg( 'limit', new LimitArgument( [ '10', '25', '50' ] ) )
+				->withOptionalArg( 'sort_order', new SortOrderArgument() )
+				->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				$limit = $optionalArgs['limit'] ?? 50;
 				$sortOrder = $optionalArgs['sort_order'] ?? 'Asc';
@@ -166,7 +162,7 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'gameEvents',
-			new ArgumentSpecification( [ IdArgument::universe() ] )->withJsonArgs(),
+			ArgumentSpecification::for( IdArgument::universe() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://apis.roblox.com/virtual-events/v1/universes/$args[0]/virtual-events";
 			},
@@ -176,13 +172,9 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'groupRoleMembers',
-			new ArgumentSpecification(
-				[ IdArgument::group(), IdArgument::role() ],
-				[
-					'limit' => new LimitArgument( [ '10', '25', '50', '100' ] ),
-					'sort_order' => new SortOrderArgument(),
-				],
-			),
+			ArgumentSpecification::for( IdArgument::group(), IdArgument::role() )
+				->withOptionalArg( 'limit', new LimitArgument( [ '10', '25', '50', '100' ] ) )
+				->withOptionalArg( 'sort_order', new SortOrderArgument() ),
 			static function ( array $args, array $optionalArgs ): string {
 				$limit = $optionalArgs['limit'] ?? 50;
 				$sortOrder = $optionalArgs['sort_order'] ?? 'Asc';

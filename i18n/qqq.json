@@ -44,8 +44,10 @@
 	"robloxapi-arg-type-asset-id": "Label for the asset ID argument type",
 	"robloxapi-arg-type-badge-id": "Label for the badge ID argument type",
 	"robloxapi-arg-type-group-id": "Label for the group ID argument type",
+	"robloxapi-arg-type-place-id": "Label for the place ID argument type",
 	"robloxapi-arg-type-role-id": "Label for the role ID argument type",
 	"robloxapi-arg-type-universe-id": "Label for the universe ID argument type",
 	"robloxapi-arg-type-user-id": "Label for the user ID argument type",
-	"robloxapi-arg-type-limit": "Label for the limit argument type"
+	"robloxapi-arg-type-limit": "Label for the limit argument type",
+	"robloxapi-arg-type-return-policy": "Label for the return policy argument type"
 }

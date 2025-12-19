@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\Types\UsernameArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Data\Source\FetcherDataSource;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
@@ -96,7 +97,7 @@ class UserIdDataSource extends FetcherDataSource {
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [ 'Username' ] );
+		return ArgumentSpecification::for( new UsernameArgument() );
 	}
 
 	// special case:

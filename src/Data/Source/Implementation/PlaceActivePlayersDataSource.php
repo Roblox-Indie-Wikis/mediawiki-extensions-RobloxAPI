@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DependentDataSource;
 use MediaWiki\Parser\Parser;
@@ -51,7 +52,7 @@ class PlaceActivePlayersDataSource extends DependentDataSource {
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [ 'UniverseID', 'GameID' ] );
+		return ArgumentSpecification::for( IdArgument::universe(), IdArgument::place() );
 	}
 
 	/**

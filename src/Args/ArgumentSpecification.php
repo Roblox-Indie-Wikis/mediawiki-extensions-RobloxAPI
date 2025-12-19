@@ -44,6 +44,10 @@ class ArgumentSpecification {
 		}
 	}
 
+	public static function for( IArgument... $requiredArgs ): self {
+		return new self( $requiredArgs );
+	}
+
 	/**
 	 * Adds the default optional arguments for JSON data and returns the instance.
 	 */

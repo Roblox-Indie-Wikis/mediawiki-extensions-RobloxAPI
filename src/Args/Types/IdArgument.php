@@ -46,6 +46,10 @@ class IdArgument extends RegexArgument {
 		return new self( 'robloxapi-arg-type-group-id' );
 	}
 
+	public static function place(): self {
+		return new self( 'robloxapi-arg-type-place-id' );
+	}
+
 	public static function role(): self {
 		return new self( 'robloxapi-arg-type-role-id' );
 	}

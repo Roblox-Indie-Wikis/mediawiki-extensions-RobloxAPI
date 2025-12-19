@@ -44,8 +44,10 @@
 	"robloxapi-arg-type-asset-id": "Asset ID",
 	"robloxapi-arg-type-badge-id": "Badge ID",
 	"robloxapi-arg-type-group-id": "Group ID",
+	"robloxapi-arg-type-place-id": "Place ID",
 	"robloxapi-arg-type-role-id": "Role ID",
 	"robloxapi-arg-type-universe-id": "Universe ID",
 	"robloxapi-arg-type-user-id": "User ID",
-	"robloxapi-arg-type-limit": "Limit"
+	"robloxapi-arg-type-limit": "Limit",
+	"robloxapi-arg-type-return-policy": "Return Policy"
 }
