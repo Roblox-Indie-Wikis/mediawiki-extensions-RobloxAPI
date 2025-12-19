@@ -61,7 +61,7 @@ class DataSourceProvider {
 
 	/** @noinspection PhpUnusedParameterInspection */
 	public function __construct(
-		public ServiceOptions $options,
+		private readonly ServiceOptions $options,
 		private readonly RobloxAPIFetcher $fetcher,
 		private readonly RobloxAPIUtils $utils,
 	) {
