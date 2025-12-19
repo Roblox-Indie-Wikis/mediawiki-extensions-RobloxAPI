@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\Util;
 
 use Exception;
+use StatusValue;
 
 /**
  * Exception thrown if there are any errors happening when calling the roblox API or parsing the
@@ -42,6 +43,10 @@ class RobloxAPIException extends Exception {
 		parent::__construct( $message );
 
 		$this->messageParams = $messageParams;
+	}
+
+	public function toStatusValue(): StatusValue {
+		return StatusValue::newFatal( $this->message, $this->messageParams );
 	}
 
 }

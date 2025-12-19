@@ -42,6 +42,7 @@ use MediaWiki\Extension\RobloxAPI\ParserFunction\RobloxApiParserFunction;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
+use StatusValue;
 
 /**
  * Handles the registration of data sources and stores them.
@@ -267,16 +268,16 @@ class DataSourceProvider {
 	}
 
 	/**
-	 * @throws RobloxAPIException
+	 * @return StatusValue<IDataSource>
 	 */
-	public function getDataSourceOrThrow( string $id, bool $ignoreCase = false ): IDataSource {
+	public function tryGetDataSource( string $id, bool $ignoreCase = false ): StatusValue {
 		$source = $this->getDataSource( $id, $ignoreCase );
 
 		if ( !$source ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found', $id );
+			return StatusValue::newFatal( 'robloxapi-error-datasource-not-found', $id );
 		}
 
-		return $source;
+		return StatusValue::newGood( $source );
 	}
 
 	/**

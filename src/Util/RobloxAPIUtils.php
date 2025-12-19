@@ -20,6 +20,7 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Util;
 
+use LogicException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
 use MediaWiki\Html\Html;
@@ -27,6 +28,7 @@ use MediaWiki\Json\FormatJson;
 use MediaWiki\Language\Language;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Utils\UrlUtils;
+use StatusValue;
 use stdClass;
 use Wikimedia\Stats\Exceptions\IllegalOperationException;
 
@@ -35,7 +37,7 @@ use Wikimedia\Stats\Exceptions\IllegalOperationException;
  */
 class RobloxAPIUtils {
 
-	public const CONSTRUCTOR_OPTIONS = [
+	public const CONSTRUCTOR_OPTIONS = [ // TODO remove ConfAllowedArguments
 		RobloxAPIConstants::ConfAllowedArguments,
 		RobloxAPIConstants::ConfCacheSplittingOptionalArguments,
 		RobloxAPIConstants::ConfShowPlainErrors,
@@ -304,6 +306,7 @@ class RobloxAPIUtils {
 	 * @return array<string, string>
 	 */
 	public function getCacheSplittingArgs( array $optionalArgs ): array {
+		// TODO move this to DataSourceCache
 		$cacheSplittingArgs = $this->options->get( RobloxAPIConstants::ConfCacheSplittingOptionalArguments );
 
 		return array_intersect_key(
@@ -324,6 +327,30 @@ class RobloxAPIUtils {
 		return $this->options->get( RobloxAPIConstants::ConfShowPlainErrors )
 			? $message
 			: Html::errorBox( $message );
+	}
+
+	/**
+	 * @return string Wikitext
+	 */
+	public function formatStatusValue( StatusValue $status, Parser $parser ): string {
+		if ( $status->isGood() ) {
+			throw new LogicException( __METHOD__ . ' should only be called for error StatusValues!' );
+		}
+
+		$result = '';
+
+		foreach ( $status->getMessages() as $msg ) {
+			$message = $parser->msg( $msg->getKey() )
+				->inContentLanguage()
+				->plaintextParams( ...$msg->getParams() )
+				->plain();
+
+			$result .= $this->options->get( RobloxAPIConstants::ConfShowPlainErrors )
+				? $message
+				: Html::errorBox( $message );
+		}
+
+		return $result;
 	}
 
 	/**
