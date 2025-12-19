@@ -319,20 +319,6 @@ class RobloxAPIUtils {
 	/**
 	 * @return string Wikitext
 	 */
-	public function formatException( RobloxAPIException $exception, Parser $parser ): string {
-		$message = $parser->msg( $exception->getMessage() )
-			->inContentLanguage()
-			->plaintextParams( ...$exception->messageParams )
-			->plain();
-
-		return $this->options->get( RobloxAPIConstants::ConfShowPlainErrors )
-			? $message
-			: Html::errorBox( $message );
-	}
-
-	/**
-	 * @return string Wikitext
-	 */
 	public function formatStatusValue( StatusValue $status, Parser $parser ): string {
 		if ( $status->isGood() ) {
 			throw new LogicException( __METHOD__ . ' should only be called for error StatusValues!' );

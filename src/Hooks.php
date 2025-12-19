@@ -66,25 +66,39 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		} );
 
 		if ( $this->config->get( RobloxAPIConstants::ConfRegisterLegacyParserFunctions ) ) {
-			$legacyParserFunctions = $this->dataSourceProvider->createLegacyParserFunctions();
+			$legacyParserFunctions = [];
+			foreach ( $this->dataSourceProvider->dataSources as $dataSource ) {
+				// register parser function only if needed for legacy reasons
+				if ( !$dataSource->shouldRegisterLegacyParserFunction() ) {
+					continue;
+				}
 
-			foreach ( $legacyParserFunctions as $id => $function ) {
+				$id = "roblox_" . ucfirst( $dataSource->getId() );
+
 				// all data source parser functions are only enabled if the corresponding data source
 				// is enabled, so we don't need to check the config for that
 				$parser->setFunctionHook(
 					$id,
-					function ( Parser $parser, mixed ...$args ) use ( $function ): array|bool|string {
+					function ( Parser $parser, mixed ...$args ) use ( $dataSource ): array|bool|string {
 						$parser->addTrackingCategory( 'robloxapi-category-deprecated-parser-function' );
 						if ( $this->config->get( RobloxAPIConstants::ConfParserFunctionsExpensive ) &&
 							!$parser->incrementExpensiveFunctionCount() ) {
 							return false;
 						}
-						$this->checkCanUseDataSource( $parser, $function->getDataSource() );
+						$canUse = $this->canUseDataSource( $parser, $dataSource );
+						if ( !$canUse->isGood() ) {
+							return $this->utils->formatStatusValue( $canUse, $parser );
+						}
 
 						try {
-							$result = $function->exec( $parser, ...$args );
+							$status = $this->argumentParser->parse(  $dataSource->getArgumentSpecification(), $args );
+							if ( !$status->isGood() ) {
+								return $this->utils->formatStatusValue( $status, $parser );
+							}
+							$parseResult = $status->value;
+							$result = $dataSource->exec( $parser, $parseResult->requiredArgs, $parseResult->optionalArgs );
 
-							$shouldEscape = $function->shouldEscapeResult( $result );
+							$shouldEscape = $dataSource->shouldEscapeResult( $result );
 
 							if ( $this->utils->shouldReturnJson( $result ) ) {
 								$result = $this->utils->createJsonResult( $result, [] );
@@ -98,7 +112,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 							];
 						} catch ( RobloxAPIException $exception ) {
 							$parser->addTrackingCategory( 'robloxapi-category-error' );
-							return $this->utils->formatException( $exception, $parser );
+							return $this->utils->formatStatusValue( $exception->toStatusValue(), $parser );
 						}
 					}
 				);

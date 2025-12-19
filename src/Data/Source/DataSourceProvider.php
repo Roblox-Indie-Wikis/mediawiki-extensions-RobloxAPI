@@ -40,8 +40,6 @@ use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\UserAvatarThumbnail
 use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\UserAvatarThumbnailUrlDataSource;
 use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\UserIdDataSource;
 use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\UserPlaceVisitsDataSource;
-use MediaWiki\Extension\RobloxAPI\ParserFunction\DataSourceParserFunction;
-use MediaWiki\Extension\RobloxAPI\ParserFunction\RobloxApiParserFunction;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use StatusValue;
@@ -274,34 +272,6 @@ class DataSourceProvider {
 		}
 
 		return StatusValue::newGood( $source );
-	}
-
-	/**
-	 * Creates parser functions for all enabled data sources.
-	 * @return RobloxApiParserFunction[]
-	 */
-	public function createLegacyParserFunctions(): array {
-		$functions = [];
-
-		foreach ( $this->dataSources as $dataSource ) {
-			// register parser function only if needed for legacy reasons
-			if ( !$dataSource->shouldRegisterLegacyParserFunction() ) {
-				continue;
-			}
-
-			$id = "roblox_" . ucfirst( $dataSource->getId() );
-			$function = $this->createParserFunction( $dataSource );
-			$functions[$id] = $function;
-		}
-
-		return $functions;
-	}
-
-	/**
-	 * Creates a parser function for the given data source.
-	 */
-	private function createParserFunction( IDataSource $dataSource ): RobloxApiParserFunction {
-		return new DataSourceParserFunction( $this->utils, $dataSource );
 	}
 
 }
