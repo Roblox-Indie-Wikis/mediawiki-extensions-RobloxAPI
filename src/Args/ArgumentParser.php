@@ -81,7 +81,7 @@ class ArgumentParser {
 		foreach ( $specification->requiredArgs as $type ) {
 			if ( count( $args ) === 0 ) {
 				return StatusValue::newFatal(
-					'robloxapi-error-missing-required-argument',
+					'robloxapi-error-missing-argument',
 					MessageValue::new( $type->getTranslationKey() )
 				);
 			}

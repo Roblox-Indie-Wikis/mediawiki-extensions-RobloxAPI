@@ -128,7 +128,7 @@ class RobloxAPIUtils {
 	 */
 	public function formatStatusValue( StatusValue $status, Parser $parser ): string {
 		if ( $status->isGood() ) {
-			throw new LogicException( __METHOD__ . ' should only be called for error StatusValues!' );
+			throw new LogicException( __METHOD__ . ' should only be called for bad StatusValues!' );
 		}
 
 		$result = '';
