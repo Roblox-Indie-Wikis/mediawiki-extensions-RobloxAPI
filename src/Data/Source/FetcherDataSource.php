@@ -44,7 +44,7 @@ abstract class FetcherDataSource extends AbstractDataSource {
 	/**
 	 * Fetches data
 	 * @param array<string> $requiredArgs
-	 * @param array<string, string> $optionalArgs
+	 * @param array<string, mixed> $optionalArgs
 	 * @return StatusValue<mixed> The fetched data.
 	 */
 	public function fetch( array $requiredArgs, array $optionalArgs = [] ): StatusValue {
@@ -80,7 +80,7 @@ abstract class FetcherDataSource extends AbstractDataSource {
 	/**
 	 * Returns the endpoint of this data source for the given arguments.
 	 * @param array<string> $requiredArgs
-	 * @param array<string, string> $optionalArgs
+	 * @param array<string, mixed> $optionalArgs
 	 * @return string The endpoint of this data source.
 	 */
 	abstract public function getEndpoint( array $requiredArgs, array $optionalArgs ): string;
@@ -89,7 +89,7 @@ abstract class FetcherDataSource extends AbstractDataSource {
 	 * Processes the data before returning it.
 	 * @param mixed $data The data to process.
 	 * @param array<string> $requiredArgs
-	 * @param array<string, string> $optionalArgs
+	 * @param array<string, mixed> $optionalArgs
 	 * @return StatusValue<mixed> The processed data.
 	 */
 	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): StatusValue {
@@ -100,7 +100,7 @@ abstract class FetcherDataSource extends AbstractDataSource {
 	 * Processes the request options before making the request. This allows modifying the request options.
 	 * @param array<string, mixed> &$options The options to process.
 	 * @param string[] $requiredArgs
-	 * @param array<string, string> $optionalArgs
+	 * @param array<string, mixed> $optionalArgs
 	 */
 	public function processRequestOptions( array &$options, array $requiredArgs, array $optionalArgs ): void {
 		// do nothing by default
@@ -109,7 +109,7 @@ abstract class FetcherDataSource extends AbstractDataSource {
 	/**
 	 * Allows specifying additional headers for the request.
 	 * @param array<string> $requiredArgs
-	 * @param array<string, string> $optionalArgs
+	 * @param array<string, mixed> $optionalArgs
 	 * @return array<string, string> The additional headers.
 	 */
 	protected function getAdditionalHeaders( array $requiredArgs, array $optionalArgs ): array {

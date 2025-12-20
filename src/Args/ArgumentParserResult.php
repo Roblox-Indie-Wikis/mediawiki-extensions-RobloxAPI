@@ -24,7 +24,7 @@ class ArgumentParserResult {
 
 	/**
 	 * @param string[] $requiredArgs
-	 * @param array<string, string> $optionalArgs
+	 * @param array<string, mixed> $optionalArgs
 	 */
 	public function __construct(
 		public readonly array $requiredArgs,

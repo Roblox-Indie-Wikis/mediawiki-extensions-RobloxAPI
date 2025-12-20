@@ -58,7 +58,7 @@ class RobloxAPIFetcher {
 	 * @param string $dataSourceId The ID of the data source
 	 * @param string $endpoint The endpoint to fetch data from.
 	 * @param array<string> $requiredArgs
-	 * @param array<string, string> $optionalArgs
+	 * @param array<string, mixed> $optionalArgs
 	 * @param array<string, string> $headers Additional headers that should be added
 	 * @param Closure( array<string, mixed>&, array<string>, array<string, string> ): void $processRequestOptions
 	 * @return StatusValue<mixed> The fetched data.

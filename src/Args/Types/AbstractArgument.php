@@ -20,6 +20,9 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Args\Types;
 
+use StatusValue;
+use Wikimedia\Message\MessageValue;
+
 /**
  * Abstract base class for arguments.
  */
@@ -40,6 +43,17 @@ abstract class AbstractArgument implements IArgument {
 
 	public function getKey(): string {
 		return $this->key;
+	}
+
+	protected function invalidValue(
+		string $value = '',
+		string $errorMessage = 'robloxapi-error-invalid-generic-argument',
+	): StatusValue {
+		return StatusValue::newFatal(
+			$errorMessage,
+			wfEscapeWikiText( $value === '' ? '<empty>' : $value ),
+			new MessageValue( $this->getTranslationKey() )
+		);
 	}
 
 }

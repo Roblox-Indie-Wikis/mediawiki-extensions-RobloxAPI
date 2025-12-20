@@ -22,29 +22,40 @@ namespace MediaWiki\Extension\RobloxAPI\Args\Types;
 
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentParserContext;
 use StatusValue;
-use Wikimedia\Message\MessageValue;
 
 /**
- * Represents an argument that must match a regular expression.
+ * Represents an argument that is a JSON key.
  */
-class RegexArgument extends AbstractArgument {
+class JsonKeyArgument extends AbstractArgument {
 
-	/** @inheritDoc */
-	public function __construct(
-		string $key,
-		private readonly string $pattern,
-		private readonly string $errorMessage = 'robloxapi-error-invalid-generic-argument'
-	) {
-		parent::__construct( $key );
+	/** @inheritdoc  */
+	public function __construct() {
+		parent::__construct( 'json-key' );
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @return StatusValue<array<string|int>>
+	 * @inheritDoc
+	 */
 	public function validate( ArgumentParserContext $ctx, string $value ): StatusValue {
-		if ( preg_match( $this->pattern, $value ) ) {
-			return StatusValue::newGood( $value );
-		} else {
-			return $this->invalidValue( $value, $this->errorMessage );
+		$values = explode( '->', $value );
+		if ( empty( $values ) ) {
+			return $this->invalidValue( $value );
 		}
+
+		$result = [];
+		foreach ( $values as $val ) {
+			if ( $val === '' ) {
+				return $this->invalidValue( $value );
+			}
+			if ( ctype_digit( $val ) ) {
+				$result[] = (int)$val;
+			} else {
+				$result[] = $val;
+			}
+		}
+
+		return StatusValue::newGood( $result );
 	}
 
 }

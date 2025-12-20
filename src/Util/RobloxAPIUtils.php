@@ -72,14 +72,13 @@ class RobloxAPIUtils {
 	/**
 	 * Creates a JSON result
 	 * @param mixed $jsonObject The JSON object
-	 * @param array<string, string> $optionalArgs The optional arguments
+	 * @param array<string, mixed> $optionalArgs The optional arguments
 	 */
 	public function createJsonResult( mixed $jsonObject, array $optionalArgs ): string {
 		$pretty = strtolower( $optionalArgs['pretty'] ?? '' ) === 'true';
 
 		// only return the value of json_key in the JSON object
-		if ( ( is_object( $jsonObject ) || is_array( $jsonObject ) ) &&
-			isset( $optionalArgs['json_key'] ) && trim( $optionalArgs['json_key'] ) !== '' ) {
+		if ( ( is_object( $jsonObject ) || is_array( $jsonObject ) ) && isset( $optionalArgs['json_key'] ) ) {
 			$jsonObject = $this->getJsonKey( $jsonObject, $optionalArgs['json_key'] );
 
 			if ( !is_object( $jsonObject ) && !is_array( $jsonObject ) ) {
@@ -93,34 +92,32 @@ class RobloxAPIUtils {
 	/**
 	 * Get a JSON key from a JSON object. This accepts recursively nested keys using '->' as a separator.
 	 * @param stdClass|array|mixed|null $jsonObject The JSON object
-	 * @param string $jsonKey The JSON key
+	 * @param array<string|int> $jsonKey The JSON key
 	 * @return stdClass|mixed|null
 	 */
-	public function getJsonKey( mixed $jsonObject, string $jsonKey ): mixed {
+	public function getJsonKey( mixed $jsonObject, array $jsonKey ): mixed {
 		if ( !is_object( $jsonObject ) && !is_array( $jsonObject ) ) {
 			return null;
 		}
 
-		// recursion
-		if ( str_contains( $jsonKey, '->' ) ) {
-			// split only once by ->
-			$parts = explode( '->', $jsonKey, 2 );
-			$firstPart = $parts[0];
-			$secondPart = $parts[1];
-
-			return $this->getJsonKey( $this->getJsonKey( $jsonObject, $firstPart ), $secondPart );
+		$value = $jsonObject;
+		foreach ( $jsonKey as $keyPart ) {
+			if ( is_object( $value ) ) {
+				if ( !property_exists( $value, $keyPart ) ) {
+					return null;
+				}
+				$value = $value->{$keyPart};
+			} elseif ( is_array( $value ) ) {
+				if ( !array_key_exists( $keyPart, $value ) ) {
+					return null;
+				}
+				$value = $value[$keyPart];
+			} else {
+				return null;
+			}
 		}
 
-		// allow array access
-		if ( is_array( $jsonObject ) && is_numeric( $jsonKey ) ) {
-			return $jsonObject[intval( $jsonKey )] ?? null;
-		}
-
-		if ( !property_exists( $jsonObject, $jsonKey ) ) {
-			return null;
-		}
-
-		return $jsonObject->{$jsonKey};
+		return $value;
 	}
 
 	/**

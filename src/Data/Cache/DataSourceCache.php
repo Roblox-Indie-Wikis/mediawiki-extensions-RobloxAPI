@@ -51,7 +51,7 @@ class DataSourceCache {
 	 * Tries to search for a value in the cache.
 	 * @param string $endpoint
 	 * @param string[] $args
-	 * @param array<string, string> $optionalArgs
+	 * @param array<string, mixed> $optionalArgs
 	 */
 	public function getResultForEndpoint( string $endpoint, array $args, array $optionalArgs ): mixed {
 		if ( $this->disabled ) {
@@ -71,7 +71,7 @@ class DataSourceCache {
 	 * @param string $endpoint
 	 * @param mixed $value
 	 * @param string[] $args
-	 * @param array<string, string> $optionalArgs
+	 * @param array<string, mixed> $optionalArgs
 	 * @param int $expiry The expiry in seconds
 	 */
 	public function registerCacheEntry(

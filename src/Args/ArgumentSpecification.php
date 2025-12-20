@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\Args;
 
 use MediaWiki\Extension\RobloxAPI\Args\Types\BooleanArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\IArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\JsonKeyArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\StringArgument;
 
 /**
@@ -54,8 +55,7 @@ class ArgumentSpecification {
 	public function withJsonArgs(): ArgumentSpecification {
 		return $this
 			->withOptionalArg( 'pretty', new BooleanArgument() )
-			// TODO custom type
-			->withOptionalArg( 'json_key', new StringArgument() );
+			->withOptionalArg( 'json_key', new JsonKeyArgument() );
 	}
 
 	/**
