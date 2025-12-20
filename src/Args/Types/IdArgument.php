@@ -30,7 +30,7 @@ class IdArgument extends RegexArgument {
 		parent::__construct(
 			$key,
 			/** @lang RegExp */ '/^\d{1,16}$/',
-			$errorMessage
+			$errorMessage // TODO show type in error
 		);
 	}
 
