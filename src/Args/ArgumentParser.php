@@ -129,8 +129,8 @@ class ArgumentParser {
 				);
 			}
 
-			$key = strtolower( $parts[0] );
-			$value = $parts[1];
+			$key = trim( strtolower( $parts[0] ) );
+			$value = trim( $parts[1] );
 
 			if ( !array_key_exists( $key, $specification->optionalArgs ) ) {
 				return StatusValue::newFatal(
