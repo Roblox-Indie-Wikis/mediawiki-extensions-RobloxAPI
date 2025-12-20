@@ -56,8 +56,8 @@ class ChoiceArgument extends AbstractArgument {
 		} else {
 			return StatusValue::newFatal(
 				$this->errorMessage,
-				$value,
-				$ctx->contentLanguage->commaList( $this->choices ),
+				wfEscapeWikiText( $value ),
+				$ctx->contentLanguage->commaList( array_map( 'wfEscapeWikiText', $this->choices ) ),
 				new MessageValue( $this->getTranslationKey() ),
 			);
 		}
