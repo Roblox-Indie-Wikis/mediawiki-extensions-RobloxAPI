@@ -67,8 +67,10 @@ abstract class RobloxAPIDataSourceUnitTestCase extends MediaWikiUnitTestCase {
 
 	private function createMockCache(): DataSourceCache {
 		return new DataSourceCache(
-			self::createServiceOptions( [ RobloxAPIConstants::ConfDisableCache => true ] ),
-			$this->createMock( RobloxAPIUtils::class ),
+			self::createServiceOptions( [
+				RobloxAPIConstants::ConfDisableCache => true,
+				RobloxAPIConstants::ConfCacheSplittingOptionalArguments => [],
+			] ),
 			$this->createMock( WANObjectCache::class )
 		);
 	}

@@ -51,12 +51,10 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 				],
 			],
 		];
-		self::assertEquals( $data->data[0], $this->subject->processData( $data, [ 12345, 12345 ], [] ) );
+		self::assertEquals( $data->data[0], $this->subject->processData( $data, [ 12345, 12345 ], [] )->getValue() );
 
-		// test invalid data
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-invalid-data' );
-		$this->subject->processData( (object)[ 'data' => null ], [ 12345, 12345 ], [] );
+		$status = $this->subject->processData( (object)[ 'data' => null ], [ 12345, 12345 ], [] );
+		$this->assertStatusError( 'robloxapi-error-invalid-data', $status );
 	}
 
 	public function testFetch() {
@@ -106,7 +104,7 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 
 		$dataSource = new GameDataSource( $this->createMockFetcher( $result ) );
 
-		$data = $dataSource->fetch( [ '6483209208', '132813250731469' ] );
+		$data = $dataSource->fetch( [ '6483209208', '132813250731469' ] )->getValue();
 
 		self::assertEquals( 6483209208, $data->id );
 		self::assertEquals( 132813250731469, $data->rootPlaceId );
@@ -123,17 +121,15 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 
 		$dataSource = new GameDataSource( $this->createMockFetcher( $result ) );
 
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-invalid-data' );
-		$dataSource->fetch( [ '4252370517', '12018816388' ] );
+		$status = $dataSource->fetch( [ '4252370517', '12018816388' ] );
+		$this->assertStatusError( 'robloxapi-error-invalid-data', $status );
 	}
 
 	public function testFailedRequest() {
 		$dataSource = new GameDataSource( $this->createMockFetcher( null, 429 ) );
 
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-request-failed' );
-		$dataSource->fetch( [ '4252370517', '12018816388' ] );
+		$status = $dataSource->fetch( [ '4252370517', '12018816388' ] );
+		$this->assertStatusError( 'robloxapi-error-request-failed', $status );
 	}
 
 }
