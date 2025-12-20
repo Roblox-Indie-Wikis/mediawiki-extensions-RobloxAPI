@@ -25,7 +25,7 @@ namespace MediaWiki\Extension\RobloxAPI\Args\Types;
  */
 class LimitArgument extends ChoiceArgument {
 
-	public function __construct( array $choices ) {
+	public function __construct( string ...$choices ) {
 		parent::__construct(
 			'limit',
 			$choices

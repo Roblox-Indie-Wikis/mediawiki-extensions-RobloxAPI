@@ -145,7 +145,7 @@ class DataSourceProvider {
 		$this->registerSimpleFetcherDataSource(
 			'userGames',
 			ArgumentSpecification::for( IdArgument::user() )
-				->withOptionalArg( 'limit', new LimitArgument( [ '10', '25', '50' ] ) )
+				->withOptionalArg( 'limit', new LimitArgument( '10', '25', '50' ) )
 				->withOptionalArg( 'sort_order', new SortOrderArgument() )
 				->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
@@ -171,7 +171,7 @@ class DataSourceProvider {
 		$this->registerSimpleFetcherDataSource(
 			'groupRoleMembers',
 			ArgumentSpecification::for( IdArgument::group(), IdArgument::role() )
-				->withOptionalArg( 'limit', new LimitArgument( [ '10', '25', '50', '100' ] ) )
+				->withOptionalArg( 'limit', new LimitArgument( '10', '25', '50', '100' ) )
 				->withOptionalArg( 'sort_order', new SortOrderArgument() ),
 			static function ( array $args, array $optionalArgs ): string {
 				$limit = $optionalArgs['limit'] ?? 50;
