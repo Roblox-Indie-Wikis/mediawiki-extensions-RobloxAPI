@@ -40,7 +40,6 @@ class DataSourceCache {
 
 	public function __construct(
 		private readonly ServiceOptions $options,
-		private readonly RobloxAPIUtils $utils,
 		private readonly WANObjectCache $cache,
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
@@ -103,9 +102,12 @@ class DataSourceCache {
 		$argsJson = json_encode( $args );
 		$optionalArgsJson = json_encode( $cacheSplittingOptionalArgs );
 
-		// ToDo consider using cache->makeKey() here
-
-		return '__roblox__' . $endpoint . '__' . md5( $argsJson ) . '__' . md5( $optionalArgsJson );
+		return $this->cache->makeKey(
+			'robloxapi',
+			$endpoint,
+			md5( $argsJson ),
+			md5( $optionalArgsJson ),
+		);
 	}
 
 }

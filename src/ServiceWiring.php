@@ -43,7 +43,6 @@ return [
 				DataSourceCache::CONSTRUCTOR_OPTIONS,
 				$services->getMainConfig()
 			),
-			$services->get( 'RobloxAPI.Utils' ),
 			$services->getMainWANObjectCache(),
 		);
 	},
