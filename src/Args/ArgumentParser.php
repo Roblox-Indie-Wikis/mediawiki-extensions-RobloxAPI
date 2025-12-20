@@ -52,12 +52,14 @@ class ArgumentParser {
 
 		$status = $this->extractRequiredArgs( $ctx, $specification, $args );
 		if ( !$status->isGood() ) {
+			// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
 			return $status;
 		}
 		$requiredArgs = $status->value;
 
 		$status = $this->extractOptionalArgs( $ctx, $specification, $args );
 		if ( !$status->isGood() ) {
+			// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
 			return $status;
 		}
 		$optionalArgs = $status->value;
@@ -90,6 +92,7 @@ class ArgumentParser {
 			$status = $type->validate( $ctx, $value );
 			// TODO implement ConfAllowedArguments! or deprecate/remove in 2.0.0?
 			if ( !$status->isGood() ) {
+				// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
 				return $status;
 			}
 
@@ -140,6 +143,7 @@ class ArgumentParser {
 			$status = $type->validate( $ctx, $value );
 			// TODO implement ConfAllowedArguments! or deprecate/remove in 2.0.0?
 			if ( !$status->isGood() ) {
+				// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
 				return $status;
 			}
 

@@ -142,6 +142,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		$dataSourceId = $args[0];
 		$status = $this->dataSourceProvider->tryGetDataSource( $dataSourceId, true );
 		if ( !$status->isGood() ) {
+			// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
 			return $status;
 		}
 		$dataSource = $status->getValue();
@@ -157,6 +158,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 		$status = $this->argumentParser->parse( $argumentSpecification, $otherArgs );
 		if ( !$status->isGood() ) {
+			// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
 			return $status;
 		}
 		$parseResult = $status->getValue();

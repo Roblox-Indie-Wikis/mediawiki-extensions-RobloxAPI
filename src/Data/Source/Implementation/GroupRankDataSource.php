@@ -40,8 +40,12 @@ class GroupRankDataSource extends DependentDataSource {
 	 * @inheritDoc
 	 */
 	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
-		$groups = $this->dataSource->exec( $parser, [ $requiredArgs[1] ] );
+		$execStatus = $this->dataSource->exec( $parser, [ $requiredArgs[1] ] );
+		if ( !$execStatus->isGood() ) {
+			return $execStatus;
+		}
 
+		$groups = $execStatus->getValue();
 		if ( !$groups ) {
 			return $this->failNoData();
 		}
