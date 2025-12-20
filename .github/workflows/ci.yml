@@ -81,3 +81,16 @@ jobs:
 
       - name: Run phan
         run: composer run phan
+  # We only want to run this during full CI for now; in the future, this will be moved to lint-check.yml
+  banana-lint:
+    name: "Lint message files"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - run: npm ci
+        name: Install dependencies
+      - run: npm test
+        name: Run banana
