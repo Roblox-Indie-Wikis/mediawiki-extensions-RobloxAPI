@@ -26,11 +26,10 @@ namespace MediaWiki\Extension\RobloxAPI\Args\Types;
 class IdArgument extends RegexArgument {
 
 	/** @inheritDoc */
-	public function __construct( string $key, string $errorMessage = 'robloxapi-error-invalid-id' ) {
+	public function __construct( string $key ) {
 		parent::__construct(
 			$key,
 			/** @lang RegExp */ '/^\d{1,16}$/',
-			$errorMessage // TODO show type in error
 		);
 	}
 
