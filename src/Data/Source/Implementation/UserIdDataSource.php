@@ -25,7 +25,6 @@ use MediaWiki\Extension\RobloxAPI\Args\Types\UsernameArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Data\Source\FetcherDataSource;
 use MediaWiki\Json\FormatJson;
-use MediaWiki\Parser\Parser;
 use StatusValue;
 
 /**
