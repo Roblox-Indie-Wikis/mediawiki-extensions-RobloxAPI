@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\Args;
 
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IArgument;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
 use MediaWiki\Language\Language;
 use StatusValue;
@@ -89,7 +90,7 @@ class ArgumentParser {
 			}
 
 			$value = array_shift( $args );
-			$status = $type->validate( $ctx, $value );
+			$status = $this->validate( $type, $ctx, $value );
 			// TODO implement ConfAllowedArguments! or deprecate/remove in 2.0.0?
 			if ( !$status->isGood() ) {
 				// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
@@ -140,7 +141,7 @@ class ArgumentParser {
 			}
 
 			$type = $specification->optionalArgs[$key];
-			$status = $type->validate( $ctx, $value );
+			$status = $this->validate( $type, $ctx, $value );
 			// TODO implement ConfAllowedArguments! or deprecate/remove in 2.0.0?
 			if ( !$status->isGood() ) {
 				// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
@@ -152,6 +153,22 @@ class ArgumentParser {
 		}
 
 		return StatusValue::newGood( $result );
+	}
+
+	private function validate(
+		IArgument $type,
+		ArgumentParserContext $ctx,
+		string $value,
+	): StatusValue {
+		if ( str_starts_with( $value, '<div class="cdx-message--error mw-robloxapi-error' ) ) {
+			// A RobloxAPI error was parsed as an argument value. Let's display it.
+			return StatusValue::newFatal(
+				'robloxapi-error-passed-error-value',
+				new MessageValue( $type->getTranslationKey() ),
+				$value,
+			);
+		}
+		return $type->validate( $ctx, $value );
 	}
 
 	/**

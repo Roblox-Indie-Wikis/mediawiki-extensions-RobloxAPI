@@ -142,7 +142,7 @@ class RobloxAPIUtils {
 
 			$result .= $this->options->get( RobloxAPIConstants::ConfShowPlainErrors )
 				? $message
-				: Html::errorBox( $message );
+				: Html::errorBox( $message, className: 'mw-robloxapi-error' );
 		}
 
 		return $result;
