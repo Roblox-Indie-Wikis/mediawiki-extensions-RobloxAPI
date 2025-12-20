@@ -56,14 +56,14 @@ class ArgumentParser {
 			// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
 			return $status;
 		}
-		$requiredArgs = $status->value;
+		$requiredArgs = $status->getValue();
 
 		$status = $this->extractOptionalArgs( $ctx, $specification, $args );
 		if ( !$status->isGood() ) {
 			// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
 			return $status;
 		}
-		$optionalArgs = $status->value;
+		$optionalArgs = $status->getValue();
 
 		return StatusValue::newGood( new ArgumentParserResult(
 			$requiredArgs,
@@ -97,7 +97,7 @@ class ArgumentParser {
 				return $status;
 			}
 
-			$result[] = $status->value;
+			$result[] = $status->getValue();
 		}
 
 		return StatusValue::newGood( $result );
@@ -148,7 +148,7 @@ class ArgumentParser {
 				return $status;
 			}
 
-			$result[$key] = $status->value;
+			$result[$key] = $status->getValue();
 			$first = false;
 		}
 

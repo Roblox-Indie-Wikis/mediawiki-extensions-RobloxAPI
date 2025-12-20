@@ -114,7 +114,7 @@ class RobloxAPIFetcher {
 			] );
 		}
 
-		if ( $status->value === 429 ) {
+		if ( $status->getValue() === 429 ) {
 			// we're getting rate limited; avoid sending further requests to the same endpoint
 			$this->rateLimitedDataSources[] = $dataSourceId;
 			return StatusValue::newFatal( 'robloxapi-error-request-rate-limited', $dataSourceId );
