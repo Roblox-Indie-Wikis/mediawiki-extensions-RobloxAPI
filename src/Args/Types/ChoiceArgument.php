@@ -22,6 +22,7 @@ namespace MediaWiki\Extension\RobloxAPI\Args\Types;
 
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentParserContext;
 use StatusValue;
+use Wikimedia\Message\MessageValue;
 
 /**
  * Represents an argument that must be one of a set of choices.
@@ -36,7 +37,7 @@ class ChoiceArgument extends AbstractArgument {
 	public function __construct(
 		string $key,
 		private array $choices,
-		private readonly string $errorMessage,
+		private readonly string $errorMessage = 'robloxapi-error-invalid-argument-choice',
 		private readonly bool $caseSensitive = true,
 	) {
 		parent::__construct( $key );
@@ -57,6 +58,7 @@ class ChoiceArgument extends AbstractArgument {
 				$this->errorMessage,
 				$value,
 				$ctx->contentLanguage->commaList( $this->choices ),
+				new MessageValue( $this->getTranslationKey() ),
 			);
 		}
 	}
