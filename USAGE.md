@@ -84,10 +84,10 @@ Get the name of the creator of a game:
 
 #### Required arguments
 
-| Name         | Description                                  | Type       |
-|--------------|----------------------------------------------|------------|
-| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
-| `PlaceId`    | The place ID of the game.                    | Numeric ID |
+| Name          | Description                                  | Type       |
+|---------------|----------------------------------------------|------------|
+| `universe-id` | The [universe ID](#universe-id) of the game. | Numeric ID |
+| `place-id`    | The place ID of the game.                    | Numeric ID |
 
 ### activePlayers
 
@@ -109,10 +109,10 @@ Get the formatted number of active players in a place:
 
 #### Required Arguments
 
-| Name         | Description                                  | Type       |
-|--------------|----------------------------------------------|------------|
-| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
-| `PlaceId`    | The place ID of the game.                    | Numeric ID |
+| Name          | Description                                  | Type       |
+|---------------|----------------------------------------------|------------|
+| `universe-id` | The [universe ID](#universe-id) of the game. | Numeric ID |
+| `place-id`    | The place ID of the game.                    | Numeric ID |
 
 ### visits
 
@@ -134,10 +134,10 @@ Get the formatted number of visits to a place:
 
 #### Required Arguments
 
-| Name         | Description                                  | Type       |
-|--------------|----------------------------------------------|------------|
-| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
-| `PlaceId`    | The place ID of the game.                    | Numeric ID |
+| Name          | Description                                  | Type       |
+|---------------|----------------------------------------------|------------|
+| `universe-id` | The [universe ID](#universe-id) of the game. | Numeric ID |
+| `place-id`    | The place ID of the game.                    | Numeric ID |
 
 ### userId
 
@@ -155,7 +155,7 @@ Get the user ID of a user:
 
 | Name       | Description               | Type   |
 |------------|---------------------------|--------|
-| `Username` | The username of the user. | String |
+| `username` | The username of the user. | String |
 
 ### userAvatarThumbnail
 
@@ -171,10 +171,10 @@ Get the data about the user avatar thumbnail of builderman (ID 156):
 
 #### Required Arguments
 
-| Name            | Description                | Type                                                                                                                                                      |
-|-----------------|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `UserId`        | The user ID of the user.   | Numeric ID                                                                                                                                                |
-| `ThumbnailSize` | The size of the thumbnail. | String (`30x30`, `48x48`, `60x60`, `75x75`, `100x100`, `110x110`, `140x140`, `150x150`, `150x200`, `180x180`, `250x250`, `352x352`, `420x420`, `720x720`) |
+| Name             | Description                | Type                                                                                                                                                      |
+|------------------|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `user-id`        | The user ID of the user.   | Numeric ID                                                                                                                                                |
+| `thumbnail-size` | The size of the thumbnail. | String (`30x30`, `48x48`, `60x60`, `75x75`, `100x100`, `110x110`, `140x140`, `150x150`, `150x200`, `180x180`, `250x250`, `352x352`, `420x420`, `720x720`) |
 
 #### Optional Arguments
 
@@ -198,10 +198,10 @@ Get the URL of the user avatar thumbnail of builderman (ID 156):
 
 #### Required Arguments
 
-| Name            | Description                | Type                                                                                                                                                      |
-|-----------------|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `UserId`        | The user ID of the user.   | Numeric ID                                                                                                                                                |
-| `ThumbnailSize` | The size of the thumbnail. | String (`30x30`, `48x48`, `60x60`, `75x75`, `100x100`, `110x110`, `140x140`, `150x150`, `150x200`, `180x180`, `250x250`, `352x352`, `420x420`, `720x720`) |
+| Name             | Description                | Type                                                                                                                                                      |
+|------------------|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `user-id`        | The user ID of the user.   | Numeric ID                                                                                                                                                |
+| `thumbnail-size` | The size of the thumbnail. | String (`30x30`, `48x48`, `60x60`, `75x75`, `100x100`, `110x110`, `140x140`, `150x150`, `150x200`, `180x180`, `250x250`, `352x352`, `420x420`, `720x720`) |
 
 #### Optional Arguments
 
@@ -228,10 +228,10 @@ Get the data about the asset thumbnail of the asset with ID 102611803:
 
 #### Required Arguments
 
-| Name            | Description                | Type                                                                                                                                                                                                                                                                 |
-|-----------------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `AssetId`       | The asset ID of the asset. | Numeric ID                                                                                                                                                                                                                                                           |
-| `ThumbnailSize` | The size of the thumbnail. | String (`30x30`, `42x42`, `50x50`, `60x62`, `75x75`, `110x110`, `140x140`, `150x150`, `160x100`, `160x600`, `250x250`, `256x144`, `300x250`, `304x166`, `384x216`, `396x216`, `420x420`, `480x270`, `512x512`, `576x324`, `700x700`, `728x90`, `768x432`, `1200x80`) |
+| Name             | Description                | Type                                                                                                                                                                                                                                                                 |
+|------------------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `asset-id`       | The asset ID of the asset. | Numeric ID                                                                                                                                                                                                                                                           |
+| `thumbnail-size` | The size of the thumbnail. | String (`30x30`, `42x42`, `50x50`, `60x62`, `75x75`, `110x110`, `140x140`, `150x150`, `160x100`, `160x600`, `250x250`, `256x144`, `300x250`, `304x166`, `384x216`, `396x216`, `420x420`, `480x270`, `512x512`, `576x324`, `700x700`, `728x90`, `768x432`, `1200x80`) |
 
 #### Optional Arguments
 
@@ -259,10 +259,10 @@ Get the URL of the asset thumbnail of the asset with ID 102611803:
 
 #### Required Arguments
 
-| Name            | Description                | Type                                                                                                                                                                                                                                                                 |
-|-----------------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `AssetId`       | The asset ID of the asset. | Numeric ID                                                                                                                                                                                                                                                           |
-| `ThumbnailSize` | The size of the thumbnail. | String (`30x30`, `42x42`, `50x50`, `60x62`, `75x75`, `110x110`, `140x140`, `150x150`, `160x100`, `160x600`, `250x250`, `256x144`, `300x250`, `304x166`, `384x216`, `396x216`, `420x420`, `480x270`, `512x512`, `576x324`, `700x700`, `728x90`, `768x432`, `1200x80`) |
+| Name             | Description                | Type                                                                                                                                                                                                                                                                 |
+|------------------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `asset-id`       | The asset ID of the asset. | Numeric ID                                                                                                                                                                                                                                                           |
+| `thumbnail-size` | The size of the thumbnail. | String (`30x30`, `42x42`, `50x50`, `60x62`, `75x75`, `110x110`, `140x140`, `150x150`, `160x100`, `160x600`, `250x250`, `256x144`, `300x250`, `304x166`, `384x216`, `396x216`, `420x420`, `480x270`, `512x512`, `576x324`, `700x700`, `728x90`, `768x432`, `1200x80`) |
 
 #### Optional Arguments
 
@@ -285,10 +285,10 @@ Get the data about the game icon of the game with ID 132813250731469:
 
 #### Required Arguments
 
-| Name            | Description               | Type                                                                    |
-|-----------------|---------------------------|-------------------------------------------------------------------------|
-| `PlaceId`       | The place ID of the game. | Numeric ID                                                              |
-| `ThumbnailSize` | The size of the icon.     | String (`50x50`, `128x128`, `150x150`, `256x256`, `420x420`, `512x512`) |
+| Name             | Description               | Type                                                                    |
+|------------------|---------------------------|-------------------------------------------------------------------------|
+| `place-id`       | The place ID of the game. | Numeric ID                                                              |
+| `thumbnail-size` | The size of the icon.     | String (`50x50`, `128x128`, `150x150`, `256x256`, `420x420`, `512x512`) |
 
 #### Optional Arguments
 
@@ -313,10 +313,10 @@ Get the URL of the game icon of the game with ID 132813250731469:
 
 #### Required Arguments
 
-| Name            | Description               | Type                                                                    |
-|-----------------|---------------------------|-------------------------------------------------------------------------|
-| `PlaceId`       | The place ID of the game. | Numeric ID                                                              |
-| `ThumbnailSize` | The size of the icon.     | String (`50x50`, `128x128`, `150x150`, `256x256`, `420x420`, `512x512`) |
+| Name             | Description               | Type                                                                    |
+|------------------|---------------------------|-------------------------------------------------------------------------|
+| `place-id`       | The place ID of the game. | Numeric ID                                                              |
+| `thumbnail-size` | The size of the icon.     | String (`50x50`, `128x128`, `150x150`, `256x256`, `420x420`, `512x512`) |
 
 #### Optional Arguments
 
@@ -342,9 +342,9 @@ Get all JSON data of the group roles of a user:
 
 #### Required Arguments
 
-| Name     | Description              | Type       |
-|----------|--------------------------|------------|
-| `UserId` | The user ID of the user. | Numeric ID |
+| Name      | Description              | Type       |
+|-----------|--------------------------|------------|
+| `user-id` | The user ID of the user. | Numeric ID |
 
 ### groupRank
 
@@ -361,10 +361,10 @@ Get the name of the rank of the user with ID `4182456156` in the group with ID `
 
 #### Required Arguments
 
-| Name      | Description                | Type       |
-|-----------|----------------------------|------------|
-| `GroupId` | The group ID of the group. | Numeric ID |
-| `UserId`  | The user ID of the user.   | Numeric ID |
+| Name       | Description                | Type       |
+|------------|----------------------------|------------|
+| `group-id` | The group ID of the group. | Numeric ID |
+| `user-id`  | The user ID of the user.   | Numeric ID |
 
 ### groupData
 
@@ -382,9 +382,9 @@ Get all JSON data of a group:
 
 #### Required Arguments
 
-| Name      | Description                | Type       |
-|-----------|----------------------------|------------|
-| `GroupId` | The group ID of the group. | Numeric ID |
+| Name       | Description                | Type       |
+|------------|----------------------------|------------|
+| `group-id` | The group ID of the group. | Numeric ID |
 
 ### groupMembers
 
@@ -407,9 +407,9 @@ Get the formatted number of members in a group:
 
 #### Required Arguments
 
-| Name      | Description                | Type       |
-|-----------|----------------------------|------------|
-| `GroupId` | The group ID of the group. | Numeric ID |
+| Name       | Description                | Type       |
+|------------|----------------------------|------------|
+| `group-id` | The group ID of the group. | Numeric ID |
 
 ### badgeInfo
 
@@ -425,9 +425,9 @@ Get all JSON data of a badge:
 
 #### Required Arguments
 
-| Name      | Description                | Type       |
-|-----------|----------------------------|------------|
-| `BadgeId` | The badge ID of the badge. | Numeric ID |
+| Name       | Description                | Type       |
+|------------|----------------------------|------------|
+| `badge-id` | The badge ID of the badge. | Numeric ID |
 
 ### userInfo
 
@@ -443,9 +443,9 @@ Get all JSON data of a user:
 
 #### Required Arguments
 
-| Name     | Description              | Type       |
-|----------|--------------------------|------------|
-| `UserId` | The user ID of the user. | Numeric ID |
+| Name      | Description              | Type       |
+|-----------|--------------------------|------------|
+| `user-id` | The user ID of the user. | Numeric ID |
 
 ### assetDetails
 
@@ -461,9 +461,9 @@ Get all JSON data of an asset:
 
 #### Required Arguments
 
-| Name      | Description                | Type       |
-|-----------|----------------------------|------------|
-| `AssetId` | The asset ID of the asset. | Numeric ID |
+| Name       | Description                | Type       |
+|------------|----------------------------|------------|
+| `asset-id` | The asset ID of the asset. | Numeric ID |
 
 ### groupRolesList
 
@@ -479,9 +479,9 @@ Get the roles of a group:
 
 #### Required Arguments
 
-| Name      | Description                | Type       |
-|-----------|----------------------------|------------|
-| `GroupId` | The group ID of the group. | Numeric ID |
+| Name       | Description                | Type       |
+|------------|----------------------------|------------|
+| `group-id` | The group ID of the group. | Numeric ID |
 
 ### gameNameDescription
 
@@ -503,9 +503,9 @@ Get the description of a game in English:
 
 #### Required Arguments
 
-| Name         | Description                                  | Type       |
-|--------------|----------------------------------------------|------------|
-| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
+| Name          | Description                                  | Type       |
+|---------------|----------------------------------------------|------------|
+| `universe-id` | The [universe ID](#universe-id) of the game. | Numeric ID |
 
 ### universeInfo
 
@@ -527,9 +527,9 @@ Get the privacy type of a universe:
 
 #### Required Arguments
 
-| Name         | Description                                  | Type       |
-|--------------|----------------------------------------------|------------|
-| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
+| Name          | Description                                  | Type       |
+|---------------|----------------------------------------------|------------|
+| `universe-id` | The [universe ID](#universe-id) of the game. | Numeric ID |
 
 ### userGames
 
@@ -547,9 +547,9 @@ Get the list of games a user has created:
 
 #### Required Arguments
 
-| Name     | Description              | Type       |
-|----------|--------------------------|------------|
-| `UserId` | The user ID of the user. | Numeric ID |
+| Name      | Description              | Type       |
+|-----------|--------------------------|------------|
+| `user-id` | The user ID of the user. | Numeric ID |
 
 #### Optional Arguments
 
@@ -574,9 +574,9 @@ Get the number of visits of all places a user has created:
 
 #### Required Arguments
 
-| Name     | Description              | Type       |
-|----------|--------------------------|------------|
-| `UserId` | The user ID of the user. | Numeric ID |
+| Name      | Description              | Type       |
+|-----------|--------------------------|------------|
+| `user-id` | The user ID of the user. | Numeric ID |
 
 #### Optional Arguments
 
@@ -605,9 +605,9 @@ Get the title of the first event in a universe:
 
 #### Required Arguments
 
-| Name         | Description                                  | Type       |
-|--------------|----------------------------------------------|------------|
-| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
+| Name          | Description                                  | Type       |
+|---------------|----------------------------------------------|------------|
+| `universe-id` | The [universe ID](#universe-id) of the game. | Numeric ID |
 
 ### groupRoleMembers
 
@@ -623,10 +623,10 @@ List of product developers in the SRC group:
 
 #### Required Arguments
 
-| Name      | Description                | Type       |
-|-----------|----------------------------|------------|
-| `GroupId` | The group ID of the group. | Numeric ID |
-| `RoleId`  | The role ID of the role.   | Numeric ID |
+| Name       | Description                | Type       |
+|------------|----------------------------|------------|
+| `group-id` | The group ID of the group. | Numeric ID |
+| `role-id`  | The role ID of the role.   | Numeric ID |
 
 #### Optional Arguments
 
@@ -634,7 +634,6 @@ List of product developers in the SRC group:
 |--------------|----------------------------------------|------------------------------|---------|
 | `limit`      | The maximum number of users to return. | Numeric ID (10, 25, 50, 100) | `50`    |
 | `sort_order` | The order to sort the users.           | String (`Asc`, `Desc`)       | `Asc`   |
-
 
 ## Handling JSON data
 
@@ -727,7 +726,7 @@ An array of data sources that should be enabled and available. By default, all d
 
 ```php
 $wgRobloxAPIEnabledDatasources = [
-    'gameData',    
+    'gameData',
     'activePlayers',
     'visits',
     'userId',
@@ -738,12 +737,19 @@ $wgRobloxAPIEnabledDatasources = [
     'gameIcon',
     'gameIconUrl',
     'groupRoles',
+    'groupRoleMembers',
     'groupData',
     'groupRank',
     'groupMembers',
     'badgeInfo',
     'userInfo',
     'assetDetails',
+    'groupRolesList',
+    'gameNameDescription',
+    'universeInfo',
+    'userGames',
+    'userPlaceVisits',
+    'gameEvents',
 ];
 ```
 
@@ -785,6 +791,7 @@ Some do, such as `format`, but are not included in the default value since it do
 is served.
 
 Default:
+
 ```php
 $wgRobloxAPICacheSplittingOptionalArguments = [
     'is_circular',
