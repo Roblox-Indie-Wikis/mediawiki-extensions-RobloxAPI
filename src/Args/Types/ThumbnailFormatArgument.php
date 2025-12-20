@@ -29,7 +29,8 @@ class ThumbnailFormatArgument extends ChoiceArgument {
 	public function __construct() {
 		parent::__construct(
 			'thumbnail-format',
-			[ 'Png', 'Webp' ]
+			[ 'Png', 'Webp' ],
+			caseSensitive: false,
 		);
 	}
 
