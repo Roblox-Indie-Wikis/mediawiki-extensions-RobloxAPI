@@ -56,7 +56,16 @@ class UserIdDataSource extends FetcherDataSource {
 			return $this->failInvalidData();
 		}
 
-		return StatusValue::newGood( $entries[0] );
+		$entry = $entries[0];
+		if ( $entry === null ) {
+			return $this->failNoData();
+		}
+
+		if ( !property_exists( $entry, 'id' ) ) {
+			return $this->failUnexpectedDataStructure();
+		}
+
+		return StatusValue::newGood( $entry->id );
 	}
 
 	/**
@@ -74,28 +83,6 @@ class UserIdDataSource extends FetcherDataSource {
 		return [
 			'Content-Type' => 'application/json',
 		];
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
-		$dataStatus = $this->fetch( $requiredArgs, $optionalArgs );
-
-		if ( !$dataStatus->isGood() ) {
-			return $dataStatus;
-		}
-		$data = $dataStatus->getValue();
-		// TODO do we really need to handle this?
-		if ( !$data ) {
-			return $this->failNoData();
-		}
-
-		if ( !property_exists( $data, 'id' ) ) {
-			return $this->failUnexpectedDataStructure();
-		}
-
-		return StatusValue::newGood( $data->id );
 	}
 
 	/**

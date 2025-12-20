@@ -68,10 +68,10 @@ abstract class FetcherDataSource extends AbstractDataSource {
 		if ( !$processedDataStatus->isOK() ) {
 			return $processedDataStatus;
 		}
-		$processedData = $processedDataStatus->getValue();
 
+		$processedData = $processedDataStatus->getValue();
 		if ( $processedData === null ) {
-			return StatusValue::newFatal( 'robloxapi-error-invalid-data' );
+			return $this->failInvalidData();
 		}
 
 		return StatusValue::newGood( $processedData );
