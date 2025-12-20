@@ -182,7 +182,10 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 	private function canUseDataSource( Parser $parser, IDataSource $dataSource ): StatusValue {
 		if ( !$dataSource->isEnabled() ) {
-			return StatusValue::newFatal( 'robloxapi-error-datasource-disabled', $dataSource->getId() );
+			return StatusValue::newFatal(
+				'robloxapi-error-datasource-disabled',
+				wfEscapeWikiText( $dataSource->getId() )
+			);
 		}
 
 		$dataSourceId = $dataSource->getFetcherSourceId();

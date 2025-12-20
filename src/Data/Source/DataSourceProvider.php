@@ -275,7 +275,10 @@ class DataSourceProvider {
 		$source = $this->getDataSource( $id, $ignoreCase );
 
 		if ( !$source ) {
-			return StatusValue::newFatal( 'robloxapi-error-datasource-not-found', $id );
+			return StatusValue::newFatal(
+				'robloxapi-error-datasource-not-found',
+				wfEscapeWikiText( $id )
+			);
 		}
 
 		return StatusValue::newGood( $source );
