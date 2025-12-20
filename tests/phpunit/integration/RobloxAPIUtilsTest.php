@@ -34,30 +34,6 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 		return $this->getServiceContainer()->getService( 'RobloxAPI.Utils' );
 	}
 
-	public function testIsValidId(): void {
-		// TODO
-		$this->markTestSkipped();
-		$utils = $this->getUtils();
-		self::assertFalse( $utils->isValidId( null ) );
-		self::assertFalse( $utils->isValidId( "" ) );
-		self::assertFalse( $utils->isValidId( "a" ) );
-		self::assertFalse( $utils->isValidId( "2412a4214" ) );
-		self::assertFalse( $utils->isValidId( "309713598a" ) );
-		self::assertFalse( $utils->isValidId( "4848492840912840912840921842019481" ) );
-		self::assertFalse( $utils->isValidId( "-1234" ) );
-
-		self::assertTrue( $utils->isValidId( "1" ) );
-		self::assertTrue( $utils->isValidId( "4182456156" ) );
-	}
-
-	public function testAssertValidIds(): void {
-		// TODO
-		$this->markTestSkipped();
-		$utils = $this->getUtils();
-		$this->expectException( RobloxAPIException::class );
-		$utils->assertValidIds( "abc" );
-	}
-
 	public function testAssertArgsAllowed(): void {
 		// TODO
 		$this->markTestSkipped();

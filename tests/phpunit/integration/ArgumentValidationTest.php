@@ -24,12 +24,16 @@ use MediaWiki\Extension\RobloxAPI\Args\ArgumentParserContext;
 use MediaWiki\Extension\RobloxAPI\Args\Types\BooleanArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\ChoiceArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\IArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\JsonKeyArgument;
 use MediaWiki\Language\Language;
 use MediaWikiIntegrationTestCase;
 
 /**
  * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\BooleanArgument
  * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\ChoiceArgument
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\JsonKeyArgument
  *
  * @group RobloxAPI
  */
@@ -71,7 +75,28 @@ class ArgumentValidationTest extends MediaWikiIntegrationTestCase {
 			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ] ), 'val1', 'val1' ],
 			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ] ), 'val2', 'val2' ],
 			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ], caseSensitive: false ), 'VAL1', 'val1' ],
-			[ new ChoiceArgument( 'test', [ 'VAL1', 'VAL2' ], caseSensitive: false ), 'val1', 'VAL1' ],
+			// assure that the capitalization is preserved if caseSensitive is false
+			[ new ChoiceArgument( 'test', [ 'VaL1', 'VaL2' ], caseSensitive: false ), 'val1', 'VaL1' ],
+
+			// generic ID tests
+			[ IdArgument::group(), '1', '1' ],
+			[ IdArgument::group(), '4182456156', '4182456156' ],
+
+			// id type tests
+			[ IdArgument::asset(), '12345', '12345' ],
+			[ IdArgument::badge(), '12345', '12345' ],
+			[ IdArgument::group(), '12345', '12345' ],
+			[ IdArgument::place(), '12345', '12345' ],
+			[ IdArgument::role(), '12345', '12345' ],
+			[ IdArgument::universe(), '12345', '12345' ],
+			[ IdArgument::user(), '12345', '12345' ],
+
+			[ new JsonKeyArgument(), 'test', [ 'test' ] ],
+			[ new JsonKeyArgument(), '0', [ 0 ] ],
+			[ new JsonKeyArgument(), 'test1->test2', [ 'test1', 'test2' ] ],
+			[ new JsonKeyArgument(), 'test1->123->test3', [ 'test1', 123, 'test3' ] ],
+			[ new JsonKeyArgument(), '0->1->2', [ 0, 1, 2 ] ],
+			[ new JsonKeyArgument(), '5->test', [ 5, 'test' ] ],
 		];
 	}
 
@@ -83,7 +108,20 @@ class ArgumentValidationTest extends MediaWikiIntegrationTestCase {
 			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ] ), 'VAL1', 'robloxapi-error-invalid-choice-argument' ],
 			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ] ), 'val3', 'robloxapi-error-invalid-choice-argument' ],
 			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ], caseSensitive: false ), 'val3', 'robloxapi-error-invalid-choice-argument' ],
+			// assure that custom error message is used
 			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ], errorMessage: 'test-custom-error' ), 'val3', 'test-custom-error' ],
+
+			[ IdArgument::group(), '', 'robloxapi-error-invalid-generic-argument' ],
+			[ IdArgument::group(), 'a', 'robloxapi-error-invalid-generic-argument' ],
+			[ IdArgument::group(), '2412a4214', 'robloxapi-error-invalid-generic-argument' ],
+			[ IdArgument::group(), '309713598a', 'robloxapi-error-invalid-generic-argument' ],
+			[ IdArgument::group(), '4848492840912840912840921842019481', 'robloxapi-error-invalid-generic-argument' ],
+			[ IdArgument::group(), '-1234', 'robloxapi-error-invalid-generic-argument' ],
+
+			[ new JsonKeyArgument(), '', 'robloxapi-error-invalid-generic-argument' ],
+			[ new JsonKeyArgument(), '->test', 'robloxapi-error-invalid-generic-argument' ],
+			[ new JsonKeyArgument(), 'test->', 'robloxapi-error-invalid-generic-argument' ],
+			[ new JsonKeyArgument(), 'test1->->test2', 'robloxapi-error-invalid-generic-argument' ],
 		];
 	}
 
