@@ -22,12 +22,14 @@ namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentParserContext;
 use MediaWiki\Extension\RobloxAPI\Args\Types\BooleanArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\ChoiceArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\IArgument;
 use MediaWiki\Language\Language;
 use MediaWikiIntegrationTestCase;
 
 /**
  * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\BooleanArgument
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\ChoiceArgument
  *
  * @group RobloxAPI
  */
@@ -46,15 +48,6 @@ class ArgumentValidationTest extends MediaWikiIntegrationTestCase {
 		$this->assertStatusValue( $expected, $status );
 	}
 
-	public static function provideArgumentValidationSuccessTests(): array {
-		return [
-			[ new BooleanArgument(), 'true', 'true' ],
-			[ new BooleanArgument(), 'TrUe', 'true' ],
-			[ new BooleanArgument(), 'false', 'false' ],
-			[ new BooleanArgument(), 'FalSe', 'false' ],
-		];
-	}
-
 	/**
 	 * @dataProvider provideArgumentValidationFailureTests
 	 */
@@ -67,11 +60,34 @@ class ArgumentValidationTest extends MediaWikiIntegrationTestCase {
 		$this->assertStatusError( $expectedErrorMessage, $status );
 	}
 
-	public static function provideArgumentValidationFailureTests(): array {
+	// phpcs:disable Generic.Files.LineLength
+	public static function provideArgumentValidationSuccessTests(): array {
 		return [
-			[ new BooleanArgument(), 'test', 'robloxapi-error-invalid-choice-argument' ]
+			[ new BooleanArgument(), 'true', 'true' ],
+			[ new BooleanArgument(), 'TrUe', 'true' ],
+			[ new BooleanArgument(), 'false', 'false' ],
+			[ new BooleanArgument(), 'FalSe', 'false' ],
+
+			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ] ), 'val1', 'val1' ],
+			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ] ), 'val2', 'val2' ],
+			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ], caseSensitive: false ), 'VAL1', 'val1' ],
+			[ new ChoiceArgument( 'test', [ 'VAL1', 'VAL2' ], caseSensitive: false ), 'val1', 'VAL1' ],
 		];
 	}
+
+	public static function provideArgumentValidationFailureTests(): array {
+		return [
+			[ new BooleanArgument(), 'test', 'robloxapi-error-invalid-choice-argument' ],
+			[ new BooleanArgument(), '', 'robloxapi-error-invalid-choice-argument' ],
+
+			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ] ), 'VAL1', 'robloxapi-error-invalid-choice-argument' ],
+			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ] ), 'val3', 'robloxapi-error-invalid-choice-argument' ],
+			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ], caseSensitive: false ), 'val3', 'robloxapi-error-invalid-choice-argument' ],
+			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ], errorMessage: 'test-custom-error' ), 'val3', 'test-custom-error' ],
+		];
+	}
+
+	// phpcs:enable Generic.Files.LineLength
 
 	private function createContext(): ArgumentParserContext {
 		return new ArgumentParserContext(
