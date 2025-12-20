@@ -20,6 +20,7 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Args\Types;
 
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use StatusValue;
 use Wikimedia\Message\MessageValue;
 
@@ -51,7 +52,7 @@ abstract class AbstractArgument implements IArgument {
 	): StatusValue {
 		return StatusValue::newFatal(
 			$errorMessage,
-			wfEscapeWikiText( $value === '' ? '<empty>' : $value ),
+			RobloxAPIUtils::transformValueForError( $value ),
 			new MessageValue( $this->getTranslationKey() )
 		);
 	}

@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\RobloxAPI\Args;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\Args\Types\IArgument;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use MediaWiki\Language\Language;
 use StatusValue;
 use Wikimedia\Message\MessageValue;
@@ -120,12 +121,12 @@ class ArgumentParser {
 				if ( $first ) {
 					return StatusValue::newFatal(
 						'robloxapi-error-too-many-required-args',
-						wfEscapeWikiText( $parts[0] === '' ? '<empty>' : $parts[0] )
+						RobloxAPIUtils::transformValueForError( $parts[0] ),
 					);
 				}
 				return StatusValue::newFatal(
 					'robloxapi-error-missing-optional-argument-value',
-					wfEscapeWikiText( $parts[0] === '' ? '<empty>' : $parts[0] )
+					RobloxAPIUtils::transformValueForError( $parts[0] ),
 				);
 			}
 
@@ -135,7 +136,7 @@ class ArgumentParser {
 			if ( !array_key_exists( $key, $specification->optionalArgs ) ) {
 				return StatusValue::newFatal(
 					'robloxapi-error-unknown-optional-argument',
-					wfEscapeWikiText( $key === '' ? '<empty>' : $key )
+					RobloxAPIUtils::transformValueForError( $key ),
 				);
 			}
 
@@ -178,7 +179,7 @@ class ArgumentParser {
 			if ( !in_array( $validatedValue, $allowedArgs, false ) ) {
 				return StatusValue::newFatal(
 					'robloxapi-error-arg-not-allowed',
-					wfEscapeWikiText( $validatedValue === '' ? '<empty>' : $validatedValue ),
+					RobloxAPIUtils::transformValueForError( $validatedValue ),
 					new MessageValue( $type->getTranslationKey() ),
 				);
 			}

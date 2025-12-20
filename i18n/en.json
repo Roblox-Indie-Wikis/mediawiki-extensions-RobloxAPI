@@ -44,5 +44,6 @@
 	"robloxapi-arg-type-json-key": "JSON Key",
 	"robloxapi-error-invalid-choice-argument": "Invalid choice <code>$1</code> for argument of type ''$3''! Possible values are: $2.",
 	"robloxapi-error-invalid-generic-argument": "Invalid value <code>$1</code> for argument of type ''$2''!",
-	"robloxapi-error-passed-error-value": "Error value passed to argument of type ''$1'': $2"
+	"robloxapi-error-passed-error-value": "Error value passed to argument of type ''$1'': $2",
+	"robloxapi-arg-empty-value-placeholder": "<empty>"
 }

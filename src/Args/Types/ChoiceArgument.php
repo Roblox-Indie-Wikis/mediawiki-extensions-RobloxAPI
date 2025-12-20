@@ -21,6 +21,7 @@
 namespace MediaWiki\Extension\RobloxAPI\Args\Types;
 
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentParserContext;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use StatusValue;
 use Wikimedia\Message\MessageValue;
 
@@ -56,7 +57,7 @@ class ChoiceArgument extends AbstractArgument {
 		} else {
 			return StatusValue::newFatal(
 				$this->errorMessage,
-				wfEscapeWikiText( $value === '' ? '<empty>' : $value ),
+				RobloxAPIUtils::transformValueForError( $value ),
 				$ctx->contentLanguage->commaList( array_map( 'wfEscapeWikiText', $this->choices ) ),
 				new MessageValue( $this->getTranslationKey() ),
 			);

@@ -28,6 +28,7 @@ use MediaWiki\Parser\Parser;
 use MediaWiki\Utils\UrlUtils;
 use StatusValue;
 use stdClass;
+use Wikimedia\Message\MessageValue;
 
 /**
  * Provides utilities for working with the Roblox API.
@@ -143,6 +144,14 @@ class RobloxAPIUtils {
 		}
 
 		return $result;
+	}
+
+	public static function transformValueForError( string $value ): string|MessageValue {
+		if ( $value !== '' ) {
+			return wfEscapeWikiText( $value );
+		} else {
+			return new MessageValue( 'robloxapi-arg-empty-value-placeholder' );
+		}
 	}
 
 	/**
