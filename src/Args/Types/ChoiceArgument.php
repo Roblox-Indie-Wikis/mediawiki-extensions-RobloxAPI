@@ -34,12 +34,12 @@ class ChoiceArgument extends AbstractArgument {
 	 * @inheritDoc
 	 */
 	public function __construct(
-		string $translationKey,
+		string $key,
 		private array $choices,
 		private readonly string $errorMessage,
 		private readonly bool $caseSensitive = true,
 	) {
-		parent::__construct( $translationKey );
+		parent::__construct( $key );
 		if ( !$caseSensitive ) {
 			$this->choices = array_map( 'strtolower', $choices );
 		}

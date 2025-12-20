@@ -28,7 +28,7 @@ class SortOrderArgument extends ChoiceArgument {
 	/** @inheritDoc */
 	public function __construct() {
 		parent::__construct(
-			'robloxapi-arg-type-sort-order',
+			'sort-order',
 			[ 'Asc', 'Desc' ],
 			'robloxapi-error-invalid-sort-order'
 		);

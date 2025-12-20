@@ -37,6 +37,11 @@ interface IArgument {
 	public function validate( ArgumentParserContext $ctx, string $value ): StatusValue;
 
 	/**
+	 * @return string The key for the argument type.
+	 */
+	public function getKey(): string;
+
+	/**
 	 * @return string The translation key for the argument type.
 	 */
 	public function getTranslationKey(): string;

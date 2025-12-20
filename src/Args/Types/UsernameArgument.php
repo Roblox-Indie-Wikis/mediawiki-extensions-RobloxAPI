@@ -28,7 +28,7 @@ class UsernameArgument extends RegexArgument {
 	/** @inheritDoc */
 	public function __construct() {
 		parent::__construct(
-			'robloxapi-arg-type-username',
+			'username',
 			/** @lang RegExp */ '/^(?=^[^_]+_?[^_]+$)\w{3,20}$/',
 			'robloxapi-error-invalid-username'
 		);

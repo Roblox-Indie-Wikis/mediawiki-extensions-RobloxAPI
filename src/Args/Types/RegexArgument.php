@@ -30,11 +30,11 @@ class RegexArgument extends AbstractArgument {
 
 	/** @inheritDoc */
 	public function __construct(
-		string $translationKey,
+		string $key,
 		private readonly string $pattern,
 		private readonly string $errorMessage
 	) {
-		parent::__construct( $translationKey );
+		parent::__construct( $key );
 	}
 
 	/** @inheritDoc */

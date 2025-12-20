@@ -30,7 +30,7 @@ class ThumbnailSizeArgument extends RegexArgument {
 	/** @inheritDoc */
 	public function __construct() {
 		parent::__construct(
-			'robloxapi-arg-type-thumbnail-size',
+			'thumbnail-size',
 			/** @lang RegExp */ '/^\d{1,3}x\d{1,3}$/',
 			'robloxapi-error-invalid-thumbnail-size'
 		);

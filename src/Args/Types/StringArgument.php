@@ -29,9 +29,9 @@ use StatusValue;
 class StringArgument extends AbstractArgument {
 
 	public function __construct(
-		string $translationKey = 'robloxapi-arg-type-string',
+		string $key = 'string',
 	) {
-		parent::__construct( $translationKey );
+		parent::__construct( $key );
 	}
 
 	/** @inheritDoc */

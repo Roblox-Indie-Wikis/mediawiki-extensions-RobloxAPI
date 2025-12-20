@@ -28,7 +28,7 @@ class BooleanArgument extends ChoiceArgument {
 	/** @inheritDoc */
 	public function __construct() {
 		parent::__construct(
-			'robloxapi-arg-type-boolean',
+			'boolean',
 			[ 'true', 'false' ],
 			'robloxapi-error-invalid-boolean',
 			false

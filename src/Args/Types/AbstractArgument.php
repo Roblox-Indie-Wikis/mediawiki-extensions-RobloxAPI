@@ -26,16 +26,20 @@ namespace MediaWiki\Extension\RobloxAPI\Args\Types;
 abstract class AbstractArgument implements IArgument {
 
 	/**
-	 * @param string $translationKey The translation key for this argument's name.
+	 * @param string $key The key for this argument type.
 	 */
 	public function __construct(
-		private readonly string $translationKey,
+		private readonly string $key,
 	) {
 	}
 
 	/** @inheritDoc */
 	public function getTranslationKey(): string {
-		return $this->translationKey;
+		return "robloxapi-arg-type-{$this->getKey()}";
+	}
+
+	public function getKey(): string {
+		return $this->key;
 	}
 
 }

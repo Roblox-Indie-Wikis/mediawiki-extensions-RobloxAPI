@@ -28,7 +28,7 @@ class ThumbnailFormatArgument extends ChoiceArgument {
 	/** @inheritDoc */
 	public function __construct() {
 		parent::__construct(
-			'robloxapi-arg-type-thumbnail-format',
+			'thumbnail-format',
 			[ 'Png', 'Webp' ],
 			'robloxapi-error-invalid-thumbnail-format'
 		);
