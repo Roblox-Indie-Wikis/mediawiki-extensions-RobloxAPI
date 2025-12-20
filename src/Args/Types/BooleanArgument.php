@@ -30,8 +30,7 @@ class BooleanArgument extends ChoiceArgument {
 		parent::__construct(
 			'boolean',
 			[ 'true', 'false' ],
-			'robloxapi-error-invalid-boolean',
-			false
+			caseSensitive: false
 		);
 	}
 

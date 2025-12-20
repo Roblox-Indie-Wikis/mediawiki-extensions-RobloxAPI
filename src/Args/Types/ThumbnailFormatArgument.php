@@ -29,8 +29,7 @@ class ThumbnailFormatArgument extends ChoiceArgument {
 	public function __construct() {
 		parent::__construct(
 			'thumbnail-format',
-			[ 'Png', 'Webp' ],
-			'robloxapi-error-invalid-thumbnail-format'
+			[ 'Png', 'Webp' ]
 		);
 	}
 

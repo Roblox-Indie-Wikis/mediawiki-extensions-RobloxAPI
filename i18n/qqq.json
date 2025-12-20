@@ -23,11 +23,7 @@
 	"robloxapi-error-missing-argument": "Error message shown when a required argument is missing. $1 is the type of argument that is missing",
 	"robloxapi-error-missing-optional-argument-value": "Error message shown when an optional argument is missing a value. The optional argument must be in the format 'key=value'",
 	"robloxapi-error-unknown-optional-argument": "Error message shown when an unknown optional argument is provided. $1 is the unknown argument's key",
-	"robloxapi-error-invalid-thumbnail-format": "Error message shown when an invalid thumbnail format is provided. $1 is the invalid format. Possible values are 'Webp' and 'Png'",
-	"robloxapi-error-invalid-boolean": "Error message shown when an invalid boolean value is provided. $1 is the invalid value. Must be 'true' or 'false'",
 	"robloxapi-error-too-many-required-args": "Error message shown when too many required arguments are provided to a data source. $1 is the argument that exceeds the maximum number of required arguments",
-	"robloxapi-error-invalid-limit": "Error message shown when an invalid limit is provided for a data source. $1 is the invalid limit. $2 is a comma-separated list of allowed limits.",
-	"robloxapi-error-invalid-sort-order": "Error message shown when an invalid sort order is provided. $1 is the invalid sort order. Must be 'Asc' or 'Desc'",
 	"robloxapi-error-usage-limit": "Error message shown when trying to exceed a data source usage limit. $1 is the data source id, $2 the amount of times it can be used per page.",
 	"robloxapi-error-usage-limit-dependent": "Error message shown when trying to exceed a data source usage limit through a dependent data source. $1 is the id of the fetcher data source, $2 the amount of times it can be used per page, $3 is the id of the dependent data source.",
 	"robloxapi-category-deprecated-parser-function": "{{Tracking category name}}\nName of the tracking category for pages that use a deprecated parser function from the RobloxAPI extension.",
@@ -50,3 +46,4 @@
 	"robloxapi-arg-type-limit": "Label for the limit argument type",
 	"robloxapi-arg-type-return-policy": "Label for the return policy argument type",
 	"robloxapi-error-invalid-choice": "Error message shown when an invalid choice is provided for an argument. $1 is the invalid choice, $2 is a comma-separated list of possible values, and $3 is the argument type."
+}

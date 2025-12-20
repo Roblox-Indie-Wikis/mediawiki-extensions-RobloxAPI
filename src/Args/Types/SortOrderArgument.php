@@ -29,8 +29,7 @@ class SortOrderArgument extends ChoiceArgument {
 	public function __construct() {
 		parent::__construct(
 			'sort-order',
-			[ 'Asc', 'Desc' ],
-			'robloxapi-error-invalid-sort-order'
+			[ 'Asc', 'Desc' ]
 		);
 	}
 

@@ -28,8 +28,7 @@ class LimitArgument extends ChoiceArgument {
 	public function __construct( array $choices ) {
 		parent::__construct(
 			'limit',
-			$choices,
-			'robloxapi-error-invalid-limit'
+			$choices
 		);
 	}
 
