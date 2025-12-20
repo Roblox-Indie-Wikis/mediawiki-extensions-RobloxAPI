@@ -115,16 +115,25 @@ class ArgumentParser {
 
 			if ( count( $parts ) === 1 ) {
 				if ( $first ) {
-					return StatusValue::newFatal( 'robloxapi-error-too-many-required-args', $parts[0] );
+					return StatusValue::newFatal(
+						'robloxapi-error-too-many-required-args',
+						wfEscapeWikiText( $parts[0] )
+					);
 				}
-				return StatusValue::newFatal( 'robloxapi-error-missing-optional-argument-value', $parts[0] );
+				return StatusValue::newFatal(
+					'robloxapi-error-missing-optional-argument-value',
+					wfEscapeWikiText( $parts[0] )
+				);
 			}
 
 			$key = strtolower( $parts[0] );
 			$value = $parts[1];
 
 			if ( !array_key_exists( $key, $specification->optionalArgs ) ) {
-				return StatusValue::newFatal( 'robloxapi-error-unknown-optional-argument', $key );
+				return StatusValue::newFatal(
+					'robloxapi-error-unknown-optional-argument',
+					wfEscapeWikiText( $key )
+				);
 			}
 
 			$type = $specification->optionalArgs[$key];
