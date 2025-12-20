@@ -45,5 +45,5 @@
 	"robloxapi-arg-type-user-id": "Label for the user ID argument type",
 	"robloxapi-arg-type-limit": "Label for the limit argument type",
 	"robloxapi-arg-type-return-policy": "Label for the return policy argument type",
-	"robloxapi-error-invalid-choice": "Error message shown when an invalid choice is provided for an argument. $1 is the invalid choice, $2 is a comma-separated list of possible values, and $3 is the argument type."
+	"robloxapi-error-invalid-choice-argument": "Error message shown when an invalid choice is provided for an argument. $1 is the invalid choice, $2 is a comma-separated list of possible values, and $3 is the argument type."
 }

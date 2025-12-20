@@ -37,7 +37,7 @@ class ChoiceArgument extends AbstractArgument {
 	public function __construct(
 		string $key,
 		private array $choices,
-		private readonly string $errorMessage = 'robloxapi-error-invalid-argument-choice',
+		private readonly string $errorMessage = 'robloxapi-error-invalid-choice-argument',
 		private readonly bool $caseSensitive = true,
 	) {
 		parent::__construct( $key );
