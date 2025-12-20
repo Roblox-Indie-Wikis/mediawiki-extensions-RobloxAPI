@@ -22,7 +22,6 @@ namespace MediaWiki\Extension\RobloxAPI\Args\Types;
 
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentParserContext;
 use StatusValue;
-use Wikimedia\Message\MessageValue;
 
 /**
  * Represents an argument that must match a regular expression.

@@ -28,7 +28,7 @@ use StatusValue;
  */
 class JsonKeyArgument extends AbstractArgument {
 
-	/** @inheritdoc  */
+	/** @inheritDoc */
 	public function __construct() {
 		parent::__construct( 'json-key' );
 	}

@@ -28,7 +28,6 @@
 	"robloxapi-category-error": "Pages with RobloxAPI errors",
 	"robloxapi-category-error-desc": "The page uses the <code>{{#robloxAPI}}</code> parser function incorrectly, resulting in an error.",
 	"robloxapi-arg-type-boolean": "Boolean",
-	"robloxapi-arg-type-string": "String",
 	"robloxapi-arg-type-sort-order": "Sort Order",
 	"robloxapi-arg-type-thumbnail-format": "Thumbnail Format",
 	"robloxapi-arg-type-thumbnail-size": "Thumbnail Size",

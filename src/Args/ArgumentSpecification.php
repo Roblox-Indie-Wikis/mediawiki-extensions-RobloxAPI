@@ -23,7 +23,6 @@ namespace MediaWiki\Extension\RobloxAPI\Args;
 use MediaWiki\Extension\RobloxAPI\Args\Types\BooleanArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\IArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\JsonKeyArgument;
-use MediaWiki\Extension\RobloxAPI\Args\Types\StringArgument;
 
 /**
  * Represents the specification for the arguments that a data source requires.

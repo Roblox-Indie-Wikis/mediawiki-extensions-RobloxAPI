@@ -28,7 +28,6 @@
 	"robloxapi-category-error": "{{Tracking category name}}\nName of the tracking category for pages where using the {{#robloxAPI}} parser function results in an error.",
 	"robloxapi-category-error-desc": "Description of the RobloxAPI error tracking category.",
 	"robloxapi-arg-type-boolean": "Label for the boolean argument type",
-	"robloxapi-arg-type-string": "Label for the string argument type",
 	"robloxapi-arg-type-sort-order": "Label for the sort order argument type",
 	"robloxapi-arg-type-thumbnail-format": "Label for the thumbnail format argument type",
 	"robloxapi-arg-type-thumbnail-size": "Label for the thumbnail size argument type",
