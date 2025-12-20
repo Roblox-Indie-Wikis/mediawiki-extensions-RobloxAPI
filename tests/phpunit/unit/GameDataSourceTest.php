@@ -22,7 +22,6 @@ namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\GameDataSource;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 
 /**
  * @covers \MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\GameDataSource
