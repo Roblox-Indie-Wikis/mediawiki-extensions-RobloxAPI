@@ -276,7 +276,7 @@ class DataSourceProvider {
 		if ( !$source ) {
 			return StatusValue::newFatal(
 				'robloxapi-error-datasource-not-found',
-				wfEscapeWikiText( $id )
+				wfEscapeWikiText( $id === '' ? '<empty>' : $id)
 			);
 		}
 

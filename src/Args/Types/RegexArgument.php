@@ -45,7 +45,7 @@ class RegexArgument extends AbstractArgument {
 		} else {
 			return StatusValue::newFatal(
 				$this->errorMessage,
-				wfEscapeWikiText( $value ),
+				wfEscapeWikiText( $value === '' ? '<empty>' : $value ),
 				new MessageValue( $this->getTranslationKey() )
 			);
 		}
