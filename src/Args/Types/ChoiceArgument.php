@@ -42,9 +42,10 @@ class ChoiceArgument extends AbstractArgument {
 		private readonly bool $caseSensitive = true,
 	) {
 		parent::__construct( $key );
-		if ( !$caseSensitive ) {
-			$this->choices = array_map( 'strtolower', $choices );
-		}
+		$this->choices = array_combine(
+			$this->caseSensitive ? $this->choices : array_map( 'strtolower', $choices ),
+			$this->choices
+		);
 	}
 
 	/** @inheritDoc */
@@ -52,8 +53,8 @@ class ChoiceArgument extends AbstractArgument {
 		if ( !$this->caseSensitive ) {
 			$value = strtolower( $value );
 		}
-		if ( in_array( $value, $this->choices, false ) ) {
-			return StatusValue::newGood( $value );
+		if ( array_key_exists( $value, $this->choices ) ) {
+			return StatusValue::newGood( $this->choices[$value] );
 		} else {
 			return StatusValue::newFatal(
 				$this->errorMessage,
