@@ -34,7 +34,7 @@ class ArgumentParser {
 	];
 
 	public function __construct(
-		private readonly ServiceOptions $options,
+		private ServiceOptions $options,
 		private readonly Language $contentLanguage,
 	) {
 		$this->options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
@@ -91,7 +91,6 @@ class ArgumentParser {
 
 			$value = array_shift( $args );
 			$status = $this->validate( $type, $ctx, $value );
-			// TODO implement ConfAllowedArguments! or deprecate/remove in 2.0.0?
 			if ( !$status->isGood() ) {
 				// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
 				return $status;
@@ -142,7 +141,6 @@ class ArgumentParser {
 
 			$type = $specification->optionalArgs[$key];
 			$status = $this->validate( $type, $ctx, $value );
-			// TODO implement ConfAllowedArguments! or deprecate/remove in 2.0.0?
 			if ( !$status->isGood() ) {
 				// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
 				return $status;
@@ -168,7 +166,37 @@ class ArgumentParser {
 				$value,
 			);
 		}
-		return $type->validate( $ctx, $value );
+
+		$status = $type->validate( $ctx, $value );
+		if ( !$status->isGood() ) {
+			return $status;
+		}
+
+		$allowedArgs = $this->getAllowedArguments( $type );
+		if ( !empty( $allowedArgs ) ) {
+			$validatedValue = $status->getValue();
+			if ( !in_array( $validatedValue, $allowedArgs, false ) ) {
+				return StatusValue::newFatal(
+					'robloxapi-error-arg-not-allowed',
+					wfEscapeWikiText( $validatedValue === '' ? '<empty>' : $validatedValue ),
+					new MessageValue( $type->getTranslationKey() ),
+				);
+			}
+		}
+		return $status;
+	}
+
+	/**
+	 * @param IArgument $type The argument type.
+	 * @return array<string, mixed> The allowed arguments for the given type.
+	 */
+	private function getAllowedArguments( IArgument $type ): array {
+		$allowed = $this->options->get( RobloxAPIConstants::ConfAllowedArguments );
+		$typeKey = $type->getKey();
+		if ( is_array( $allowed ) && array_key_exists( $typeKey, $allowed ) ) {
+			return $allowed[$typeKey];
+		}
+		return [];
 	}
 
 	/**
@@ -178,6 +206,13 @@ class ArgumentParser {
 		return new ArgumentParserContext(
 			$this->contentLanguage,
 		);
+	}
+
+	/**
+	 * @internal
+	 */
+	public function overrideOptions( array $options ): void {
+		$this->options = new ServiceOptions( self::CONSTRUCTOR_OPTIONS, $options );
 	}
 
 }

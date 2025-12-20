@@ -225,18 +225,11 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 * @inheritDoc
 	 */
 	public function onParserTestGlobals( &$globals ): void {
-		// TODO apart from plain errors, those were moved to ArgumentParser
-		$defaults = [
-			RobloxAPIConstants::ConfAllowedArguments => [ 'UserID' => [ 54321 ] ],
-			// show errors as plain text to make parser tests not depend on changes in Html:errorBox
+		$this->argumentParser->overrideOptions( [
+			RobloxAPIConstants::ConfAllowedArguments => [ 'user-id' => [ 54321 ] ],
+		] );
+		$this->utils->overrideOptions( [
 			RobloxAPIConstants::ConfShowPlainErrors => true,
-			RobloxAPIConstants::ConfCacheSplittingOptionalArguments =>
-				$this->config->get( RobloxAPIConstants::ConfCacheSplittingOptionalArguments )
-		];
-
-		foreach ( $defaults as $key => $value ) {
-			$globals["wg$key"] = $value;
-		}
-		$this->utils->initForParserTests( $defaults );
+		] );
 	}
 }

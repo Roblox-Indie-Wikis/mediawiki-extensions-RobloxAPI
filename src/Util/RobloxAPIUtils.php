@@ -151,7 +151,7 @@ class RobloxAPIUtils {
 	/**
 	 * @internal
 	 */
-	public function initForParserTests( array $defaults ): void {
+	public function overrideOptions( array $defaults ): void {
 		$this->options = new ServiceOptions( self::CONSTRUCTOR_OPTIONS, $defaults );
 	}
 

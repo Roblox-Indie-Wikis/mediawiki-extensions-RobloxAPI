@@ -805,7 +805,7 @@ If you want to restrict the allowed arguments for a specific type, you can do so
 
 ```php
 $wgRobloxAPIAllowedArguments = [
-    'PlaceID' => [123456, 789012],
+    'place-id' => [123456, 789012],
 ];
 ```
 
