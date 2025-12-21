@@ -40,48 +40,6 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 		return $this->getServiceContainer()->getService( 'RobloxAPI.Utils' );
 	}
 
-	public function testAssertArgsAllowed(): void {
-		// TODO
-		$this->markTestSkipped();
-		$this->overrideConfigValue( 'RobloxAPIAllowedArguments', [
-			'UserID' => [ '123454321' ],
-			'GroupID' => [],
-		] );
-		$utils = $this->getUtils();
-
-		$utils->assertArgAllowed( 'UserID', '123454321' );
-		$utils->assertArgAllowed( 'GroupID', '14981124' );
-		$utils->assertArgAllowed( 'GroupID', '512512312' );
-		$utils->assertArgAllowed( 'GroupID', '901480124' );
-
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-arg-not-allowed' );
-		$utils->assertArgAllowed( 'UserID', '54321' );
-	}
-
-	public function testAssertValidArgs(): void {
-		// TODO
-		$this->markTestSkipped();
-		$utils = $this->getUtils();
-		$utils->assertValidArg( 'UserID', '123454321' );
-		$utils->assertValidArg( 'ThumbnailSize', '140x140' );
-		$utils->assertValidArg( 'Username', 'builderman_123' );
-
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-invalid-thumbnail-size' );
-		$utils->assertValidArg( 'ThumbnailSize', '12345' );
-	}
-
-	public function testAssertValidArgsInvalidUsername(): void {
-		// TODO
-		$this->markTestSkipped();
-		$utils = $this->getUtils();
-
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-invalid-username' );
-		$utils->assertValidArg( 'Username', '__invalidusername' );
-	}
-
 	/**
 	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::createJsonResult
 	 */
