@@ -94,16 +94,8 @@ jobs:
         run: composer phpunit:entrypoint -- -c tests/phpunit/suite.xml extensions/RobloxAPI/tests/phpunit
         if: matrix.coverage == false
 
-      - name: Run parser tests without coverage
-        run: php tests/parser/parserTests.php --file=extensions/RobloxAPI/tests/parser/parserTests.txt
-        if: matrix.coverage == false
-
       - name: Run PHPUnit and generate coverage report
         run: XDEBUG_MODE=coverage vendor/bin/phpunit --bootstrap tests/phpunit/bootstrap.integration.php --coverage-filter extensions/RobloxAPI/src --coverage-clover coverage.xml extensions/RobloxAPI/tests/phpunit
-        if: matrix.coverage == true
-
-      - name: Run parser tests and generate coverage report
-        run: XDEBUG_MODE=coverage vendor/bin/phpunit --bootstrap tests/phpunit/bootstrap.integration.php --coverage-filter extensions/RobloxAPI/src --coverage-clover coverage.xml tests/phpunit/suites/ExtensionsParserTestSuite.php
         if: matrix.coverage == true
 
       - name: Upload coverage to Codecov
@@ -111,6 +103,9 @@ jobs:
         if: matrix.coverage == true
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Run parser tests
+        run: php tests/parser/parserTests.php --file=extensions/RobloxAPI/tests/parser/parserTests.txt
 
       - name: Run phan
         run: composer run phan
