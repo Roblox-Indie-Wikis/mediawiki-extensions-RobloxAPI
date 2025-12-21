@@ -26,7 +26,10 @@ use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use MediaWiki\MediaWikiServices;
 
-/** @phpcs-require-sorted-array */
+/**
+ * @phpcs-require-sorted-array
+ * Tested in ServiceWiringTest.php
+ */
 return [
 	'RobloxAPI.ArgumentParser' => static function ( MediaWikiServices $services ): ArgumentParser {
 		return new ArgumentParser(
