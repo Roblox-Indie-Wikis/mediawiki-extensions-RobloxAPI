@@ -5,6 +5,7 @@ on:
     branches: [ master, development ]
   pull_request:
     branches: [ "*" ]
+  workflow_dispatch: {}
 
 jobs:
   test:
@@ -84,6 +85,16 @@ jobs:
 
       - name: Run PHPUnit
         run: composer phpunit:entrypoint -- --group RobloxAPI -c tests/phpunit/suite.xml
+
+      - name: Generate test coverage report
+        if: always()
+        run: XDEBUG_MODE=coverage composer phpunit -- --testsuite extensions --coverage-clover coverage.xml extensions/RobloxAPI/tests/phpunit --exclude-group Stub
+
+      - name: Upload coverage to Codecov
+        if: always()
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Run parser tests
         run: php tests/parser/parserTests.php --file=extensions/RobloxAPI/tests/parser/parserTests.txt
