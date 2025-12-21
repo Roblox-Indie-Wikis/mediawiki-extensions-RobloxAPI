@@ -213,7 +213,8 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 		);
 		$formatted = $utils->formatStatusValue( $statusFatal, $parser );
 		// phpcs:ignore Generic.Files.LineLength
-		self::assertEquals( '<div class="cdx-message--error mw-robloxapi-error cdx-message cdx-message--block"><span class="cdx-message__icon"></span><div class="cdx-message__content">Invalid value <code><invalid&value></code> for argument of type \'\'Username\'\'!</div></div>', $formatted );
+		self::assertStringContainsString( '<span class="cdx-message__icon"></span><div class="cdx-message__content">Invalid value <code><invalid&value></code> for argument of type \'\'Username\'\'!</div></div>', $formatted );
+		self::assertStringContainsString( 'mw-robloxapi-error', $formatted );
 
 		$utils->overrideOptions( [
 			RobloxAPIConstants::ConfShowPlainErrors => true,

@@ -157,7 +157,7 @@ class ArgumentParser {
 		ArgumentParserContext $ctx,
 		string $value,
 	): StatusValue {
-		if ( str_starts_with( $value, '<div class="cdx-message--error mw-robloxapi-error' ) ) {
+		if ( preg_match( '/<div class="[^"]+mw-robloxapi-error/', $value ) ) {
 			// A RobloxAPI error was parsed as an argument value. Let's display it.
 			return StatusValue::newFatal(
 				'robloxapi-error-passed-error-value',
