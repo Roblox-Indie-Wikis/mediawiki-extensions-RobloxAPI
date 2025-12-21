@@ -23,8 +23,6 @@ namespace MediaWiki\Extension\RobloxAPI\Tests\Integration;
 use FormatJson;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
-use MediaWiki\Parser\ParserOptions;
-use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 use StatusValue;
 use Wikimedia\Message\MessageValue;
@@ -34,6 +32,7 @@ use Wikimedia\Message\MessageValue;
  * @group RobloxAPI
  */
 class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
+	use ParserDependentTestTrait;
 
 	protected function getUtils(): RobloxAPIUtils {
 		return $this->getServiceContainer()->getService( 'RobloxAPI.Utils' );
@@ -156,12 +155,7 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testFormatStatusValue(): void {
 		$utils = $this->getUtils();
-		$parser = $this->getServiceContainer()->getParserFactory()->create();
-		$lang = $this->getServiceContainer()->getLanguageFactory()->getLanguage( 'en' );
-		$parserOptions = ParserOptions::newFromAnon();
-		$parserOptions->setTargetLanguage( $lang );
-		$parser->setOptions( $parserOptions );
-		$parser->setPage( Title::newFromText( 'RobloxAPITest' ) );
+		$parser = $this->createParser();
 
 		$statusFatal = StatusValue::newFatal(
 			'robloxapi-error-invalid-generic-argument',
