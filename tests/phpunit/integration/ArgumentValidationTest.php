@@ -31,6 +31,8 @@ use MediaWiki\Extension\RobloxAPI\Args\Types\RegexArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\ReturnPolicyArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\SortOrderArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailFormatArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailSizeArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\UsernameArgument;
 use MediaWiki\Language\Language;
 use MediaWikiIntegrationTestCase;
 
@@ -44,6 +46,8 @@ use MediaWikiIntegrationTestCase;
  * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\ReturnPolicyArgument
  * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\SortOrderArgument
  * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailFormatArgument
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailSizeArgument
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\UsernameArgument
  *
  * @group RobloxAPI
  */
@@ -127,6 +131,13 @@ class ArgumentValidationTest extends MediaWikiIntegrationTestCase {
 			[ new ThumbnailFormatArgument(), 'Png', 'Png' ],
 			[ new ThumbnailFormatArgument(), 'Webp', 'Webp' ],
 			[ new ThumbnailFormatArgument(), 'png', 'Png' ],
+
+			[ new ThumbnailSizeArgument(), '30x30', '30x30' ],
+			[ new ThumbnailSizeArgument(), '140x140', '140x140' ],
+			[ new ThumbnailSizeArgument(), '420x420', '420x420' ],
+
+			[ new UsernameArgument(), 'builderman', 'builderman' ],
+			[ new UsernameArgument(), 'BuilderMan_123', 'BuilderMan_123' ],
 		];
 	}
 
@@ -171,6 +182,17 @@ class ArgumentValidationTest extends MediaWikiIntegrationTestCase {
 			[ new SortOrderArgument(), 'asc', 'robloxapi-error-invalid-choice-argument' ],
 
 			[ new ThumbnailFormatArgument(), 'Jpg', 'robloxapi-error-invalid-choice-argument' ],
+
+			[ new ThumbnailSizeArgument(), '', 'robloxapi-error-invalid-generic-argument' ],
+			[ new ThumbnailSizeArgument(), '100', 'robloxapi-error-invalid-generic-argument' ],
+			[ new ThumbnailSizeArgument(), '100x100test', 'robloxapi-error-invalid-generic-argument' ],
+			[ new ThumbnailSizeArgument(), 'test100x100', 'robloxapi-error-invalid-generic-argument' ],
+			[ new ThumbnailSizeArgument(), '1000x1000', 'robloxapi-error-invalid-generic-argument' ],
+
+			[ new UsernameArgument(), 'ab', 'robloxapi-error-invalid-generic-argument' ],
+			[ new UsernameArgument(), 'thisusernameiswaytoolongtobevalid', 'robloxapi-error-invalid-generic-argument' ],
+			[ new UsernameArgument(), 'invalid__username', 'robloxapi-error-invalid-generic-argument' ],
+			[ new UsernameArgument(), 'invalid-username', 'robloxapi-error-invalid-generic-argument' ],
 		];
 	}
 
