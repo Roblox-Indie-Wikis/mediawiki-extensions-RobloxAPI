@@ -45,6 +45,125 @@ class ArgumentParserTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
+	 * @dataProvider provideValidParseTests
+	 */
+	public function testParseValidArgs(
+		ArgumentSpecification $specification,
+		array $args,
+		array $expectedRequired,
+		array $expectedOptional
+	) {
+		$parser = $this->getArgumentParser();
+		$parsingResult = $parser->parse(
+			$specification,
+			$args
+		);
+		$this->assertStatusGood( $parsingResult );
+		$this->assertEquals( $expectedRequired, $parsingResult->getValue()->requiredArgs );
+		$this->assertEquals( $expectedOptional, $parsingResult->getValue()->optionalArgs );
+	}
+
+	public static function provideValidParseTests(): array {
+		return [
+			[
+				ArgumentSpecification::for( new UsernameArgument() )
+					->withOptionalArg( 'pretty', new BooleanArgument() ),
+				[
+					'validUsername',
+					'pretty=true'
+				],
+				[
+					'validUsername'
+				],
+				[
+					'pretty' => 'true'
+				]
+			],
+			[
+				ArgumentSpecification::for( new UsernameArgument(), IdArgument::group() )
+					->withOptionalArg( 'pretty', new BooleanArgument() )
+					->withJsonArgs(),
+				[
+					'validUsername',
+					'12345',
+					'pretty=false',
+					'json_key=value->2'
+				],
+				[
+					'validUsername',
+					'12345'
+				],
+				[
+					'pretty' => 'false',
+					'json_key' => [ 'value', 2 ]
+				]
+			],
+			[
+				ArgumentSpecification::for(),
+				[],
+				[],
+				[]
+			]
+		];
+	}
+
+	/**
+	 * @dataProvider provideInvalidParseTests
+	 */
+	public function testParseInvalidArgs(
+		ArgumentSpecification $specification,
+		array $args,
+		string $expectedError
+	) {
+		$parser = $this->getArgumentParser();
+		$parsingResult = $parser->parse(
+			$specification,
+			$args
+		);
+		$this->assertStatusError( $expectedError, $parsingResult );
+	}
+
+	public static function provideInvalidParseTests(): array {
+		return [
+			[
+				ArgumentSpecification::for( new UsernameArgument() ),
+				[],
+				'robloxapi-error-missing-argument'
+			],
+			[
+				ArgumentSpecification::for( new UsernameArgument() )
+					->withOptionalArg( 'pretty', new BooleanArgument() ),
+				[
+					'validUsername',
+					'pretty=notaboolean'
+				],
+				'robloxapi-error-invalid-choice-argument'
+			],
+			[
+				ArgumentSpecification::for( new UsernameArgument() )
+					->withOptionalArg( 'pretty', new BooleanArgument() ),
+				[
+					'validUsername',
+					'extraarg'
+				],
+				'robloxapi-error-too-many-required-args'
+			],
+			[
+				ArgumentSpecification::for( new UsernameArgument(), IdArgument::group() )
+					->withOptionalArg( 'pretty', new BooleanArgument() )
+					->withJsonArgs(),
+				[
+					'validUsername',
+					'notaninteger',
+					'pretty=false',
+					'json_key=value->2'
+				],
+				'robloxapi-error-invalid-generic-argument'
+			],
+		];
+	}
+
+	/**
 	 * @dataProvider provideValidRequiredArgsTests
 	 */
 	public function testExtractValidRequiredArgs(
