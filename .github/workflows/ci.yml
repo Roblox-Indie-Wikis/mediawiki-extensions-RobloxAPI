@@ -18,24 +18,31 @@ jobs:
           - mw: 'REL1_43'
             php: 8.1
             experimental: false
+            coverage: true
           - mw: 'REL1_44'
             php: 8.1
             experimental: false
+            coverage: false
           - mw: 'REL1_44'
             php: 8.3
             experimental: false
+            coverage: false
           - mw: 'REL1_45'
             php: 8.2
             experimental: false
+            coverage: false
           - mw: 'REL1_45'
             php: 8.3
             experimental: false
+            coverage: false
           - mw: 'master'
             php: 8.3
             experimental: true
+            coverage: false
           - mw: 'master'
             php: 8.5
             experimental: true
+            coverage: false
 
     runs-on: ubuntu-latest
 
@@ -83,16 +90,17 @@ jobs:
       - name: Composer update
         run: composer update
 
-      - name: Run PHPUnit
-        run: composer phpunit:entrypoint -- --group RobloxAPI -c tests/phpunit/suite.xml
+      - name: Run PHPUnit without coverage
+        run: composer phpunit:entrypoint -- -c tests/phpunit/suite.xml extensions/RobloxAPI/tests/phpunit
+        if: matrix.coverage == false
 
-      - name: Generate test coverage report
-        if: always()
-        run: XDEBUG_MODE=coverage composer phpunit -- --testsuite extensions --coverage-clover coverage.xml extensions/RobloxAPI/tests/phpunit --exclude-group Stub
+      - name: Run PHPUnit and generate coverage report
+        run: XDEBUG_MODE=coverage composer phpunit:entrypoint -- -c tests/phpunit/suite.xml --coverage-clover coverage.xml extensions/RobloxAPI/tests/phpunit
+        if: matrix.coverage == true
 
       - name: Upload coverage to Codecov
-        if: always()
         uses: codecov/codecov-action@v5
+        if: matrix.coverage == true
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
