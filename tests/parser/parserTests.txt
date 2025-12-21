@@ -43,7 +43,7 @@ robloxAPI: handle optional arg without a key
 !! wikitext
 {{#robloxAPI: groupRank | 12345 | 54321 | =test}}
 !! html
-<p>Unknown optional argument <i>&#60;empty&#62;</i>!
+<p>Unknown optional argument <code>&lt;empty&gt;</code>!
 </p>
 !! end
 
@@ -52,7 +52,7 @@ robloxAPI: handle invalid optional arg
 !! wikitext
 {{#robloxAPI: groupRank | 12345 | 54321 | invalidArg=test}}
 !! html
-<p>Unknown optional argument <i>invalidarg</i>!
+<p>Unknown optional argument <code>invalidarg</code>!
 </p>
 !! end
 
