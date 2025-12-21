@@ -18,7 +18,7 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\Tests;
+namespace MediaWiki\Extension\RobloxAPI\Tests\Integration;
 
 use MediaWikiIntegrationTestCase;
 
@@ -27,6 +27,7 @@ use MediaWikiIntegrationTestCase;
  */
 class ServiceWiringTest extends MediaWikiIntegrationTestCase {
 
+	// phpcs:ignore MediaWiki.Commenting.MissingCovers.MissingCovers
 	public function testServices() {
 		// we manually loop over the services so the coverage is 100%
 		// this wouldn't work with a data provider

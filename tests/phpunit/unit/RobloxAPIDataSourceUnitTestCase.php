@@ -18,7 +18,7 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\Tests;
+namespace MediaWiki\Extension\RobloxAPI\Tests\Unit;
 
 use GuzzleHttpRequest;
 use MediaWiki\Config\ServiceOptions;

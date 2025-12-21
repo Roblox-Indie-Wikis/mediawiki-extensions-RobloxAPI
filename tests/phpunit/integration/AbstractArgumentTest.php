@@ -18,7 +18,7 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\Tests;
+namespace MediaWiki\Extension\RobloxAPI\Tests\Integration;
 
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentParserContext;
 use MediaWiki\Extension\RobloxAPI\Args\Types\AbstractArgument;
