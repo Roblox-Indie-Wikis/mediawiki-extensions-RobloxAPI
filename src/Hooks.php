@@ -96,8 +96,8 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 						$parseResult = $status->getValue();
 						$execStatus = $dataSource->exec(
 							$parser,
-							$parseResult->requiredArgs,
-							$parseResult->optionalArgs
+							$parseResult->getRequiredArgs(),
+							$parseResult->getOptionalArgs()
 						);
 						if ( !$execStatus->isGood() ) {
 							$parser->addTrackingCategory( 'robloxapi-category-error' );
@@ -163,7 +163,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		}
 		$parseResult = $status->getValue();
 
-		$execStatus = $dataSource->exec( $parser, $parseResult->requiredArgs, $parseResult->optionalArgs );
+		$execStatus = $dataSource->exec( $parser, $parseResult->getRequiredArgs(), $parseResult->getOptionalArgs() );
 		if ( !$execStatus->isGood() ) {
 			return $execStatus;
 		}
@@ -171,7 +171,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		$shouldEscape = $dataSource->shouldEscapeResult( $result );
 
 		if ( $this->utils->shouldReturnJson( $result ) ) {
-			$result = $this->utils->createJsonResult( $result, $parseResult->optionalArgs );
+			$result = $this->utils->createJsonResult( $result, $parseResult->getOptionalArgs() );
 			// always escape json, there is no need for it to be parsed
 			$shouldEscape = true;
 		}

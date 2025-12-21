@@ -63,7 +63,7 @@ class ChoiceArgument extends AbstractArgument {
 			return StatusValue::newFatal(
 				$this->errorMessage,
 				RobloxAPIUtils::transformValueForError( $value ),
-				$ctx->contentLanguage->commaList( array_map( 'wfEscapeWikiText', $this->choices ) ),
+				$ctx->getContentLanguage()->commaList( array_map( 'wfEscapeWikiText', $this->choices ) ),
 				new MessageValue( $this->getTranslationKey() ),
 			);
 		}

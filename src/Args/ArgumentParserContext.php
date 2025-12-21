@@ -25,8 +25,12 @@ use MediaWiki\Language\Language;
 class ArgumentParserContext {
 
 	public function __construct(
-		public Language $contentLanguage,
+		private readonly Language $contentLanguage,
 	) {
+	}
+
+	public function getContentLanguage(): Language {
+		return $this->contentLanguage;
 	}
 
 }
