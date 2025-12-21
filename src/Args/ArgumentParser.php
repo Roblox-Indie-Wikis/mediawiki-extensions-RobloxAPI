@@ -73,9 +73,11 @@ class ArgumentParser {
 	}
 
 	/**
+	 * Public for testing, due to T287318
+	 * @internal
 	 * @return StatusValue<string[]> The extracted required arguments or an error status.
 	 */
-	private function extractRequiredArgs(
+	public function extractRequiredArgs(
 		ArgumentParserContext $ctx,
 		ArgumentSpecification $specification,
 		array &$args,
@@ -108,7 +110,7 @@ class ArgumentParser {
 	private function extractOptionalArgs(
 		ArgumentParserContext $ctx,
 		ArgumentSpecification $specification,
-		array &$args,
+		array $args,
 	): StatusValue {
 		$result = [];
 		$first = true;
@@ -209,6 +211,7 @@ class ArgumentParser {
 
 	/**
 	 * @internal
+	 * @codeCoverageIgnore Internal method used for testing.
 	 */
 	public function overrideOptions( array $options ): void {
 		$this->options = new ServiceOptions( self::CONSTRUCTOR_OPTIONS, $options );
