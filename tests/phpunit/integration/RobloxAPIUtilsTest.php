@@ -20,9 +20,11 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Tests;
 
+use FormatJson;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use MediaWikiIntegrationTestCase;
+use Wikimedia\Message\MessageValue;
 
 /**
  * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils
@@ -91,7 +93,7 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 					"displayName": "abaddriverlol"
 				}
 		EOD;
-		$jsonObject = \FormatJson::decode( $jsonString );
+		$jsonObject = FormatJson::decode( $jsonString );
 		self::assertEquals( 'abaddriverlol',
 			$utils->createJsonResult( $jsonObject, [ 'json_key' => [ 'requestedUsername' ] ] ) );
 		self::assertEquals( '{"requestedUsername":"abaddriverlol","hasVerifiedBadge":false,"id":4182456156,' .
@@ -118,7 +120,7 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 					]
 				}
 		EOD;
-		$jsonObject = \FormatJson::decode( $jsonString );
+		$jsonObject = FormatJson::decode( $jsonString );
 		self::assertEquals( 'someValue',
 			$utils->createJsonResult( $jsonObject, [ 'json_key' => [ 'someData', 0 ] ] ) );
 	}
@@ -136,7 +138,7 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 					}
 				}
 		EOD;
-		$jsonObject = \FormatJson::decode( $jsonString );
+		$jsonObject = FormatJson::decode( $jsonString );
 		self::assertEquals( 'someValue', $utils->getJsonKey( $jsonObject, [ 'someData', 'someNestedData' ] ) );
 	}
 
@@ -153,6 +155,19 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 
 		self::assertFalse( $utils->verifyIsRobloxCdnUrl( 'https://roblox.com/1234/' ) );
 		self::assertFalse( $utils->verifyIsRobloxCdnUrl( 'https://t0.rbxcdn.com///https://google.com/' ) );
+	}
+
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::transformValueForError
+	 */
+	public function testTransformValueForError(): void {
+		$utils = $this->getUtils();
+
+		self::assertEquals( 'simpleString', $utils->transformValueForError( 'simpleString' ) );
+		self::assertEquals( new MessageValue( 'robloxapi-arg-empty-value-placeholder' ),
+			$utils->transformValueForError( '' ) );
+		self::assertEquals( '&#32; ', $utils->transformValueForError( '  ' ) );
+		self::assertEquals( '&#60;test&#62;', $utils->transformValueForError( '<test>' ) );
 	}
 
 }
