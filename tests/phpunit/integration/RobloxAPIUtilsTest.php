@@ -21,9 +21,13 @@
 namespace MediaWiki\Extension\RobloxAPI\Tests;
 
 use FormatJson;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
+use MediaWiki\Parser\ParserOptions;
+use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
+use StatusValue;
 use Wikimedia\Message\MessageValue;
 
 /**
@@ -135,11 +139,18 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 				{
 					"someData": {
 						"someNestedData": "someValue"
-					}
+					},
+					"someArray": [
+						"firstValue",
+						"secondValue"
+					]
 				}
 		EOD;
 		$jsonObject = FormatJson::decode( $jsonString );
 		self::assertEquals( 'someValue', $utils->getJsonKey( $jsonObject, [ 'someData', 'someNestedData' ] ) );
+
+		self::assertNull( $utils->getJsonKey( 'string', [ 'key' ] ) );
+		self::assertNull( $utils->getJsonKey( $jsonObject, [ 'someArray', 3 ] ) );
 	}
 
 	/**
@@ -168,6 +179,52 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 			$utils->transformValueForError( '' ) );
 		self::assertEquals( '&#32; ', $utils->transformValueForError( '  ' ) );
 		self::assertEquals( '&#60;test&#62;', $utils->transformValueForError( '<test>' ) );
+	}
+
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::shouldReturnJson
+	 */
+	public function testShouldReturnJson(): void {
+		$utils = $this->getUtils();
+
+		self::assertTrue( $utils->shouldReturnJson( (object)[ 'key' => 'value' ] ) );
+		self::assertTrue( $utils->shouldReturnJson( [ 'key' => 'value' ] ) );
+		self::assertFalse( $utils->shouldReturnJson( 'just a string' ) );
+		self::assertFalse( $utils->shouldReturnJson( 12345 ) );
+		self::assertFalse( $utils->shouldReturnJson( null ) );
+	}
+
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::formatStatusValue
+	 */
+	public function testFormatStatusValue(): void {
+		$utils = $this->getUtils();
+		$parser = $this->getServiceContainer()->getParserFactory()->create();
+		$lang = $this->getServiceContainer()->getLanguageFactory()->getLanguage( 'en' );
+		$parserOptions = ParserOptions::newFromAnon();
+		$parserOptions->setTargetLanguage( $lang );
+		$parser->setOptions( $parserOptions );
+		$parser->setPage( Title::newFromText( 'RobloxAPITest' ) );
+
+		$statusFatal = StatusValue::newFatal(
+			'robloxapi-error-invalid-generic-argument',
+			'<invalid&value>',
+			new MessageValue( 'robloxapi-arg-type-username' )
+		);
+		$formatted = $utils->formatStatusValue( $statusFatal, $parser );
+		// phpcs:ignore Generic.Files.LineLength
+		self::assertEquals( '<div class="cdx-message--error mw-robloxapi-error cdx-message cdx-message--block"><span class="cdx-message__icon"></span><div class="cdx-message__content">Invalid value <code><invalid&value></code> for argument of type \'\'Username\'\'!</div></div>', $formatted );
+
+		$utils->overrideOptions( [
+			RobloxAPIConstants::ConfShowPlainErrors => true,
+		] );
+		$formatted = $utils->formatStatusValue( $statusFatal, $parser );
+		self::assertEquals( 'Invalid value <code><invalid&value></code> for argument of type \'\'Username\'\'!',
+			$formatted );
+
+		$statusGood = StatusValue::newGood();
+		$this->expectException( \LogicException::class );
+		$utils->formatStatusValue( $statusGood, $parser );
 	}
 
 }
