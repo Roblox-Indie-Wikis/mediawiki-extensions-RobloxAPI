@@ -35,8 +35,8 @@ class ArgumentSpecification {
 	 * @param bool $withJsonArgs Whether to add the default optional arguments for JSON data.
 	 */
 	public function __construct(
-		public array $requiredArgs,
-		public array $optionalArgs = [],
+		private array $requiredArgs,
+		private array $optionalArgs = [],
 		bool $withJsonArgs = false
 	) {
 		if ( $withJsonArgs ) {
@@ -76,6 +76,20 @@ class ArgumentSpecification {
 		$this->optionalArgs[$arg] = $type;
 
 		return $this;
+	}
+
+	/**
+	 * @return IArgument[]
+	 */
+	public function getRequiredArgs(): array {
+		return $this->requiredArgs;
+	}
+
+	/**
+	 * @return array<string, IArgument>
+	 */
+	public function getOptionalArgs(): array {
+		return $this->optionalArgs;
 	}
 
 }

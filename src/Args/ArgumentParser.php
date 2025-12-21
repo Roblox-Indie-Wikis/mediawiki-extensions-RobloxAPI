@@ -84,7 +84,7 @@ class ArgumentParser {
 	): StatusValue {
 		$result = [];
 
-		foreach ( $specification->requiredArgs as $type ) {
+		foreach ( $specification->getRequiredArgs() as $type ) {
 			if ( count( $args ) === 0 ) {
 				return StatusValue::newFatal(
 					'robloxapi-error-missing-argument',
@@ -134,14 +134,14 @@ class ArgumentParser {
 			$key = trim( strtolower( $parts[0] ) );
 			$value = trim( $parts[1] );
 
-			if ( !array_key_exists( $key, $specification->optionalArgs ) ) {
+			if ( !array_key_exists( $key, $specification->getOptionalArgs() ) ) {
 				return StatusValue::newFatal(
 					'robloxapi-error-unknown-optional-argument',
 					RobloxAPIUtils::transformValueForError( $key ),
 				);
 			}
 
-			$type = $specification->optionalArgs[$key];
+			$type = $specification->getOptionalArgs()[$key];
 			$status = $this->validate( $type, $ctx, $value );
 			if ( !$status->isGood() ) {
 				return $status;
