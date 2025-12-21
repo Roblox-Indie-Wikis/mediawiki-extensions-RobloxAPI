@@ -20,12 +20,15 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Tests\Integration;
 
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentParserContext;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentParserResult;
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\Args\Types\BooleanArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\UsernameArgument;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
+use MediaWiki\Language\Language;
 use MediaWikiIntegrationTestCase;
 use StatusValue;
 use Wikimedia\Message\MessageValue;
@@ -59,8 +62,8 @@ class ArgumentParserTest extends MediaWikiIntegrationTestCase {
 			$args
 		);
 		$this->assertStatusGood( $parsingResult );
-		$this->assertEquals( $expectedRequired, $parsingResult->getValue()->requiredArgs );
-		$this->assertEquals( $expectedOptional, $parsingResult->getValue()->optionalArgs );
+		$this->assertEquals( $expectedRequired, $parsingResult->getValue()->getRequiredArgs() );
+		$this->assertEquals( $expectedOptional, $parsingResult->getValue()->getOptionalArgs() );
 	}
 
 	public static function provideValidParseTests(): array {
@@ -465,6 +468,26 @@ class ArgumentParserTest extends MediaWikiIntegrationTestCase {
 		$context = $parser->newContext();
 
 		$this->assertNotNull( $context );
+	}
+
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\Args\ArgumentParserContext
+	 */
+	public function testArgumentParserContext() {
+		$contentLanguage = $this->createMock( Language::class );
+		$context = new ArgumentParserContext( $contentLanguage );
+		$this->assertSame( $contentLanguage, $context->getContentLanguage() );
+	}
+
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\Args\ArgumentParserResult
+	 */
+	public function testArgumentParserResult() {
+		$requiredArgs = [ 'arg1', 'arg2' ];
+		$optionalArgs = [ 'opt1' => 'value1', 'opt2' => 'value2' ];
+		$result = new ArgumentParserResult( $requiredArgs, $optionalArgs );
+		$this->assertEquals( $requiredArgs, $result->getRequiredArgs() );
+		$this->assertEquals( $optionalArgs, $result->getOptionalArgs() );
 	}
 
 }
