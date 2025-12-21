@@ -97,6 +97,7 @@ class DataSourceCache {
 			$optionalArgs,
 			array_flip( $this->options->get( RobloxAPIConstants::ConfCacheSplittingOptionalArguments ) )
 		);
+		ksort( $cacheSplittingOptionalArgs );
 
 		$argsJson = json_encode( $args );
 		$optionalArgsJson = json_encode( $cacheSplittingOptionalArgs );
