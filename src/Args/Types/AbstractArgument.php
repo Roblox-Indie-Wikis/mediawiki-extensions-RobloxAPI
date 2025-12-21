@@ -26,13 +26,16 @@ use Wikimedia\Message\MessageValue;
 
 /**
  * Abstract base class for arguments.
+ * @template T
+ * @implements IArgument<T>
  */
 abstract class AbstractArgument implements IArgument {
 
 	/**
 	 * @param string $key The key for this argument type.
+	 * @suppress PhanGenericConstructorTypes No idea why, but it causes errors otherwise.
 	 */
-	public function __construct(
+	protected function __construct(
 		private readonly string $key,
 	) {
 	}

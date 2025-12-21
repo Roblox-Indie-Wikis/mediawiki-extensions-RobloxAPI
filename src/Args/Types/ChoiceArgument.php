@@ -27,6 +27,7 @@ use Wikimedia\Message\MessageValue;
 
 /**
  * Represents an argument that must be one of a set of choices.
+ * @extends AbstractArgument<string>
  */
 class ChoiceArgument extends AbstractArgument {
 
@@ -48,7 +49,10 @@ class ChoiceArgument extends AbstractArgument {
 		);
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @return StatusValue<string>
+	 * @inheritDoc
+	 */
 	public function validate( ArgumentParserContext $ctx, string $value ): StatusValue {
 		if ( !$this->caseSensitive ) {
 			$value = strtolower( $value );

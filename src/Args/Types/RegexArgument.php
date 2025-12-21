@@ -25,6 +25,7 @@ use StatusValue;
 
 /**
  * Represents an argument that must match a regular expression.
+ * @extends AbstractArgument<string>
  */
 class RegexArgument extends AbstractArgument {
 
@@ -37,7 +38,10 @@ class RegexArgument extends AbstractArgument {
 		parent::__construct( $key );
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @return StatusValue<string>
+	 * @inheritDoc
+	 */
 	public function validate( ArgumentParserContext $ctx, string $value ): StatusValue {
 		if ( preg_match( $this->pattern, $value ) ) {
 			return StatusValue::newGood( $value );

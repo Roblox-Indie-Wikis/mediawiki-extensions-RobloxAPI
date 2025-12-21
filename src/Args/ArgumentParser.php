@@ -93,7 +93,6 @@ class ArgumentParser {
 			$value = array_shift( $args );
 			$status = $this->validate( $type, $ctx, $value );
 			if ( !$status->isGood() ) {
-				// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
 				return $status;
 			}
 
@@ -143,7 +142,6 @@ class ArgumentParser {
 			$type = $specification->optionalArgs[$key];
 			$status = $this->validate( $type, $ctx, $value );
 			if ( !$status->isGood() ) {
-				// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
 				return $status;
 			}
 
@@ -174,7 +172,7 @@ class ArgumentParser {
 		}
 
 		$allowedArgs = $this->getAllowedArguments( $type );
-		if ( !empty( $allowedArgs ) ) {
+		if ( $allowedArgs ) {
 			$validatedValue = $status->getValue();
 			if ( !in_array( $validatedValue, $allowedArgs, false ) ) {
 				return StatusValue::newFatal(

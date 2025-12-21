@@ -25,6 +25,7 @@ use StatusValue;
 
 /**
  * Represents an argument that is a JSON key.
+ * @extends AbstractArgument<array<string|int>>
  */
 class JsonKeyArgument extends AbstractArgument {
 
@@ -39,9 +40,6 @@ class JsonKeyArgument extends AbstractArgument {
 	 */
 	public function validate( ArgumentParserContext $ctx, string $value ): StatusValue {
 		$values = explode( '->', $value );
-		if ( empty( $values ) ) {
-			return $this->invalidValue( $value );
-		}
 
 		$result = [];
 		foreach ( $values as $val ) {
