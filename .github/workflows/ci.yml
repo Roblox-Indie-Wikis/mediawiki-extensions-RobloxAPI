@@ -95,7 +95,7 @@ jobs:
         if: matrix.coverage == false
 
       - name: Run PHPUnit and generate coverage report
-        run: XDEBUG_MODE=coverage composer phpunit:entrypoint -- -c tests/phpunit/suite.xml --coverage-clover coverage.xml extensions/RobloxAPI/tests/phpunit
+        run: XDEBUG_MODE=coverage vendor/bin/phpunit --bootstrap tests/phpunit/bootstrap.integration.php --coverage-filter extensions/RobloxAPI/src --coverage-clover coverage.xml extensions/RobloxAPI/tests/phpunit
         if: matrix.coverage == true
 
       - name: Upload coverage to Codecov
