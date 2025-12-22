@@ -20,20 +20,17 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Tests\Unit;
 
-use GuzzleHttpRequest;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\Data\Cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Tests\Integration\HttpRequestFactoryTestTrait;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
-use MediaWiki\Http\HttpRequestFactory;
-use MediaWiki\Status\Status;
 use MediaWikiUnitTestCase;
-use StatusValue;
 use Wikimedia\ObjectCache\WANObjectCache;
 
 /**
  * Base class for Roblox API unit tests.
+ * // TODO convert to trait
  */
 abstract class RobloxAPIDataSourceUnitTestCase extends MediaWikiUnitTestCase {
 	use HttpRequestFactoryTestTrait;
