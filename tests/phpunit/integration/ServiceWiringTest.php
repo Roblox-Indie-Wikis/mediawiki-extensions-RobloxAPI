@@ -24,10 +24,14 @@ use MediaWikiIntegrationTestCase;
 
 /**
  * @group RobloxAPI
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\ArgumentParser
+ * @covers \MediaWiki\Extension\RobloxAPI\Data\Cache\DataSourceCache
+ * @covers \MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider
+ * @covers \MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher
+ * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils
  */
 class ServiceWiringTest extends MediaWikiIntegrationTestCase {
 
-	// phpcs:ignore MediaWiki.Commenting.MissingCovers.MissingCovers
 	public function testServices() {
 		// we manually loop over the services so the coverage is 100%
 		// this wouldn't work with a data provider
