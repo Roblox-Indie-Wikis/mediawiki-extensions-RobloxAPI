@@ -86,16 +86,15 @@ class RobloxAPIFetcher {
 			'timeout' => 5,
 		];
 
-		$userAgent = $this->options->get( RobloxAPIConstants::ConfRequestUserAgent );
-		if ( $userAgent !== null && $userAgent !== '' ) {
-			$options['userAgent'] = $userAgent;
-		}
-
 		$processRequestOptions( $options, $requiredArgs, $optionalArgs );
 
-		// @phan-suppress-next-line PhanParamTooFewInPHPDoc the $caller arg has a default so no need to supply it
-		$request = $this->httpRequestFactory->create( $endpoint, $options );
+		$request = $this->httpRequestFactory->create( $endpoint, $options, __METHOD__ );
 		$request->setHeader( 'Accept', 'application/json' );
+
+		$userAgent = $this->options->get( RobloxAPIConstants::ConfRequestUserAgent );
+		if ( $userAgent !== null && $userAgent !== '' ) {
+			$request->setUserAgent( $userAgent );
+		}
 
 		foreach ( $headers as $header => $value ) {
 			$request->setHeader( $header, $value );
