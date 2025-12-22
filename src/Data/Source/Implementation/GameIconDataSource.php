@@ -50,8 +50,6 @@ class GameIconDataSource extends ThumbnailDataSource {
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return ArgumentSpecification::for( IdArgument::place(), new ThumbnailSizeArgument() )
 			->withOptionalArg( 'is_circular', new BooleanArgument() )
-			// TODO we can implement this now
-			// jpeg is also supported in theory, not by the other thumbnail APIs though
 			->withOptionalArg( 'format', new ThumbnailFormatArgument() )
 			->withOptionalArg( 'return_policy', new ReturnPolicyArgument() )
 			->withJsonArgs();
