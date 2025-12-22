@@ -43,7 +43,7 @@ class PlaceVisitsDataSource extends DependentDataSource {
 		$gameDataStatus = $this->dataSource->exec( $parser, $requiredArgs );
 
 		if ( !$gameDataStatus->isGood() ) {
-			return $this->failNoData();
+			return $gameDataStatus;
 		}
 		$gameData = $gameDataStatus->getValue();
 
