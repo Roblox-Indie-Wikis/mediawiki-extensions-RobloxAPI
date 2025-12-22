@@ -13,9 +13,7 @@ use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 
 class AssetThumbnailUrlDataSource extends ThumbnailUrlDataSource {
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function __construct( DataSourceProvider $dataSourceProvider, RobloxAPIUtils $utils ) {
 		parent::__construct( $dataSourceProvider, $utils, 'assetThumbnailUrl', 'assetThumbnail' );
 	}

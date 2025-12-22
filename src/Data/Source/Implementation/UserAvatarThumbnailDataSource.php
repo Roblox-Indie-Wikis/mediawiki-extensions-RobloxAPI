@@ -17,16 +17,12 @@ use MediaWiki\Extension\RobloxAPI\Data\Source\ThumbnailDataSource;
 
 class UserAvatarThumbnailDataSource extends ThumbnailDataSource {
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function __construct( RobloxAPIFetcher $fetcher ) {
 		parent::__construct( 'userAvatarThumbnail', $fetcher, 'users/avatar', 'userIds' );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return ArgumentSpecification::for( IdArgument::user(), new ThumbnailSizeArgument() )
 			->withOptionalArg( 'is_circular', new BooleanArgument() )
@@ -34,9 +30,7 @@ class UserAvatarThumbnailDataSource extends ThumbnailDataSource {
 			->withJsonArgs();
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function shouldRegisterLegacyParserFunction(): bool {
 		return true;
 	}

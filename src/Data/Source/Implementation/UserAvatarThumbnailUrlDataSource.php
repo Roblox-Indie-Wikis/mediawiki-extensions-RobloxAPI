@@ -13,16 +13,12 @@ use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 
 class UserAvatarThumbnailUrlDataSource extends ThumbnailUrlDataSource {
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function __construct( DataSourceProvider $dataSourceProvider, RobloxAPIUtils $utils ) {
 		parent::__construct( $dataSourceProvider, $utils, 'userAvatarThumbnailUrl', 'userAvatarThumbnail' );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function shouldRegisterLegacyParserFunction(): bool {
 		return true;
 	}

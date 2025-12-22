@@ -16,16 +16,12 @@ use StatusValue;
 
 class PlaceActivePlayersDataSource extends DependentDataSource {
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
 		parent::__construct( $dataSourceProvider, 'activePlayers', 'gameData' );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
 		$gameDataStatus = $this->dataSource->exec( $parser, $requiredArgs );
 
@@ -40,16 +36,12 @@ class PlaceActivePlayersDataSource extends DependentDataSource {
 		return StatusValue::newGood( $gameData->playing );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return ArgumentSpecification::for( IdArgument::universe(), IdArgument::place() );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function shouldRegisterLegacyParserFunction(): bool {
 		return true;
 	}

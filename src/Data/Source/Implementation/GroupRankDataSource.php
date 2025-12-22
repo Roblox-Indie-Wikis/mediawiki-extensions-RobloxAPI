@@ -16,16 +16,12 @@ use StatusValue;
 
 class GroupRankDataSource extends DependentDataSource {
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
 		parent::__construct( $dataSourceProvider, 'groupRank', 'groupRoles' );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
 		$execStatus = $this->dataSource->exec( $parser, [ $requiredArgs[1] ] );
 		if ( !$execStatus->isGood() ) {
@@ -50,16 +46,12 @@ class GroupRankDataSource extends DependentDataSource {
 		return StatusValue::newFatal( 'robloxapi-error-user-group-not-found' );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return ArgumentSpecification::for( IdArgument::group(), IdArgument::user() );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function shouldRegisterLegacyParserFunction(): bool {
 		return true;
 	}

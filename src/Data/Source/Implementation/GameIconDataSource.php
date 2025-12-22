@@ -18,9 +18,7 @@ use MediaWiki\Extension\RobloxAPI\Data\Source\ThumbnailDataSource;
 
 class GameIconDataSource extends ThumbnailDataSource {
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function __construct( RobloxAPIFetcher $fetcher ) {
 		parent::__construct( 'gameIcon', $fetcher, 'places/gameicons', 'placeIds' );
 	}
@@ -31,9 +29,7 @@ class GameIconDataSource extends ThumbnailDataSource {
 		return parent::getEndpoint( $requiredArgs, $optionalArgs ) . "&returnPolicy=$returnPolicy";
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return ArgumentSpecification::for( IdArgument::place(), new ThumbnailSizeArgument() )
 			->withOptionalArg( 'is_circular', new BooleanArgument() )

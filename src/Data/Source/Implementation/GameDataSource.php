@@ -22,16 +22,12 @@ class GameDataSource extends FetcherDataSource {
 		parent::__construct( 'gameData', $fetcher );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
 		return "https://games.roblox.com/v1/games?universeIds=$requiredArgs[0]";
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): StatusValue {
 		$entries = $data->data;
 
@@ -55,16 +51,12 @@ class GameDataSource extends FetcherDataSource {
 		return StatusValue::newGood( null );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function shouldRegisterLegacyParserFunction(): bool {
 		return true;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return ArgumentSpecification::for( IdArgument::universe(), IdArgument::place() )
 			->withJsonArgs();

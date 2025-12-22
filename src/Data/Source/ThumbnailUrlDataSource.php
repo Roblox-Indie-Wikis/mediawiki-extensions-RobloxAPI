@@ -17,9 +17,7 @@ use MediaWiki\Parser\Parser;
 use StatusValue;
 
 abstract class ThumbnailUrlDataSource extends DependentDataSource {
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function __construct(
 		DataSourceProvider $dataSourceProvider,
 		private readonly RobloxAPIUtils $utils,
@@ -67,18 +65,14 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 		return StatusValue::newGood( $url );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function shouldEscapeResult( mixed $result ): bool {
 		// The url should not be escaped here in order to be embedded correctly using $wgEnableImageWhitelist.
 		// If the URL was escaped here, it would be URL-encoded and not recognized by MediaWiki as an image URL.
 		return !$this->utils->verifyIsRobloxCdnUrl( $result );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return ArgumentSpecification::for( IdArgument::user(), new ThumbnailSizeArgument() )
 			->withOptionalArg( 'is_circular', new BooleanArgument() )

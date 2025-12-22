@@ -26,9 +26,7 @@ abstract class ThumbnailDataSource extends FetcherDataSource {
 		parent::__construct( $id, $fetcher );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): StatusValue {
 		if ( !is_object( $data ) || !property_exists( $data, 'data' ) ) {
 			return $this->failUnexpectedDataStructure();
@@ -37,9 +35,7 @@ abstract class ThumbnailDataSource extends FetcherDataSource {
 		return StatusValue::newGood( $data->data );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
 		$thumbnailId = $requiredArgs[0];
 		$size = $requiredArgs[1];

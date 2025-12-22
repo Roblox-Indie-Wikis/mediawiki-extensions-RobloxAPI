@@ -19,23 +19,17 @@ use StatusValue;
  */
 class UserIdDataSource extends FetcherDataSource {
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function __construct( RobloxAPIFetcher $fetcher ) {
 		parent::__construct( 'userId', $fetcher );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
 		return "https://users.roblox.com/v1/usernames/users";
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): StatusValue {
 		$entries = $data->data;
 		if ( $entries === null || count( $entries ) === 0 ) {
@@ -54,26 +48,20 @@ class UserIdDataSource extends FetcherDataSource {
 		return StatusValue::newGood( $entry->id );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function processRequestOptions( array &$options, array $requiredArgs, array $optionalArgs ): void {
 		$options['method'] = 'POST';
 		$options['postData'] = FormatJson::encode( [ 'usernames' => [ $requiredArgs[0] ] ] );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	protected function getAdditionalHeaders( array $requiredArgs, array $optionalArgs ): array {
 		return [
 			'Content-Type' => 'application/json',
 		];
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return ArgumentSpecification::for( new UsernameArgument() );
 	}
@@ -83,9 +71,7 @@ class UserIdDataSource extends FetcherDataSource {
 	// instead, it returns the id directly.
 	// this is because the id is the same as the one of the legacy parser function.
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function shouldRegisterLegacyParserFunction(): bool {
 		return true;
 	}

@@ -16,16 +16,12 @@ use StatusValue;
 
 class GroupMembersDataSource extends DependentDataSource {
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function __construct( DataSourceProvider $dataSourceProvider ) {
 		parent::__construct( $dataSourceProvider, 'groupMembers', 'groupData' );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = []	): StatusValue {
 		$groupDataStatus = $this->dataSource->exec( $parser, $requiredArgs );
 
@@ -45,16 +41,12 @@ class GroupMembersDataSource extends DependentDataSource {
 		return StatusValue::newGood( $groupData->memberCount );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return ArgumentSpecification::for( IdArgument::group() );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function shouldRegisterLegacyParserFunction(): bool {
 		return true;
 	}

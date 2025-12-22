@@ -25,37 +25,27 @@ abstract class AbstractDataSource implements IDataSource {
 		$this->enabled = true;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function isEnabled(): bool {
 		return $this->enabled;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function disable(): void {
 		$this->enabled = false;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getId(): string {
 		return $this->id;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function shouldEscapeResult( mixed $result ): bool {
 		return true;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function shouldRegisterLegacyParserFunction(): bool {
 		return false;
 	}

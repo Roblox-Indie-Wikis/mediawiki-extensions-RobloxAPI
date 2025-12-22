@@ -40,9 +40,7 @@ abstract class DependentDataSource extends AbstractDataSource {
 		return $this->dataSource->getFetcherSourceId();
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function isEnabled(): bool {
 		return $this->dataSource->isEnabled() && parent::isEnabled();
 	}

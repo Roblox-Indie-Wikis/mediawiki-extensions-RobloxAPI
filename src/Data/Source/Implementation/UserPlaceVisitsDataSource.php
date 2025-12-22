@@ -23,9 +23,7 @@ class UserPlaceVisitsDataSource extends DependentDataSource {
 		parent::__construct( $dataSourceProvider, 'userPlaceVisits', 'userGames' );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
 		$userGamesStatus = $this->dataSource->exec( $parser, $requiredArgs, $optionalArgs );
 
@@ -52,9 +50,7 @@ class UserPlaceVisitsDataSource extends DependentDataSource {
 		return StatusValue::newGood( $totalVisits );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return $this->dataSource->getArgumentSpecification();
 	}

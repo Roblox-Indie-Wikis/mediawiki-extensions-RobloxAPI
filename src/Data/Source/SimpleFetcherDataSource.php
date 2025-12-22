@@ -35,16 +35,12 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 		parent::__construct( $id, $fetcher );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getEndpoint( array $requiredArgs, array $optionalArgs ): string {
 		return call_user_func( $this->createEndpoint, $requiredArgs, $optionalArgs );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): StatusValue {
 		if ( $this->processDataFn ) {
 			$processedData = call_user_func( $this->processDataFn, $data, $requiredArgs, $optionalArgs );
@@ -57,9 +53,7 @@ class SimpleFetcherDataSource extends FetcherDataSource {
 		return StatusValue::newGood( $data );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function shouldRegisterLegacyParserFunction(): bool {
 		return $this->registerParserFunction;
 	}

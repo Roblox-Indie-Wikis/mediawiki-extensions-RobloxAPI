@@ -38,9 +38,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		$this->usageLimits = $this->config->get( RobloxAPIConstants::ConfDataSourceUsageLimits );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function onParserFirstCallInit( $parser ): void {
 		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, mixed ...$args ): array|bool|string {
 			$status = $this->handleParserFunctionCall( $parser, $args );
@@ -209,9 +207,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		return StatusValue::newGood();
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function onParserTestGlobals( &$globals ): void {
 		$this->argumentParser->overrideOptions( [
 			RobloxAPIConstants::ConfAllowedArguments => [ 'user-id' => [ 54321 ] ],

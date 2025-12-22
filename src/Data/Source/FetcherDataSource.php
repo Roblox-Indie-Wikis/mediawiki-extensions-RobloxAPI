@@ -103,9 +103,7 @@ abstract class FetcherDataSource extends AbstractDataSource {
 		return [];
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
 		return $this->fetch( $requiredArgs, $optionalArgs );
 	}

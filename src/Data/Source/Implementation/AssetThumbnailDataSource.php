@@ -17,16 +17,12 @@ use MediaWiki\Extension\RobloxAPI\Data\Source\ThumbnailDataSource;
 
 class AssetThumbnailDataSource extends ThumbnailDataSource {
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function __construct( RobloxAPIFetcher $fetcher ) {
 		parent::__construct( 'assetThumbnail', $fetcher, 'assets', 'assetIds' );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return ArgumentSpecification::for( IdArgument::asset(), new ThumbnailSizeArgument() )
 			->withOptionalArg( 'is_circular', new BooleanArgument() )
