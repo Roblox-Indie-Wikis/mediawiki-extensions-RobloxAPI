@@ -20,9 +20,9 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 
-use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
 use MediaWiki\Parser\Parser;
+use StatusValue;
 
 /**
  * Represents a data source.
@@ -33,10 +33,10 @@ interface IDataSource {
 	 * Executes the data source. This is called when the #robloxAPI parser function is used.
 	 * @param Parser $parser
 	 * @param string[] $requiredArgs
-	 * @param array<string, string> $optionalArgs
-	 * @throws RobloxAPIException If the data source fails to execute
+	 * @param array<string, mixed> $optionalArgs
+	 * @return StatusValue<mixed> The result of the data source execution.
 	 */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): mixed;
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue;
 
 	/**
 	 * Determines whether a legacy parser function should be registered.

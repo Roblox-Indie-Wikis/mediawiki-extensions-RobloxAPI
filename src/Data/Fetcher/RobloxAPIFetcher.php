@@ -24,10 +24,10 @@ use Closure;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\Data\Cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Json\FormatJson;
 use MediaWiki\Logger\LoggerFactory;
+use StatusValue;
 
 /**
  * This class holds all logic for fetching data from Roblox API endpoints.
@@ -58,11 +58,10 @@ class RobloxAPIFetcher {
 	 * @param string $dataSourceId The ID of the data source
 	 * @param string $endpoint The endpoint to fetch data from.
 	 * @param array<string> $requiredArgs
-	 * @param array<string, string> $optionalArgs
+	 * @param array<string, mixed> $optionalArgs
 	 * @param array<string, string> $headers Additional headers that should be added
 	 * @param Closure( array<string, mixed>&, array<string>, array<string, string> ): void $processRequestOptions
-	 * @return mixed The fetched data.
-	 * @throws RobloxAPIException if there are any errors during the process
+	 * @return StatusValue<mixed> The fetched data.
 	 */
 	public function getDataFromEndpoint(
 		string $dataSourceId,
@@ -71,15 +70,15 @@ class RobloxAPIFetcher {
 		array $optionalArgs,
 		array $headers,
 		Closure $processRequestOptions
-	): mixed {
+	): StatusValue {
 		$cachedResult = $this->cache->getResultForEndpoint( $endpoint, $requiredArgs, $optionalArgs );
 
 		if ( $cachedResult !== null ) {
-			return $cachedResult;
+			return StatusValue::newGood( $cachedResult );
 		}
 
 		if ( in_array( $dataSourceId, $this->rateLimitedDataSources, true ) ) {
-			throw new RobloxAPIException( 'robloxapi-error-request-cancelled-rate-limits', $dataSourceId );
+			return StatusValue::newFatal( 'robloxapi-error-request-cancelled-rate-limits', $dataSourceId );
 		}
 
 		$options = [
@@ -87,16 +86,15 @@ class RobloxAPIFetcher {
 			'timeout' => 5,
 		];
 
-		$userAgent = $this->options->get( RobloxAPIConstants::ConfRequestUserAgent );
-		if ( $userAgent !== null && $userAgent !== '' ) {
-			$options['userAgent'] = $userAgent;
-		}
-
 		$processRequestOptions( $options, $requiredArgs, $optionalArgs );
 
-		// @phan-suppress-next-line PhanParamTooFewInPHPDoc the $caller arg has a default so no need to supply it
-		$request = $this->httpRequestFactory->create( $endpoint, $options );
+		$request = $this->httpRequestFactory->create( $endpoint, $options, __METHOD__ );
 		$request->setHeader( 'Accept', 'application/json' );
+
+		$userAgent = $this->options->get( RobloxAPIConstants::ConfRequestUserAgent );
+		if ( $userAgent !== null && $userAgent !== '' ) {
+			$request->setUserAgent( $userAgent );
+		}
 
 		foreach ( $headers as $header => $value ) {
 			$request->setHeader( $header, $value );
@@ -115,22 +113,22 @@ class RobloxAPIFetcher {
 			] );
 		}
 
-		if ( $status->value === 429 ) {
+		if ( $status->getValue() === 429 ) {
 			// we're getting rate limited; avoid sending further requests to the same endpoint
 			$this->rateLimitedDataSources[] = $dataSourceId;
-			throw new RobloxAPIException( 'robloxapi-error-request-rate-limited', $dataSourceId );
+			return StatusValue::newFatal( 'robloxapi-error-request-rate-limited', $dataSourceId );
 		}
 
 		$json = $request->getContent();
 
 		if ( !$status->isOK() || $json === null ) {
-			throw new RobloxAPIException( 'robloxapi-error-request-failed' );
+			return StatusValue::newFatal( 'robloxapi-error-request-failed' );
 		}
 
 		$data = FormatJson::decode( $json );
 
 		if ( $data === null ) {
-			throw new RobloxAPIException( 'robloxapi-error-decode-failure' );
+			return StatusValue::newFatal( 'robloxapi-error-decode-failure' );
 		}
 
 		$this->cache->registerCacheEntry(
@@ -141,7 +139,7 @@ class RobloxAPIFetcher {
 			$this->getCachingExpiry( $dataSourceId )
 		);
 
-		return $data;
+		return StatusValue::newGood( $data );
 	}
 
 	/**

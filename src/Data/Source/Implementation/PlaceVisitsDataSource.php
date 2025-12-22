@@ -20,10 +20,12 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
-use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DependentDataSource;
 use MediaWiki\Parser\Parser;
+use StatusValue;
 
 class PlaceVisitsDataSource extends DependentDataSource {
 
@@ -37,25 +39,26 @@ class PlaceVisitsDataSource extends DependentDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): mixed {
-		$gameData = $this->dataSource->exec( $parser, $requiredArgs );
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
+		$gameDataStatus = $this->dataSource->exec( $parser, $requiredArgs );
 
-		if ( !$gameData ) {
-			$this->failNoData();
+		if ( !$gameDataStatus->isGood() ) {
+			return $gameDataStatus;
 		}
+		$gameData = $gameDataStatus->getValue();
 
 		if ( !property_exists( $gameData, 'visits' ) ) {
-			$this->failUnexpectedDataStructure();
+			return $this->failUnexpectedDataStructure();
 		}
 
-		return $gameData->visits;
+		return StatusValue::newGood( $gameData->visits );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [ 'UniverseID', 'GameID' ] );
+		return ArgumentSpecification::for( IdArgument::universe(), IdArgument::place() );
 	}
 
 	/**

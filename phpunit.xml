@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="../../tests/phpunit/bootstrap.integration.php">
+	<coverage processUncoveredFiles="true">
+		<include>
+			<directory suffix=".php">src/</directory>
+		</include>
+	</coverage>
+
+	<testsuites>
+		<testsuite name="RobloxAPI">
+			<directory>tests/phpunit</directory>
+		</testsuite>
+		<testsuite name="parsertests">
+			<file>../../tests/phpunit/suites/ExtensionsParserTestSuite.php</file>
+		</testsuite>
+	</testsuites>
+</phpunit>

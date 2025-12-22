@@ -1,0 +1,207 @@
+<?php
+/**
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ *
+ * @file
+ */
+
+namespace MediaWiki\Extension\RobloxAPI\Tests\Integration;
+
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentParserContext;
+use MediaWiki\Extension\RobloxAPI\Args\Types\BooleanArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\ChoiceArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\JsonKeyArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\LimitArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\RegexArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\ReturnPolicyArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\SortOrderArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailFormatArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailSizeArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\UsernameArgument;
+use MediaWiki\Language\Language;
+use MediaWikiIntegrationTestCase;
+
+/**
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\BooleanArgument
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\ChoiceArgument
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\JsonKeyArgument
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\LimitArgument
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\RegexArgument
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\ReturnPolicyArgument
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\SortOrderArgument
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailFormatArgument
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailSizeArgument
+ * @covers \MediaWiki\Extension\RobloxAPI\Args\Types\UsernameArgument
+ *
+ * @group RobloxAPI
+ */
+class ArgumentValidationTest extends MediaWikiIntegrationTestCase {
+
+	/**
+	 * @dataProvider provideArgumentValidationSuccessTests
+	 */
+	public function testArgumentValidationSuccess(
+		IArgument $argument,
+		string $value,
+		mixed $expected,
+	) {
+		$status = $argument->validate( $this->createContext(), $value );
+		$this->assertStatusGood( $status );
+		$this->assertStatusValue( $expected, $status );
+	}
+
+	/**
+	 * @dataProvider provideArgumentValidationFailureTests
+	 */
+	public function testArgumentValidationFailure(
+		IArgument $argument,
+		string $value,
+		string $expectedErrorMessage,
+	) {
+		$status = $argument->validate( $this->createContext(), $value );
+		$this->assertStatusError( $expectedErrorMessage, $status );
+	}
+
+	// phpcs:disable Generic.Files.LineLength
+	public static function provideArgumentValidationSuccessTests(): array {
+		return [
+			[ new BooleanArgument(), 'true', 'true' ],
+			[ new BooleanArgument(), 'TrUe', 'true' ],
+			[ new BooleanArgument(), 'false', 'false' ],
+			[ new BooleanArgument(), 'FalSe', 'false' ],
+
+			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ] ), 'val1', 'val1' ],
+			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ] ), 'val2', 'val2' ],
+			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ], caseSensitive: false ), 'VAL1', 'val1' ],
+			// assure that the capitalization is preserved if caseSensitive is false
+			[ new ChoiceArgument( 'test', [ 'VaL1', 'VaL2' ], caseSensitive: false ), 'val1', 'VaL1' ],
+
+			// generic ID tests
+			[ IdArgument::group(), '1', '1' ],
+			[ IdArgument::group(), '4182456156', '4182456156' ],
+
+			// id type tests
+			[ IdArgument::asset(), '12345', '12345' ],
+			[ IdArgument::badge(), '12345', '12345' ],
+			[ IdArgument::group(), '12345', '12345' ],
+			[ IdArgument::place(), '12345', '12345' ],
+			[ IdArgument::role(), '12345', '12345' ],
+			[ IdArgument::universe(), '12345', '12345' ],
+			[ IdArgument::user(), '12345', '12345' ],
+
+			[ new JsonKeyArgument(), 'test', [ 'test' ] ],
+			[ new JsonKeyArgument(), '0', [ 0 ] ],
+			[ new JsonKeyArgument(), 'test1->test2', [ 'test1', 'test2' ] ],
+			[ new JsonKeyArgument(), 'test1->123->test3', [ 'test1', 123, 'test3' ] ],
+			[ new JsonKeyArgument(), '0->1->2', [ 0, 1, 2 ] ],
+			[ new JsonKeyArgument(), '5->test', [ 5, 'test' ] ],
+
+			[ new LimitArgument( '10', '25', '100' ), '10', '10' ],
+			[ new LimitArgument( '10', '25', '100' ), '25', '25' ],
+			[ new LimitArgument( '10', '25', '100' ), '100', '100' ],
+
+			[ new RegexArgument( 'test', /** @lang RegExp */ '/^[a-z]{3,5}$/' ), 'abc', 'abc' ],
+			[ new RegexArgument( 'test', /** @lang RegExp */ '/^[a-z]{3,5}$/' ), 'abcd', 'abcd' ],
+			[ new RegexArgument( 'test', /** @lang RegExp */ '/^[a-z]{3,5}$/' ), 'abcde', 'abcde' ],
+
+			[ new ReturnPolicyArgument(), 'PlaceHolder', 'PlaceHolder' ],
+			[ new ReturnPolicyArgument(), 'ForcePlaceHolder', 'ForcePlaceHolder' ],
+			[ new ReturnPolicyArgument(), 'AutoGenerated', 'AutoGenerated' ],
+			[ new ReturnPolicyArgument(), 'ForceAutoGenerated', 'ForceAutoGenerated' ],
+
+			[ new SortOrderArgument(), 'Asc', 'Asc' ],
+			[ new SortOrderArgument(), 'Desc', 'Desc' ],
+
+			[ new ThumbnailFormatArgument(), 'Png', 'Png' ],
+			[ new ThumbnailFormatArgument(), 'Webp', 'Webp' ],
+			[ new ThumbnailFormatArgument(), 'png', 'Png' ],
+
+			[ new ThumbnailSizeArgument(), '30x30', '30x30' ],
+			[ new ThumbnailSizeArgument(), '140x140', '140x140' ],
+			[ new ThumbnailSizeArgument(), '420x420', '420x420' ],
+
+			[ new UsernameArgument(), 'builderman', 'builderman' ],
+			[ new UsernameArgument(), 'BuilderMan_123', 'BuilderMan_123' ],
+		];
+	}
+
+	public static function provideArgumentValidationFailureTests(): array {
+		return [
+			[ new BooleanArgument(), 'test', 'robloxapi-error-invalid-choice-argument' ],
+			[ new BooleanArgument(), '', 'robloxapi-error-invalid-choice-argument' ],
+
+			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ] ), 'VAL1', 'robloxapi-error-invalid-choice-argument' ],
+			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ] ), 'val3', 'robloxapi-error-invalid-choice-argument' ],
+			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ], caseSensitive: false ), 'val3', 'robloxapi-error-invalid-choice-argument' ],
+			// assure that custom error message is used
+			[ new ChoiceArgument( 'test', [ 'val1', 'val2' ], errorMessage: 'test-custom-error' ), 'val3', 'test-custom-error' ],
+
+			[ IdArgument::group(), '', 'robloxapi-error-invalid-generic-argument' ],
+			[ IdArgument::group(), 'a', 'robloxapi-error-invalid-generic-argument' ],
+			[ IdArgument::group(), '2412a4214', 'robloxapi-error-invalid-generic-argument' ],
+			[ IdArgument::group(), '309713598a', 'robloxapi-error-invalid-generic-argument' ],
+			[ IdArgument::group(), '4848492840912840912840921842019481', 'robloxapi-error-invalid-generic-argument' ],
+			[ IdArgument::group(), '-1234', 'robloxapi-error-invalid-generic-argument' ],
+
+			[ new JsonKeyArgument(), '', 'robloxapi-error-invalid-generic-argument' ],
+			[ new JsonKeyArgument(), '->test', 'robloxapi-error-invalid-generic-argument' ],
+			[ new JsonKeyArgument(), 'test->', 'robloxapi-error-invalid-generic-argument' ],
+			[ new JsonKeyArgument(), 'test1->->test2', 'robloxapi-error-invalid-generic-argument' ],
+
+			[ new LimitArgument( '10', '25', '100' ), '0', 'robloxapi-error-invalid-choice-argument' ],
+			[ new LimitArgument( '10', '25', '100' ), '15', 'robloxapi-error-invalid-choice-argument' ],
+			[ new LimitArgument( '10', '25', '100' ), '200', 'robloxapi-error-invalid-choice-argument' ],
+
+			[ new RegexArgument( 'test', /** @lang RegExp */ '/^[a-z]{3,5}$/' ), 'ab', 'robloxapi-error-invalid-generic-argument' ],
+			[ new RegexArgument( 'test', /** @lang RegExp */ '/^[a-z]{3,5}$/' ), 'abcdef', 'robloxapi-error-invalid-generic-argument' ],
+			[ new RegexArgument( 'test', /** @lang RegExp */ '/^[a-z]{3,5}$/' ), 'abc1', 'robloxapi-error-invalid-generic-argument' ],
+			[ new RegexArgument( 'test', /** @lang RegExp */ '/^[a-z]{3,5}$/', 'test-custom-error' ), 'ab', 'test-custom-error' ],
+
+			[ new ReturnPolicyArgument(), 'InvalidPolicy', 'robloxapi-error-invalid-choice-argument' ],
+			// currently case-sensitive
+			[ new ReturnPolicyArgument(), 'placeholder', 'robloxapi-error-invalid-choice-argument' ],
+
+			[ new SortOrderArgument(), 'Ascending', 'robloxapi-error-invalid-choice-argument' ],
+			// currently case-sensitive
+			[ new SortOrderArgument(), 'asc', 'robloxapi-error-invalid-choice-argument' ],
+
+			[ new ThumbnailFormatArgument(), 'Jpg', 'robloxapi-error-invalid-choice-argument' ],
+
+			[ new ThumbnailSizeArgument(), '', 'robloxapi-error-invalid-generic-argument' ],
+			[ new ThumbnailSizeArgument(), '100', 'robloxapi-error-invalid-generic-argument' ],
+			[ new ThumbnailSizeArgument(), '100x100test', 'robloxapi-error-invalid-generic-argument' ],
+			[ new ThumbnailSizeArgument(), 'test100x100', 'robloxapi-error-invalid-generic-argument' ],
+			[ new ThumbnailSizeArgument(), '1000x1000', 'robloxapi-error-invalid-generic-argument' ],
+
+			[ new UsernameArgument(), 'ab', 'robloxapi-error-invalid-generic-argument' ],
+			[ new UsernameArgument(), 'thisusernameiswaytoolongtobevalid', 'robloxapi-error-invalid-generic-argument' ],
+			[ new UsernameArgument(), 'invalid__username', 'robloxapi-error-invalid-generic-argument' ],
+			[ new UsernameArgument(), 'invalid-username', 'robloxapi-error-invalid-generic-argument' ],
+		];
+	}
+
+	// phpcs:enable Generic.Files.LineLength
+
+	private function createContext(): ArgumentParserContext {
+		return new ArgumentParserContext(
+			$this->createMock( Language::class )
+		);
+	}
+
+}

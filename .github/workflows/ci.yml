@@ -5,6 +5,7 @@ on:
     branches: [ master, development ]
   pull_request:
     branches: [ "*" ]
+  workflow_dispatch: {}
 
 jobs:
   test:
@@ -17,15 +18,31 @@ jobs:
           - mw: 'REL1_43'
             php: 8.1
             experimental: false
+            coverage: true
           - mw: 'REL1_44'
             php: 8.1
             experimental: false
+            coverage: false
+          - mw: 'REL1_44'
+            php: 8.3
+            experimental: false
+            coverage: false
           - mw: 'REL1_45'
             php: 8.2
             experimental: false
+            coverage: false
+          - mw: 'REL1_45'
+            php: 8.3
+            experimental: false
+            coverage: false
           - mw: 'master'
             php: 8.3
             experimental: true
+            coverage: false
+          - mw: 'master'
+            php: 8.5
+            experimental: true
+            coverage: false
 
     runs-on: ubuntu-latest
 
@@ -73,11 +90,35 @@ jobs:
       - name: Composer update
         run: composer update
 
-      - name: Run PHPUnit
-        run: composer phpunit:entrypoint -- --group RobloxAPI -c tests/phpunit/suite.xml
+      - name: Run PHPUnit without coverage
+        run: composer phpunit:entrypoint -- -c tests/phpunit/suite.xml extensions/RobloxAPI/tests/phpunit
+        if: matrix.coverage == false
+
+      - name: Run PHPUnit and generate coverage report
+        run: XDEBUG_MODE=coverage vendor/bin/phpunit --configuration extensions/RobloxAPI/phpunit.xml --coverage-clover coverage.xml
+        if: matrix.coverage == true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        if: matrix.coverage == true
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Run parser tests
         run: php tests/parser/parserTests.php --file=extensions/RobloxAPI/tests/parser/parserTests.txt
 
       - name: Run phan
         run: composer run phan
+  # We only want to run this during full CI for now; in the future, this will be moved to lint-check.yml
+  banana-lint:
+    name: "Lint message files"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - run: npm ci
+        name: Install dependencies
+      - run: npm test
+        name: Run banana

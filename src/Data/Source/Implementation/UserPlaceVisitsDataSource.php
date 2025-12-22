@@ -20,10 +20,11 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
-use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DependentDataSource;
 use MediaWiki\Parser\Parser;
+use StatusValue;
 
 /**
  * A data source for getting the total amount of visits a user's places have.
@@ -38,26 +39,30 @@ class UserPlaceVisitsDataSource extends DependentDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): mixed {
-		$userGames = $this->dataSource->exec( $parser, $requiredArgs, $optionalArgs );
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
+		$userGamesStatus = $this->dataSource->exec( $parser, $requiredArgs, $optionalArgs );
 
+		if ( !$userGamesStatus->isGood() ) {
+			return $userGamesStatus;
+		}
+		$userGames = $userGamesStatus->getValue();
 		if ( $userGames === null ) {
-			$this->failNoData();
+			return $this->failNoData();
 		}
 
 		if ( !is_array( $userGames ) ) {
-			$this->failUnexpectedDataStructure();
+			return $this->failUnexpectedDataStructure();
 		}
 
 		$totalVisits = 0;
 		foreach ( $userGames as $game ) {
 			if ( !property_exists( $game, 'placeVisits' ) ) {
-				$this->failUnexpectedDataStructure();
+				return $this->failUnexpectedDataStructure();
 			}
 			$totalVisits += $game->placeVisits;
 		}
 
-		return $totalVisits;
+		return StatusValue::newGood( $totalVisits );
 	}
 
 	/**

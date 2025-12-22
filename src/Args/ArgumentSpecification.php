@@ -18,7 +18,11 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\Data\Args;
+namespace MediaWiki\Extension\RobloxAPI\Args;
+
+use MediaWiki\Extension\RobloxAPI\Args\Types\BooleanArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\JsonKeyArgument;
 
 /**
  * Represents the specification for the arguments that a data source requires.
@@ -26,13 +30,13 @@ namespace MediaWiki\Extension\RobloxAPI\Data\Args;
 class ArgumentSpecification {
 
 	/**
-	 * @param string[] $requiredArgs The required argument types.
-	 * @param array<string, string> $optionalArgs The optional argument's names and types.
+	 * @param IArgument[] $requiredArgs The required argument types.
+	 * @param array<string, IArgument> $optionalArgs The optional argument's names and types.
 	 * @param bool $withJsonArgs Whether to add the default optional arguments for JSON data.
 	 */
 	public function __construct(
-		public array $requiredArgs,
-		public array $optionalArgs = [],
+		private array $requiredArgs,
+		private array $optionalArgs = [],
 		bool $withJsonArgs = false
 	) {
 		if ( $withJsonArgs ) {
@@ -40,21 +44,24 @@ class ArgumentSpecification {
 		}
 	}
 
+	public static function for( IArgument ...$requiredArgs ): self {
+		return new self( $requiredArgs );
+	}
+
 	/**
 	 * Adds the default optional arguments for JSON data and returns the instance.
 	 */
 	public function withJsonArgs(): ArgumentSpecification {
-		$this->optionalArgs['pretty'] = 'Boolean';
-		$this->optionalArgs['json_key'] = 'String';
-
-		return $this;
+		return $this
+			->withOptionalArg( 'pretty', new BooleanArgument() )
+			->withOptionalArg( 'json_key', new JsonKeyArgument() );
 	}
 
 	/**
 	 * Adds a required argument to the specification and returns the instance.
-	 * @param string $arg The argument type.
+	 * @param IArgument $arg The argument type.
 	 */
-	public function withRequiredArg( string $arg ): ArgumentSpecification {
+	public function withRequiredArg( IArgument $arg ): ArgumentSpecification {
 		$this->requiredArgs[] = $arg;
 
 		return $this;
@@ -63,12 +70,26 @@ class ArgumentSpecification {
 	/**
 	 * Adds an optional argument to the specification and returns the instance.
 	 * @param string $arg The argument name.
-	 * @param string $type The argument type.
+	 * @param IArgument $type The argument type.
 	 */
-	public function withOptionalArg( string $arg, string $type ): ArgumentSpecification {
+	public function withOptionalArg( string $arg, IArgument $type ): ArgumentSpecification {
 		$this->optionalArgs[$arg] = $type;
 
 		return $this;
+	}
+
+	/**
+	 * @return IArgument[]
+	 */
+	public function getRequiredArgs(): array {
+		return $this->requiredArgs;
+	}
+
+	/**
+	 * @return array<string, IArgument>
+	 */
+	public function getOptionalArgs(): array {
+		return $this->optionalArgs;
 	}
 
 }

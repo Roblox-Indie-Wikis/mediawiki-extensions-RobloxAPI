@@ -20,12 +20,12 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
-use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\Types\UsernameArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Data\Source\FetcherDataSource;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Json\FormatJson;
-use MediaWiki\Parser\Parser;
+use StatusValue;
 
 /**
  * A data source for getting a user's ID from their username.
@@ -49,13 +49,22 @@ class UserIdDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
+	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): StatusValue {
 		$entries = $data->data;
 		if ( $entries === null || count( $entries ) === 0 ) {
-			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
+			return $this->failInvalidData();
 		}
 
-		return $entries[0];
+		$entry = $entries[0];
+		if ( $entry === null ) {
+			return $this->failNoData();
+		}
+
+		if ( !property_exists( $entry, 'id' ) ) {
+			return $this->failUnexpectedDataStructure();
+		}
+
+		return StatusValue::newGood( $entry->id );
 	}
 
 	/**
@@ -78,25 +87,8 @@ class UserIdDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): mixed {
-		$data = $this->fetch( $requiredArgs, $optionalArgs );
-
-		if ( !$data ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
-		}
-
-		if ( !property_exists( $data, 'id' ) ) {
-			throw new RobloxAPIException( 'robloxapi-error-unexpected-data-structure' );
-		}
-
-		return $data->id;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [ 'Username' ] );
+		return ArgumentSpecification::for( new UsernameArgument() );
 	}
 
 	// special case:

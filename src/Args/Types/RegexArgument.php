@@ -18,30 +18,36 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\Util;
+namespace MediaWiki\Extension\RobloxAPI\Args\Types;
 
-use Exception;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentParserContext;
+use StatusValue;
 
 /**
- * Exception thrown if there are any errors happening when calling the roblox API or parsing the
- * data it returns.
+ * Represents an argument that must match a regular expression.
+ * @extends AbstractArgument<string>
  */
-class RobloxAPIException extends Exception {
+class RegexArgument extends AbstractArgument {
+
+	/** @inheritDoc */
+	public function __construct(
+		string $key,
+		private readonly string $pattern,
+		private readonly string $errorMessage = 'robloxapi-error-invalid-generic-argument'
+	) {
+		parent::__construct( $key );
+	}
 
 	/**
-	 * @var string[] The parameters to be used in the message.
+	 * @return StatusValue<string>
+	 * @inheritDoc
 	 */
-	public array $messageParams = [];
-
-	/**
-	 * Creates a new RobloxAPIException.
-	 * @param string $message
-	 * @param string ...$messageParams
-	 */
-	public function __construct( string $message = '', string ...$messageParams ) {
-		parent::__construct( $message );
-
-		$this->messageParams = $messageParams;
+	public function validate( ArgumentParserContext $ctx, string $value ): StatusValue {
+		if ( preg_match( $this->pattern, $value ) ) {
+			return StatusValue::newGood( $value );
+		} else {
+			return $this->invalidValue( $value, $this->errorMessage );
+		}
 	}
 
 }

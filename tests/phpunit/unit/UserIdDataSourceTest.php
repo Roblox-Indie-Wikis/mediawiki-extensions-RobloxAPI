@@ -18,11 +18,10 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\Tests;
+namespace MediaWiki\Extension\RobloxAPI\Tests\Unit;
 
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\UserIdDataSource;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 
 /**
  * @covers \MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\UserIdDataSource
@@ -40,16 +39,15 @@ class UserIdDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 		$data = (object)[
 			'data' => [
 				(object)[
-					'userId' => 12345,
+					'id' => 12345,
 				],
 			],
 		];
-		self::assertEquals( $data->data[0], $this->subject->processData( $data, [ 'username' ], [] ) );
+		self::assertEquals( 12345, $this->subject->processData( $data, [ 'username' ], [] )->getValue() );
 
 		// test invalid data
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-invalid-data' );
-		$this->subject->processData( (object)[ 'data' => null ], [ 'username' ], [] );
+		$status = $this->subject->processData( (object)[ 'data' => null ], [ 'username' ], [] );
+		$this->assertStatusError( 'robloxapi-error-invalid-data', $status );
 	}
 
 	public function testFetch() {
@@ -70,10 +68,9 @@ class UserIdDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 
 		$dataSource = new UserIdDataSource( $this->createMockFetcher( $result ) );
 
-		$data = $dataSource->fetch( [ 'abaddriverlol' ] );
+		$data = $dataSource->fetch( [ 'abaddriverlol' ] )->getValue();
 
-		self::assertEquals( 4182456156, $data->id );
-		self::assertEquals( 'abaddriverlol', $data->name );
+		self::assertEquals( 4182456156, $data );
 	}
 
 	public function testFetchEmptyResult() {
@@ -86,17 +83,15 @@ class UserIdDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 
 		$dataSource = new UserIdDataSource( $this->createMockFetcher( $result ) );
 
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-invalid-data' );
-		$dataSource->fetch( [ 'thisuserdoesntexist' ] );
+		$status = $dataSource->fetch( [ 'thisuserdoesntexist' ] );
+		$this->assertStatusError( 'robloxapi-error-invalid-data', $status );
 	}
 
 	public function testFailedRequest() {
 		$dataSource = new UserIdDataSource( $this->createMockFetcher( null, 429 ) );
 
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-request-failed' );
-		$dataSource->fetch( [ 'thisrequestwillfail' ] );
+		$status = $dataSource->fetch( [ 'thisrequestwillfail' ] );
+		$this->assertStatusError( 'robloxapi-error-request-rate-limited', $status );
 	}
 
 	public function testProcessRequestOptions() {

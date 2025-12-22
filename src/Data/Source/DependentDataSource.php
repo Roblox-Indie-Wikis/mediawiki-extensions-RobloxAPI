@@ -21,7 +21,6 @@
 namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 
 use LogicException;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 
 abstract class DependentDataSource extends AbstractDataSource {
 
@@ -49,44 +48,7 @@ abstract class DependentDataSource extends AbstractDataSource {
 		$this->dataSource = $nullableDataSource;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function shouldRegisterLegacyParserFunction(): bool {
-		return false;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function shouldEscapeResult( mixed $result ): bool {
-		return true;
-	}
-
-	/**
-	 * Throws an exception stating that the data source returned no data.
-	 * @throws RobloxAPIException
-	 */
-	protected function failNoData(): never {
-		throw new RobloxAPIException( 'robloxapi-error-datasource-returned-no-data' );
-	}
-
-	/**
-	 * Throws an exception stating that the data source returned an unexpected data structure.
-	 * @throws RobloxAPIException
-	 */
-	protected function failUnexpectedDataStructure(): never {
-		throw new RobloxAPIException( 'robloxapi-error-unexpected-data-structure' );
-	}
-
-	/**
-	 * Throws an exception stating that the data source returned invalid data.
-	 * @throws RobloxAPIException
-	 */
-	protected function failInvalidData(): never {
-		throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
-	}
-
+	/** @inheritDoc */
 	public function getFetcherSourceId(): string {
 		return $this->dataSource->getFetcherSourceId();
 	}

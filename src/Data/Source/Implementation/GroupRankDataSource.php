@@ -20,11 +20,12 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
-use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DependentDataSource;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Parser\Parser;
+use StatusValue;
 
 class GroupRankDataSource extends DependentDataSource {
 
@@ -38,15 +39,19 @@ class GroupRankDataSource extends DependentDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): mixed {
-		$groups = $this->dataSource->exec( $parser, [ $requiredArgs[1] ] );
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
+		$execStatus = $this->dataSource->exec( $parser, [ $requiredArgs[1] ] );
+		if ( !$execStatus->isGood() ) {
+			return $execStatus;
+		}
 
+		$groups = $execStatus->getValue();
 		if ( !$groups ) {
-			$this->failNoData();
+			return $this->failNoData();
 		}
 
 		if ( !is_array( $groups ) ) {
-			$this->failUnexpectedDataStructure();
+			return $this->failUnexpectedDataStructure();
 		}
 
 		foreach ( $groups as $group ) {
@@ -55,14 +60,14 @@ class GroupRankDataSource extends DependentDataSource {
 			}
 		}
 
-		throw new RobloxAPIException( 'robloxapi-error-user-group-not-found' );
+		return StatusValue::newFatal( 'robloxapi-error-user-group-not-found' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return new ArgumentSpecification( [ 'GroupID', 'UserID' ] );
+		return ArgumentSpecification::for( IdArgument::group(), IdArgument::user() );
 	}
 
 	/**

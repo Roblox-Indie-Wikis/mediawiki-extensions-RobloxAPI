@@ -20,10 +20,11 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
-use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Data\Source\FetcherDataSource;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
+use StatusValue;
 
 /**
  * A data source for the roblox games API.
@@ -44,11 +45,11 @@ class GameDataSource extends FetcherDataSource {
 	/**
 	 * @inheritDoc
 	 */
-	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
+	public function processData( mixed $data, array $requiredArgs, array $optionalArgs ): StatusValue {
 		$entries = $data->data;
 
 		if ( !$entries ) {
-			throw new RobloxAPIException( 'robloxapi-error-invalid-data' );
+			return $this->failInvalidData();
 		}
 
 		foreach ( $entries as $entry ) {
@@ -60,10 +61,11 @@ class GameDataSource extends FetcherDataSource {
 				continue;
 			}
 
-			return $entry;
+			return StatusValue::newGood( $entry );
 		}
 
-		return null;
+		// TODO reconsider whether this should be an error (also consider in PlaceActivePlayersDataSource)
+		return StatusValue::newGood( null );
 	}
 
 	/**
@@ -77,10 +79,8 @@ class GameDataSource extends FetcherDataSource {
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		return ( new ArgumentSpecification( [
-			'UniverseID',
-			'PlaceID',
-		] ) )->withJsonArgs();
+		return ArgumentSpecification::for( IdArgument::universe(), IdArgument::place() )
+			->withJsonArgs();
 	}
 
 }

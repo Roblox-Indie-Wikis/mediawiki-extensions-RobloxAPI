@@ -20,7 +20,12 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
-use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\Types\BooleanArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\ReturnPolicyArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailFormatArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailSizeArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Data\Source\ThumbnailDataSource;
 
@@ -43,15 +48,11 @@ class GameIconDataSource extends ThumbnailDataSource {
 	 * @inheritDoc
 	 */
 	public function getArgumentSpecification(): ArgumentSpecification {
-		// jpeg is also supported in theory, not by the other thumbnail APIs though
-		return ( new ArgumentSpecification( [
-			'PlaceID',
-			'ThumbnailSize',
-		], [
-			'is_circular' => 'Boolean',
-			'format' => 'ThumbnailFormat',
-			'return_policy' => 'ReturnPolicy',
-		], ) )->withJsonArgs();
+		return ArgumentSpecification::for( IdArgument::place(), new ThumbnailSizeArgument() )
+			->withOptionalArg( 'is_circular', new BooleanArgument() )
+			->withOptionalArg( 'format', new ThumbnailFormatArgument() )
+			->withOptionalArg( 'return_policy', new ReturnPolicyArgument() )
+			->withJsonArgs();
 	}
 
 }

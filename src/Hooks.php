@@ -21,14 +21,15 @@ namespace MediaWiki\Extension\RobloxAPI;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ConfigFactory;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentParser;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\IDataSource;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Hook\ParserTestGlobalsHook;
 use MediaWiki\Parser\Parser;
+use StatusValue;
 
 class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
@@ -40,6 +41,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 	public function __construct(
 		ConfigFactory $configFactory,
+		private readonly ArgumentParser $argumentParser,
 		private readonly DataSourceProvider $dataSourceProvider,
 		private readonly RobloxAPIUtils $utils,
 	) {
@@ -53,49 +55,68 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 */
 	public function onParserFirstCallInit( $parser ): void {
 		$parser->setFunctionHook( 'robloxapi', function ( Parser $parser, mixed ...$args ): array|bool|string {
-			try {
-				return $this->handleParserFunctionCall( $parser, $args );
-			} catch ( RobloxAPIException $exception ) {
+			$status = $this->handleParserFunctionCall( $parser, $args );
+			if ( $status->isGood() ) {
+				return $status->getValue();
+			} else {
 				$parser->addTrackingCategory( 'robloxapi-category-error' );
-				return $this->utils->formatException( $exception, $parser );
+				return $this->utils->formatStatusValue( $status, $parser );
 			}
 		} );
 
 		if ( $this->config->get( RobloxAPIConstants::ConfRegisterLegacyParserFunctions ) ) {
-			$legacyParserFunctions = $this->dataSourceProvider->createLegacyParserFunctions();
+			foreach ( $this->dataSourceProvider->dataSources as $dataSource ) {
+				// register parser function only if needed for legacy reasons
+				if ( !$dataSource->shouldRegisterLegacyParserFunction() ) {
+					continue;
+				}
 
-			foreach ( $legacyParserFunctions as $id => $function ) {
+				$id = "roblox_" . ucfirst( $dataSource->getId() );
+
 				// all data source parser functions are only enabled if the corresponding data source
 				// is enabled, so we don't need to check the config for that
 				$parser->setFunctionHook(
 					$id,
-					function ( Parser $parser, mixed ...$args ) use ( $function ): array|bool|string {
+					function ( Parser $parser, mixed ...$args ) use ( $dataSource ): array|bool|string {
 						$parser->addTrackingCategory( 'robloxapi-category-deprecated-parser-function' );
 						if ( $this->config->get( RobloxAPIConstants::ConfParserFunctionsExpensive ) &&
 							!$parser->incrementExpensiveFunctionCount() ) {
 							return false;
 						}
-						$this->checkCanUseDataSource( $parser, $function->getDataSource() );
-
-						try {
-							$result = $function->exec( $parser, ...$args );
-
-							$shouldEscape = $function->shouldEscapeResult( $result );
-
-							if ( $this->utils->shouldReturnJson( $result ) ) {
-								$result = $this->utils->createJsonResult( $result, [] );
-								// always escape json, there is no need for it to be parsed
-								$shouldEscape = true;
-							}
-
-							return [
-								$result,
-								'nowiki' => $shouldEscape,
-							];
-						} catch ( RobloxAPIException $exception ) {
-							$parser->addTrackingCategory( 'robloxapi-category-error' );
-							return $this->utils->formatException( $exception, $parser );
+						$canUse = $this->canUseDataSource( $parser, $dataSource );
+						if ( !$canUse->isGood() ) {
+							return $this->utils->formatStatusValue( $canUse, $parser );
 						}
+
+						$status = $this->argumentParser->parse( $dataSource->getArgumentSpecification(), $args );
+						if ( !$status->isGood() ) {
+							$parser->addTrackingCategory( 'robloxapi-category-error' );
+							return $this->utils->formatStatusValue( $status, $parser );
+						}
+						$parseResult = $status->getValue();
+						$execStatus = $dataSource->exec(
+							$parser,
+							$parseResult->getRequiredArgs(),
+							$parseResult->getOptionalArgs()
+						);
+						if ( !$execStatus->isGood() ) {
+							$parser->addTrackingCategory( 'robloxapi-category-error' );
+							return $this->utils->formatStatusValue( $execStatus, $parser );
+						}
+						$result = $execStatus->getValue();
+
+						$shouldEscape = $dataSource->shouldEscapeResult( $result );
+
+						if ( $this->utils->shouldReturnJson( $result ) ) {
+							$result = $this->utils->createJsonResult( $result, [] );
+							// always escape json, there is no need for it to be parsed
+							$shouldEscape = true;
+						}
+
+						return [
+							$result,
+							'nowiki' => $shouldEscape,
+						];
 					}
 				);
 			}
@@ -106,55 +127,73 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 	 * Handles a call to the #robloxAPI parser function.
 	 * @param Parser $parser
 	 * @param string[] $args
-	 * @throws RobloxAPIException
+	 * @return StatusValue<array|bool>
 	 */
-	private function handleParserFunctionCall( Parser $parser, array $args ): array|bool {
+	private function handleParserFunctionCall( Parser $parser, array $args ): StatusValue {
 		if ( $this->config->get( RobloxAPIConstants::ConfParserFunctionsExpensive ) &&
 			!$parser->incrementExpensiveFunctionCount() ) {
-			return false;
+			// TODO suboptimal
+			return StatusValue::newGood( false );
 		}
 
 		if ( count( $args ) === 0 ) {
-			throw new RobloxAPIException( 'robloxapi-error-no-arguments' );
+			return StatusValue::newFatal( 'robloxapi-error-no-arguments' );
 		}
 		$dataSourceId = $args[0];
-		$dataSource = $this->dataSourceProvider->getDataSourceOrThrow( $dataSourceId, true );
+		$status = $this->dataSourceProvider->tryGetDataSource( $dataSourceId, true );
+		if ( !$status->isGood() ) {
+			// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
+			return $status;
+		}
+		$dataSource = $status->getValue();
 
-		$this->checkCanUseDataSource( $parser, $dataSource );
+		$canUse = $this->canUseDataSource( $parser, $dataSource );
+		if ( !$canUse->isGood() ) {
+			return $canUse;
+		}
 
 		$otherArgs = array_slice( $args, 1 );
 
 		$argumentSpecification = $dataSource->getArgumentSpecification();
 
-		[ $requiredArgs, $optionalArgs ] = $this->utils->parseArguments( $argumentSpecification, $otherArgs );
+		$status = $this->argumentParser->parse( $argumentSpecification, $otherArgs );
+		if ( !$status->isGood() ) {
+			// @phan-suppress-next-line PhanTypeMismatchReturn Bad status, value type is irrelevant
+			return $status;
+		}
+		$parseResult = $status->getValue();
 
-		$result = $dataSource->exec( $parser, $requiredArgs, $optionalArgs );
+		$execStatus = $dataSource->exec( $parser, $parseResult->getRequiredArgs(), $parseResult->getOptionalArgs() );
+		if ( !$execStatus->isGood() ) {
+			return $execStatus;
+		}
+		$result = $execStatus->getValue();
 		$shouldEscape = $dataSource->shouldEscapeResult( $result );
 
 		if ( $this->utils->shouldReturnJson( $result ) ) {
-			$result = $this->utils->createJsonResult( $result, $optionalArgs );
+			$result = $this->utils->createJsonResult( $result, $parseResult->getOptionalArgs() );
 			// always escape json, there is no need for it to be parsed
 			$shouldEscape = true;
 		}
 
-		return [
+		return StatusValue::newGood( [
 			$result,
 			'nowiki' => $shouldEscape,
-		];
+		] );
 	}
 
-	/**
-	 * @throws RobloxAPIException if the usage limit of the data source is exceeded
-	 */
-	private function checkCanUseDataSource( Parser $parser, IDataSource $dataSource ): void {
+	private function canUseDataSource( Parser $parser, IDataSource $dataSource ): StatusValue {
 		if ( !$dataSource->isEnabled() ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-disabled', $dataSource->getId() );
+			return StatusValue::newFatal(
+				'robloxapi-error-datasource-disabled',
+				wfEscapeWikiText( $dataSource->getId() )
+			);
 		}
 
 		$dataSourceId = $dataSource->getFetcherSourceId();
 		if ( !array_key_exists( $dataSourceId, $this->usageLimits ) ) {
 			// no limit
-			return;
+			return StatusValue::newGood();
 		}
 
 		$output = $parser->getOutput();
@@ -172,29 +211,25 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 
 		if ( $used > $limit ) {
 			if ( $dataSource->getFetcherSourceId() !== $dataSource->getId() ) {
-				throw new RobloxAPIException( 'robloxapi-error-usage-limit-dependent', $dataSourceId, (string)$limit,
+				return StatusValue::newFatal( 'robloxapi-error-usage-limit-dependent', $dataSourceId, (string)$limit,
 					$dataSource->getId() );
 			} else {
-				throw new RobloxAPIException( 'robloxapi-error-usage-limit', $dataSourceId, (string)$limit );
+				return StatusValue::newFatal( 'robloxapi-error-usage-limit', $dataSourceId, (string)$limit );
 			}
 		}
+
+		return StatusValue::newGood();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function onParserTestGlobals( &$globals ): void {
-		$defaults = [
-			RobloxAPIConstants::ConfAllowedArguments => [ 'UserID' => [ 54321 ] ],
-			// show errors as plain text to make parser tests not depend on changes in Html:errorBox
+		$this->argumentParser->overrideOptions( [
+			RobloxAPIConstants::ConfAllowedArguments => [ 'user-id' => [ 54321 ] ],
+		] );
+		$this->utils->overrideOptions( [
 			RobloxAPIConstants::ConfShowPlainErrors => true,
-			RobloxAPIConstants::ConfCacheSplittingOptionalArguments =>
-				$this->config->get( RobloxAPIConstants::ConfCacheSplittingOptionalArguments )
-		];
-
-		foreach ( $defaults as $key => $value ) {
-			$globals["wg$key"] = $value;
-		}
-		$this->utils->initForParserTests( $defaults );
+		] );
 	}
 }

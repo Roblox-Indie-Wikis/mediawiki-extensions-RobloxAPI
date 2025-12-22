@@ -18,91 +18,24 @@
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\Tests;
+namespace MediaWiki\Extension\RobloxAPI\Tests\Integration;
 
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
+use FormatJson;
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use MediaWikiIntegrationTestCase;
+use StatusValue;
+use Wikimedia\Message\MessageValue;
 
 /**
  * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils
  * @group RobloxAPI
  */
 class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
+	use ParserDependentTestTrait;
 
 	protected function getUtils(): RobloxAPIUtils {
 		return $this->getServiceContainer()->getService( 'RobloxAPI.Utils' );
-	}
-
-	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::isValidId
-	 */
-	public function testIsValidId(): void {
-		$utils = $this->getUtils();
-		self::assertFalse( $utils->isValidId( null ) );
-		self::assertFalse( $utils->isValidId( "" ) );
-		self::assertFalse( $utils->isValidId( "a" ) );
-		self::assertFalse( $utils->isValidId( "2412a4214" ) );
-		self::assertFalse( $utils->isValidId( "309713598a" ) );
-		self::assertFalse( $utils->isValidId( "4848492840912840912840921842019481" ) );
-		self::assertFalse( $utils->isValidId( "-1234" ) );
-
-		self::assertTrue( $utils->isValidId( "1" ) );
-		self::assertTrue( $utils->isValidId( "4182456156" ) );
-	}
-
-	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::assertValidIds
-	 */
-	public function testAssertValidIds(): void {
-		$utils = $this->getUtils();
-		$this->expectException( RobloxAPIException::class );
-		$utils->assertValidIds( "abc" );
-	}
-
-	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::assertArgAllowed
-	 */
-	public function testAssertArgsAllowed(): void {
-		$this->overrideConfigValue( 'RobloxAPIAllowedArguments', [
-			'UserID' => [ '123454321' ],
-			'GroupID' => [],
-		] );
-		$utils = $this->getUtils();
-
-		$utils->assertArgAllowed( 'UserID', '123454321' );
-		$utils->assertArgAllowed( 'GroupID', '14981124' );
-		$utils->assertArgAllowed( 'GroupID', '512512312' );
-		$utils->assertArgAllowed( 'GroupID', '901480124' );
-
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-arg-not-allowed' );
-		$utils->assertArgAllowed( 'UserID', '54321' );
-	}
-
-	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::assertValidArg
-	 */
-	public function testAssertValidArgs(): void {
-		$utils = $this->getUtils();
-		$utils->assertValidArg( 'UserID', '123454321' );
-		$utils->assertValidArg( 'ThumbnailSize', '140x140' );
-		$utils->assertValidArg( 'Username', 'builderman_123' );
-
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-invalid-thumbnail-size' );
-		$utils->assertValidArg( 'ThumbnailSize', '12345' );
-	}
-
-	/**
-	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::assertValidArg
-	 */
-	public function testAssertValidArgsInvalidUsername(): void {
-		$utils = $this->getUtils();
-
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-invalid-username' );
-		$utils->assertValidArg( 'Username', '__invalidusername' );
 	}
 
 	/**
@@ -120,23 +53,23 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 					"displayName": "abaddriverlol"
 				}
 		EOD;
-		$jsonObject = \FormatJson::decode( $jsonString );
+		$jsonObject = FormatJson::decode( $jsonString );
 		self::assertEquals( 'abaddriverlol',
-			$utils->createJsonResult( $jsonObject, [ 'json_key' => 'requestedUsername' ] ) );
+			$utils->createJsonResult( $jsonObject, [ 'json_key' => [ 'requestedUsername' ] ] ) );
 		self::assertEquals( '{"requestedUsername":"abaddriverlol","hasVerifiedBadge":false,"id":4182456156,' .
 			'"name":"abaddriverlol","displayName":"abaddriverlol"}',
 			$utils->createJsonResult( $jsonObject, [] ) );
 
 		// test non-existent key
-		self::assertEquals( 'null', $utils->createJsonResult( $jsonObject, [ 'json_key' => 'doesnotexist' ] ) );
+		self::assertEquals( 'null', $utils->createJsonResult( $jsonObject, [ 'json_key' => [ 'doesnotexist' ] ] ) );
 
 		// test invalid key path
 		self::assertEquals( 'null',
-			$utils->createJsonResult( $jsonObject, [ 'json_key' => 'doesnotexist->->' ] ) );
+			$utils->createJsonResult( $jsonObject, [ 'json_key' => [ 'doesnotexist' ] ] ) );
 
 		// test keys pointing to non-objects
 		self::assertEquals( 'null',
-			$utils->createJsonResult( $jsonObject, [ 'json_key' => 'requestedUsername->id' ] ) );
+			$utils->createJsonResult( $jsonObject, [ 'json_key' => [ 'requestedUsername', 'id' ] ] ) );
 
 		// test array index
 		$jsonString = /** @lang JSON */
@@ -147,9 +80,9 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 					]
 				}
 		EOD;
-		$jsonObject = \FormatJson::decode( $jsonString );
+		$jsonObject = FormatJson::decode( $jsonString );
 		self::assertEquals( 'someValue',
-			$utils->createJsonResult( $jsonObject, [ 'json_key' => 'someData->0' ] ) );
+			$utils->createJsonResult( $jsonObject, [ 'json_key' => [ 'someData', 0 ] ] ) );
 	}
 
 	/**
@@ -162,11 +95,18 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 				{
 					"someData": {
 						"someNestedData": "someValue"
-					}
+					},
+					"someArray": [
+						"firstValue",
+						"secondValue"
+					]
 				}
 		EOD;
-		$jsonObject = \FormatJson::decode( $jsonString );
-		self::assertEquals( 'someValue', $utils->getJsonKey( $jsonObject, 'someData->someNestedData' ) );
+		$jsonObject = FormatJson::decode( $jsonString );
+		self::assertEquals( 'someValue', $utils->getJsonKey( $jsonObject, [ 'someData', 'someNestedData' ] ) );
+
+		self::assertNull( $utils->getJsonKey( 'string', [ 'key' ] ) );
+		self::assertNull( $utils->getJsonKey( $jsonObject, [ 'someArray', 3 ] ) );
 	}
 
 	/**
@@ -182,6 +122,61 @@ class RobloxAPIUtilsTest extends MediaWikiIntegrationTestCase {
 
 		self::assertFalse( $utils->verifyIsRobloxCdnUrl( 'https://roblox.com/1234/' ) );
 		self::assertFalse( $utils->verifyIsRobloxCdnUrl( 'https://t0.rbxcdn.com///https://google.com/' ) );
+	}
+
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::transformValueForError
+	 */
+	public function testTransformValueForError(): void {
+		$utils = $this->getUtils();
+
+		self::assertEquals( 'simpleString', $utils->transformValueForError( 'simpleString' ) );
+		self::assertEquals( new MessageValue( 'robloxapi-arg-empty-value-placeholder' ),
+			$utils->transformValueForError( '' ) );
+		self::assertEquals( '&#32; ', $utils->transformValueForError( '  ' ) );
+		self::assertEquals( '&#60;test&#62;', $utils->transformValueForError( '<test>' ) );
+	}
+
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::shouldReturnJson
+	 */
+	public function testShouldReturnJson(): void {
+		$utils = $this->getUtils();
+
+		self::assertTrue( $utils->shouldReturnJson( (object)[ 'key' => 'value' ] ) );
+		self::assertTrue( $utils->shouldReturnJson( [ 'key' => 'value' ] ) );
+		self::assertFalse( $utils->shouldReturnJson( 'just a string' ) );
+		self::assertFalse( $utils->shouldReturnJson( 12345 ) );
+		self::assertFalse( $utils->shouldReturnJson( null ) );
+	}
+
+	/**
+	 * @covers \MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils::formatStatusValue
+	 */
+	public function testFormatStatusValue(): void {
+		$utils = $this->getUtils();
+		$parser = $this->createParser();
+
+		$statusFatal = StatusValue::newFatal(
+			'robloxapi-error-invalid-generic-argument',
+			'<invalid&value>',
+			new MessageValue( 'robloxapi-arg-type-username' )
+		);
+		$formatted = $utils->formatStatusValue( $statusFatal, $parser );
+		// phpcs:ignore Generic.Files.LineLength
+		self::assertStringContainsString( '<span class="cdx-message__icon"></span><div class="cdx-message__content">Invalid value <code><invalid&value></code> for argument of type \'\'Username\'\'!</div></div>', $formatted );
+		self::assertStringContainsString( 'mw-robloxapi-error', $formatted );
+
+		$utils->overrideOptions( [
+			RobloxAPIConstants::ConfShowPlainErrors => true,
+		] );
+		$formatted = $utils->formatStatusValue( $statusFatal, $parser );
+		self::assertEquals( 'Invalid value <code><invalid&value></code> for argument of type \'\'Username\'\'!',
+			$formatted );
+
+		$statusGood = StatusValue::newGood();
+		$this->expectException( \LogicException::class );
+		$utils->formatStatusValue( $statusGood, $parser );
 	}
 
 }

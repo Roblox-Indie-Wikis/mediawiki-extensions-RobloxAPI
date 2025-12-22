@@ -19,21 +19,33 @@
  */
 
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentParser;
 use MediaWiki\Extension\RobloxAPI\Data\Cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use MediaWiki\MediaWikiServices;
 
-/** @phpcs-require-sorted-array */
+/**
+ * @phpcs-require-sorted-array
+ * Tested in ServiceWiringTest.php
+ */
 return [
+	'RobloxAPI.ArgumentParser' => static function ( MediaWikiServices $services ): ArgumentParser {
+		return new ArgumentParser(
+			new ServiceOptions(
+				ArgumentParser::CONSTRUCTOR_OPTIONS,
+				$services->getMainConfig()
+			),
+			$services->getContentLanguage(),
+		);
+	},
 	'RobloxAPI.DataSourceCache' => static function ( MediaWikiServices $services ): DataSourceCache {
 		return new DataSourceCache(
 			new ServiceOptions(
 				DataSourceCache::CONSTRUCTOR_OPTIONS,
 				$services->getMainConfig()
 			),
-			$services->get( 'RobloxAPI.Utils' ),
 			$services->getMainWANObjectCache(),
 		);
 	},
@@ -63,7 +75,6 @@ return [
 				RobloxAPIUtils::CONSTRUCTOR_OPTIONS,
 				$services->getMainConfig()
 			),
-			$services->getContentLanguage(),
 			$services->getUrlUtils(),
 		);
 	},
