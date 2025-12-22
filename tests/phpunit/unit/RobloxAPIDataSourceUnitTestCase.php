@@ -24,6 +24,7 @@ use GuzzleHttpRequest;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\Data\Cache\DataSourceCache;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
+use MediaWiki\Extension\RobloxAPI\Tests\Integration\HttpRequestFactoryTestTrait;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
 use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Status\Status;
@@ -35,34 +36,7 @@ use Wikimedia\ObjectCache\WANObjectCache;
  * Base class for Roblox API unit tests.
  */
 abstract class RobloxAPIDataSourceUnitTestCase extends MediaWikiUnitTestCase {
-
-	/**
-	 * @param ?string $returnedContent Content to be returned by the request
-	 * @param int $status HTTP status code to be returned by the request
-	 * @return HttpRequestFactory Mocked HTTP request factory
-	 */
-	private function createMockHttpRequestFactory( ?string $returnedContent, int $status = 200 ): HttpRequestFactory {
-		$request = $this->createPartialMock( GuzzleHttpRequest::class, [ 'execute', 'getContent' ] );
-
-		if ( $status > 0 && $status < 400 ) {
-			$requestStatus = StatusValue::newGood( $status );
-		} else {
-			$requestStatus = StatusValue::newFatal( $status );
-		}
-
-		$request->expects( $this->once() )->method( 'execute' )->willReturn( Status::wrap( $requestStatus ) );
-
-		if ( $returnedContent ) {
-			$request->expects( $this->once() )->method( 'getContent' )->willReturn( $returnedContent );
-		} else {
-			$request->expects( $this->atMost( 2 ) )->method( 'getContent' )->willReturn( '' );
-		}
-
-		$httpRequestFactory = $this->createPartialMock( HttpRequestFactory::class, [ 'create' ] );
-		$httpRequestFactory->expects( $this->once() )->method( 'create' )->willReturn( $request );
-
-		return $httpRequestFactory;
-	}
+	use HttpRequestFactoryTestTrait;
 
 	private function createMockCache(): DataSourceCache {
 		return new DataSourceCache(
@@ -79,7 +53,7 @@ abstract class RobloxAPIDataSourceUnitTestCase extends MediaWikiUnitTestCase {
 			RobloxAPIConstants::ConfCachingExpiries => [ '*' => 600 ],
 			RobloxAPIConstants::ConfRequestUserAgent => null
 		] );
-		$httpRequestFactory = $this->createMockHttpRequestFactory( $returnedContent, $status );
+		[ $httpRequestFactory ] = $this->createMockHttpRequestFactory( $returnedContent, $status );
 
 		return new RobloxAPIFetcher( $serviceOptions, $this->createMockCache(), $httpRequestFactory );
 	}

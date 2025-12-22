@@ -128,7 +128,7 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 		$dataSource = new GameDataSource( $this->createMockFetcher( null, 429 ) );
 
 		$status = $dataSource->fetch( [ '4252370517', '12018816388' ] );
-		$this->assertStatusError( 'robloxapi-error-request-failed', $status );
+		$this->assertStatusError( 'robloxapi-error-request-rate-limited', $status );
 	}
 
 }

@@ -29,6 +29,7 @@ use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \MediaWiki\Extension\RobloxAPI\Data\Cache\DataSourceCache
+ * @group RobloxAPI
  */
 class DataSourceCacheTest extends MediaWikiIntegrationTestCase {
 

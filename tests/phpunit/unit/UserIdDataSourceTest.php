@@ -91,7 +91,7 @@ class UserIdDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 		$dataSource = new UserIdDataSource( $this->createMockFetcher( null, 429 ) );
 
 		$status = $dataSource->fetch( [ 'thisrequestwillfail' ] );
-		$this->assertStatusError( 'robloxapi-error-request-failed', $status );
+		$this->assertStatusError( 'robloxapi-error-request-rate-limited', $status );
 	}
 
 	public function testProcessRequestOptions() {
