@@ -48,20 +48,6 @@ abstract class DependentDataSource extends AbstractDataSource {
 		$this->dataSource = $nullableDataSource;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function shouldRegisterLegacyParserFunction(): bool {
-		return false;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function shouldEscapeResult( mixed $result ): bool {
-		return true;
-	}
-
 	/** @inheritDoc */
 	public function getFetcherSourceId(): string {
 		return $this->dataSource->getFetcherSourceId();

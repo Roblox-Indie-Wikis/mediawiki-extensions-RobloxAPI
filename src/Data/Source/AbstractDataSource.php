@@ -60,6 +60,20 @@ abstract class AbstractDataSource implements IDataSource {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	public function shouldEscapeResult( mixed $result ): bool {
+		return true;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function shouldRegisterLegacyParserFunction(): bool {
+		return false;
+	}
+
+	/**
 	 * Throws an exception stating that the data source returned no data.
 	 */
 	protected function failNoData(): StatusValue {
