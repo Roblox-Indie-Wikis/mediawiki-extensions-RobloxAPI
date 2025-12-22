@@ -23,6 +23,7 @@ trait ParserDependentTestTrait {
 		$parserOptions->setTargetLanguage( $lang );
 		$parser->setOptions( $parserOptions );
 		$parser->setPage( Title::newFromText( 'RobloxAPITest' ) );
+		$parser->resetOutput();
 		return $parser;
 	}
 

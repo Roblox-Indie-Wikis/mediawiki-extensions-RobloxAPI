@@ -207,7 +207,10 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		return StatusValue::newGood();
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @inheritDoc
+	 * @codeCoverageIgnore Test hook only
+	 */
 	public function onParserTestGlobals( &$globals ): void {
 		$this->argumentParser->overrideOptions( [
 			RobloxAPIConstants::ConfAllowedArguments => [ 'user-id' => [ 54321 ] ],
