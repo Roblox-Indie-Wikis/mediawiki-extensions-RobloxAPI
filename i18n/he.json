@@ -1,0 +1,20 @@
+{
+	"@metadata": {
+		"authors": [
+			"Neriah",
+			"YaronSh"
+		]
+	},
+	"robloxapi-error-no-arguments": "נא לספק מקור תקני לנתונים!",
+	"robloxapi-error-invalid-id": "ערך המזהה „$1” שגוי!",
+	"robloxapi-error-invalid-data": "נקודת הקצה החזירה נתונים בלתי־תקינים!",
+	"robloxapi-error-decode-failure": "פענוח התשובה נכשל!",
+	"robloxapi-error-datasource-not-found": "מקור הנתונים „$1” לא נמצא!",
+	"robloxapi-error-datasource-disabled": "מקור הנתונים „$1”!",
+	"robloxapi-error-unexpected-data-structure": "מבנה נתונים מפתיע!",
+	"robloxapi-error-datasource-returned-no-data": "מקור הנתונים לא החזיר נתונים!",
+	"robloxapi-error-request-failed": "הבקשה נכשלה!",
+	"robloxapi-error-invalid-username": "שם משתמש בלתי־תקין!",
+	"robloxapi-category-error": "דפים עם שגיאות RobloxAPI",
+	"robloxapi-category-error-desc": "הדף משתמש בפונקציית פיענוח <code>{{#robloxAPI}}‎</code> בצורה שגויה, מה שגורם לשגיאה."
+}
