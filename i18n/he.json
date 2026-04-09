@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Neriah",
-			"YaronSh"
+			"YaronSh",
+			"ערן"
 		]
 	},
 	"robloxapi-error-no-arguments": "נא לספק מקור תקני לנתונים!",
@@ -14,6 +15,7 @@
 	"robloxapi-error-unexpected-data-structure": "מבנה נתונים מפתיע!",
 	"robloxapi-error-datasource-returned-no-data": "מקור הנתונים לא החזיר נתונים!",
 	"robloxapi-error-request-failed": "הבקשה נכשלה!",
+	"robloxapi-error-invalid-thumbnail-size": "גודל תמונה ממוזערת לא חוקי!",
 	"robloxapi-error-invalid-username": "שם משתמש בלתי־תקין!",
 	"robloxapi-category-error": "דפים עם שגיאות RobloxAPI",
 	"robloxapi-category-error-desc": "הדף משתמש בפונקציית פיענוח <code>{{#robloxAPI}}‎</code> בצורה שגויה, מה שגורם לשגיאה."
