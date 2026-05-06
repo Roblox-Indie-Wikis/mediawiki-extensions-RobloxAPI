@@ -99,7 +99,7 @@ jobs:
         if: matrix.coverage == true
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         if: matrix.coverage == true
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
