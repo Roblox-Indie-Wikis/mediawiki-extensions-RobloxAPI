@@ -23,7 +23,7 @@ jobs:
           - mw: 'REL1_43'
             php: 8.3
             experimental: false
-            coverage: true
+            coverage: false
             phan: true
           - mw: 'REL1_44'
             php: 8.2
@@ -48,7 +48,7 @@ jobs:
           - mw: 'REL1_46'
             php: 8.3
             experimental: false
-            coverage: false
+            coverage: true
             phan: false
           - mw: 'REL1_46'
             php: 8.5
@@ -130,6 +130,7 @@ jobs:
             --exclude-group Broken \
             --coverage-clover coverage.xml
         if: matrix.coverage == true
+        working-directory: mediawiki
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
