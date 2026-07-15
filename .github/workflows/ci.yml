@@ -101,7 +101,7 @@ jobs:
 
       - name: Install MediaWiki
         if: steps.cache-mediawiki.outputs.cache-hit != 'true'
-        run: bash EarlyCopy/.github/workflows/installWiki.sh ${{ matrix.mw }}
+        run: rm -rf mediawiki && bash EarlyCopy/.github/workflows/installWiki.sh ${{ matrix.mw }}
 
       - uses: actions/checkout@v7
         with:
