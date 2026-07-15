@@ -55,16 +55,19 @@ jobs:
             experimental: false
             coverage: false
             phan: true
+            generate_phpunit_config: true
           - mw: 'master'
             php: 8.3
             experimental: true
             coverage: false
             phan: false
+            generate_phpunit_config: true
           - mw: 'master'
             php: 8.5
             experimental: true
             coverage: false
             phan: true
+            generate_phpunit_config: true
 
     runs-on: ubuntu-latest
 
@@ -108,11 +111,6 @@ jobs:
         run: composer update
         working-directory: mediawiki
 
-      - name: Run PHPUnit without coverage
-        run: composer run phpunit extensions/RobloxAPI/tests
-        if: matrix.coverage == false
-        working-directory: mediawiki
-
       - name: Set up PHPUnit for coverage generation
         run: |
           php tests/phpunit/generatePHPUnitConfig.php &&
@@ -120,7 +118,13 @@ jobs:
             -o phpunit-suite-edit.py \
             https://raw.githubusercontent.com/wikimedia/integration-config/04997edbb1f93953575c1d4025b6456e7913d8e8/dockerfiles/quibble-coverage/phpunit-suite-edit.py &&
           python3 phpunit-suite-edit.py phpunit.xml --cover-extension "extensions/RobloxAPI"
-        if: matrix.coverage == true
+        # Only works on MW 1.46+
+        if: matrix.coverage == true || matrix.generate_phpunit_config
+        working-directory: mediawiki
+
+      - name: Run PHPUnit without coverage
+        run: composer run phpunit extensions/RobloxAPI/tests
+        if: matrix.coverage == false
         working-directory: mediawiki
 
       - name: Run PHPUnit and generate coverage report

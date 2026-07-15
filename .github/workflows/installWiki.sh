@@ -9,6 +9,8 @@ mv mediawiki-$MW_BRANCH mediawiki
 
 cd mediawiki
 
+git clone https://github.com/wikimedia/mediawiki-skins-Vector -b $MW_BRANCH skins/Vector
+
 composer install
 php maintenance/install.php --dbtype sqlite --dbuser root --dbname mw --dbpath $(pwd) --pass AdminPassword WikiName AdminUser
 
