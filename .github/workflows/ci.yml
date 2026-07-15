@@ -16,39 +16,60 @@ jobs:
       matrix:
         include:
           - mw: 'REL1_43'
-            php: 8.1
-            experimental: false
-            coverage: true
-          - mw: 'REL1_44'
-            php: 8.1
+            php: 8.2
             experimental: false
             coverage: false
+            phan: false
+          - mw: 'REL1_43'
+            php: 8.3
+            experimental: false
+            coverage: false
+            phan: true
+          - mw: 'REL1_44'
+            php: 8.2
+            experimental: false
+            coverage: false
+            phan: false
           - mw: 'REL1_44'
             php: 8.3
             experimental: false
             coverage: false
+            phan: true
           - mw: 'REL1_45'
             php: 8.2
             experimental: false
             coverage: false
+            phan: false
           - mw: 'REL1_45'
             php: 8.3
             experimental: false
             coverage: false
+            phan: true
+          - mw: 'REL1_46'
+            php: 8.3
+            experimental: false
+            coverage: true
+            phan: false
+          - mw: 'REL1_46'
+            php: 8.5
+            experimental: false
+            coverage: false
+            phan: true
+            generate_phpunit_config: true
           - mw: 'master'
             php: 8.3
             experimental: true
             coverage: false
+            phan: false
+            generate_phpunit_config: true
           - mw: 'master'
             php: 8.5
             experimental: true
             coverage: false
+            phan: true
+            generate_phpunit_config: true
 
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: mediawiki
 
     steps:
       - name: Setup PHP
@@ -66,7 +87,7 @@ jobs:
             mediawiki
             !mediawiki/extensions/
             !mediawiki/vendor/
-          key: mw_${{ matrix.mw }}-php${{ matrix.php }}-v20
+          key: mw_${{ matrix.mw }}-php${{ matrix.php }}-v2
 
       - name: Cache Composer cache
         uses: actions/cache@v6
@@ -80,23 +101,40 @@ jobs:
 
       - name: Install MediaWiki
         if: steps.cache-mediawiki.outputs.cache-hit != 'true'
-        working-directory: ~
-        run: bash EarlyCopy/.github/workflows/installWiki.sh ${{ matrix.mw }}
+        run: rm -rf mediawiki && bash EarlyCopy/.github/workflows/installWiki.sh ${{ matrix.mw }}
 
       - uses: actions/checkout@v7
         with:
           path: mediawiki/extensions/RobloxAPI
 
-      - name: Composer update
+      - name: Composer update (core)
         run: composer update
+        working-directory: mediawiki
+
+      - name: Set up PHPUnit for coverage generation
+        run: |
+          php tests/phpunit/generatePHPUnitConfig.php &&
+          curl -L \
+            -o phpunit-suite-edit.py \
+            https://raw.githubusercontent.com/wikimedia/integration-config/04997edbb1f93953575c1d4025b6456e7913d8e8/dockerfiles/quibble-coverage/phpunit-suite-edit.py &&
+          python3 phpunit-suite-edit.py phpunit.xml --cover-extension "extensions/RobloxAPI"
+        # Only works on MW 1.46+
+        if: matrix.coverage == true || matrix.generate_phpunit_config
+        working-directory: mediawiki
 
       - name: Run PHPUnit without coverage
-        run: composer phpunit:entrypoint -- -c tests/phpunit/suite.xml extensions/RobloxAPI/tests/phpunit
+        run: composer run phpunit extensions/RobloxAPI/tests
         if: matrix.coverage == false
+        working-directory: mediawiki
 
       - name: Run PHPUnit and generate coverage report
-        run: XDEBUG_MODE=coverage vendor/bin/phpunit --configuration extensions/RobloxAPI/phpunit.xml --coverage-clover coverage.xml
+        run: |
+          vendor/bin/phpunit \
+            --testsuite extensions \
+            --exclude-group Broken \
+            --coverage-clover coverage.xml
         if: matrix.coverage == true
+        working-directory: mediawiki
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
@@ -106,9 +144,16 @@ jobs:
 
       - name: Run parser tests
         run: php tests/parser/parserTests.php --file=extensions/RobloxAPI/tests/parser/parserTests.txt
+        working-directory: mediawiki
+
+      - name: Composer update (extension)
+        run: composer update
+        working-directory: mediawiki/extensions/RobloxAPI
 
       - name: Run phan
+        working-directory: mediawiki/extensions/RobloxAPI
         run: composer run phan
+        if: matrix.phan
   # We only want to run this during full CI for now; in the future, this will be moved to lint-check.yml
   banana-lint:
     name: "Lint message files"
