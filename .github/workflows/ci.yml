@@ -126,7 +126,7 @@ jobs:
       - name: Run PHPUnit and generate coverage report
         run: |
           vendor/bin/phpunit \
-            --testsuite extensions:unit \
+            --testsuite extensions \
             --exclude-group Broken \
             --coverage-clover coverage.xml
         if: matrix.coverage == true
