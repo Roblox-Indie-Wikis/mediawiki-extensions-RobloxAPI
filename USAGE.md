@@ -48,13 +48,13 @@
 
 ## Basic Usage
 
-To use any data source, you can use the `{{#robloxAPI: ... }}` parser function. The first argument is the name of the
+To use any data source, you can use the `{{#robloxAPI: ...}}` parser function. The first argument is the name of the
 data source, and the rest of the arguments are the arguments for the data source.
 
 For example, to get the ID of a user named `builderman`, you can use:
 
 ```
-{{#robloxAPI: userId | builderman }}
+{{#robloxAPI: userId | builderman}}
 ```
 
 This example uses the data source `userId` and provides one required argument, `builderman`.
@@ -73,13 +73,13 @@ Provides information about a game/place in the [JSON format](#handling-json-data
 Get all JSON data of a game:
 
 ```
-{{#robloxAPI: gameData | 6483209208 | 132813250731469 }}
+{{#robloxAPI: gameData | 6483209208 | 132813250731469}}
 ```
 
 Get the name of the creator of a game:
 
 ```
-{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=creator->name }}
+{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=creator->name}}
 ```
 
 #### Required arguments
@@ -98,13 +98,13 @@ Provides the number of active players in a place. Requires [gameData](#gameData)
 Get the number of active players in a place:
 
 ```
-{{#robloxAPI: activePlayers | 6483209208 | 132813250731469 }}
+{{#robloxAPI: activePlayers | 6483209208 | 132813250731469}}
 ```
 
 Get the formatted number of active players in a place:
 
 ```
-{{formatnum: {{#robloxAPI: activePlayers | 6483209208 | 132813250731469 }} }}
+{{formatnum: {{#robloxAPI: activePlayers | 6483209208 | 132813250731469}}}}
 ```
 
 #### Required Arguments
@@ -123,13 +123,13 @@ Provides the number of visits to a place. Requires [gameData](#gameData) to be e
 Get the number of visits to a place:
 
 ```
-{{#robloxAPI: visits | 6483209208 | 132813250731469 }}
+{{#robloxAPI: visits | 6483209208 | 132813250731469}}
 ```
 
 Get the formatted number of visits to a place:
 
 ```
-{{formatnum: {{#robloxAPI: visits | 6483209208 | 132813250731469 }} }}
+{{formatnum: {{#robloxAPI: visits | 6483209208 | 132813250731469}}}}
 ```
 
 #### Required Arguments
@@ -148,7 +148,7 @@ Provides the user ID for a given username.
 Get the user ID of a user:
 
 ```
-{{#robloxAPI: userId | builderman }}
+{{#robloxAPI: userId | builderman}}
 ```
 
 #### Required Arguments
@@ -166,7 +166,7 @@ Provides data about a user's avatar thumbnail in the [JSON format](#handling-jso
 Get the data about the user avatar thumbnail of builderman (ID 156):
 
 ```
-{{#robloxAPI: userAvatarThumbnail | 156 | 150x150 }}
+{{#robloxAPI: userAvatarThumbnail | 156 | 150x150}}
 ```
 
 #### Required Arguments
@@ -193,7 +193,7 @@ image. Requires [userAvatarThumbnail](#userAvatarThumbnail) to be enabled.
 Get the URL of the user avatar thumbnail of builderman (ID 156):
 
 ```
-{{#robloxAPI: userAvatarThumbnailUrl | 156 | 150x150 }}
+{{#robloxAPI: userAvatarThumbnailUrl | 156 | 150x150}}
 ```
 
 #### Required Arguments
@@ -223,7 +223,7 @@ Provides the data about an asset thumbnail in the [JSON format](#handling-json-d
 Get the data about the asset thumbnail of the asset with ID 102611803:
 
 ```
-{{#robloxAPI: assetThumbnail | 1962446128 | 140x140 }}
+{{#robloxAPI: assetThumbnail | 1962446128 | 140x140}}
 ```
 
 #### Required Arguments
@@ -254,7 +254,7 @@ Requires [assetThumbnail](#assetThumbnail) to be enabled.
 Get the URL of the asset thumbnail of the asset with ID 102611803:
 
 ```
-{{#robloxAPI: assetThumbnailUrl | 1962446128 | 140x140 }}
+{{#robloxAPI: assetThumbnailUrl | 1962446128 | 140x140}}
 ```
 
 #### Required Arguments
@@ -280,7 +280,7 @@ Provides the data about a game icon in the [JSON format](#handling-json-data).
 Get the data about the game icon of the game with ID 132813250731469:
 
 ```
-{{#robloxAPI: gameIcon | 132813250731469 | 150x150 }}
+{{#robloxAPI: gameIcon | 132813250731469 | 150x150}}
 ```
 
 #### Required Arguments
@@ -308,7 +308,7 @@ Requires [gameIcon](#gameIcon) to be enabled.
 Get the URL of the game icon of the game with ID 132813250731469:
 
 ```
-{{#robloxAPI: gameIconUrl | 132813250731469 | 150x150 }}
+{{#robloxAPI: gameIconUrl | 132813250731469 | 150x150}}
 ```
 
 #### Required Arguments
@@ -337,7 +337,7 @@ Provides all group roles a user has in all groups they have joined in the [JSON 
 Get all JSON data of the group roles of a user:
 
 ```
-{{#robloxAPI: groupRoles | 4182456156 }}
+{{#robloxAPI: groupRoles | 4182456156}}
 ```
 
 #### Required Arguments
@@ -356,7 +356,7 @@ Requires [groupRoles](#groupRoles) to be enabled.
 Get the name of the rank of the user with ID `4182456156` in the group with ID `3620943`:
 
 ```
-{{#robloxAPI: groupRank | 3620943 | 4182456156 }}
+{{#robloxAPI: groupRank | 3620943 | 4182456156}}
 ```
 
 #### Required Arguments
@@ -377,7 +377,7 @@ Provides data about a group in the [JSON format](#handling-json-data).
 Get all JSON data of a group:
 
 ```
-{{#robloxAPI: groupData | 3620943 }}
+{{#robloxAPI: groupData | 3620943}}
 ```
 
 #### Required Arguments
@@ -396,13 +396,13 @@ Requires [groupData](#groupData) to be enabled.
 Get the number of members in a group:
 
 ```
-{{#robloxAPI: groupMembers | 3620943 }}
+{{#robloxAPI: groupMembers | 3620943}}
 ```
 
 Get the formatted number of members in a group:
 
 ```
-{{formatnum: {{#robloxAPI: groupMembers | 3620943 }} }}
+{{formatnum: {{#robloxAPI: groupMembers | 3620943}}}}
 ```
 
 #### Required Arguments
@@ -438,7 +438,7 @@ Provides information about a user in the [JSON format](#handling-json-data).
 Get all JSON data of a user:
 
 ```
-{{#robloxAPI: userInfo | 156 }}
+{{#robloxAPI: userInfo | 156}}
 ```
 
 #### Required Arguments
@@ -456,7 +456,7 @@ Provides information about an asset in the [JSON format](#handling-json-data).
 Get all JSON data of an asset:
 
 ```
-{{#robloxAPI: assetDetails | 102611803 }}
+{{#robloxAPI: assetDetails | 102611803}}
 ```
 
 #### Required Arguments
@@ -474,7 +474,7 @@ Provides a list of roles in a group in the [JSON format](#handling-json-data).
 Get the roles of a group:
 
 ```
-{{#robloxAPI: groupRolesList | 5353743 }}
+{{#robloxAPI: groupRolesList | 5353743}}
 ```
 
 #### Required Arguments
@@ -492,13 +492,13 @@ Provides the name and description of a game in all supported languages in the [J
 Get the name and description of a game:
 
 ```
-{{#robloxAPI: gameNameDescription | 6483209208 }}
+{{#robloxAPI: gameNameDescription | 6483209208}}
 ```
 
 Get the description of a game in English:
 
 ```
-{{#robloxAPI: gameNameDescription | 6483209208 | json_key=data->0->description }}
+{{#robloxAPI: gameNameDescription | 6483209208 | json_key=data->0->description}}
 ```
 
 #### Required Arguments
@@ -516,13 +516,13 @@ Provides info about a universe in the [JSON format](#handling-json-data).
 Get info about a universe:
 
 ```
-{{#robloxAPI: universeInfo | 4864117649 }}
+{{#robloxAPI: universeInfo | 4864117649}}
 ```
 
 Get the privacy type of a universe:
 
 ```
-{{#robloxAPI: universeInfo | 4864117649 | json_key=privacyType }}
+{{#robloxAPI: universeInfo | 4864117649 | json_key=privacyType}}
 ```
 
 #### Required Arguments
@@ -542,7 +542,7 @@ Note that it is not possible to get more than 50 games.
 Get the list of games a user has created:
 
 ```
-{{#robloxAPI: userGames | 1995870730 }}
+{{#robloxAPI: userGames | 1995870730}}
 ```
 
 #### Required Arguments
@@ -569,7 +569,7 @@ Note that due to performance reasons, only the views of the first 50 places of t
 Get the number of visits of all places a user has created:
 
 ```
-{{#robloxAPI: userPlaceVisits | 1995870730 }}
+{{#robloxAPI: userPlaceVisits | 1995870730}}
 ```
 
 #### Required Arguments
@@ -594,13 +594,13 @@ Provides a list of events happening in a universe.
 Get the events in a universe:
 
 ```
-{{#robloxAPI: gameEvents | 6597877862 }}
+{{#robloxAPI: gameEvents | 6597877862}}
 ```
 
 Get the title of the first event in a universe:
 
 ```
-{{#robloxAPI: gameEvents | 6597877862 | json_key=0->title }}
+{{#robloxAPI: gameEvents | 6597877862 | json_key=0->title}}
 ```
 
 #### Required Arguments
@@ -618,7 +618,7 @@ Provides a list of users who have a certain role in a group.
 List of product developers in the SRC group:
 
 ```
-{{#robloxAPI: groupRoleMembers | 3620943 | 31072726 | limit=100 }}
+{{#robloxAPI: groupRoleMembers | 3620943 | 31072726 | limit=100}}
 ```
 
 #### Required Arguments
@@ -643,7 +643,7 @@ Some data sources return plain JSON data from the Roblox API. To parse this data
 Scribunto extension) or use the `json_key` optional argument:
 
 ```
-{{#robloxAPI: userInfo | 156 | json_key=created }}
+{{#robloxAPI: userInfo | 156 | json_key=created}}
 ```
 
 This example gets the user info of the user with the ID `156` and returns the `created` key from the JSON data.
@@ -651,13 +651,13 @@ This example gets the user info of the user with the ID `156` and returns the `c
 Nested keys can be accessed by separating them with '->', e.g.:
 
 ```
-{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=creator->name }}
+{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=creator->name}}
 ```
 
 To access an item in an array, you can use the index of the item, e.g.:
 
 ```
-{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=allowedGearGenres->0 }}
+{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=allowedGearGenres->0}}
 ```
 
 ### Pretty-printing JSON data
@@ -665,7 +665,7 @@ To access an item in an array, you can use the index of the item, e.g.:
 To pretty-print JSON data, you can use the `pretty` optional argument:
 
 ```
-{{#robloxAPI: userInfo | 156 | pretty=true }}
+{{#robloxAPI: userInfo | 156 | pretty=true}}
 ```
 
 ## FAQs
