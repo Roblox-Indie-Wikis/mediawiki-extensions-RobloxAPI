@@ -149,6 +149,7 @@ jobs:
       - name: Composer update (extension)
         run: composer update
         working-directory: mediawiki/extensions/RobloxAPI
+        if: matrix.phan
 
       - name: Run phan
         working-directory: mediawiki/extensions/RobloxAPI
