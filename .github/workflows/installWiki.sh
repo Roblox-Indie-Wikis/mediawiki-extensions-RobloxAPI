@@ -20,6 +20,8 @@ echo '$wgShowExceptionDetails = true;' >> LocalSettings.php
 echo '$wgShowDBErrorBacktrace = true;' >> LocalSettings.php
 echo '$wgDevelopmentWarnings = true;' >> LocalSettings.php
 
+echo 'wfLoadSkin( "Vector" );' >> LocalSettings.php
+echo '$wgDefaultSkin = "vector-2022";' >> LocalSettings.php
 echo 'wfLoadExtension( "RobloxAPI" );' >> LocalSettings.php
 
 cat <<EOT >> composer.local.json
