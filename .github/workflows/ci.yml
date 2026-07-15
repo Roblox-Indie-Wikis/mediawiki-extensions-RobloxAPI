@@ -35,6 +35,14 @@ jobs:
             php: 8.3
             experimental: false
             coverage: false
+          - mw: 'REL1_46'
+            php: 8.3
+            experimental: false
+            coverage: false
+          - mw: 'REL1_46'
+            php: 8.5
+            experimental: false
+            coverage: false
           - mw: 'master'
             php: 8.3
             experimental: true
@@ -45,10 +53,6 @@ jobs:
             coverage: false
 
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: mediawiki
 
     steps:
       - name: Setup PHP
@@ -66,7 +70,7 @@ jobs:
             mediawiki
             !mediawiki/extensions/
             !mediawiki/vendor/
-          key: mw_${{ matrix.mw }}-php${{ matrix.php }}-v20
+          key: mw_${{ matrix.mw }}-php${{ matrix.php }}-v1
 
       - name: Cache Composer cache
         uses: actions/cache@v6
@@ -80,34 +84,41 @@ jobs:
 
       - name: Install MediaWiki
         if: steps.cache-mediawiki.outputs.cache-hit != 'true'
-        working-directory: ~
         run: bash EarlyCopy/.github/workflows/installWiki.sh ${{ matrix.mw }}
 
       - uses: actions/checkout@v7
         with:
           path: mediawiki/extensions/RobloxAPI
 
-      - name: Composer update
+      - name: Composer update (core)
         run: composer update
+        working-directory: mediawiki
 
       - name: Run PHPUnit without coverage
-        run: composer run phpunit extensions/RobloxAPI/tests/
+        run: composer run phpunit extensions/RobloxAPI/tests
         if: matrix.coverage == false
+        working-directory: mediawiki
 
-      - name: Run PHPUnit and generate coverage report
-        run: XDEBUG_MODE=coverage vendor/bin/phpunit --configuration extensions/RobloxAPI/phpunit.xml --coverage-clover coverage.xml
-        if: matrix.coverage == true
+      #- name: Run PHPUnit and generate coverage report
+      #  run: XDEBUG_MODE=coverage vendor/bin/phpunit --configuration extensions/RobloxAPI/phpunit.xml --coverage-clover coverage.xml
+      #  if: matrix.coverage == true
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
-        if: matrix.coverage == true
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+      #- name: Upload coverage to Codecov
+#        uses: codecov/codecov-action@v5
+#        if: matrix.coverage == true
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Run parser tests
         run: php tests/parser/parserTests.php --file=extensions/RobloxAPI/tests/parser/parserTests.txt
+        working-directory: mediawiki
+
+      - name: Composer update (extension)
+        run: composer update
+        working-directory: mediawiki/extensions/RobloxAPI
 
       - name: Run phan
+        working-directory: mediawiki/extensions/RobloxAPI
         run: composer run phan
   # We only want to run this during full CI for now; in the future, this will be moved to lint-check.yml
   banana-lint:
