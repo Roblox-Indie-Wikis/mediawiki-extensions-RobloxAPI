@@ -132,13 +132,20 @@ jobs:
           vendor/bin/phpunit \
             --testsuite extensions \
             --exclude-group Broken \
-            --coverage-clover coverage.xml
+            --coverage-clover coverage.xml \
+            --log-junit junit.xml
         if: matrix.coverage == true
         working-directory: mediawiki
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         if: matrix.coverage == true
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload test results to Codecov
+        if: matrix.coverage == true
+        uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
