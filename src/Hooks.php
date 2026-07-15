@@ -10,6 +10,7 @@ namespace MediaWiki\Extension\RobloxAPI;
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ConfigFactory;
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentParser;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentParserResult;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\IDataSource;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
@@ -80,6 +81,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 							return $this->utils->formatStatusValue( $status, $parser );
 						}
 						$parseResult = $status->getValue();
+						'@phan-var ArgumentParserResult $parseResult';
 						$execStatus = $dataSource->exec(
 							$parser,
 							$parseResult->getRequiredArgs(),
@@ -132,6 +134,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 			return $status;
 		}
 		$dataSource = $status->getValue();
+		'@phan-var IDataSource $dataSource';
 
 		$canUse = $this->canUseDataSource( $parser, $dataSource );
 		if ( !$canUse->isGood() ) {
@@ -148,6 +151,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 			return $status;
 		}
 		$parseResult = $status->getValue();
+		'@phan-var ArgumentParserResult $parseResult';
 
 		$execStatus = $dataSource->exec( $parser, $parseResult->getRequiredArgs(), $parseResult->getOptionalArgs() );
 		if ( !$execStatus->isGood() ) {
