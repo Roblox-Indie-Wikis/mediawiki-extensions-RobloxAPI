@@ -113,15 +113,29 @@ jobs:
         if: matrix.coverage == false
         working-directory: mediawiki
 
-      #- name: Run PHPUnit and generate coverage report
-      #  run: XDEBUG_MODE=coverage vendor/bin/phpunit --configuration extensions/RobloxAPI/phpunit.xml --coverage-clover coverage.xml
-      #  if: matrix.coverage == true
+      - name: Set up PHPUnit for coverage generation
+        run: |
+          php tests/phpunit/generatePHPUnitConfig.php &&
+          curl -L \
+            -o phpunit-suite-edit.py \
+            https://raw.githubusercontent.com/wikimedia/integration-config/04997edbb1f93953575c1d4025b6456e7913d8e8/dockerfiles/quibble-coverage/phpunit-suite-edit.py &&
+          python3 phpunit-suite-edit.py phpunit.xml --cover-extension "extensions/RobloxAPI"
+        if: matrix.coverage == true
+        working-directory: mediawiki
 
-      #- name: Upload coverage to Codecov
-#        uses: codecov/codecov-action@v5
-#        if: matrix.coverage == true
-#        with:
-#          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Run PHPUnit and generate coverage report
+        run: |
+          vendor/bin/phpunit \
+            --testsuite extensions:unit \
+            --exclude-group Broken \
+            --coverage-clover coverage.xml
+        if: matrix.coverage == true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        if: matrix.coverage == true
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Run parser tests
         run: php tests/parser/parserTests.php --file=extensions/RobloxAPI/tests/parser/parserTests.txt
