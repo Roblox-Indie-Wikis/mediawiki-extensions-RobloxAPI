@@ -33,7 +33,6 @@ class RobloxAPIFetcherTest extends MediaWikiIntegrationTestCase {
 			'HttpRequestFactory',
 			$httpRequestFactory
 		);
-		$this->resetServices();
 
 		$fetcher = $this->getFetcher();
 
@@ -51,7 +50,6 @@ class RobloxAPIFetcherTest extends MediaWikiIntegrationTestCase {
 			'HttpRequestFactory',
 			$httpRequestFactory
 		);
-		$this->resetServices();
 
 		$fetcher = $this->getFetcher();
 
@@ -77,7 +75,6 @@ class RobloxAPIFetcherTest extends MediaWikiIntegrationTestCase {
 			'HttpRequestFactory',
 			$httpRequestFactory
 		);
-		$this->resetServices();
 
 		$fetcher = $this->getFetcher();
 		$fetcher->getDataFromEndpoint( 'testSource', 'some/endpoint', [], [], [
@@ -94,7 +91,6 @@ class RobloxAPIFetcherTest extends MediaWikiIntegrationTestCase {
 	public function testInvalidJsonHandling() {
 		[ $httpRequestFactory ] = $this->createMockHttpRequestFactory( 'invalid json' );
 		$this->setService( 'HttpRequestFactory', $httpRequestFactory );
-		$this->resetServices();
 
 		$fetcher = $this->getFetcher();
 
@@ -108,7 +104,6 @@ class RobloxAPIFetcherTest extends MediaWikiIntegrationTestCase {
 			'HttpRequestFactory',
 			$httpRequestFactory
 		);
-		$this->resetServices();
 
 		$fetcher = $this->getFetcher();
 
@@ -124,7 +119,6 @@ class RobloxAPIFetcherTest extends MediaWikiIntegrationTestCase {
 			'HttpRequestFactory',
 			$httpRequestFactory
 		);
-		$this->resetServices();
 
 		$fetcher = $this->getFetcher();
 
@@ -152,7 +146,6 @@ class RobloxAPIFetcherTest extends MediaWikiIntegrationTestCase {
 				'*' => 600
 			]
 		);
-		$this->resetServices();
 		$fetcher = $this->getFetcher();
 
 		$this->assertEquals( 3600, $fetcher->getCachingExpiry( 'testSource' ) );

@@ -53,7 +53,6 @@ class DataSourceCacheTest extends MediaWikiIntegrationTestCase {
 				'arg2',
 			]
 		);
-		$this->resetServices();
 		$cache = $this->getDataSourceCache();
 
 		$this->assertEquals(

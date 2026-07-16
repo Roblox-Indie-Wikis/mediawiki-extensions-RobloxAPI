@@ -7,9 +7,9 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Tests\Integration;
 
+use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\ParserOptions;
-use MediaWiki\Title\Title;
 
 /**
  * @method getServiceContainer()
@@ -22,7 +22,7 @@ trait ParserDependentTestTrait {
 		$parserOptions = ParserOptions::newFromAnon();
 		$parserOptions->setTargetLanguage( $lang );
 		$parser->setOptions( $parserOptions );
-		$parser->setPage( Title::newFromText( 'RobloxAPITest' ) );
+		$parser->setPage( PageReferenceValue::localReference( NS_MAIN, 'RobloxAPITest' ) );
 		$parser->resetOutput();
 		return $parser;
 	}

@@ -13,6 +13,7 @@ use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use MediaWiki\MediaWikiServices;
 
+// @codeCoverageIgnoreStart
 /**
  * @phpcs-require-sorted-array
  * Tested in ServiceWiringTest.php

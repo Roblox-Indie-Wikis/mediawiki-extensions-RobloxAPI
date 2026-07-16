@@ -375,7 +375,6 @@ class ArgumentParserTest extends MediaWikiIntegrationTestCase {
 			]
 		);
 
-		$this->resetServices();
 		$parser = $this->getArgumentParser();
 		$validationStatus = $parser->validate(
 			new UsernameArgument(),
@@ -393,7 +392,6 @@ class ArgumentParserTest extends MediaWikiIntegrationTestCase {
 			]
 		);
 
-		$this->resetServices();
 		$parser = $this->getArgumentParser();
 		$validationStatus = $parser->validate(
 			new UsernameArgument(),
@@ -438,7 +436,6 @@ class ArgumentParserTest extends MediaWikiIntegrationTestCase {
 			]
 		);
 
-		$this->resetServices();
 		$parser = $this->getArgumentParser();
 		$allowedUsernameArgs = $parser->getAllowedArguments(
 			new UsernameArgument()

@@ -10,6 +10,7 @@ namespace MediaWiki\Extension\RobloxAPI\Tests\Integration;
 use MediaWiki\Extension\RobloxAPI\Data\Source\IDataSource;
 use MediaWiki\Extension\RobloxAPI\Hooks;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
+use MediaWiki\Parser\Parser;
 use MediaWikiIntegrationTestCase;
 use Wikimedia\TestingAccessWrapper;
 
@@ -55,7 +56,6 @@ class HooksTest extends MediaWikiIntegrationTestCase {
 			RobloxAPIConstants::ConfDataSourceUsageLimits,
 			[ 'limitedsource' => 1 ]
 		);
-		$this->resetServices();
 		$hooks = TestingAccessWrapper::newFromObject( $this->createHooks() );
 
 		$dataSourceMock = $this->createMock( IDataSource::class );
@@ -75,7 +75,6 @@ class HooksTest extends MediaWikiIntegrationTestCase {
 			RobloxAPIConstants::ConfDataSourceUsageLimits,
 			[ 'dependentsource-dependency' => 1 ]
 		);
-		$this->resetServices();
 		$hooks = TestingAccessWrapper::newFromObject( $this->createHooks() );
 
 		$dataSourceMock = $this->createMock( IDataSource::class );
@@ -88,6 +87,54 @@ class HooksTest extends MediaWikiIntegrationTestCase {
 		$this->assertStatusGood( $result );
 		$result = $hooks->canUseDataSource( $parser, $dataSourceMock );
 		$this->assertStatusError( 'robloxapi-error-usage-limit-dependent', $result );
+	}
+
+	public function testExpensiveFunctionLimitReached() {
+		$hooks = TestingAccessWrapper::newFromObject( $this->createHooks() );
+		$parser = $this->createMock( Parser::class );
+		$parser->expects( $this->once() )->method( 'incrementExpensiveFunctionCount' )
+			->willReturn( false );
+
+		$status = $hooks->handleParserFunctionCall( $parser, [] );
+		$this->assertStatusGood( $status );
+		$this->assertStatusValue( false, $status );
+	}
+
+	public function testNoArguments() {
+		$hooks = TestingAccessWrapper::newFromObject( $this->createHooks() );
+		$parser = $this->createParser();
+
+		$status = $hooks->handleParserFunctionCall( $parser, [] );
+		$this->assertStatusError( 'robloxapi-error-no-arguments', $status );
+	}
+
+	public function testUnknownDataSource() {
+		$hooks = TestingAccessWrapper::newFromObject( $this->createHooks() );
+		$parser = $this->createParser();
+
+		$status = $hooks->handleParserFunctionCall( $parser, [ 'testSource' ] );
+		$this->assertStatusError( 'robloxapi-error-datasource-not-found', $status );
+	}
+
+	public function testDataSourceDisabled() {
+		// Disable userId
+		$this->overrideConfigValue(
+			RobloxAPIConstants::ConfEnabledDataSources,
+			[
+				array_diff(
+					$this->getServiceContainer()->getMainConfig()->get( RobloxAPIConstants::ConfEnabledDataSources ),
+					[
+						'userId'
+					]
+				)
+			]
+		);
+
+		$hooks = TestingAccessWrapper::newFromObject( $this->createHooks() );
+		$parser = $this->createParser();
+
+		$status = $hooks->handleParserFunctionCall( $parser, [ 'userId' ] );
+		$this->assertStatusError( 'robloxapi-error-datasource-disabled', $status );
 	}
 
 }

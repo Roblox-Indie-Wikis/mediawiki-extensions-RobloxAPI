@@ -9,6 +9,7 @@ namespace MediaWiki\Extension\RobloxAPI\Tests\Unit;
 
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\Args\Types\BooleanArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\JsonKeyArgument;
 use MediaWikiUnitTestCase;
 
@@ -46,6 +47,16 @@ class ArgumentSpecificationTest extends MediaWikiUnitTestCase {
 		$this->assertCount( 1, $argSpec->getRequiredArgs() );
 		$argSpec->withOptionalArg( 'test', new BooleanArgument() );
 		$this->assertCount( 3, $argSpec->getOptionalArgs() );
+	}
+
+	public function testFor() {
+		$emptySpec = ArgumentSpecification::for();
+		$this->assertEquals( [], $emptySpec->getRequiredArgs() );
+		$this->assertEquals( [], $emptySpec->getOptionalArgs() );
+
+		$spec = ArgumentSpecification::for( new BooleanArgument(), IdArgument::user() );
+		$this->assertCount( 2, $spec->getRequiredArgs() );
+		$this->assertEquals( [], $spec->getOptionalArgs() );
 	}
 
 }
