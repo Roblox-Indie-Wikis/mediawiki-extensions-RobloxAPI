@@ -1,0 +1,15 @@
+{
+	"@metadata": {
+		"authors": [
+			"Volvox"
+		]
+	},
+	"robloxapi-error-invalid-id": "Ongültegen ID-Wäert „$1“!",
+	"robloxapi-error-unexpected-data-structure": "Onerwaart Datestruktur!",
+	"robloxapi-error-invalid-thumbnail-size": "Ongülteg Miniaturbildgréisst!",
+	"robloxapi-error-invalid-username": "Ongültege Benotzernumm!",
+	"robloxapi-error-missing-argument": "En/t feelt en obligatorescht Argument vum Typ $1!",
+	"robloxapi-error-unknown-optional-argument": "Onbekannt fakultatiivt Argument „$1“!",
+	"robloxapi-error-invalid-thumbnail-format": "Ongültegt Miniaturbildformat „$1“! Méiglech Wäerter si „Webp“ a „Png“.",
+	"robloxapi-category-error": "Säite mat RobloxAPI-Feeler"
+}
