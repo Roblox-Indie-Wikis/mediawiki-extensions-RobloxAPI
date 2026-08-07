@@ -118,14 +118,14 @@ class RobloxAPIUtils {
 			throw new LogicException( __METHOD__ . ' should only be called for bad StatusValues!' );
 		}
 
-		if ( $localizer instanceof Parser ) {
+		if ( $localizer instanceof MessageLocalizer ) {
+			$localizerCallback = $localizer->msg( ... );
+		} else {
 			// Parser::msg doesn't implement MessageLocalizer and only supports strings and not MessageSpecifiers...
 			// TODO This is be fixed on 1.47+
 			$localizerCallback = static fn ( MessageSpecifier $msg ) => wfMessage( $msg )
 				->inLanguage( $localizer->getTargetLanguage() )
 				->page( $localizer->getPage() );
-		} else {
-			$localizerCallback = $localizer->msg( ... );
 		}
 
 		$result = '';
