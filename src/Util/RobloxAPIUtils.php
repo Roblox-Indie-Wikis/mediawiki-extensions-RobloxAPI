@@ -12,6 +12,7 @@ use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Html\Html;
 use MediaWiki\Json\FormatJson;
 use MediaWiki\Language\MessageLocalizer;
+use MediaWiki\Message\Message;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Utils\UrlUtils;
 use StatusValue;
@@ -123,7 +124,7 @@ class RobloxAPIUtils {
 		} else {
 			// Parser::msg doesn't implement MessageLocalizer and only supports strings and not MessageSpecifiers...
 			// TODO This is be fixed on 1.47+
-			$localizerCallback = static fn ( MessageSpecifier $msg ) => wfMessage( $msg )
+			$localizerCallback = static fn ( MessageSpecifier $msg ): Message => wfMessage( $msg )
 				->inLanguage( $localizer->getTargetLanguage() )
 				->page( $localizer->getPage() );
 		}
