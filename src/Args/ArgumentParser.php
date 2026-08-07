@@ -166,7 +166,7 @@ class ArgumentParser {
 			if ( !in_array( $validatedValue, $allowedArgs, false ) ) {
 				return StatusValue::newFatal(
 					'robloxapi-error-arg-not-allowed',
-					RobloxAPIUtils::transformValueForError( $validatedValue ),
+					RobloxAPIUtils::transformValueForError( $value ),
 					new MessageValue( $type->getTranslationKey() ),
 				);
 			}
