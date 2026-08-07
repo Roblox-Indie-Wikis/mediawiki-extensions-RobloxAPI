@@ -16,6 +16,7 @@ use MediaWiki\Parser\Parser;
 use MediaWiki\Utils\UrlUtils;
 use StatusValue;
 use stdClass;
+use Wikimedia\Message\MessageSpecifier;
 use Wikimedia\Message\MessageValue;
 
 /**
@@ -120,7 +121,7 @@ class RobloxAPIUtils {
 		if ( $localizer instanceof Parser ) {
 			// Parser::msg doesn't implement MessageLocalizer and only supports strings and not MessageSpecifiers...
 			// TODO This is be fixed on 1.47+
-			$localizerCallback = static fn ( $msg ) => wfMessage( $msg )
+			$localizerCallback = static fn ( MessageSpecifier $msg ) => wfMessage( $msg )
 				->inLanguage( $localizer->getTargetLanguage() )
 				->page( $localizer->getPage() );
 		} else {
