@@ -39,7 +39,7 @@ class GroupRankDataSource extends DependentDataSource {
 
 		foreach ( $groups as $group ) {
 			if ( $group->group->id === (int)$requiredArgs[0] ) {
-				return $group->role->name;
+				return StatusValue::newGood( $group->role->name );
 			}
 		}
 
