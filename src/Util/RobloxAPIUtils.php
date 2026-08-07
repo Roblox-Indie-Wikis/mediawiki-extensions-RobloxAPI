@@ -11,10 +11,13 @@ use LogicException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Html\Html;
 use MediaWiki\Json\FormatJson;
+use MediaWiki\Language\MessageLocalizer;
+use MediaWiki\Message\Message;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Utils\UrlUtils;
 use StatusValue;
 use stdClass;
+use Wikimedia\Message\MessageSpecifier;
 use Wikimedia\Message\MessageValue;
 
 /**
@@ -111,19 +114,25 @@ class RobloxAPIUtils {
 	/**
 	 * @return string Wikitext
 	 */
-	public function formatStatusValue( StatusValue $status, Parser $parser ): string {
+	public function formatStatusValue( StatusValue $status, MessageLocalizer|Parser $localizer ): string {
 		if ( $status->isGood() ) {
 			throw new LogicException( __METHOD__ . ' should only be called for bad StatusValues!' );
+		}
+
+		if ( $localizer instanceof MessageLocalizer ) {
+			$localizerCallback = $localizer->msg( ... );
+		} else {
+			// Parser::msg doesn't implement MessageLocalizer and only supports strings and not MessageSpecifiers...
+			// TODO This is be fixed on 1.47+
+			$localizerCallback = static fn ( MessageSpecifier $msg ): Message => wfMessage( $msg )
+				->inLanguage( $localizer->getTargetLanguage() )
+				->page( $localizer->getPage() );
 		}
 
 		$result = '';
 
 		foreach ( $status->getMessages() as $msg ) {
-			// Parser::msg doesn't allow a MessageSpecifier as the first arg...
-			$message = wfMessage( $msg )
-				->inLanguage( $parser->getTargetLanguage() )
-				->page( $parser->getPage() )
-				->plain();
+			$message = $localizerCallback( $msg )->plain();
 
 			$result .= $this->options->get( RobloxAPIConstants::ConfShowPlainErrors )
 				? $message

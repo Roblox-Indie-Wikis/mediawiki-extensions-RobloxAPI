@@ -13,7 +13,6 @@ use MediaWiki\Extension\RobloxAPI\Args\Types\IArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailFormatArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailSizeArgument;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
-use MediaWiki\Parser\Parser;
 use StatusValue;
 
 abstract class ThumbnailUrlDataSource extends DependentDataSource {
@@ -31,8 +30,8 @@ abstract class ThumbnailUrlDataSource extends DependentDataSource {
 	 * @inheritDoc
 	 * @return StatusValue<string> URL of the thumbnail
 	 */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
-		$dataStatus = $this->dataSource->exec( $parser, $requiredArgs, $optionalArgs );
+	public function exec( array $requiredArgs, array $optionalArgs = [] ): StatusValue {
+		$dataStatus = $this->dataSource->exec( $requiredArgs, $optionalArgs );
 
 		if ( !$dataStatus->isOK() ) {
 			return $dataStatus;

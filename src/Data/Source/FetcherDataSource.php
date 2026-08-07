@@ -8,7 +8,6 @@
 namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
-use MediaWiki\Parser\Parser;
 use StatusValue;
 
 /**
@@ -104,7 +103,7 @@ abstract class FetcherDataSource extends AbstractDataSource {
 	}
 
 	/** @inheritDoc */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
+	public function exec( array $requiredArgs, array $optionalArgs = [] ): StatusValue {
 		return $this->fetch( $requiredArgs, $optionalArgs );
 	}
 
