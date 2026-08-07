@@ -120,14 +120,12 @@ class HooksTest extends MediaWikiIntegrationTestCase {
 		// Disable userId
 		$this->overrideConfigValue(
 			RobloxAPIConstants::ConfEnabledDataSources,
-			[
-				array_diff(
-					$this->getServiceContainer()->getMainConfig()->get( RobloxAPIConstants::ConfEnabledDataSources ),
-					[
-						'userId'
-					]
-				)
-			]
+			array_diff(
+				$this->getServiceContainer()->getMainConfig()->get( RobloxAPIConstants::ConfEnabledDataSources ),
+				[
+					'userId'
+				]
+			)
 		);
 
 		$hooks = TestingAccessWrapper::newFromObject( $this->createHooks() );
