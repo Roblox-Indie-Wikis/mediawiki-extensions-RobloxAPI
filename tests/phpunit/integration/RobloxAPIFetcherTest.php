@@ -1,0 +1,155 @@
+<?php
+/**
+ * @license GPL-2.0-or-later
+ *
+ * @file
+ */
+
+namespace MediaWiki\Extension\RobloxAPI\Tests\Integration;
+
+use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
+use MediaWikiIntegrationTestCase;
+use Wikimedia\TestingAccessWrapper;
+
+/**
+ * @covers \MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher
+ * @group RobloxAPI
+ */
+class RobloxAPIFetcherTest extends MediaWikiIntegrationTestCase {
+	use HttpRequestFactoryTestTrait;
+
+	private function getFetcher(): TestingAccessWrapper {
+		return TestingAccessWrapper::newFromObject(
+			$this->getServiceContainer()->getService( 'RobloxAPI.RobloxAPIFetcher' )
+		);
+	}
+
+	public function testSuccessfulDataFetch() {
+		$sampleData = [ 'key' => 'value', 'number' => 42 ];
+		$jsonData = json_encode( $sampleData );
+
+		[ $httpRequestFactory ] = $this->createMockHttpRequestFactory( $jsonData );
+		$this->setService(
+			'HttpRequestFactory',
+			$httpRequestFactory
+		);
+
+		$fetcher = $this->getFetcher();
+
+		$result = $fetcher->getDataFromEndpoint( 'testSource', 'some/endpoint', [], [], [], static fn () => [] );
+
+		$this->assertStatusValue( (object)$sampleData, $result );
+	}
+
+	public function testCachingBehavior() {
+		$sampleData = [ 'cachedKey' => 'cachedValue' ];
+		$jsonData = json_encode( $sampleData );
+
+		[ $httpRequestFactory ] = $this->createMockHttpRequestFactory( $jsonData );
+		$this->setService(
+			'HttpRequestFactory',
+			$httpRequestFactory
+		);
+
+		$fetcher = $this->getFetcher();
+
+		// First fetch should hit the HTTP request
+		$result1 = $fetcher->getDataFromEndpoint( 'testSource', 'some/endpoint', [], [], [], static fn () => [] );
+		$this->assertStatusValue( (object)$sampleData, $result1 );
+
+		// Second fetch should use the cache and not hit the HTTP request again
+		$result2 = $fetcher->getDataFromEndpoint( 'testSource', 'some/endpoint', [], [], [], static fn () => [] );
+		$this->assertStatusValue( (object)$sampleData, $result2 );
+	}
+
+	public function testHeaders() {
+		$expectedUserAgent = 'RobloxAPI Test Agent/1.0';
+
+		$this->overrideConfigValue(
+			RobloxAPIConstants::ConfRequestUserAgent,
+			$expectedUserAgent
+		);
+
+		[ $httpRequestFactory, $request ] = $this->createMockHttpRequestFactory( json_encode( [] ), );
+		$this->setService(
+			'HttpRequestFactory',
+			$httpRequestFactory
+		);
+
+		$fetcher = $this->getFetcher();
+		$fetcher->getDataFromEndpoint( 'testSource', 'some/endpoint', [], [], [
+			'Custom-Header' => 'test123'
+		], static fn () => [] );
+
+		$request = TestingAccessWrapper::newFromObject( $request );
+		$headers = $request->reqHeaders;
+		$this->assertEquals( 'test123', $headers['Custom-Header'] );
+		$this->assertEquals( $expectedUserAgent, $headers['User-Agent'] );
+		$this->assertEquals( 'application/json', $headers['Accept'] );
+	}
+
+	public function testInvalidJsonHandling() {
+		[ $httpRequestFactory ] = $this->createMockHttpRequestFactory( 'invalid json' );
+		$this->setService( 'HttpRequestFactory', $httpRequestFactory );
+
+		$fetcher = $this->getFetcher();
+
+		$this->assertStatusError( 'robloxapi-error-decode-failure',
+			$fetcher->getDataFromEndpoint( 'testSource', 'some/endpoint', [], [], [], static fn () => [] ) );
+	}
+
+	public function test429ResponseHandling() {
+		[ $httpRequestFactory ] = $this->createMockHttpRequestFactory( null, 429 );
+		$this->setService(
+			'HttpRequestFactory',
+			$httpRequestFactory
+		);
+
+		$fetcher = $this->getFetcher();
+
+		$this->assertStatusError(
+			'robloxapi-error-request-rate-limited',
+			$fetcher->getDataFromEndpoint( 'testSource', 'some/endpoint', [], [], [], static fn () => [] )
+		);
+	}
+
+	public function testBadStatusHandling() {
+		[ $httpRequestFactory ] = $this->createMockHttpRequestFactory( null, 500, false );
+		$this->setService(
+			'HttpRequestFactory',
+			$httpRequestFactory
+		);
+
+		$fetcher = $this->getFetcher();
+
+		$this->assertStatusError(
+			'robloxapi-error-request-failed',
+			$fetcher->getDataFromEndpoint( 'testSource', 'some/endpoint', [], [], [], static fn () => [] )
+		);
+	}
+
+	public function testRateLimitedDataSources() {
+		$fetcher = $this->getFetcher();
+		$fetcher->rateLimitedDataSources = [ 'sourceA', 'sourceB' ];
+
+		$this->assertStatusError(
+			'robloxapi-error-request-cancelled-rate-limits',
+			$fetcher->getDataFromEndpoint( 'sourceA', 'some/endpoint', [], [], [], static fn () => [] )
+		);
+	}
+
+	public function testGetCachingExpiry() {
+		$this->overrideConfigValue(
+			RobloxAPIConstants::ConfCachingExpiries,
+			[
+				'testSource' => 3600,
+				'*' => 600
+			]
+		);
+		$fetcher = $this->getFetcher();
+
+		$this->assertEquals( 3600, $fetcher->getCachingExpiry( 'testSource' ) );
+		$this->assertEquals( 600, $fetcher->getCachingExpiry( 'unknownSource' ) );
+	}
+
+}

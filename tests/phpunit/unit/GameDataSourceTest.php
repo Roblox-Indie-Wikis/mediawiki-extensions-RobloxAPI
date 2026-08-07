@@ -1,28 +1,14 @@
 <?php
 /**
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- * http://www.gnu.org/copyleft/gpl.html
+ * @license GPL-2.0-or-later
  *
  * @file
  */
 
-namespace MediaWiki\Extension\RobloxAPI\Tests;
+namespace MediaWiki\Extension\RobloxAPI\Tests\Unit;
 
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\GameDataSource;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 
 /**
  * @covers \MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\GameDataSource
@@ -51,12 +37,10 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 				],
 			],
 		];
-		self::assertEquals( $data->data[0], $this->subject->processData( $data, [ 12345, 12345 ], [] ) );
+		self::assertEquals( $data->data[0], $this->subject->processData( $data, [ 12345, 12345 ], [] )->getValue() );
 
-		// test invalid data
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-invalid-data' );
-		$this->subject->processData( (object)[ 'data' => null ], [ 12345, 12345 ], [] );
+		$status = $this->subject->processData( (object)[ 'data' => null ], [ 12345, 12345 ], [] );
+		$this->assertStatusError( 'robloxapi-error-invalid-data', $status );
 	}
 
 	public function testFetch() {
@@ -106,7 +90,7 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 
 		$dataSource = new GameDataSource( $this->createMockFetcher( $result ) );
 
-		$data = $dataSource->fetch( [ '6483209208', '132813250731469' ] );
+		$data = $dataSource->fetch( [ '6483209208', '132813250731469' ] )->getValue();
 
 		self::assertEquals( 6483209208, $data->id );
 		self::assertEquals( 132813250731469, $data->rootPlaceId );
@@ -123,17 +107,15 @@ class GameDataSourceTest extends RobloxAPIDataSourceUnitTestCase {
 
 		$dataSource = new GameDataSource( $this->createMockFetcher( $result ) );
 
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-invalid-data' );
-		$dataSource->fetch( [ '4252370517', '12018816388' ] );
+		$status = $dataSource->fetch( [ '4252370517', '12018816388' ] );
+		$this->assertStatusError( 'robloxapi-error-invalid-data', $status );
 	}
 
 	public function testFailedRequest() {
 		$dataSource = new GameDataSource( $this->createMockFetcher( null, 429 ) );
 
-		$this->expectException( RobloxAPIException::class );
-		$this->expectExceptionMessage( 'robloxapi-error-request-failed' );
-		$dataSource->fetch( [ '4252370517', '12018816388' ] );
+		$status = $dataSource->fetch( [ '4252370517', '12018816388' ] );
+		$this->assertStatusError( 'robloxapi-error-request-rate-limited', $status );
 	}
 
 }

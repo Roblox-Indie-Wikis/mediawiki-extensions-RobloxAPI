@@ -9,13 +9,17 @@
 	"license-name": "GPL-2.0-or-later",
 	"type": "parserhook",
 	"requires": {
-		"MediaWiki": ">= 1.43.0"
+		"MediaWiki": ">= 1.43.0",
+		"platform": {
+			"php": ">= 8.2"
+		}
 	},
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\RobloxAPI\\": "src/"
 	},
 	"TestAutoloadNamespaces": {
-		"MediaWiki\\Extension\\RobloxAPI\\Tests\\": "tests/phpunit/unit/"
+		"MediaWiki\\Extension\\RobloxAPI\\Tests\\Unit\\": "tests/phpunit/unit/",
+		"MediaWiki\\Extension\\RobloxAPI\\Tests\\Integration\\": "tests/phpunit/integration/"
 	},
 	"config": {
 		"RobloxAPIAllowedArguments": {
@@ -109,6 +113,7 @@
 			"class": "MediaWiki\\Extension\\RobloxAPI\\Hooks",
 			"services": [
 				"ConfigFactory",
+				"RobloxAPI.ArgumentParser",
 				"RobloxAPI.DataSourceProvider",
 				"RobloxAPI.Utils"
 			]

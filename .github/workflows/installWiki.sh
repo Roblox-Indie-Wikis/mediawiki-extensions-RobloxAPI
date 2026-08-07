@@ -1,7 +1,6 @@
 #! /bin/bash
 
 MW_BRANCH=$1
-EXTENSION_NAME=$2
 
 wget https://github.com/wikimedia/mediawiki/archive/$MW_BRANCH.tar.gz -nv
 
@@ -9,6 +8,8 @@ tar -zxf $MW_BRANCH.tar.gz
 mv mediawiki-$MW_BRANCH mediawiki
 
 cd mediawiki
+
+git clone https://github.com/wikimedia/mediawiki-skins-Vector -b $MW_BRANCH skins/Vector
 
 composer install
 php maintenance/install.php --dbtype sqlite --dbuser root --dbname mw --dbpath $(pwd) --pass AdminPassword WikiName AdminUser
@@ -19,6 +20,8 @@ echo '$wgShowExceptionDetails = true;' >> LocalSettings.php
 echo '$wgShowDBErrorBacktrace = true;' >> LocalSettings.php
 echo '$wgDevelopmentWarnings = true;' >> LocalSettings.php
 
+echo 'wfLoadSkin( "Vector" );' >> LocalSettings.php
+echo '$wgDefaultSkin = "vector-2022";' >> LocalSettings.php
 echo 'wfLoadExtension( "RobloxAPI" );' >> LocalSettings.php
 
 cat <<EOT >> composer.local.json
@@ -34,3 +37,8 @@ cat <<EOT >> composer.local.json
 	}
 }
 EOT
+
+# Download phpunit.xml.dist or phpunit.xml.template as they're not in the tarballs
+# Taken from https://github.com/StarCitizenTools/mediawiki-ci-workflows/blob/main/.github/workflows/test-php.yml
+wget "https://raw.githubusercontent.com/wikimedia/mediawiki/${MW_BRANCH}/phpunit.xml.dist" -nv || \
+  wget "https://raw.githubusercontent.com/wikimedia/mediawiki/${MW_BRANCH}/phpunit.xml.template" -nv

@@ -1,19 +1,6 @@
 <?php
 /**
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- * http://www.gnu.org/copyleft/gpl.html
+ * @license GPL-2.0-or-later
  *
  * @file
  */
@@ -22,7 +9,10 @@ namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 
 use Closure;
 use MediaWiki\Config\ServiceOptions;
-use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\LimitArgument;
+use MediaWiki\Extension\RobloxAPI\Args\Types\SortOrderArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Fetcher\RobloxAPIFetcher;
 use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\AssetThumbnailDataSource;
 use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\AssetThumbnailUrlDataSource;
@@ -37,11 +27,9 @@ use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\UserAvatarThumbnail
 use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\UserAvatarThumbnailUrlDataSource;
 use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\UserIdDataSource;
 use MediaWiki\Extension\RobloxAPI\Data\Source\Implementation\UserPlaceVisitsDataSource;
-use MediaWiki\Extension\RobloxAPI\ParserFunction\DataSourceParserFunction;
-use MediaWiki\Extension\RobloxAPI\ParserFunction\RobloxApiParserFunction;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
+use StatusValue;
 
 /**
  * Handles the registration of data sources and stores them.
@@ -60,7 +48,7 @@ class DataSourceProvider {
 
 	/** @noinspection PhpUnusedParameterInspection */
 	public function __construct(
-		public ServiceOptions $options,
+		private readonly ServiceOptions $options,
 		private readonly RobloxAPIFetcher $fetcher,
 		private readonly RobloxAPIUtils $utils,
 	) {
@@ -76,7 +64,7 @@ class DataSourceProvider {
 
 		$this->registerSimpleFetcherDataSource(
 			'groupRoles',
-			new ArgumentSpecification( [ 'UserID' ], [], true ),
+			ArgumentSpecification::for( IdArgument::user() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://groups.roblox.com/v1/users/$args[0]/groups/roles";
 			}, static function ( mixed $data, array $requiredArgs, array $optionalArgs ): mixed {
@@ -86,7 +74,7 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'groupData',
-			new ArgumentSpecification( [ 'GroupID' ], [], true ),
+			ArgumentSpecification::for( IdArgument::group() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://groups.roblox.com/v1/groups/$args[0]";
 			},
@@ -95,14 +83,14 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'groupRolesList',
-			new ArgumentSpecification( [ 'GroupID' ], [], true ),
+			ArgumentSpecification::for( IdArgument::group() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://groups.roblox.com/v1/groups/$args[0]/roles";
 			}
 		);
 		$this->registerSimpleFetcherDataSource(
 			'badgeInfo',
-			new ArgumentSpecification( [ 'BadgeID' ], [], true ),
+			ArgumentSpecification::for( IdArgument::badge() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://badges.roblox.com/v1/badges/$args[0]";
 			},
@@ -111,7 +99,7 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'userInfo',
-			new ArgumentSpecification( [ 'UserID' ], [], true ),
+			ArgumentSpecification::for( IdArgument::user() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://users.roblox.com/v1/users/$args[0]";
 			},
@@ -120,7 +108,7 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'assetDetails',
-			new ArgumentSpecification( [ 'AssetID' ], [], true ),
+			ArgumentSpecification::for( IdArgument::asset() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://economy.roblox.com/v2/assets/$args[0]/details";
 			},
@@ -129,25 +117,24 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'gameNameDescription',
-			new ArgumentSpecification( [ 'UniverseID' ], [], true ),
+			ArgumentSpecification::for( IdArgument::universe() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://gameinternationalization.roblox.com/v1/name-description/games/$args[0]";
 			}
 		);
 		$this->registerSimpleFetcherDataSource(
 			'universeInfo',
-			new ArgumentSpecification( [ 'UniverseID' ], [], true ),
+			ArgumentSpecification::for( IdArgument::universe() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://develop.roblox.com/v1/universes/$args[0]";
 			}
 		);
 		$this->registerSimpleFetcherDataSource(
 			'userGames',
-			new ArgumentSpecification(
-				[ 'UserID' ],
-				[ 'limit' => 'UserGamesLimit', 'sort_order' => 'SortOrder' ],
-				true
-			),
+			ArgumentSpecification::for( IdArgument::user() )
+				->withOptionalArg( 'limit', new LimitArgument( '10', '25', '50' ) )
+				->withOptionalArg( 'sort_order', new SortOrderArgument() )
+				->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				$limit = $optionalArgs['limit'] ?? 50;
 				$sortOrder = $optionalArgs['sort_order'] ?? 'Asc';
@@ -160,11 +147,7 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'gameEvents',
-			new ArgumentSpecification(
-				[ 'UniverseID' ],
-				[],
-				true
-			),
+			ArgumentSpecification::for( IdArgument::universe() )->withJsonArgs(),
 			static function ( array $args, array $optionalArgs ): string {
 				return "https://apis.roblox.com/virtual-events/v1/universes/$args[0]/virtual-events";
 			},
@@ -174,10 +157,9 @@ class DataSourceProvider {
 		);
 		$this->registerSimpleFetcherDataSource(
 			'groupRoleMembers',
-			new ArgumentSpecification(
-				[ 'GroupID', 'RoleID' ],
-				[ 'limit' => 'GroupRoleMembersLimit', 'sort_order' => 'SortOrder' ],
-			),
+			ArgumentSpecification::for( IdArgument::group(), IdArgument::role() )
+				->withOptionalArg( 'limit', new LimitArgument( '10', '25', '50', '100' ) )
+				->withOptionalArg( 'sort_order', new SortOrderArgument() ),
 			static function ( array $args, array $optionalArgs ): string {
 				$limit = $optionalArgs['limit'] ?? 50;
 				$sortOrder = $optionalArgs['sort_order'] ?? 'Asc';
@@ -228,6 +210,12 @@ class DataSourceProvider {
 
 	/**
 	 * Registers a new simple fetcher data source if it's enabled.
+	 * @param string $id The ID of the data source.
+	 * @param ArgumentSpecification $argumentSpecification The argument specification.
+	 * @param Closure( string[], array<string, string> ): string $createEndpoint The function to create the endpoint.
+	 * @param null|Closure( mixed, string[], array<string, string> ): (StatusValue<mixed>|mixed|null) $processData
+	 * The function to process the data.
+	 * @param bool $registerParserFunction Whether to register a legacy parser function.
 	 * @see SimpleFetcherDataSource::__construct
 	 */
 	public function registerSimpleFetcherDataSource(
@@ -267,44 +255,19 @@ class DataSourceProvider {
 	}
 
 	/**
-	 * @throws RobloxAPIException
+	 * @return StatusValue<IDataSource>
 	 */
-	public function getDataSourceOrThrow( string $id, bool $ignoreCase = false ): IDataSource {
+	public function tryGetDataSource( string $id, bool $ignoreCase = false ): StatusValue {
 		$source = $this->getDataSource( $id, $ignoreCase );
 
 		if ( !$source ) {
-			throw new RobloxAPIException( 'robloxapi-error-datasource-not-found', $id );
+			return StatusValue::newFatal(
+				'robloxapi-error-datasource-not-found',
+				RobloxAPIUtils::transformValueForError( $id ),
+			);
 		}
 
-		return $source;
-	}
-
-	/**
-	 * Creates parser functions for all enabled data sources.
-	 * @return RobloxApiParserFunction[]
-	 */
-	public function createLegacyParserFunctions(): array {
-		$functions = [];
-
-		foreach ( $this->dataSources as $dataSource ) {
-			// register parser function only if needed for legacy reasons
-			if ( !$dataSource->shouldRegisterLegacyParserFunction() ) {
-				continue;
-			}
-
-			$id = "roblox_" . ucfirst( $dataSource->getId() );
-			$function = $this->createParserFunction( $dataSource );
-			$functions[$id] = $function;
-		}
-
-		return $functions;
-	}
-
-	/**
-	 * Creates a parser function for the given data source.
-	 */
-	private function createParserFunction( IDataSource $dataSource ): RobloxApiParserFunction {
-		return new DataSourceParserFunction( $this->utils, $dataSource );
+		return StatusValue::newGood( $source );
 	}
 
 }

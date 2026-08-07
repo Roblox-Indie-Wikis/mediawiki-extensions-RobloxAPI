@@ -1,29 +1,17 @@
 <?php
 /**
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- * http://www.gnu.org/copyleft/gpl.html
+ * @license GPL-2.0-or-later
  *
  * @file
  */
 
 namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 
-use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DependentDataSource;
 use MediaWiki\Parser\Parser;
+use StatusValue;
 
 /**
  * A data source for getting the total amount of visits a user's places have.
@@ -35,34 +23,34 @@ class UserPlaceVisitsDataSource extends DependentDataSource {
 		parent::__construct( $dataSourceProvider, 'userPlaceVisits', 'userGames' );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): mixed {
-		$userGames = $this->dataSource->exec( $parser, $requiredArgs, $optionalArgs );
+	/** @inheritDoc */
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
+		$userGamesStatus = $this->dataSource->exec( $parser, $requiredArgs, $optionalArgs );
 
+		if ( !$userGamesStatus->isGood() ) {
+			return $userGamesStatus;
+		}
+		$userGames = $userGamesStatus->getValue();
 		if ( $userGames === null ) {
-			$this->failNoData();
+			return $this->failNoData();
 		}
 
 		if ( !is_array( $userGames ) ) {
-			$this->failUnexpectedDataStructure();
+			return $this->failUnexpectedDataStructure();
 		}
 
 		$totalVisits = 0;
 		foreach ( $userGames as $game ) {
 			if ( !property_exists( $game, 'placeVisits' ) ) {
-				$this->failUnexpectedDataStructure();
+				return $this->failUnexpectedDataStructure();
 			}
 			$totalVisits += $game->placeVisits;
 		}
 
-		return $totalVisits;
+		return StatusValue::newGood( $totalVisits );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function getArgumentSpecification(): ArgumentSpecification {
 		return $this->dataSource->getArgumentSpecification();
 	}
