@@ -10,7 +10,6 @@ namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\Args\Types\BooleanArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\IArgument;
-use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailFormatArgument;
 use MediaWiki\Extension\RobloxAPI\Args\Types\ThumbnailSizeArgument;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
