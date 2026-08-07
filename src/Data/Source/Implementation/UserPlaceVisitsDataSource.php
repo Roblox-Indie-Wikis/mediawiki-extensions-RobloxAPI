@@ -10,7 +10,6 @@ namespace MediaWiki\Extension\RobloxAPI\Data\Source\Implementation;
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DependentDataSource;
-use MediaWiki\Parser\Parser;
 use StatusValue;
 
 /**
@@ -24,8 +23,8 @@ class UserPlaceVisitsDataSource extends DependentDataSource {
 	}
 
 	/** @inheritDoc */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
-		$userGamesStatus = $this->dataSource->exec( $parser, $requiredArgs, $optionalArgs );
+	public function exec( array $requiredArgs, array $optionalArgs = [] ): StatusValue {
+		$userGamesStatus = $this->dataSource->exec( $requiredArgs, $optionalArgs );
 
 		if ( !$userGamesStatus->isGood() ) {
 			return $userGamesStatus;

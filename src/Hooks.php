@@ -83,7 +83,6 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 						$parseResult = $status->getValue();
 						'@phan-var ArgumentParserResult $parseResult';
 						$execStatus = $dataSource->exec(
-							$parser,
 							$parseResult->getRequiredArgs(),
 							$parseResult->getOptionalArgs()
 						);
@@ -153,7 +152,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 		$parseResult = $status->getValue();
 		'@phan-var ArgumentParserResult $parseResult';
 
-		$execStatus = $dataSource->exec( $parser, $parseResult->getRequiredArgs(), $parseResult->getOptionalArgs() );
+		$execStatus = $dataSource->exec( $parseResult->getRequiredArgs(), $parseResult->getOptionalArgs() );
 		if ( !$execStatus->isGood() ) {
 			return $execStatus;
 		}

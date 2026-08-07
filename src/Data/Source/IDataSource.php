@@ -8,7 +8,6 @@
 namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 
 use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
-use MediaWiki\Parser\Parser;
 use StatusValue;
 
 /**
@@ -18,12 +17,11 @@ interface IDataSource {
 
 	/**
 	 * Executes the data source. This is called when the #robloxAPI parser function is used.
-	 * @param Parser $parser
 	 * @param string[] $requiredArgs
 	 * @param array<string, mixed> $optionalArgs
 	 * @return StatusValue<mixed> The result of the data source execution.
 	 */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue;
+	public function exec( array $requiredArgs, array $optionalArgs = [] ): StatusValue;
 
 	/**
 	 * Determines whether a legacy parser function should be registered.
