@@ -7,6 +7,7 @@
 
 namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 
+use NoDiscard;
 use StatusValue;
 
 abstract class AbstractDataSource implements IDataSource {
@@ -53,6 +54,7 @@ abstract class AbstractDataSource implements IDataSource {
 	/**
 	 * Returns an error stating that the data source returned no data.
 	 */
+	#[NoDiscard]
 	protected function failNoData(): StatusValue {
 		return StatusValue::newFatal( 'robloxapi-error-datasource-returned-no-data' );
 	}
@@ -60,6 +62,7 @@ abstract class AbstractDataSource implements IDataSource {
 	/**
 	 * Returns an error stating that the data source returned an unexpected data structure.
 	 */
+	#[NoDiscard]
 	protected function failUnexpectedDataStructure(): StatusValue {
 		return StatusValue::newFatal( 'robloxapi-error-unexpected-data-structure' );
 	}
@@ -67,6 +70,7 @@ abstract class AbstractDataSource implements IDataSource {
 	/**
 	 * Returns an error stating that the data source returned invalid data.
 	 */
+	#[NoDiscard]
 	protected function failInvalidData(): StatusValue {
 		return StatusValue::newFatal( 'robloxapi-error-invalid-data' );
 	}
