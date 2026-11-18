@@ -48,6 +48,13 @@ A data source must fulfill the following requirements:
     - `composer phpunit:entrypoint -- extensions/RobloxAPI/tests/phpunit/unit/<folder>` to run all tests in a specific
       folder
 
+#### PHP Test Coverage
+
+0. If you are running a MediaWiki docker container, go to the container's directory and run
+   `docker compose exec mediawiki bash` to get a shell in the container.
+1. Run
+   `XDEBUG_MODE=coverage composer phpunit -- --testsuite extensions --coverage-html coverage extensions/RobloxAPI/tests/phpunit --exclude-group Stub`
+
 #### Parser tests
 
 0. If you are running a MediaWiki docker container, go to the container's directory and run

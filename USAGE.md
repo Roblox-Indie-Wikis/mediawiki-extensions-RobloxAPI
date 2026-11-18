@@ -48,13 +48,13 @@
 
 ## Basic Usage
 
-To use any data source, you can use the `{{#robloxAPI: ... }}` parser function. The first argument is the name of the
+To use any data source, you can use the `{{#robloxAPI: ...}}` parser function. The first argument is the name of the
 data source, and the rest of the arguments are the arguments for the data source.
 
 For example, to get the ID of a user named `builderman`, you can use:
 
 ```
-{{#robloxAPI: userId | builderman }}
+{{#robloxAPI: userId | builderman}}
 ```
 
 This example uses the data source `userId` and provides one required argument, `builderman`.
@@ -73,21 +73,21 @@ Provides information about a game/place in the [JSON format](#handling-json-data
 Get all JSON data of a game:
 
 ```
-{{#robloxAPI: gameData | 6483209208 | 132813250731469 }}
+{{#robloxAPI: gameData | 6483209208 | 132813250731469}}
 ```
 
 Get the name of the creator of a game:
 
 ```
-{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=creator->name }}
+{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=creator->name}}
 ```
 
 #### Required arguments
 
-| Name         | Description                                  | Type       |
-|--------------|----------------------------------------------|------------|
-| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
-| `PlaceId`    | The place ID of the game.                    | Numeric ID |
+| Name          | Description                                  | Type       |
+|---------------|----------------------------------------------|------------|
+| `universe-id` | The [universe ID](#universe-id) of the game. | Numeric ID |
+| `place-id`    | The place ID of the game.                    | Numeric ID |
 
 ### activePlayers
 
@@ -98,21 +98,21 @@ Provides the number of active players in a place. Requires [gameData](#gamedata)
 Get the number of active players in a place:
 
 ```
-{{#robloxAPI: activePlayers | 6483209208 | 132813250731469 }}
+{{#robloxAPI: activePlayers | 6483209208 | 132813250731469}}
 ```
 
 Get the formatted number of active players in a place:
 
 ```
-{{formatnum: {{#robloxAPI: activePlayers | 6483209208 | 132813250731469 }} }}
+{{formatnum: {{#robloxAPI: activePlayers | 6483209208 | 132813250731469}}}}
 ```
 
 #### Required Arguments
 
-| Name         | Description                                  | Type       |
-|--------------|----------------------------------------------|------------|
-| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
-| `PlaceId`    | The place ID of the game.                    | Numeric ID |
+| Name          | Description                                  | Type       |
+|---------------|----------------------------------------------|------------|
+| `universe-id` | The [universe ID](#universe-id) of the game. | Numeric ID |
+| `place-id`    | The place ID of the game.                    | Numeric ID |
 
 ### visits
 
@@ -123,21 +123,21 @@ Provides the number of visits to a place. Requires [gameData](#gamedata) to be e
 Get the number of visits to a place:
 
 ```
-{{#robloxAPI: visits | 6483209208 | 132813250731469 }}
+{{#robloxAPI: visits | 6483209208 | 132813250731469}}
 ```
 
 Get the formatted number of visits to a place:
 
 ```
-{{formatnum: {{#robloxAPI: visits | 6483209208 | 132813250731469 }} }}
+{{formatnum: {{#robloxAPI: visits | 6483209208 | 132813250731469}}}}
 ```
 
 #### Required Arguments
 
-| Name         | Description                                  | Type       |
-|--------------|----------------------------------------------|------------|
-| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
-| `PlaceId`    | The place ID of the game.                    | Numeric ID |
+| Name          | Description                                  | Type       |
+|---------------|----------------------------------------------|------------|
+| `universe-id` | The [universe ID](#universe-id) of the game. | Numeric ID |
+| `place-id`    | The place ID of the game.                    | Numeric ID |
 
 ### userId
 
@@ -148,14 +148,14 @@ Provides the user ID for a given username.
 Get the user ID of a user:
 
 ```
-{{#robloxAPI: userId | builderman }}
+{{#robloxAPI: userId | builderman}}
 ```
 
 #### Required Arguments
 
 | Name       | Description               | Type   |
 |------------|---------------------------|--------|
-| `Username` | The username of the user. | String |
+| `username` | The username of the user. | String |
 
 ### userAvatarThumbnail
 
@@ -166,15 +166,15 @@ Provides data about a user's avatar thumbnail in the [JSON format](#handling-jso
 Get the data about the user avatar thumbnail of builderman (ID 156):
 
 ```
-{{#robloxAPI: userAvatarThumbnail | 156 | 150x150 }}
+{{#robloxAPI: userAvatarThumbnail | 156 | 150x150}}
 ```
 
 #### Required Arguments
 
-| Name            | Description                | Type                                                                                                                                                      |
-|-----------------|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `UserId`        | The user ID of the user.   | Numeric ID                                                                                                                                                |
-| `ThumbnailSize` | The size of the thumbnail. | String (`30x30`, `48x48`, `60x60`, `75x75`, `100x100`, `110x110`, `140x140`, `150x150`, `150x200`, `180x180`, `250x250`, `352x352`, `420x420`, `720x720`) |
+| Name             | Description                | Type                                                                                                                                                      |
+|------------------|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `user-id`        | The user ID of the user.   | Numeric ID                                                                                                                                                |
+| `thumbnail-size` | The size of the thumbnail. | String (`30x30`, `48x48`, `60x60`, `75x75`, `100x100`, `110x110`, `140x140`, `150x150`, `150x200`, `180x180`, `250x250`, `352x352`, `420x420`, `720x720`) |
 
 #### Optional Arguments
 
@@ -192,15 +192,15 @@ Provides the URL of a user's avatar thumbnail. Allows [embedding](#embedding-ima
 Get the URL of the user avatar thumbnail of builderman (ID 156):
 
 ```
-{{#robloxAPI: userAvatarThumbnailUrl | 156 | 150x150 }}
+{{#robloxAPI: userAvatarThumbnailUrl | 156 | 150x150}}
 ```
 
 #### Required Arguments
 
-| Name            | Description                | Type                                                                                                                                                      |
-|-----------------|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `UserId`        | The user ID of the user.   | Numeric ID                                                                                                                                                |
-| `ThumbnailSize` | The size of the thumbnail. | String (`30x30`, `48x48`, `60x60`, `75x75`, `100x100`, `110x110`, `140x140`, `150x150`, `150x200`, `180x180`, `250x250`, `352x352`, `420x420`, `720x720`) |
+| Name             | Description                | Type                                                                                                                                                      |
+|------------------|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `user-id`        | The user ID of the user.   | Numeric ID                                                                                                                                                |
+| `thumbnail-size` | The size of the thumbnail. | String (`30x30`, `48x48`, `60x60`, `75x75`, `100x100`, `110x110`, `140x140`, `150x150`, `150x200`, `180x180`, `250x250`, `352x352`, `420x420`, `720x720`) |
 
 #### Optional Arguments
 
@@ -222,15 +222,15 @@ Provides the data about an asset thumbnail in the [JSON format](#handling-json-d
 Get the data about the asset thumbnail of the asset with ID 102611803:
 
 ```
-{{#robloxAPI: assetThumbnail | 1962446128 | 140x140 }}
+{{#robloxAPI: assetThumbnail | 1962446128 | 140x140}}
 ```
 
 #### Required Arguments
 
-| Name            | Description                | Type                                                                                                                                                                                                                                                                 |
-|-----------------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `AssetId`       | The asset ID of the asset. | Numeric ID                                                                                                                                                                                                                                                           |
-| `ThumbnailSize` | The size of the thumbnail. | String (`30x30`, `42x42`, `50x50`, `60x62`, `75x75`, `110x110`, `140x140`, `150x150`, `160x100`, `160x600`, `250x250`, `256x144`, `300x250`, `304x166`, `384x216`, `396x216`, `420x420`, `480x270`, `512x512`, `576x324`, `700x700`, `728x90`, `768x432`, `1200x80`) |
+| Name             | Description                | Type                                                                                                                                                                                                                                                                 |
+|------------------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `asset-id`       | The asset ID of the asset. | Numeric ID                                                                                                                                                                                                                                                           |
+| `thumbnail-size` | The size of the thumbnail. | String (`30x30`, `42x42`, `50x50`, `60x62`, `75x75`, `110x110`, `140x140`, `150x150`, `160x100`, `160x600`, `250x250`, `256x144`, `300x250`, `304x166`, `384x216`, `396x216`, `420x420`, `480x270`, `512x512`, `576x324`, `700x700`, `728x90`, `768x432`, `1200x80`) |
 
 #### Optional Arguments
 
@@ -253,15 +253,15 @@ Requires [assetThumbnail](#assetthumbnail) to be enabled.
 Get the URL of the asset thumbnail of the asset with ID 102611803:
 
 ```
-{{#robloxAPI: assetThumbnailUrl | 1962446128 | 140x140 }}
+{{#robloxAPI: assetThumbnailUrl | 1962446128 | 140x140}}
 ```
 
 #### Required Arguments
 
-| Name            | Description                | Type                                                                                                                                                                                                                                                                 |
-|-----------------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `AssetId`       | The asset ID of the asset. | Numeric ID                                                                                                                                                                                                                                                           |
-| `ThumbnailSize` | The size of the thumbnail. | String (`30x30`, `42x42`, `50x50`, `60x62`, `75x75`, `110x110`, `140x140`, `150x150`, `160x100`, `160x600`, `250x250`, `256x144`, `300x250`, `304x166`, `384x216`, `396x216`, `420x420`, `480x270`, `512x512`, `576x324`, `700x700`, `728x90`, `768x432`, `1200x80`) |
+| Name             | Description                | Type                                                                                                                                                                                                                                                                 |
+|------------------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `asset-id`       | The asset ID of the asset. | Numeric ID                                                                                                                                                                                                                                                           |
+| `thumbnail-size` | The size of the thumbnail. | String (`30x30`, `42x42`, `50x50`, `60x62`, `75x75`, `110x110`, `140x140`, `150x150`, `160x100`, `160x600`, `250x250`, `256x144`, `300x250`, `304x166`, `384x216`, `396x216`, `420x420`, `480x270`, `512x512`, `576x324`, `700x700`, `728x90`, `768x432`, `1200x80`) |
 
 #### Optional Arguments
 
@@ -279,15 +279,15 @@ Provides the data about a game icon in the [JSON format](#handling-json-data).
 Get the data about the game icon of the game with ID 132813250731469:
 
 ```
-{{#robloxAPI: gameIcon | 132813250731469 | 150x150 }}
+{{#robloxAPI: gameIcon | 132813250731469 | 150x150}}
 ```
 
 #### Required Arguments
 
-| Name            | Description               | Type                                                                    |
-|-----------------|---------------------------|-------------------------------------------------------------------------|
-| `PlaceId`       | The place ID of the game. | Numeric ID                                                              |
-| `ThumbnailSize` | The size of the icon.     | String (`50x50`, `128x128`, `150x150`, `256x256`, `420x420`, `512x512`) |
+| Name             | Description               | Type                                                                    |
+|------------------|---------------------------|-------------------------------------------------------------------------|
+| `place-id`       | The place ID of the game. | Numeric ID                                                              |
+| `thumbnail-size` | The size of the icon.     | String (`50x50`, `128x128`, `150x150`, `256x256`, `420x420`, `512x512`) |
 
 #### Optional Arguments
 
@@ -307,15 +307,15 @@ Requires [gameIcon](#gameicon) to be enabled.
 Get the URL of the game icon of the game with ID 132813250731469:
 
 ```
-{{#robloxAPI: gameIconUrl | 132813250731469 | 150x150 }}
+{{#robloxAPI: gameIconUrl | 132813250731469 | 150x150}}
 ```
 
 #### Required Arguments
 
-| Name            | Description               | Type                                                                    |
-|-----------------|---------------------------|-------------------------------------------------------------------------|
-| `PlaceId`       | The place ID of the game. | Numeric ID                                                              |
-| `ThumbnailSize` | The size of the icon.     | String (`50x50`, `128x128`, `150x150`, `256x256`, `420x420`, `512x512`) |
+| Name             | Description               | Type                                                                    |
+|------------------|---------------------------|-------------------------------------------------------------------------|
+| `place-id`       | The place ID of the game. | Numeric ID                                                              |
+| `thumbnail-size` | The size of the icon.     | String (`50x50`, `128x128`, `150x150`, `256x256`, `420x420`, `512x512`) |
 
 #### Optional Arguments
 
@@ -336,14 +336,14 @@ Provides all group roles a user has in all groups they have joined in the [JSON 
 Get all JSON data of the group roles of a user:
 
 ```
-{{#robloxAPI: groupRoles | 4182456156 }}
+{{#robloxAPI: groupRoles | 4182456156}}
 ```
 
 #### Required Arguments
 
-| Name     | Description              | Type       |
-|----------|--------------------------|------------|
-| `UserId` | The user ID of the user. | Numeric ID |
+| Name      | Description              | Type       |
+|-----------|--------------------------|------------|
+| `user-id` | The user ID of the user. | Numeric ID |
 
 ### groupRank
 
@@ -355,15 +355,15 @@ Requires [groupRoles](#grouproles) to be enabled.
 Get the name of the rank of the user with ID `4182456156` in the group with ID `3620943`:
 
 ```
-{{#robloxAPI: groupRank | 3620943 | 4182456156 }}
+{{#robloxAPI: groupRank | 3620943 | 4182456156}}
 ```
 
 #### Required Arguments
 
-| Name      | Description                | Type       |
-|-----------|----------------------------|------------|
-| `GroupId` | The group ID of the group. | Numeric ID |
-| `UserId`  | The user ID of the user.   | Numeric ID |
+| Name       | Description                | Type       |
+|------------|----------------------------|------------|
+| `group-id` | The group ID of the group. | Numeric ID |
+| `user-id`  | The user ID of the user.   | Numeric ID |
 
 ### groupData
 
@@ -376,14 +376,14 @@ Provides data about a group in the [JSON format](#handling-json-data).
 Get all JSON data of a group:
 
 ```
-{{#robloxAPI: groupData | 3620943 }}
+{{#robloxAPI: groupData | 3620943}}
 ```
 
 #### Required Arguments
 
-| Name      | Description                | Type       |
-|-----------|----------------------------|------------|
-| `GroupId` | The group ID of the group. | Numeric ID |
+| Name       | Description                | Type       |
+|------------|----------------------------|------------|
+| `group-id` | The group ID of the group. | Numeric ID |
 
 ### groupMembers
 
@@ -395,20 +395,20 @@ Requires [groupData](#groupdata) to be enabled.
 Get the number of members in a group:
 
 ```
-{{#robloxAPI: groupMembers | 3620943 }}
+{{#robloxAPI: groupMembers | 3620943}}
 ```
 
 Get the formatted number of members in a group:
 
 ```
-{{formatnum: {{#robloxAPI: groupMembers | 3620943 }} }}
+{{formatnum: {{#robloxAPI: groupMembers | 3620943}}}}
 ```
 
 #### Required Arguments
 
-| Name      | Description                | Type       |
-|-----------|----------------------------|------------|
-| `GroupId` | The group ID of the group. | Numeric ID |
+| Name       | Description                | Type       |
+|------------|----------------------------|------------|
+| `group-id` | The group ID of the group. | Numeric ID |
 
 ### badgeInfo
 
@@ -424,9 +424,9 @@ Get all JSON data of a badge:
 
 #### Required Arguments
 
-| Name      | Description                | Type       |
-|-----------|----------------------------|------------|
-| `BadgeId` | The badge ID of the badge. | Numeric ID |
+| Name       | Description                | Type       |
+|------------|----------------------------|------------|
+| `badge-id` | The badge ID of the badge. | Numeric ID |
 
 ### userInfo
 
@@ -437,14 +437,14 @@ Provides information about a user in the [JSON format](#handling-json-data).
 Get all JSON data of a user:
 
 ```
-{{#robloxAPI: userInfo | 156 }}
+{{#robloxAPI: userInfo | 156}}
 ```
 
 #### Required Arguments
 
-| Name     | Description              | Type       |
-|----------|--------------------------|------------|
-| `UserId` | The user ID of the user. | Numeric ID |
+| Name      | Description              | Type       |
+|-----------|--------------------------|------------|
+| `user-id` | The user ID of the user. | Numeric ID |
 
 ### assetDetails
 
@@ -455,14 +455,14 @@ Provides information about an asset in the [JSON format](#handling-json-data).
 Get all JSON data of an asset:
 
 ```
-{{#robloxAPI: assetDetails | 102611803 }}
+{{#robloxAPI: assetDetails | 102611803}}
 ```
 
 #### Required Arguments
 
-| Name      | Description                | Type       |
-|-----------|----------------------------|------------|
-| `AssetId` | The asset ID of the asset. | Numeric ID |
+| Name       | Description                | Type       |
+|------------|----------------------------|------------|
+| `asset-id` | The asset ID of the asset. | Numeric ID |
 
 ### groupRolesList
 
@@ -473,14 +473,14 @@ Provides a list of roles in a group in the [JSON format](#handling-json-data).
 Get the roles of a group:
 
 ```
-{{#robloxAPI: groupRolesList | 5353743 }}
+{{#robloxAPI: groupRolesList | 5353743}}
 ```
 
 #### Required Arguments
 
-| Name      | Description                | Type       |
-|-----------|----------------------------|------------|
-| `GroupId` | The group ID of the group. | Numeric ID |
+| Name       | Description                | Type       |
+|------------|----------------------------|------------|
+| `group-id` | The group ID of the group. | Numeric ID |
 
 ### gameNameDescription
 
@@ -491,20 +491,20 @@ Provides the name and description of a game in all supported languages in the [J
 Get the name and description of a game:
 
 ```
-{{#robloxAPI: gameNameDescription | 6483209208 }}
+{{#robloxAPI: gameNameDescription | 6483209208}}
 ```
 
 Get the description of a game in English:
 
 ```
-{{#robloxAPI: gameNameDescription | 6483209208 | json_key=data->0->description }}
+{{#robloxAPI: gameNameDescription | 6483209208 | json_key=data->0->description}}
 ```
 
 #### Required Arguments
 
-| Name         | Description                                  | Type       |
-|--------------|----------------------------------------------|------------|
-| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
+| Name          | Description                                  | Type       |
+|---------------|----------------------------------------------|------------|
+| `universe-id` | The [universe ID](#universe-id) of the game. | Numeric ID |
 
 ### universeInfo
 
@@ -515,20 +515,20 @@ Provides info about a universe in the [JSON format](#handling-json-data).
 Get info about a universe:
 
 ```
-{{#robloxAPI: universeInfo | 4864117649 }}
+{{#robloxAPI: universeInfo | 4864117649}}
 ```
 
 Get the privacy type of a universe:
 
 ```
-{{#robloxAPI: universeInfo | 4864117649 | json_key=privacyType }}
+{{#robloxAPI: universeInfo | 4864117649 | json_key=privacyType}}
 ```
 
 #### Required Arguments
 
-| Name         | Description                                  | Type       |
-|--------------|----------------------------------------------|------------|
-| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
+| Name          | Description                                  | Type       |
+|---------------|----------------------------------------------|------------|
+| `universe-id` | The [universe ID](#universe-id) of the game. | Numeric ID |
 
 ### userGames
 
@@ -541,14 +541,14 @@ Note that it is not possible to get more than 50 games.
 Get the list of games a user has created:
 
 ```
-{{#robloxAPI: userGames | 1995870730 }}
+{{#robloxAPI: userGames | 1995870730}}
 ```
 
 #### Required Arguments
 
-| Name     | Description              | Type       |
-|----------|--------------------------|------------|
-| `UserId` | The user ID of the user. | Numeric ID |
+| Name      | Description              | Type       |
+|-----------|--------------------------|------------|
+| `user-id` | The user ID of the user. | Numeric ID |
 
 #### Optional Arguments
 
@@ -568,14 +568,14 @@ Note that due to performance reasons, only the views of the first 50 places of t
 Get the number of visits of all places a user has created:
 
 ```
-{{#robloxAPI: userPlaceVisits | 1995870730 }}
+{{#robloxAPI: userPlaceVisits | 1995870730}}
 ```
 
 #### Required Arguments
 
-| Name     | Description              | Type       |
-|----------|--------------------------|------------|
-| `UserId` | The user ID of the user. | Numeric ID |
+| Name      | Description              | Type       |
+|-----------|--------------------------|------------|
+| `user-id` | The user ID of the user. | Numeric ID |
 
 #### Optional Arguments
 
@@ -593,20 +593,20 @@ Provides a list of events happening in a universe.
 Get the events in a universe:
 
 ```
-{{#robloxAPI: gameEvents | 6597877862 }}
+{{#robloxAPI: gameEvents | 6597877862}}
 ```
 
 Get the title of the first event in a universe:
 
 ```
-{{#robloxAPI: gameEvents | 6597877862 | json_key=0->title }}
+{{#robloxAPI: gameEvents | 6597877862 | json_key=0->title}}
 ```
 
 #### Required Arguments
 
-| Name         | Description                                  | Type       |
-|--------------|----------------------------------------------|------------|
-| `UniverseId` | The [universe ID](#universe-id) of the game. | Numeric ID |
+| Name          | Description                                  | Type       |
+|---------------|----------------------------------------------|------------|
+| `universe-id` | The [universe ID](#universe-id) of the game. | Numeric ID |
 
 ### groupRoleMembers
 
@@ -617,15 +617,15 @@ Provides a list of users who have a certain role in a group.
 List of product developers in the SRC group:
 
 ```
-{{#robloxAPI: groupRoleMembers | 3620943 | 31072726 | limit=100 }}
+{{#robloxAPI: groupRoleMembers | 3620943 | 31072726 | limit=100}}
 ```
 
 #### Required Arguments
 
-| Name      | Description                | Type       |
-|-----------|----------------------------|------------|
-| `GroupId` | The group ID of the group. | Numeric ID |
-| `RoleId`  | The role ID of the role.   | Numeric ID |
+| Name       | Description                | Type       |
+|------------|----------------------------|------------|
+| `group-id` | The group ID of the group. | Numeric ID |
+| `role-id`  | The role ID of the role.   | Numeric ID |
 
 #### Optional Arguments
 
@@ -633,7 +633,6 @@ List of product developers in the SRC group:
 |--------------|----------------------------------------|------------------------------|---------|
 | `limit`      | The maximum number of users to return. | Numeric ID (10, 25, 50, 100) | `50`    |
 | `sort_order` | The order to sort the users.           | String (`Asc`, `Desc`)       | `Asc`   |
-
 
 ## Handling JSON data
 
@@ -643,7 +642,7 @@ Some data sources return plain JSON data from the Roblox API. To parse this data
 Scribunto extension) or use the `json_key` optional argument:
 
 ```
-{{#robloxAPI: userInfo | 156 | json_key=created }}
+{{#robloxAPI: userInfo | 156 | json_key=created}}
 ```
 
 This example gets the user info of the user with the ID `156` and returns the `created` key from the JSON data.
@@ -651,13 +650,13 @@ This example gets the user info of the user with the ID `156` and returns the `c
 Nested keys can be accessed by separating them with '->', e.g.:
 
 ```
-{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=creator->name }}
+{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=creator->name}}
 ```
 
 To access an item in an array, you can use the index of the item, e.g.:
 
 ```
-{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=allowedGearGenres->0 }}
+{{#robloxAPI: gameData | 6483209208 | 132813250731469 | json_key=allowedGearGenres->0}}
 ```
 
 ### Pretty-printing JSON data
@@ -665,7 +664,7 @@ To access an item in an array, you can use the index of the item, e.g.:
 To pretty-print JSON data, you can use the `pretty` optional argument:
 
 ```
-{{#robloxAPI: userInfo | 156 | pretty=true }}
+{{#robloxAPI: userInfo | 156 | pretty=true}}
 ```
 
 ## FAQs
@@ -677,7 +676,7 @@ To pretty-print JSON data, you can use the `pretty` optional argument:
 To get the universe ID of a place, input the place ID to this API:
 
 ```
-https://apis.roblox.com/universes/v1/places/<GAMEID>/universe
+https://apis.roblox.com/universes/v1/places/<PLACEID>/universe
 ```
 
 ### Embedding images from the Roblox CDN
@@ -726,7 +725,7 @@ An array of data sources that should be enabled and available. By default, all d
 
 ```php
 $wgRobloxAPIEnabledDatasources = [
-    'gameData',    
+    'gameData',
     'activePlayers',
     'visits',
     'userId',
@@ -737,12 +736,19 @@ $wgRobloxAPIEnabledDatasources = [
     'gameIcon',
     'gameIconUrl',
     'groupRoles',
+    'groupRoleMembers',
     'groupData',
     'groupRank',
     'groupMembers',
     'badgeInfo',
     'userInfo',
     'assetDetails',
+    'groupRolesList',
+    'gameNameDescription',
+    'universeInfo',
+    'userGames',
+    'userPlaceVisits',
+    'gameEvents',
 ];
 ```
 
@@ -784,6 +790,7 @@ Some do, such as `format`, but are not included in the default value since it do
 is served.
 
 Default:
+
 ```php
 $wgRobloxAPICacheSplittingOptionalArguments = [
     'is_circular',
@@ -804,11 +811,11 @@ If you want to restrict the allowed arguments for a specific type, you can do so
 
 ```php
 $wgRobloxAPIAllowedArguments = [
-    'GameID' => [123456, 789012],
+    'place-id' => [123456, 789012],
 ];
 ```
 
-In this example, only the Game IDs 123456 and 789012 are allowed.
+In this example, only the Place IDs 123456 and 789012 are allowed.
 
 ### `$wgRobloxAPIRequestUserAgent`
 

@@ -1,19 +1,6 @@
 <?php
 /**
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- * http://www.gnu.org/copyleft/gpl.html
+ * @license GPL-2.0-or-later
  *
  * @file
  */
@@ -22,7 +9,6 @@ namespace MediaWiki\Extension\RobloxAPI\Data\Cache;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIConstants;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIUtils;
 use Wikimedia\ObjectCache\WANObjectCache;
 
 /**
@@ -31,6 +17,7 @@ use Wikimedia\ObjectCache\WANObjectCache;
 class DataSourceCache {
 
 	public const CONSTRUCTOR_OPTIONS = [
+		RobloxAPIConstants::ConfCacheSplittingOptionalArguments,
 		RobloxAPIConstants::ConfDisableCache,
 	];
 
@@ -38,8 +25,7 @@ class DataSourceCache {
 	private bool $disabled;
 
 	public function __construct(
-		ServiceOptions $options,
-		private readonly RobloxAPIUtils $utils,
+		private readonly ServiceOptions $options,
 		private readonly WANObjectCache $cache,
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
@@ -50,7 +36,7 @@ class DataSourceCache {
 	 * Tries to search for a value in the cache.
 	 * @param string $endpoint
 	 * @param string[] $args
-	 * @param array<string, string> $optionalArgs
+	 * @param array<string, mixed> $optionalArgs
 	 */
 	public function getResultForEndpoint( string $endpoint, array $args, array $optionalArgs ): mixed {
 		if ( $this->disabled ) {
@@ -70,7 +56,7 @@ class DataSourceCache {
 	 * @param string $endpoint
 	 * @param mixed $value
 	 * @param string[] $args
-	 * @param array<string, string> $optionalArgs
+	 * @param array<string, mixed> $optionalArgs
 	 * @param int $expiry The expiry in seconds
 	 */
 	public function registerCacheEntry(
@@ -94,14 +80,21 @@ class DataSourceCache {
 	 * @param array<string, string> $optionalArgs
 	 */
 	protected function getCacheKey( string $endpoint, array $args, array $optionalArgs ): string {
-		$cacheSplittingOptionalArgs = $this->utils->getCacheSplittingArgs( $optionalArgs );
+		$cacheSplittingOptionalArgs = array_intersect_key(
+			$optionalArgs,
+			array_flip( $this->options->get( RobloxAPIConstants::ConfCacheSplittingOptionalArguments ) )
+		);
+		ksort( $cacheSplittingOptionalArgs );
 
 		$argsJson = json_encode( $args );
 		$optionalArgsJson = json_encode( $cacheSplittingOptionalArgs );
 
-		// ToDo consider using cache->makeKey() here
-
-		return '__roblox__' . $endpoint . '__' . md5( $argsJson ) . '__' . md5( $optionalArgsJson );
+		return $this->cache->makeKey(
+			'robloxapi',
+			$endpoint,
+			md5( $argsJson ),
+			md5( $optionalArgsJson ),
+		);
 	}
 
 }

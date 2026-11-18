@@ -1,28 +1,15 @@
 <?php
 /**
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- * http://www.gnu.org/copyleft/gpl.html
+ * @license GPL-2.0-or-later
  *
  * @file
  */
 
 namespace MediaWiki\Extension\RobloxAPI\Data\Source;
 
-use MediaWiki\Extension\RobloxAPI\Data\Args\ArgumentSpecification;
-use MediaWiki\Extension\RobloxAPI\Util\RobloxAPIException;
+use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
 use MediaWiki\Parser\Parser;
+use StatusValue;
 
 /**
  * Represents a data source.
@@ -33,10 +20,10 @@ interface IDataSource {
 	 * Executes the data source. This is called when the #robloxAPI parser function is used.
 	 * @param Parser $parser
 	 * @param string[] $requiredArgs
-	 * @param array<string, string> $optionalArgs
-	 * @throws RobloxAPIException If the data source fails to execute
+	 * @param array<string, mixed> $optionalArgs
+	 * @return StatusValue<mixed> The result of the data source execution.
 	 */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): mixed;
+	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue;
 
 	/**
 	 * Determines whether a legacy parser function should be registered.

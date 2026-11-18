@@ -26,7 +26,7 @@ Live Examples:
 
 Requirements:
 * MediaWiki 1.43 or higher
-* PHP 8.1.0 or higher
+* PHP 8.2.0 or higher
 
 1. Download the repository using the following
    link: [Download ZIP](https://github.com/Roblox-Indie-Wikis/mediawiki-extensions-RobloxAPI/archive/master.zip)
