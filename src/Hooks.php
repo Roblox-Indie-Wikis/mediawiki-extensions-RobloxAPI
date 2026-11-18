@@ -96,6 +96,7 @@ class Hooks implements ParserFirstCallInitHook, ParserTestGlobalsHook {
 						$shouldEscape = $dataSource->shouldEscapeResult( $result );
 
 						if ( $this->utils->shouldReturnJson( $result ) ) {
+							// Legacy parser functions don't support json_key/pretty
 							$result = $this->utils->createJsonResult( $result, [] );
 							// always escape json, there is no need for it to be parsed
 							$shouldEscape = true;
