@@ -144,6 +144,8 @@ class RobloxAPIUtils {
 	/**
 	 * @internal
 	 * @codeCoverageIgnore Internal code used for testing only
+	 *
+	 * @param array<string,mixed> $defaults
 	 */
 	public function overrideOptions( array $defaults ): void {
 		$this->options = new ServiceOptions( self::CONSTRUCTOR_OPTIONS, $defaults );
