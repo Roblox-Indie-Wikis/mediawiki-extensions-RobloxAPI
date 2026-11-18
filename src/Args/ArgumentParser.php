@@ -65,7 +65,7 @@ class ArgumentParser {
 	 *
 	 * @param ArgumentParserContext $ctx
 	 * @param ArgumentSpecification $specification
-	 * @param string[] $args
+	 * @param string[] &$args
 	 * @return StatusValue<string[]> The extracted required arguments or an error status.
 	 */
 	public function extractRequiredArgs(
