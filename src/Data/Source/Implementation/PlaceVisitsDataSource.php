@@ -29,6 +29,9 @@ class PlaceVisitsDataSource extends DependentDataSource {
 			return $gameDataStatus;
 		}
 		$gameData = $gameDataStatus->getValue();
+		if ( $gameData === null ) {
+			return $this->failNoData();
+		}
 
 		if ( !property_exists( $gameData, 'visits' ) ) {
 			return $this->failUnexpectedDataStructure();
