@@ -11,7 +11,6 @@ use MediaWiki\Extension\RobloxAPI\Args\ArgumentSpecification;
 use MediaWiki\Extension\RobloxAPI\Args\Types\IdArgument;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DataSourceProvider;
 use MediaWiki\Extension\RobloxAPI\Data\Source\DependentDataSource;
-use MediaWiki\Parser\Parser;
 use StatusValue;
 
 class PlaceVisitsDataSource extends DependentDataSource {
@@ -22,8 +21,8 @@ class PlaceVisitsDataSource extends DependentDataSource {
 	}
 
 	/** @inheritDoc */
-	public function exec( Parser $parser, array $requiredArgs, array $optionalArgs = [] ): StatusValue {
-		$gameDataStatus = $this->dataSource->exec( $parser, $requiredArgs );
+	public function exec( array $requiredArgs, array $optionalArgs = [] ): StatusValue {
+		$gameDataStatus = $this->dataSource->exec( $requiredArgs );
 
 		if ( !$gameDataStatus->isGood() ) {
 			return $gameDataStatus;
